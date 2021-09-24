@@ -25,6 +25,21 @@
     <Filter Include="ソース ファイル\ヘッダー ファイル\Main">
       <UniqueIdentifier>{06ea819c-0061-432d-9cef-dd1bac8eee78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Chara">
+      <UniqueIdentifier>{57269543-fb4e-41a9-a617-fe22efa7e9ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Chara">
+      <UniqueIdentifier>{bb80723e-39ad-4f68-a818-14d626a026a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Obstacle">
+      <UniqueIdentifier>{54e43f30-5c5f-40d9-a32b-8b43f290da61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Obstacle">
+      <UniqueIdentifier>{019bee02-1f11-4472-b9d4-5c95a510de23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Stage">
+      <UniqueIdentifier>{9c622120-4ee3-4e41-875e-fc0eb2ae50b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneTitle.cpp">
@@ -50,6 +65,15 @@
     </ClCompile>
     <ClCompile Include="SceneTrophyCollection.cpp">
       <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +103,18 @@
     </ClInclude>
     <ClInclude Include="SceneTrophyCollection.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

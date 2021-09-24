@@ -102,17 +102,22 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneConfig.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneGameMenu.cpp" />
     <ClCompile Include="SceneStressCollection.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="SceneTrophyCollection.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneConfig.h" />
@@ -121,6 +126,8 @@
     <ClInclude Include="SceneStressCollection.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="SceneTrophyCollection.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Stage1.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />
