@@ -11,6 +11,10 @@
 #include	"GameApp.h"
 #include	"SceneTitle.h"
 #include	"SceneGame.h"
+#include	"SceneGameMenu.h"
+#include	"SceneConfig.h"
+#include	"SceneStressCollection.h"
+#include	"SceneTrophyCollection.h"
 
 //シーンクラス
 CSceneBase* nowScene = NULL;
@@ -53,6 +57,18 @@ MofBool CGameApp::Update(void) {
 		case SCENENO_GAME:
 			nowScene = new CSceneGame();
 			break;
+		case SCENENO_GAMEMENU:
+			nowScene = new CSceneGameMenu();
+			break;
+		case SCENENO_CONFIG:
+			nowScene = new CSceneConfig();
+			break;
+		case SCENENO_STRESSCOLLECTION:
+			nowScene = new CSceneStressCollection;
+			break;
+		case SCENENO_TROPHY:
+			nowScene = new CSceneTrophyCollection;
+			break;
 		}
 	}
 
@@ -86,6 +102,7 @@ MofBool CGameApp::Render(void) {
 						それ以外	失敗、エラーコードが戻り値となる
 *//**************************************************************************/
 MofBool CGameApp::Release(void) {
+	nowScene->Release();
 	if (nowScene)
 	{
 		delete nowScene;

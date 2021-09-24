@@ -1,13 +1,12 @@
 #pragma once
 #include "SceneBase.h"
 
-class CSceneTitle : public CSceneBase
+class CSceneConfig :public CSceneBase
 {
 private:
-	CTexture	buttonTexture;
 public:
-	CSceneTitle();
-	~CSceneTitle();
+	CSceneConfig();
+	~CSceneConfig();
 	void Initialize() override;
 	void Update() override;
 	void Render() override;

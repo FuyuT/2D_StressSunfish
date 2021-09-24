@@ -10,22 +10,25 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::Initialize()
 {
+
 }
 
 void CSceneTitle::Update()
 {
-	if (g_pInput->IsKeyPush(MOFKEY_2))
+	if ( g_pInput->IsKeyPush(MOFKEY_1))
 	{
 		endFlg = true;
-		nextScene = SCENENO_GAME;
+		nextScene = SCENENO_GAMEMENU;
 	}
 }
 
 void CSceneTitle::Render()
 {
-	CGraphicsUtilities::RenderString(100, 300, "タイトル");
+	buttonTexture.Render(100, 300);
+	CGraphicsUtilities::RenderString(100, 350, "1キーでゲームメニュー");
 }
 
 void CSceneTitle::Release()
 {
+	buttonTexture.Release();
 }
