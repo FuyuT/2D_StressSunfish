@@ -16,6 +16,11 @@ private:
 
 	int timeCnt = 0;
 
+	Vector2 moveSpeed;
+	CTexture backGroundTexture;
+	CTexture playerTexture;
+	float scrollValueX;
+	float scrollValueY;
 	//CTexture stressGauge;
 public:
 	CSceneGame();
@@ -25,6 +30,9 @@ public:
 	void Render() override;
 	void Release() override;
 
-	
+	CRectangle GetRect() {
+		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
+	};
+
 };
 

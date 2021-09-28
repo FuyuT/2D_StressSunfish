@@ -26,6 +26,9 @@ CSceneBase* nowScene = NULL;
 						それ以外	失敗、エラーコードが戻り値となる
 *//**************************************************************************/
 MofBool CGameApp::Initialize(void) {
+	//リソースディレクトリの設定
+	CUtilities::SetCurrentDirectory("Resource");
+
 	//シーンの初期化
 	nowScene = new CSceneTitle;
 	nowScene->Initialize();
@@ -44,8 +47,8 @@ MofBool CGameApp::Update(void) {
 	nowScene->Update();
 	if (nowScene->IsEnd())
 	{
-		//次のシーンの取得a
-		short nextScene = nowScene->GetNextScene();
+		//次のシーンの取得
+		short nextScene = nowScene->GetNextScene();		
 		//古いシーンの消去
 		delete nowScene;
 		//次のシーン番号に応じてシーンを作って初期化
@@ -70,6 +73,7 @@ MofBool CGameApp::Update(void) {
 			nowScene = new CSceneTrophyCollection;
 			break;
 		}
+		nowScene->Initialize();
 	}
 
 	return TRUE;
