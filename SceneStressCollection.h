@@ -4,6 +4,9 @@
 class CSceneStressCollection : public CSceneBase
 {
 private:
+	CTexture	buttonTexture;
+	int			buttonPosX = 800;
+	int			buttonPosY = 800;
 public:
 	CSceneStressCollection();
 	~CSceneStressCollection();
@@ -12,5 +15,8 @@ public:
 	void Update() override;
 	void Render() override;
 	void Release() override;
+	CRectangle GetRect() {
+		return CRectangle(buttonPosX, buttonPosY, buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
+	};
 };
 

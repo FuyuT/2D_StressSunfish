@@ -20,7 +20,7 @@ protected:
 public:
 	
 	virtual void Initialize() {};
-	virtual void Update() {};
+	virtual void Update(){};
 	virtual void Render() {};
 	virtual void Release() {};
 	//ÉQÉbÉ^Å[

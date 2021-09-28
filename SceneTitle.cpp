@@ -10,22 +10,25 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::Initialize()
 {
-
+	buttonTexture.Load("ButtonStart.png");
 }
 
 void CSceneTitle::Update()
 {
-	if ( g_pInput->IsKeyPush(MOFKEY_1))
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
+	if ( g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX,mousePosY))
 	{
 		endFlg = true;
 		nextScene = SCENENO_GAMEMENU;
+		CSceneTitle::Release();
 	}
 }
 
 void CSceneTitle::Render()
 {
-	buttonTexture.Render(100, 300);
-	CGraphicsUtilities::RenderString(100, 350, "1キーでゲームメニュー");
+	CGraphicsUtilities::RenderString(100, 300, "タイトル画面");
+	buttonTexture.Render(buttonPosX, buttonPosY);
 }
 
 void CSceneTitle::Release()
