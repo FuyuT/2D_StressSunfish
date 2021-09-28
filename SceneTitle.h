@@ -1,20 +1,20 @@
 #pragma once
 #include "SceneBase.h"
 
-class CSceneStressCollection : public CSceneBase
+class CSceneTitle : public CSceneBase
 {
 private:
 	CTexture	buttonTexture;
 	int			buttonPosX = 800;
 	int			buttonPosY = 800;
 public:
-	CSceneStressCollection();
-	~CSceneStressCollection();
-
+	CSceneTitle();
+	~CSceneTitle();
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
 	void Release() override;
+
 	CRectangle GetRect() {
 		return CRectangle(buttonPosX, buttonPosY, buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
 	};
