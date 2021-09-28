@@ -5,7 +5,7 @@ CSceneTrophyCollection::CSceneTrophyCollection()
 }
 CSceneTrophyCollection::~CSceneTrophyCollection()
 {
-
+	Release();
 }
 void CSceneTrophyCollection::Initialize()
 {

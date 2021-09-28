@@ -6,7 +6,7 @@ CSceneStressCollection::CSceneStressCollection()
 }
 CSceneStressCollection::~CSceneStressCollection()
 {
-
+	Release();
 }
 void CSceneStressCollection::Initialize()
 {

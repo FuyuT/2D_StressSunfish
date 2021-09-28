@@ -7,7 +7,7 @@ CSceneGameMenu:: CSceneGameMenu()
 
 CSceneGameMenu::~CSceneGameMenu()
 {
-
+	Release();
 }
 void CSceneGameMenu::Initialize()
 {

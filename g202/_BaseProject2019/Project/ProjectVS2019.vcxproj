@@ -113,6 +113,7 @@
     <ClCompile Include="PoseWindow.cpp" />
     <ClCompile Include="ResultWindow.cpp" />
     <ClCompile Include="RetryWindow.cpp" />
+    <ClCompile Include="SceneBase.cpp" />
     <ClCompile Include="SceneConfig.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneGameMenu.cpp" />

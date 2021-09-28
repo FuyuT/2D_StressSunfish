@@ -8,6 +8,7 @@ scrollValueY(0)
 
 CSceneGame::~CSceneGame()
 {
+	Release();
 }
 
 void CSceneGame::Initialize()

@@ -126,6 +126,9 @@
     <ClCompile Include="ContinueWindow.cpp">
       <Filter>ソース ファイル\PopUpWindow</Filter>
     </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">

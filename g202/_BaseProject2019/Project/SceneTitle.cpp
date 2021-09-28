@@ -6,6 +6,7 @@ CSceneTitle::CSceneTitle()
 
 CSceneTitle::~CSceneTitle()
 {
+	Release();
 }
 
 void CSceneTitle::Initialize()

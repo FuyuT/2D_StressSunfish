@@ -18,11 +18,13 @@ protected:
 	short		nextScene;
 	
 public:
-	
-	virtual void Initialize() {};
-	virtual void Update() {};
-	virtual void Render() {};
-	virtual void Release() {};
+	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
+	CSceneBase() {}
+	virtual ~CSceneBase() {}
+	virtual void Initialize() {}
+	virtual void Update() {}
+	virtual void Render() {}
+	virtual void Release() {}
 	//ゲッター
 	short GetNextScene() { return nextScene; }
 	bool IsEnd() { return endFlg; }

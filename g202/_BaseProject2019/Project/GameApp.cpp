@@ -55,16 +55,16 @@ MofBool CGameApp::Update(void) {
 		switch (nextScene)
 		{
 		case SCENENO_TITLE:
-			nowScene = new CSceneTitle();
+			nowScene = new CSceneTitle;
 			break;
 		case SCENENO_GAME:
-			nowScene = new CSceneGame();
+			nowScene = new CSceneGame;
 			break;
 		case SCENENO_GAMEMENU:
-			nowScene = new CSceneGameMenu();
+			nowScene = new CSceneGameMenu;
 			break;
 		case SCENENO_CONFIG:
-			nowScene = new CSceneConfig();
+			nowScene = new CSceneConfig;
 			break;
 		case SCENENO_STRESSCOLLECTION:
 			nowScene = new CSceneStressCollection;

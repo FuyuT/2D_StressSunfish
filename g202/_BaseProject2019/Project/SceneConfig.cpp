@@ -6,7 +6,7 @@ CSceneConfig::CSceneConfig()
 }
 CSceneConfig::~CSceneConfig()
 {
-
+	Release();
 }
 void CSceneConfig::Initialize()
 {
