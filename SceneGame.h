@@ -16,12 +16,29 @@ private:
 
 	int timeCnt = 0;
 
+	int bodyTemperature = 50;
+
+	int parasiteCnt = 0;
+	int parasiteFlg = 0;
+
 	Vector2 moveSpeed;
 	CTexture backGroundTexture;
 	CTexture playerTexture;
 	float scrollValueX;
 	float scrollValueY;
-	//CTexture stressGauge;
+
+	CTexture temperatureNormal;
+	CTexture temperatureHot;
+	CTexture temperatureCold;
+
+	CTexture hungerGauge;
+	CTexture hungerGaugeFrame;
+
+	CTexture parasite1;
+	CTexture parasite2;
+	CTexture parasite3;
+	CTexture parasite4;
+	CTexture parasite5;
 public:
 	CSceneGame();
 	~CSceneGame();
