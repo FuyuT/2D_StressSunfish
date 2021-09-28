@@ -40,6 +40,27 @@
     <Filter Include="ソース ファイル\ヘッダー ファイル\Stage">
       <UniqueIdentifier>{9c622120-4ee3-4e41-875e-fc0eb2ae50b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Utilitys">
+      <UniqueIdentifier>{836f2071-76e4-40ab-9354-71547ddc8ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Utilitys">
+      <UniqueIdentifier>{c08d5821-886a-4983-b74e-13d6cc19e9f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Stage">
+      <UniqueIdentifier>{1dbae22c-a064-4a30-ab0a-9579e420868b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\PopUpWindow">
+      <UniqueIdentifier>{9f6d1a96-f865-4b2a-913e-b574072c70b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\PopUpWindow">
+      <UniqueIdentifier>{e9ff58cc-cc4d-4314-89d8-f28768ddea0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Manager">
+      <UniqueIdentifier>{0e53553d-b53e-4b06-99ca-a74919fe1e35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Manager">
+      <UniqueIdentifier>{591cbf9b-6186-4ea2-a916-15a465d3487f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneTitle.cpp">
@@ -72,8 +93,38 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル\Obstacle</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>ソース ファイル\Utilitys</Filter>
+    </ClCompile>
     <ClCompile Include="Stage.cpp">
-      <Filter>ソース ファイル\Obstacle</Filter>
+      <Filter>ソース ファイル\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="GameQuitWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="ObstacleManager.cpp">
+      <Filter>ソース ファイル\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="PoseWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="RetryWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="BacktoTitleWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="CauseOfDeathWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="TrophyWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="ContinueWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +166,39 @@
     </ClInclude>
     <ClInclude Include="Stage1.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
+    </ClInclude>
+    <ClInclude Include="PopUpWindowBase.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="GameQuitWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleManager.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="PoseWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="RetryWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="BackToTitleWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="CauseOfDeathWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="TrophyWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="ContinueWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

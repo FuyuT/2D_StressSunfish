@@ -106,7 +106,14 @@ void CSceneGame::Update()
 		playerX = stgw - playerTexture.GetWidth();
 	}
 	//ã‰º
-
+	if (prec.Top < 0)
+	{
+		playerY = 0;
+	}
+	else if (prec.Bottom > stgh)
+	{
+		playerY = stgh - playerTexture.GetHeight();
+	}
 	
 	//ÀÛ‚ÉˆÚ“®
 	playerX += moveSpeed.x;

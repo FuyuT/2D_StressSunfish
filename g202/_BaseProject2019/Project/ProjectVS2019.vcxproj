@@ -102,9 +102,17 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BacktoTitleWindow.cpp" />
+    <ClCompile Include="CauseOfDeathWindow.cpp" />
+    <ClCompile Include="ContinueWindow.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="GameQuitWindow.cpp" />
+    <ClCompile Include="ObstacleManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PoseWindow.cpp" />
+    <ClCompile Include="ResultWindow.cpp" />
+    <ClCompile Include="RetryWindow.cpp" />
     <ClCompile Include="SceneConfig.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneGameMenu.cpp" />
@@ -112,13 +120,24 @@
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="SceneTrophyCollection.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TrophyWindow.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackToTitleWindow.h" />
+    <ClInclude Include="CauseOfDeathWindow.h" />
+    <ClInclude Include="ContinueWindow.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameApp.h" />
+    <ClInclude Include="GameQuitWindow.h" />
+    <ClInclude Include="ObstacleManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PopUpWindowBase.h" />
+    <ClInclude Include="PoseWindow.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ResultWindow.h" />
+    <ClInclude Include="RetryWindow.h" />
     <ClInclude Include="SceneBase.h" />
     <ClInclude Include="SceneConfig.h" />
     <ClInclude Include="SceneGame.h" />
@@ -128,6 +147,8 @@
     <ClInclude Include="SceneTrophyCollection.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Stage1.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="TrophyWindow.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />
