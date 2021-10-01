@@ -4,9 +4,13 @@
 class CSceneTitle : public CSceneBase
 {
 private:
-	CTexture	buttonTexture;
-	int			buttonPosX = 800;
-	int			buttonPosY = 800;
+private:
+	CTexture	gamePrayButtonTexture;
+	CTexture	gameFinishButtonTexture;
+	int			gamePrayButtonPosX;
+	int			gamePrayButtonPosY;
+	int			gameFinishButtonPosX;
+	int			gameFinishButtonPosY;
 public:
 	CSceneTitle();
 	~CSceneTitle();
@@ -14,9 +18,6 @@ public:
 	void Update() override;
 	void Render() override;
 	void Release() override;
-
-	CRectangle GetRect() {
-		return CRectangle(buttonPosX, buttonPosY, buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
-	};
+	CRectangle GetRect(int i);
 };
 

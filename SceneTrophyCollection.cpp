@@ -5,11 +5,11 @@ CSceneTrophyCollection::CSceneTrophyCollection()
 }
 CSceneTrophyCollection::~CSceneTrophyCollection()
 {
-
+	Release();
 }
 void CSceneTrophyCollection::Initialize()
 {
-	buttonTexture.Load("ButtonMenu.png");
+	menuButtonTexture.Load("ButtonMenu.png");
 }
 void CSceneTrophyCollection::Update()
 {
@@ -25,9 +25,9 @@ void CSceneTrophyCollection::Update()
 void CSceneTrophyCollection::Render()
 {
 	CGraphicsUtilities::RenderString(100, 300, "トロフィー画面");
-	buttonTexture.Render(buttonPosX, buttonPosY);
+	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 }
 void CSceneTrophyCollection::Release()
 {
-	buttonTexture.Release();
+	menuButtonTexture.Release();
 }

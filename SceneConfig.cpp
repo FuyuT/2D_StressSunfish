@@ -6,11 +6,11 @@ CSceneConfig::CSceneConfig()
 }
 CSceneConfig::~CSceneConfig()
 {
-
+	Release();
 }
 void CSceneConfig::Initialize()
 {
-	buttonTexture.Load("ButtonMenu.png");
+	menuButtonTexture.Load("ButtonMenu.png");
 }
 void CSceneConfig::Update()
 {
@@ -26,9 +26,9 @@ void CSceneConfig::Update()
 void CSceneConfig::Render()
 {
 	CGraphicsUtilities::RenderString(100, 300, "ê›íËâÊñ ");
-	buttonTexture.Render(buttonPosX, buttonPosY);
+	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 }
 void CSceneConfig::Release()
 {
-	buttonTexture.Release();
+	menuButtonTexture.Release();
 }
