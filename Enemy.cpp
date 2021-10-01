@@ -40,7 +40,7 @@ void Enemy::Update() {
 }
 
 void Enemy::Render() {
-	if (show) {
+	if (!show) {
 		return;
 	}
 	texture->Render(posX, posY);
