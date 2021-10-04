@@ -1,15 +1,10 @@
 #pragma once
 #include "SceneBase.h"
-#include "Player.h"
-
 class CSceneGame : public CSceneBase
 {
 private:
-	/*int playerX = 100;
-	int playerY = 100;*/
-
-	//’Ç‰Á
-	CPlayer pl;
+	int playerX = 100;
+	int playerY = 100;
 
 	int distancePlayer = 0;
 
@@ -17,24 +12,28 @@ private:
 	int stressBarY = 10;
 	int stressBarChenge = 300;
 
-	int stressNumber = 100;
-
-	int timeCnt = 0;
-
-	int bodyTemperature = 50;
+	int bodyTemp = 10;
 
 	int parasiteCnt = 0;
 	int parasiteFlg = 0;
 
-	//Vector2 moveSpeed;
+	float tempRegion = 245;
+	int hungerRegion = 40;
+
+	Vector2 moveSpeed;
 	CTexture backGroundTexture;
-	//CTexture playerTexture;
+	CTexture playerTexture;
 	float scrollValueX;
 	float scrollValueY;
 
-	CTexture temperatureNormal;
-	CTexture temperatureHot;
-	CTexture temperatureCold;
+	CTexture stressMeter;
+
+	CTexture tempNormal;
+	CTexture tempHot;
+	CTexture tempCold;
+
+	CTexture tempMeter;
+	CTexture tempMeterFrame;
 
 	CTexture hungerGauge;
 	CTexture hungerGaugeFrame;
@@ -52,20 +51,9 @@ public:
 	void Render() override;
 	void Release() override;
 
-	/*
-	//’Ç‰Á
-	float GetScrollX()
-	{
-		return scrollValueX;
-	};
-	float GetScrollY()
-	{
-		return scrollValueY;
-	}
-	*/
-	/*CRectangle GetRect() {
+	CRectangle GetRect() {
 		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
-	};*/
+	};
 
 };
 
