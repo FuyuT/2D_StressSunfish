@@ -39,6 +39,10 @@ private:
 	CTexture parasite3;
 	CTexture parasite4;
 	CTexture parasite5;
+
+	//áŠQ•¨
+	CTexture seaTurtleTexture;
+
 public:
 	CSceneGame();
 	~CSceneGame();

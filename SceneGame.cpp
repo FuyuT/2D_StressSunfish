@@ -1,4 +1,5 @@
 #include "SceneGame.h"
+
 #define	PLAYER_SPEED 10
 CSceneGame::CSceneGame():
 scrollValueX(0),
@@ -8,6 +9,7 @@ scrollValueY(0)
 
 CSceneGame::~CSceneGame()
 {
+
 }
 
 void CSceneGame::Initialize()
@@ -28,6 +30,9 @@ void CSceneGame::Initialize()
 	parasite3.Load("kiseitilyuu3.png");
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
+	//障害物
+	seaTurtleTexture.Load("ウミガメ ラフ.png");
+
 }
 
 void CSceneGame::Update()
@@ -281,8 +286,14 @@ void CSceneGame::Render()
 	//hungerGauge.Render(1400, 0);
 	hungerGaugeFrame.Render(1400, 0);
 
+	//障害物
+	seaTurtleTexture.Render(500 - scrollValueX, 500 - scrollValueY);
+	CRectangle seaTurtleRect(500 - scrollValueX, 500 - scrollValueY, 500 + 300 -scrollValueX, 500 + 200 - scrollValueY);
+	CGraphicsUtilities::RenderRect(seaTurtleRect,MOF_COLOR_BLACK);
+
 	//デバッグ用
 	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
+
 }
 
 void CSceneGame::Release()
@@ -302,4 +313,5 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
+	seaTurtleTexture.Release();
 }
