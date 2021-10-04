@@ -10,7 +10,7 @@ CSceneStressCollection::~CSceneStressCollection()
 }
 void CSceneStressCollection::Initialize()
 {
-	buttonTexture.Load("ButtonMenu.png");
+	menuButtonTexture.Load("ButtonMenu.png");
 }
 void CSceneStressCollection::Update()
 {
@@ -26,9 +26,9 @@ void CSceneStressCollection::Update()
 void CSceneStressCollection::Render()
 {
 	CGraphicsUtilities::RenderString(100, 300, "ストレス集画面");
-	buttonTexture.Render(buttonPosX, buttonPosY);
+	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 }
 void CSceneStressCollection::Release()
 {
-	buttonTexture.Release();
+	menuButtonTexture.Release();
 }
