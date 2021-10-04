@@ -9,14 +9,13 @@ scrollValueY(0)
 
 CSceneGame::~CSceneGame()
 {
-
 }
 
 void CSceneGame::Initialize()
 {
 	//stressGauge.Load("gauge.png");
 	backGroundTexture.Load("SeaTexture.png");
-	playerTexture.Load("Player.png");
+	//playerTexture.Load("Player.png");
 
 	temperatureNormal.Load("nicochyan5.png");
 	temperatureHot.Load("nicochyan6.png");
@@ -30,9 +29,8 @@ void CSceneGame::Initialize()
 	parasite3.Load("kiseitilyuu3.png");
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
-	//障害物
-	seaTurtleTexture.Load("ウミガメ ラフ.png");
 
+	pl.Initialize();
 }
 
 void CSceneGame::Update()
@@ -45,7 +43,7 @@ void CSceneGame::Update()
 	}
 
 	//スクロール
-	CRectangle prec = GetRect();
+	CRectangle prec = pl.GetRect();
 	//スクリーン幅
 	float sw = g_pGraphics->GetTargetWidth();
 	float sh = g_pGraphics->GetTargetHeight();
@@ -95,8 +93,8 @@ void CSceneGame::Update()
 	
 	//移動
 	//初期化（しないと加速するので
-	moveSpeed.x = 0; moveSpeed.y = 0;
-	if (g_pInput->IsKeyHold(MOFKEY_D))
+	//moveSpeed.x = 0; moveSpeed.y = 0;
+	/*if (g_pInput->IsKeyHold(MOFKEY_D))
 	{
 		moveSpeed.x += PLAYER_SPEED;
 		distancePlayer += 10.0f;
@@ -112,23 +110,28 @@ void CSceneGame::Update()
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
 		moveSpeed.y += PLAYER_SPEED;
-	}
+	}*/
 	//移動制限
 	//左右
-	if (prec.Left < 0)
-	{
-		playerX = 0;
-	}
-	else if (prec.Right > stgw)
-	{
-		playerX = stgw - playerTexture.GetWidth();
-	}
-	//上下
+	//if (prec.Left < 0)
+	//{
+	//	playerX = 0;
+	//}
+	//else if (prec.Right > stgw)
+	//{
+	//	playerX = stgw - playerTexture.GetWidth();
+	//}
+	////上下
 
-	
-	//実際に移動
-	playerX += moveSpeed.x;
-	playerY += moveSpeed.y;
+
+	//追加
+	pl.Update();
+
+
+	//
+	////実際に移動
+	//playerX += moveSpeed.x;
+	//playerY += moveSpeed.y;
 
 
 	//else if (prec.Right > backGroundTexture.GetWidth())
@@ -151,7 +154,7 @@ void CSceneGame::Update()
 
 	//体温変化
 	//体温下降
-	if (playerY >= backGroundTexture.GetHeight() - 500)
+	if (pl.GetPosX() >= backGroundTexture.GetHeight() - 500)
 	{		
 		if (timeCnt >= 40)
 		{
@@ -165,7 +168,7 @@ void CSceneGame::Update()
 		}
 	}
 	//体温上昇
-	else if (playerY <= backGroundTexture.GetHeight() - 1200)
+	else if (pl.GetPosY() <= backGroundTexture.GetHeight() - 1200)
 	{		
 		if (timeCnt >= 40)
 		{
@@ -244,7 +247,10 @@ void CSceneGame::Render()
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);
-	playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
+	
+	pl.Render(scrollValueX, scrollValueY);
+
+	//playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
 	//CGraphicsUtilities::RenderString(100, 300, "game画面");
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 	
@@ -286,21 +292,15 @@ void CSceneGame::Render()
 	//hungerGauge.Render(1400, 0);
 	hungerGaugeFrame.Render(1400, 0);
 
-	//障害物
-	seaTurtleTexture.Render(500 - scrollValueX, 500 - scrollValueY);
-	CRectangle seaTurtleRect(500 - scrollValueX, 500 - scrollValueY, 500 + 300 -scrollValueX, 500 + 200 - scrollValueY);
-	CGraphicsUtilities::RenderRect(seaTurtleRect,MOF_COLOR_BLACK);
-
 	//デバッグ用
 	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
-
 }
 
 void CSceneGame::Release()
 {
 	backGroundTexture.Release();
-	playerTexture.Release();
-
+	//playerTexture.Release();
+	pl.Release();
 	temperatureNormal.Release();
 	temperatureHot.Release();
 	temperatureCold.Release();
@@ -313,5 +313,4 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
-	seaTurtleTexture.Release();
 }
