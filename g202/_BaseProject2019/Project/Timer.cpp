@@ -19,12 +19,12 @@ void CTimer::Update()
 		NowTime -= CUtilities::GetFrameSecond();
 		if (NowTime < 0)
 		{
-			UpdateFlg = false;
+
 		}
 	}
 }
 
 void CTimer::Render(int xpos, int ypos)
 {
-	CGraphicsUtilities::RenderString(xpos, ypos, "Time:%3.0f", NowTime);
+	CGraphicsUtilities::RenderString(xpos, ypos,MOF_COLOR_BLACK, "Time:%3.0f", NowTime);
 }

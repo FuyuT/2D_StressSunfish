@@ -9,6 +9,8 @@ private:
 	float		speedX;
 	float		speedY;
 	bool		show;
+	CRectangle rect = CRectangle(0, 0, 10, 10);
+	int type = 2;
 public:
 	Enemy();
 	~Enemy();
@@ -18,5 +20,14 @@ public:
 	void Render();
 	void SetTexture(CTexture* pt) { texture = pt; }
 	bool GetShow() { return show; }
+	CRectangle GetRect()
+	{
+		return rect;
+	}
+	int GetType()
+	{
+		return type;
+	}
+
 };
 
