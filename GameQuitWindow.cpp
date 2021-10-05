@@ -14,7 +14,7 @@ void CGameQuitWindow::Initialize()
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
-	font.Create(64, "MS　明朝");
+	font.Create(32, "MS　明朝");
 	endFlg = false;
 }
 void CGameQuitWindow::Update()
@@ -24,8 +24,6 @@ void CGameQuitWindow::Update()
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
 		PostQuitMessage(0);
-		endFlg = true;
-		Release();
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -36,7 +34,7 @@ void CGameQuitWindow::Update()
 void CGameQuitWindow::Render()
 {
 	popUpTexture.Render(200,50);
-	font.RenderString(650, 400,MOF_XRGB(0,0,0), "ゲームを終了しますか?");
+	font.RenderString(750, 400,MOF_XRGB(0,0,0), "ゲームを終了しますか?");
 	buttonYesTexture.Render(buttonYesPosX,buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
 }
