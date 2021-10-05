@@ -30,8 +30,7 @@ void CSceneTitle::Update()
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
 		endFlg = true;
-		nextScene = SCENENO_GAMEMENU;
-		delete nowPopUp;
+		nextScene = SCENENO_GAMEMENU;;
 		CSceneTitle::Release();
 	}
 	//ƒQ[ƒ€I—¹‚ð‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
@@ -66,6 +65,11 @@ void CSceneTitle::Release()
 {
 	gamePrayButtonTexture.Release();
 	nowPopUp->Release();
+	if (nowPopUp)
+	{
+		delete nowPopUp;
+		nowPopUp = NULL;
+	}
 }
 
 CRectangle CSceneTitle::GetRect(int i)
