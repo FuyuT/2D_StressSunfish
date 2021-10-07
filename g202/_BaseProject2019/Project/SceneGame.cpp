@@ -159,8 +159,11 @@ void CSceneGame::Update()
 		tempTimer.StartTimer();
 		if (tempTimer.GetNowtime() <= 0)
 		{
-			bodyTemp -= 1;
-			tempRegion += 4.1;
+			if (bodyTemp > -30)
+			{
+				bodyTemp -= 1;
+				tempRegion += 4.1;
+			}
 			tempTimer.SetTotalTime(1);
 		}
 	}
@@ -171,8 +174,11 @@ void CSceneGame::Update()
 		tempTimer.StartTimer();
 		if (tempTimer.GetNowtime() <= 0)
 		{
-			bodyTemp += 1;
-			tempRegion -= 4.1;
+			if (bodyTemp < 50)
+			{
+				bodyTemp += 1;
+				tempRegion -= 4.1;
+			}
 			tempTimer.SetTotalTime(1);
 		}
 	}
@@ -221,7 +227,10 @@ void CSceneGame::Update()
 	hungerTimer.StartTimer();
 	if (hungerTimer.GetNowtime() <= 0)
 	{
-		hungerRegion += 3;
+		if (hungerRegion < 160)
+		{
+			hungerRegion += 3;
+		}		
 		hungerTimer.SetTotalTime(3);
 	}
 }
@@ -283,7 +292,7 @@ void CSceneGame::Render()
 	hungerGauge.Render(1400,hungerRegion,rec3);
 
 	//デバッグ用
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemp);
+	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "温度  %d", bodyTemp);
 	tempTimer.Render(10, 70);
 	hungerTimer.Render(10, 90);
 	parasiteTimer.Render(10, 110);

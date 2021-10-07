@@ -1,4 +1,7 @@
 #include "SceneTitle.h"
+#include "GameQuitWindow.h"
+
+CPopUpWindowBase* nowPopUp = NULL;
 
 CSceneTitle::CSceneTitle()
 {
@@ -16,6 +19,8 @@ void CSceneTitle::Initialize()
 	gamePrayButtonPosY = 700;
 	gameFinishButtonPosX = 800;
 	gameFinishButtonPosY = 800;
+	nowPopUp = new CGameQuitWindow;
+	nowPopUp->Initialize();
 }
 
 void CSceneTitle::Update()
@@ -25,12 +30,23 @@ void CSceneTitle::Update()
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
 		endFlg = true;
-		nextScene = SCENENO_GAMEMENU;
+		nextScene = SCENENO_GAMEMENU;;
 		CSceneTitle::Release();
 	}
 	//ゲーム終了を押したときの処理
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
+		popUpFlg = true;
+	}
+	
+	if (popUpFlg)
+	{
+		nowPopUp->Initialize();
+		nowPopUp->Update();
+		if (nowPopUp->IsEnd())
+		{
+			popUpFlg = false;
+		}
 	}
 }
 
@@ -39,11 +55,21 @@ void CSceneTitle::Render()
 	CGraphicsUtilities::RenderString(100, 300, "タイトル画面");
 	gamePrayButtonTexture.Render(gamePrayButtonPosX, gamePrayButtonPosY);
 	gameFinishButtonTexture.Render(gameFinishButtonPosX, gameFinishButtonPosY);
+	if (popUpFlg)
+	{
+		nowPopUp->Render();
+	}
 }
 
 void CSceneTitle::Release()
 {
 	gamePrayButtonTexture.Release();
+	nowPopUp->Release();
+	if (nowPopUp)
+	{
+		delete nowPopUp;
+		nowPopUp = NULL;
+	}
 }
 
 CRectangle CSceneTitle::GetRect(int i)
