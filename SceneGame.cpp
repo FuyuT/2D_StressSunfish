@@ -1,28 +1,21 @@
 #include "SceneGame.h"
-#include "Enemy.h"
-
-Enemy cEnemy;
 
 #define	PLAYER_SPEED 10
 CSceneGame::CSceneGame():
 scrollValueX(0),
-scrollValueY(0),
-deadFlag(false),
-posX(0.0f),
-posY(0.0f)
+scrollValueY(0)
 {
 }
 
 CSceneGame::~CSceneGame()
 {
-
 }
 
 void CSceneGame::Initialize()
 {
 	//stressGauge.Load("gauge.png");
 	backGroundTexture.Load("SeaTexture.png");
-	playerTexture.Load("Player.png");
+	//playerTexture.Load("Player.png");
 
 	temperatureNormal.Load("nicochyan5.png");
 	temperatureHot.Load("nicochyan6.png");
@@ -36,13 +29,12 @@ void CSceneGame::Initialize()
 	parasite3.Load("kiseitilyuu3.png");
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
-	//障害物
-	cEnemy.Initialize();
-	cEnemy.Start(scrollValueX,scrollValueY,0);
-	//seaTurtleTexture.Load("ウミガメ ラフ.png");
-	posX = 500;
-	posY = 500;
 
+	pl.Initialize();
+	ene.Initialize();
+
+	//ePosX = 1800;
+	//ePosY = 1000;
 }
 
 void CSceneGame::Update()
@@ -55,7 +47,7 @@ void CSceneGame::Update()
 	}
 
 	//スクロール
-	CRectangle prec = GetRect();
+	CRectangle prec = pl.GetRect();
 	//スクリーン幅
 	float sw = g_pGraphics->GetTargetWidth();
 	float sh = g_pGraphics->GetTargetHeight();
@@ -105,8 +97,8 @@ void CSceneGame::Update()
 	
 	//移動
 	//初期化（しないと加速するので
-	moveSpeed.x = 0; moveSpeed.y = 0;
-	if (g_pInput->IsKeyHold(MOFKEY_D))
+	//moveSpeed.x = 0; moveSpeed.y = 0;
+	/*if (g_pInput->IsKeyHold(MOFKEY_D))
 	{
 		moveSpeed.x += PLAYER_SPEED;
 		distancePlayer += 10.0f;
@@ -122,23 +114,32 @@ void CSceneGame::Update()
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
 		moveSpeed.y += PLAYER_SPEED;
-	}
+	}*/
 	//移動制限
 	//左右
-	if (prec.Left < 0)
-	{
-		playerX = 0;
-	}
-	else if (prec.Right > stgw)
-	{
-		playerX = stgw - playerTexture.GetWidth();
-	}
-	//上下
+	//if (prec.Left < 0)
+	//{
+	//	playerX = 0;
+	//}
+	//else if (prec.Right > stgw)
+	//{
+	//	playerX = stgw - playerTexture.GetWidth();
+	//}
+	////上下
 
-	
-	//実際に移動
-	playerX += moveSpeed.x;
-	playerY += moveSpeed.y;
+	ene.Update();
+	//追加
+	pl.Update();
+	pl.Collision(ene);
+
+	//敵
+	/*ePosX -= 1;*/
+
+
+	//
+	////実際に移動
+	//playerX += moveSpeed.x;
+	//playerY += moveSpeed.y;
 
 
 	//else if (prec.Right > backGroundTexture.GetWidth())
@@ -161,95 +162,92 @@ void CSceneGame::Update()
 
 	//体温変化
 	//体温下降
-	if (playerY >= backGroundTexture.GetHeight() - 500)
-	{		
-		if (timeCnt >= 40)
-		{
-			bodyTemperature -= 1;
+	//if (pl.GetPosX() >= backGroundTexture.GetHeight() - 500)
+	//{		
+	//	if (timeCnt >= 40)
+	//	{
+	//		bodyTemperature -= 1;
 
-			timeCnt = 0;
-		}
-		else
-		{
-			timeCnt += 1;
-		}
-	}
-	//体温上昇
-	else if (playerY <= backGroundTexture.GetHeight() - 1200)
-	{		
-		if (timeCnt >= 40)
-		{
-			bodyTemperature += 1;
+	//		timeCnt = 0;
+	//	}
+	//	else
+	//	{
+	//		timeCnt += 1;
+	//	}
+	//}
+	////体温上昇
+	//else if (pl.GetPosY() <= backGroundTexture.GetHeight() - 1200)
+	//{		
+	//	if (timeCnt >= 40)
+	//	{
+	//		bodyTemperature += 1;
 
-			timeCnt = 0;
-		}
-		else
-		{
-			timeCnt += 1;
-		}
-	}
-	//体温が一定の値に戻る
-	else
-	{
-		if (bodyTemperature > 50)
-		{			
-			if (timeCnt == 80)
-			{
-				bodyTemperature -= 1;
+	//		timeCnt = 0;
+	//	}
+	//	else
+	//	{
+	//		timeCnt += 1;
+	//	}
+	//}
+	////体温が一定の値に戻る
+	//else
+	//{
+	//	if (bodyTemperature > 50)
+	//	{			
+	//		if (timeCnt == 80)
+	//		{
+	//			bodyTemperature -= 1;
 
-				timeCnt = 0;
-			}
-			else
-			{
-				timeCnt += 1;
-			}
-		}
-		else if (bodyTemperature < 50)
-		{			
-			if (timeCnt == 80)
-			{
-				bodyTemperature += 1;
+	//			timeCnt = 0;
+	//		}
+	//		else
+	//		{
+	//			timeCnt += 1;
+	//		}
+	//	}
+	//	else if (bodyTemperature < 50)
+	//	{			
+	//		if (timeCnt == 80)
+	//		{
+	//			bodyTemperature += 1;
 
-				timeCnt = 0;
-			}
-			else
-			{
-				timeCnt += 1;
-			}
-		}
-	}
+	//			timeCnt = 0;
+	//		}
+	//		else
+	//		{
+	//			timeCnt += 1;
+	//		}
+	//	}
+	//}
 
-	//寄生虫(仮)
-	parasiteCnt += 1;
+	////寄生虫(仮)
+	//parasiteCnt += 1;
 
-	if (parasiteCnt == 50)
-	{
-		parasiteFlg = 1;
-	}
-	else if (parasiteCnt == 100)
-	{
-		parasiteFlg = 2;
-	}
-	else if (parasiteCnt == 150)
-	{
-		parasiteFlg = 3;
-	}
-	else if (parasiteCnt == 200)
-	{
-		parasiteFlg = 4;
-	}
-	else if (parasiteCnt == 250)
-	{
-		parasiteFlg = 5;
-	}
-	else if (parasiteCnt == 300)
-	{
-		parasiteFlg = 0;
-		parasiteCnt = 0;
-	}
-
-	//seaTurtle
-	cEnemy.Update();
+	//if (parasiteCnt == 50)
+	//{
+	//	parasiteFlg = 1;
+	//}
+	//else if (parasiteCnt == 100)
+	//{
+	//	parasiteFlg = 2;
+	//}
+	//else if (parasiteCnt == 150)
+	//{
+	//	parasiteFlg = 3;
+	//}
+	//else if (parasiteCnt == 200)
+	//{
+	//	parasiteFlg = 4;
+	//}
+	//else if (parasiteCnt == 250)
+	//{
+	//	parasiteFlg = 5;
+	//}
+	//else if (parasiteCnt == 300)
+	//{
+	//	parasiteFlg = 0;
+	//	parasiteCnt = 0;
+	//}
 }
 
 void CSceneGame::Render()
@@ -257,61 +255,71 @@ void CSceneGame::Render()
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);
-	playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
-	//CGraphicsUtilities::RenderString(100, 300, "game画面");
-	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 	
-	//体温UI描画
-	if (bodyTemperature >=70)
-	{
-		temperatureHot.Render(1600, 0);
-	}
-	else if (bodyTemperature <= 30)
-	{
-		temperatureCold.Render(1600, 0);
-	}
-	else
-	{
-		temperatureNormal.Render(1600, 0);
-	}
+	ene.Render(scrollValueX, scrollValueY);
 
-	//寄生虫UIの描画(仮)
-	switch (parasiteFlg)
-	{
-	case 1:
-		parasite1.Render(1600, 0);
-		break;
-	case 2:
-		parasite2.Render(1600, 0);
-		break;
-	case 3:
-		parasite3.Render(1600, 0);
-		break;
-	case 4:
-		parasite4.Render(1600, 0);
-		break;
-	case 5:
-		parasite5.Render(1600, 0);
-		break;
-	}
 
-	//空腹ゲージUI描画
-	//hungerGauge.Render(1400, 0);
-	hungerGaugeFrame.Render(1400, 0);
+	pl.Render(scrollValueX, scrollValueY);
+	pl.RenderDebug(scrollValueX, scrollValueY);
 
-	//障害物
-	cEnemy.Render(scrollValueX,scrollValueY);
+	/*CGraphicsUtilities::RenderFillRect(
+		GetRect().Left - scrollValueX,
+		GetRect().Top - scrollValueY,
+		GetRect().Right - scrollValueX,
+		GetRect().Bottom - scrollValueY,
+		MOF_COLOR_RED);*/
 
-	//デバッグ用
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
+	//playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
+	//CGraphicsUtilities::RenderString(100, 300, "game画面");
+	//CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "%d m",distancePlayer);
+	
+	////体温UI描画
+	//if (bodyTemperature >=70)
+	//{
+	//	temperatureHot.Render(1600, 0);
+	//}
+	//else if (bodyTemperature <= 30)
+	//{
+	//	temperatureCold.Render(1600, 0);
+	//}
+	//else
+	//{
+	//	temperatureNormal.Render(1600, 0);
+	//}
 
+	////寄生虫UIの描画(仮)
+	//switch (parasiteFlg)
+	//{
+	//case 1:
+	//	parasite1.Render(1600, 0);
+	//	break;
+	//case 2:
+	//	parasite2.Render(1600, 0);
+	//	break;
+	//case 3:
+	//	parasite3.Render(1600, 0);
+	//	break;
+	//case 4:
+	//	parasite4.Render(1600, 0);
+	//	break;
+	//case 5:
+	//	parasite5.Render(1600, 0);
+	//	break;
+	//}
+
+	////空腹ゲージUI描画
+	////hungerGauge.Render(1400, 0);
+	//hungerGaugeFrame.Render(1400, 0);
+
+	////デバッグ用
+	//CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
 }
 
 void CSceneGame::Release()
 {
 	backGroundTexture.Release();
-	playerTexture.Release();
-
+	//playerTexture.Release();
+	pl.Release();
 	temperatureNormal.Release();
 	temperatureHot.Release();
 	temperatureCold.Release();
@@ -324,6 +332,4 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
-	cEnemy.Release();
-	//seaTurtleTexture.Release();
 }

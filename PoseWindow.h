@@ -1,6 +1,6 @@
 #pragma once
 #include "PopUpWindowBase.h"
-class CGameQuitWindow : public CPopUpWindowBase
+class PoseWindow : public CPopUpWindowBase
 {
 };
 

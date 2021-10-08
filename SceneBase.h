@@ -16,7 +16,7 @@ class CSceneBase
 protected:
 	bool		endFlg = false;
 	short		nextScene;
-	bool		popUpFlg = false;
+	
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() {}
