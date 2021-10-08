@@ -1,9 +1,15 @@
 #include "SceneGame.h"
+#include "Enemy.h"
+
+Enemy cEnemy;
 
 #define	PLAYER_SPEED 10
 CSceneGame::CSceneGame():
 scrollValueX(0),
-scrollValueY(0)
+scrollValueY(0),
+deadFlag(false),
+posX(0.0f),
+posY(0.0f)
 {
 }
 
@@ -31,7 +37,11 @@ void CSceneGame::Initialize()
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
 	//障害物
-	seaTurtleTexture.Load("ウミガメ ラフ.png");
+	cEnemy.Initialize();
+	cEnemy.Start(scrollValueX,scrollValueY,0);
+	//seaTurtleTexture.Load("ウミガメ ラフ.png");
+	posX = 500;
+	posY = 500;
 
 }
 
@@ -237,6 +247,9 @@ void CSceneGame::Update()
 		parasiteFlg = 0;
 		parasiteCnt = 0;
 	}
+
+	//seaTurtle
+	cEnemy.Update();
 }
 
 void CSceneGame::Render()
@@ -287,9 +300,7 @@ void CSceneGame::Render()
 	hungerGaugeFrame.Render(1400, 0);
 
 	//障害物
-	seaTurtleTexture.Render(500 - scrollValueX, 500 - scrollValueY);
-	CRectangle seaTurtleRect(500 - scrollValueX, 500 - scrollValueY, 500 + 300 -scrollValueX, 500 + 200 - scrollValueY);
-	CGraphicsUtilities::RenderRect(seaTurtleRect,MOF_COLOR_BLACK);
+	cEnemy.Render(scrollValueX,scrollValueY);
 
 	//デバッグ用
 	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
@@ -313,5 +324,6 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
-	seaTurtleTexture.Release();
+	cEnemy.Release();
+	//seaTurtleTexture.Release();
 }

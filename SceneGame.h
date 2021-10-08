@@ -41,7 +41,10 @@ private:
 	CTexture parasite5;
 
 	//è·äQï®
+	int posX;
+	int posY;
 	CTexture seaTurtleTexture;
+	bool deadFlag;
 
 public:
 	CSceneGame();

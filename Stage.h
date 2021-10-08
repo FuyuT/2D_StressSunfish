@@ -7,6 +7,7 @@
 typedef struct tag_ENEMYSTART {
 	float posX;
 	float scroll;
+	int type;
 }ENEMYSTART;
 
 class Stage

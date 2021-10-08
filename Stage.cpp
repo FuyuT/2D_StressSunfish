@@ -40,7 +40,7 @@ void Stage::Update(Enemy* ene, int ecnt) {
 				continue;
 			}
 			ene[i].SetTexture(&enemyTexture);
-			ene[i].Start(enemyStart[enemyNo].posX, 0);
+			ene[i].Start(enemyStart[enemyNo].posX, 0,enemyStart[enemyNo].type);
 			break;
 		}
 		enemyNo++;
