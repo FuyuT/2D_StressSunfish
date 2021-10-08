@@ -1,17 +1,21 @@
 #include "SceneGame.h"
-#include "Timer.h"
+#include "Enemy.h"
+
+Enemy cEnemy;
+
 #define	PLAYER_SPEED 10
-CTimer tempTimer;
-CTimer hungerTimer;
-CTimer parasiteTimer;
 CSceneGame::CSceneGame():
 scrollValueX(0),
-scrollValueY(0)
+scrollValueY(0),
+deadFlag(false),
+posX(0.0f),
+posY(0.0f)
 {
 }
 
 CSceneGame::~CSceneGame()
 {
+
 }
 
 void CSceneGame::Initialize()
@@ -20,14 +24,9 @@ void CSceneGame::Initialize()
 	backGroundTexture.Load("SeaTexture.png");
 	playerTexture.Load("Player.png");
 
-	stressMeter.Load("sutoresume--ta-.png");
-
-	tempNormal.Load("nicochyan5.png");
-	tempHot.Load("nicochyan6.png");
-	tempCold.Load("nicochyan4.png");
-
-	tempMeter.Load("temperatureMeter.png");
-	tempMeterFrame.Load("temperatureMeterFrame.png");
+	temperatureNormal.Load("nicochyan5.png");
+	temperatureHot.Load("nicochyan6.png");
+	temperatureCold.Load("nicochyan4.png");
 
 	hungerGauge.Load("stomach2.png");
 	hungerGaugeFrame.Load("stomach.png");
@@ -37,11 +36,13 @@ void CSceneGame::Initialize()
 	parasite3.Load("kiseitilyuu3.png");
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
+	//障害物
+	cEnemy.Initialize();
+	cEnemy.Start(scrollValueX,scrollValueY,0);
+	//seaTurtleTexture.Load("ウミガメ ラフ.png");
+	posX = 500;
+	posY = 500;
 
-	//タイマー
-	tempTimer.SetTotalTime(2);
-	hungerTimer.SetTotalTime(3);
-	parasiteTimer.SetTotalTime(15);
 }
 
 void CSceneGame::Update()
@@ -53,10 +54,6 @@ void CSceneGame::Update()
 		nextScene = SCENENO_TITLE;
 	}
 
-	//タイマー
-	tempTimer.Update();
-	hungerTimer.Update();
-	parasiteTimer.Update();
 	//スクロール
 	CRectangle prec = GetRect();
 	//スクリーン幅
@@ -150,89 +147,109 @@ void CSceneGame::Update()
 	//}
 
 
+	//if (timeCnt == 75)
+	//{
+	//	stressNumber -= 1;
+	//	stressBarChenge -= 3;
+
+	//	timeCnt = 0;
+	//}
+	//else
+	//{
+	//	timeCnt += 1;
+	//}
 
 	//体温変化
 	//体温下降
-	if (playerY >= backGroundTexture.GetHeight() - 330)
+	if (playerY >= backGroundTexture.GetHeight() - 500)
 	{		
-		//タイマーセット
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
+		if (timeCnt >= 40)
 		{
-			if (bodyTemp > -30)
-			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
-			}
-			tempTimer.SetTotalTime(1);
+			bodyTemperature -= 1;
+
+			timeCnt = 0;
+		}
+		else
+		{
+			timeCnt += 1;
 		}
 	}
 	//体温上昇
 	else if (playerY <= backGroundTexture.GetHeight() - 1200)
-	{	
-		//タイマーセット
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
+	{		
+		if (timeCnt >= 40)
 		{
-			if (bodyTemp < 50)
-			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
-			}
-			tempTimer.SetTotalTime(1);
+			bodyTemperature += 1;
+
+			timeCnt = 0;
+		}
+		else
+		{
+			timeCnt += 1;
 		}
 	}
 	//体温が一定の値に戻る
 	else
 	{
-		if (bodyTemp > 10)
-		{	
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
+		if (bodyTemperature > 50)
+		{			
+			if (timeCnt == 80)
 			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
-				tempTimer.SetTotalTime(2);
+				bodyTemperature -= 1;
+
+				timeCnt = 0;
+			}
+			else
+			{
+				timeCnt += 1;
 			}
 		}
-		else if (bodyTemp < 10)
-		{	
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
+		else if (bodyTemperature < 50)
+		{			
+			if (timeCnt == 80)
 			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
-				tempTimer.SetTotalTime(2);
+				bodyTemperature += 1;
+
+				timeCnt = 0;
+			}
+			else
+			{
+				timeCnt += 1;
 			}
 		}
 	}
 
-	//寄生虫
-	if (parasiteFlg < 5)
-	{
-		//タイマーセット
-		parasiteTimer.StartTimer();
-		if (parasiteTimer.GetNowtime() <= 0)
-		{
-			parasiteFlg += 1;
-			parasiteTimer.SetTotalTime(15);
-		}
+	//寄生虫(仮)
+	parasiteCnt += 1;
 
+	if (parasiteCnt == 50)
+	{
+		parasiteFlg = 1;
+	}
+	else if (parasiteCnt == 100)
+	{
+		parasiteFlg = 2;
+	}
+	else if (parasiteCnt == 150)
+	{
+		parasiteFlg = 3;
+	}
+	else if (parasiteCnt == 200)
+	{
+		parasiteFlg = 4;
+	}
+	else if (parasiteCnt == 250)
+	{
+		parasiteFlg = 5;
+	}
+	else if (parasiteCnt == 300)
+	{
+		parasiteFlg = 0;
+		parasiteCnt = 0;
 	}
 
-	//空腹ゲージ
-	//タイマーセット
-	hungerTimer.StartTimer();
-	if (hungerTimer.GetNowtime() <= 0)
-	{
-		if (hungerRegion < 160)
-		{
-			hungerRegion += 3;
-		}		
-		hungerTimer.SetTotalTime(3);
-	}
+	//seaTurtle
+	cEnemy.Update();
 }
 
 void CSceneGame::Render()
@@ -243,29 +260,22 @@ void CSceneGame::Render()
 	playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
 	//CGraphicsUtilities::RenderString(100, 300, "game画面");
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
-
-	stressMeter.Render(1600, 0);
 	
 	//体温UI描画
-	if (bodyTemp >=40)
+	if (bodyTemperature >=70)
 	{
-		tempHot.Render(1600, 0);
+		temperatureHot.Render(1600, 0);
 	}
-	else if (bodyTemp <= -20)
+	else if (bodyTemperature <= 30)
 	{
-		tempCold.Render(1600, 0);
+		temperatureCold.Render(1600, 0);
 	}
 	else
 	{
-		tempNormal.Render(1600, 0);
+		temperatureNormal.Render(1600, 0);
 	}
 
-	//温度計UI描画
-	tempMeterFrame.Render(1550,200);
-	CRectangle rec1(0, tempRegion, 500, 500);
-	tempMeter.Render(1550, 200 + tempRegion,rec1);
-
-	//寄生虫UIの描画
+	//寄生虫UIの描画(仮)
 	switch (parasiteFlg)
 	{
 	case 1:
@@ -286,16 +296,15 @@ void CSceneGame::Render()
 	}
 
 	//空腹ゲージUI描画
-	CRectangle rec2(0, 0, 330, 200);
-	hungerGaugeFrame.Render(1400, 0,rec2);
-	CRectangle rec3(0,hungerRegion, 330, 200);
-	hungerGauge.Render(1400,hungerRegion,rec3);
+	//hungerGauge.Render(1400, 0);
+	hungerGaugeFrame.Render(1400, 0);
+
+	//障害物
+	cEnemy.Render(scrollValueX,scrollValueY);
 
 	//デバッグ用
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "温度  %d", bodyTemp);
-	tempTimer.Render(10, 70);
-	hungerTimer.Render(10, 90);
-	parasiteTimer.Render(10, 110);
+	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
+
 }
 
 void CSceneGame::Release()
@@ -303,14 +312,9 @@ void CSceneGame::Release()
 	backGroundTexture.Release();
 	playerTexture.Release();
 
-	stressMeter.Release();
-
-	tempNormal.Release();
-	tempHot.Release();
-	tempCold.Release();
-
-	tempMeter.Release();
-	tempMeterFrame.Release();
+	temperatureNormal.Release();
+	temperatureHot.Release();
+	temperatureCold.Release();
 
 	hungerGauge.Release();
 	hungerGaugeFrame.Release();
@@ -320,4 +324,6 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
+	cEnemy.Release();
+	//seaTurtleTexture.Release();
 }

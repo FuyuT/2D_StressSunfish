@@ -1,33 +1,27 @@
 #pragma once
 #include "Mof.h"
+
 class Enemy
 {
 private:
+	CTexture    seaTurtleTexture;
 	CTexture*	texture;
 	float		posX;
 	float		posY;
 	float		speedX;
 	float		speedY;
 	bool		show;
-	CRectangle rect = CRectangle(0, 0, 10, 10);
-	int type = 2;
+	int			type;
 public:
 	Enemy();
 	~Enemy();
 	void Initialize();
-	void Start(float px, float py);
+	void Start(float px, float py,int t);
 	void Update();
-	void Render();
+	void Render(float px,float py);
+	void Release();
 	void SetTexture(CTexture* pt) { texture = pt; }
 	bool GetShow() { return show; }
-	CRectangle GetRect()
-	{
-		return rect;
-	}
-	int GetType()
-	{
-		return type;
-	}
-
+	void UpdateType0() { type = 0; };
 };
 
