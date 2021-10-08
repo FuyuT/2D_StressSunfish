@@ -31,6 +31,10 @@ void CSceneGame::Initialize()
 	parasite5.Load("kiseitilyuu5.png");
 
 	pl.Initialize();
+	ene.Initialize();
+
+	//ePosX = 1800;
+	//ePosY = 1000;
 }
 
 void CSceneGame::Update()
@@ -123,9 +127,13 @@ void CSceneGame::Update()
 	//}
 	////è„â∫
 
-
+	ene.Update();
 	//í«â¡
 	pl.Update();
+	pl.Collision(ene);
+
+	//ìG
+	/*ePosX -= 1;*/
 
 
 	//
@@ -154,92 +162,92 @@ void CSceneGame::Update()
 
 	//ëÃâ∑ïœâª
 	//ëÃâ∑â∫ç~
-	if (pl.GetPosX() >= backGroundTexture.GetHeight() - 500)
-	{		
-		if (timeCnt >= 40)
-		{
-			bodyTemperature -= 1;
+	//if (pl.GetPosX() >= backGroundTexture.GetHeight() - 500)
+	//{		
+	//	if (timeCnt >= 40)
+	//	{
+	//		bodyTemperature -= 1;
 
-			timeCnt = 0;
-		}
-		else
-		{
-			timeCnt += 1;
-		}
-	}
-	//ëÃâ∑è„è∏
-	else if (pl.GetPosY() <= backGroundTexture.GetHeight() - 1200)
-	{		
-		if (timeCnt >= 40)
-		{
-			bodyTemperature += 1;
+	//		timeCnt = 0;
+	//	}
+	//	else
+	//	{
+	//		timeCnt += 1;
+	//	}
+	//}
+	////ëÃâ∑è„è∏
+	//else if (pl.GetPosY() <= backGroundTexture.GetHeight() - 1200)
+	//{		
+	//	if (timeCnt >= 40)
+	//	{
+	//		bodyTemperature += 1;
 
-			timeCnt = 0;
-		}
-		else
-		{
-			timeCnt += 1;
-		}
-	}
-	//ëÃâ∑Ç™àÍíËÇÃílÇ…ñﬂÇÈ
-	else
-	{
-		if (bodyTemperature > 50)
-		{			
-			if (timeCnt == 80)
-			{
-				bodyTemperature -= 1;
+	//		timeCnt = 0;
+	//	}
+	//	else
+	//	{
+	//		timeCnt += 1;
+	//	}
+	//}
+	////ëÃâ∑Ç™àÍíËÇÃílÇ…ñﬂÇÈ
+	//else
+	//{
+	//	if (bodyTemperature > 50)
+	//	{			
+	//		if (timeCnt == 80)
+	//		{
+	//			bodyTemperature -= 1;
 
-				timeCnt = 0;
-			}
-			else
-			{
-				timeCnt += 1;
-			}
-		}
-		else if (bodyTemperature < 50)
-		{			
-			if (timeCnt == 80)
-			{
-				bodyTemperature += 1;
+	//			timeCnt = 0;
+	//		}
+	//		else
+	//		{
+	//			timeCnt += 1;
+	//		}
+	//	}
+	//	else if (bodyTemperature < 50)
+	//	{			
+	//		if (timeCnt == 80)
+	//		{
+	//			bodyTemperature += 1;
 
-				timeCnt = 0;
-			}
-			else
-			{
-				timeCnt += 1;
-			}
-		}
-	}
+	//			timeCnt = 0;
+	//		}
+	//		else
+	//		{
+	//			timeCnt += 1;
+	//		}
+	//	}
+	//}
 
-	//äÒê∂íé(âº)
-	parasiteCnt += 1;
+	////äÒê∂íé(âº)
+	//parasiteCnt += 1;
 
-	if (parasiteCnt == 50)
-	{
-		parasiteFlg = 1;
-	}
-	else if (parasiteCnt == 100)
-	{
-		parasiteFlg = 2;
-	}
-	else if (parasiteCnt == 150)
-	{
-		parasiteFlg = 3;
-	}
-	else if (parasiteCnt == 200)
-	{
-		parasiteFlg = 4;
-	}
-	else if (parasiteCnt == 250)
-	{
-		parasiteFlg = 5;
-	}
-	else if (parasiteCnt == 300)
-	{
-		parasiteFlg = 0;
-		parasiteCnt = 0;
-	}
+	//if (parasiteCnt == 50)
+	//{
+	//	parasiteFlg = 1;
+	//}
+	//else if (parasiteCnt == 100)
+	//{
+	//	parasiteFlg = 2;
+	//}
+	//else if (parasiteCnt == 150)
+	//{
+	//	parasiteFlg = 3;
+	//}
+	//else if (parasiteCnt == 200)
+	//{
+	//	parasiteFlg = 4;
+	//}
+	//else if (parasiteCnt == 250)
+	//{
+	//	parasiteFlg = 5;
+	//}
+	//else if (parasiteCnt == 300)
+	//{
+	//	parasiteFlg = 0;
+	//	parasiteCnt = 0;
+	//}
 }
 
 void CSceneGame::Render()
@@ -248,52 +256,63 @@ void CSceneGame::Render()
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);
 	
+	ene.Render(scrollValueX, scrollValueY);
+
+
 	pl.Render(scrollValueX, scrollValueY);
+	pl.RenderDebug(scrollValueX, scrollValueY);
+
+	/*CGraphicsUtilities::RenderFillRect(
+		GetRect().Left - scrollValueX,
+		GetRect().Top - scrollValueY,
+		GetRect().Right - scrollValueX,
+		GetRect().Bottom - scrollValueY,
+		MOF_COLOR_RED);*/
 
 	//playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
 	//CGraphicsUtilities::RenderString(100, 300, "gameâÊñ ");
-	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
+	//CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "%d m",distancePlayer);
 	
-	//ëÃâ∑UIï`âÊ
-	if (bodyTemperature >=70)
-	{
-		temperatureHot.Render(1600, 0);
-	}
-	else if (bodyTemperature <= 30)
-	{
-		temperatureCold.Render(1600, 0);
-	}
-	else
-	{
-		temperatureNormal.Render(1600, 0);
-	}
+	////ëÃâ∑UIï`âÊ
+	//if (bodyTemperature >=70)
+	//{
+	//	temperatureHot.Render(1600, 0);
+	//}
+	//else if (bodyTemperature <= 30)
+	//{
+	//	temperatureCold.Render(1600, 0);
+	//}
+	//else
+	//{
+	//	temperatureNormal.Render(1600, 0);
+	//}
 
-	//äÒê∂íéUIÇÃï`âÊ(âº)
-	switch (parasiteFlg)
-	{
-	case 1:
-		parasite1.Render(1600, 0);
-		break;
-	case 2:
-		parasite2.Render(1600, 0);
-		break;
-	case 3:
-		parasite3.Render(1600, 0);
-		break;
-	case 4:
-		parasite4.Render(1600, 0);
-		break;
-	case 5:
-		parasite5.Render(1600, 0);
-		break;
-	}
+	////äÒê∂íéUIÇÃï`âÊ(âº)
+	//switch (parasiteFlg)
+	//{
+	//case 1:
+	//	parasite1.Render(1600, 0);
+	//	break;
+	//case 2:
+	//	parasite2.Render(1600, 0);
+	//	break;
+	//case 3:
+	//	parasite3.Render(1600, 0);
+	//	break;
+	//case 4:
+	//	parasite4.Render(1600, 0);
+	//	break;
+	//case 5:
+	//	parasite5.Render(1600, 0);
+	//	break;
+	//}
 
-	//ãÛï†ÉQÅ[ÉWUIï`âÊ
-	//hungerGauge.Render(1400, 0);
-	hungerGaugeFrame.Render(1400, 0);
+	////ãÛï†ÉQÅ[ÉWUIï`âÊ
+	////hungerGauge.Render(1400, 0);
+	//hungerGaugeFrame.Render(1400, 0);
 
-	//ÉfÉoÉbÉOóp
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
+	////ÉfÉoÉbÉOóp
+	//CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
 }
 
 void CSceneGame::Release()

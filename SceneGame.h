@@ -1,6 +1,7 @@
 #pragma once
 #include "SceneBase.h"
 #include "Player.h"
+#include "Enemy.h"
 
 class CSceneGame : public CSceneBase
 {
@@ -8,8 +9,13 @@ private:
 	/*int playerX = 100;
 	int playerY = 100;*/
 
+	/*int ePosX;
+	int ePosY;*/
+
 	//’Ç‰Á
 	CPlayer pl;
+	Enemy ene;
+	
 
 	int distancePlayer = 0;
 
@@ -66,6 +72,21 @@ public:
 	/*CRectangle GetRect() {
 		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
 	};*/
+
+	/*CRectangle GetRect()
+	{
+		return CRectangle(
+			ePosX,
+			ePosY,
+			ePosX + 100,
+			ePosY + 100
+		);
+	}
+	int GetType()
+	{
+		return 0;
+	}*/
+
 
 };
 
