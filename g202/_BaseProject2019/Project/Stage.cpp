@@ -23,7 +23,7 @@ bool Stage::Load() {
 }
 
 void Stage::Initialize(ENEMYSTART* pSt, int cnt) {
-//	scroll = 0;
+	//	scroll = 0;
 	enemyNo = 0;
 	enemyStart = pSt;
 	enemyCount = cnt;
@@ -33,14 +33,14 @@ void Stage::Initialize(ENEMYSTART* pSt, int cnt) {
 
 void Stage::Update(Enemy* ene, int ecnt) {
 	//scroll += SCROLL_SPEED;
-	
+
 	if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
 		for (int i = 0; i < ecnt; i++) {
 			if (ene[i].GetShow()) {
 				continue;
 			}
 			ene[i].SetTexture(&enemyTexture);
-			ene[i].Start(enemyStart[enemyNo].posX, 0,enemyStart[enemyNo].type);
+			ene[i].Start(enemyStart[enemyNo].posX, 0, enemyStart[enemyNo].type);
 			break;
 		}
 		enemyNo++;

@@ -1,12 +1,20 @@
 #include "SceneGame.h"
+#include "Enemy.h"
 #include "Timer.h"
 #define	PLAYER_SPEED 10
+
+Enemy cEnemy;
+
+
 CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
 CSceneGame::CSceneGame():
 scrollValueX(0),
-scrollValueY(0)
+scrollValueY(0),
+deadFlag(false),
+posX(0.0f),
+posY(0.0f)
 {
 }
 
@@ -37,6 +45,13 @@ void CSceneGame::Initialize()
 	parasite3.Load("kiseitilyuu3.png");
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
+
+	//障害物
+	cEnemy.Initialize();
+	cEnemy.Start(scrollValueX, scrollValueY, 0);
+	//seaTurtleTexture.Load("ウミガメ ラフ.png");
+	posX = 500;
+	posY = 500;
 
 	//タイマー
 	tempTimer.SetTotalTime(2);
@@ -233,6 +248,9 @@ void CSceneGame::Update()
 		}		
 		hungerTimer.SetTotalTime(3);
 	}
+
+	//seaTurtle
+	cEnemy.Update();
 }
 
 void CSceneGame::Render()
@@ -291,6 +309,9 @@ void CSceneGame::Render()
 	CRectangle rec3(0,hungerRegion, 330, 200);
 	hungerGauge.Render(1400,hungerRegion,rec3);
 
+	//障害物
+	cEnemy.Render(scrollValueX, scrollValueY);
+
 	//デバッグ用
 	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "温度  %d", bodyTemp);
 	tempTimer.Render(10, 70);
@@ -320,4 +341,5 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
+	cEnemy.Release();
 }

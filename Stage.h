@@ -7,6 +7,7 @@
 typedef struct tag_ENEMYSTART {
 	float posX;
 	float scroll;
+	int type;
 }ENEMYSTART;
 
 class Stage
@@ -23,7 +24,7 @@ public:
 	~Stage();
 	bool Load();
 	void Initialize(ENEMYSTART* pSt, int cnt);
-	void Update(Enemy* ene,int ecnt);
+	void Update(Enemy* ene, int ecnt);
 	void Render();
 	void Release();
 };

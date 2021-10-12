@@ -24,7 +24,7 @@ public:
 	~Stage();
 	bool Load();
 	void Initialize(ENEMYSTART* pSt, int cnt);
-	void Update(Enemy* ene,int ecnt);
+	void Update(Enemy* ene, int ecnt);
 	void Render();
 	void Release();
 };

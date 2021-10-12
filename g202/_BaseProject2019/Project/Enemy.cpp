@@ -7,7 +7,7 @@ Enemy::Enemy() :
 	speedX(0.0f),
 	speedY(0.0f),
 	show(true),
-	type(0){
+	type(0) {
 
 }
 
@@ -15,16 +15,15 @@ Enemy::~Enemy() {
 }
 
 void Enemy::Initialize() {
-	posX = 500;
-	posY = 500;
+	posX = 0;
+	posY = 0;
 	speedX = 0;
 	speedY = 0;
-	show = true;
+	show = false;
 	seaTurtleTexture.Load("ウミガメ ラフ.png");
-	//texture->Load("ウミガメ ラフ.png");
 }
 
-void Enemy::Start(float px, float py,int t) {
+void Enemy::Start(float px, float py, int t) {
 	speedX = 1;
 	speedY = 0;
 	type = t;
@@ -41,14 +40,13 @@ void Enemy::Update() {
 	}
 }
 
-void Enemy::Render(float px,float py) {
+void Enemy::Render(float px, float py) {
 	if (!show) {
 		return;
 	}
 	seaTurtleTexture.Render(posX - px, posY - py);
-	CRectangle seaTurtleRect(posX - px, posY - py, posX + 500 - px, posY + 450 - scrollValueY);
-    CGraphicsUtilities::RenderRect(seaTurtleRect, MOF_COLOR_BLACK);
-
+	CRectangle seaTurtleRect(posX - px, posY - py, posX + 500 - px, posY + 450 - py);
+	CGraphicsUtilities::RenderRect(seaTurtleRect, MOF_COLOR_BLACK);
 }
 
 void Enemy::Release()
