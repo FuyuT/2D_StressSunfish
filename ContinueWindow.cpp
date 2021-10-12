@@ -26,29 +26,35 @@ void CContinueWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
+		Release();
 		//コンティニューボタンが押された際の処理
 		endFlg = true;
+		//ゲーム画面をInitialise
+
 		nextPopUp = NULL;
-		Release();
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
+		Release();
 		//メニュー画面ボタンが押されたときの処理
 		endFlg = true;
+		//メニュー画面へ遷移
+
 		nextPopUp = NULL;
-		Release();
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
+		Release();
 		//タイトル画面ボタンが押された際の処理
 		endFlg = true;
+		//タイトル画面へ遷移
+
 		nextPopUp = NULL;
-		Release();
 	}
 }
 void CContinueWindow::Render()
 {
-	popUpTexture.Render(200, 50);
+	popUpTexture.Render(popUpPosX, popUpPosY);
 	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "コンティニュー？");
 	buttonContinueTexture.Render(buttonContinuePosX, buttonContinuePosY);
 	buttonMenuTexture.Render(buttonMenuPosX, buttonMenuPosY);

@@ -23,18 +23,23 @@ void CRetryWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
+		Release();
+		endFlg = true;
 		//ゲーム画面を初期化
+
+		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		endFlg = true;
 		Release();
+		endFlg = true;
+		nextPopUp = NULL;
 	}
 }
 void CRetryWindow::Render()
 {
-	popUpTexture.Render(200, 50);
-	font.RenderString(750, 400, MOF_XRGB(0, 0, 0), "リトライしますか?");
+	popUpTexture.Render(popUpPosX, popUpPosY);
+	font.RenderString(850, 400, MOF_XRGB(0, 0, 0), "リトライしますか?");
 	buttonYesTexture.Render(buttonYesPosX, buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
 }

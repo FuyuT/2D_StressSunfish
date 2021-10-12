@@ -3,6 +3,10 @@
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
 #include "CauseOfDeathWindow.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
+
 #define	PLAYER_SPEED 10
 CTimer tempTimer;
 CTimer hungerTimer;
@@ -49,8 +53,6 @@ void CSceneGame::Initialize()
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
-	nowPopUpGame = new CCauseOfDeathWindow;
-	nowPopUpGame->Initialize();
 }
 
 void CSceneGame::Update()
@@ -244,8 +246,16 @@ void CSceneGame::Update()
 	}
 
 	//とりあえずF1でポップアップが出るように
-	if (g_pInput->IsKeyPush(MOFKEY_F1))
+	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
 	{
+		nowPopUpGame = new CCauseOfDeathWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	{
+		nowPopUpGame = new CPoseWindow;
+		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}
 	if (popUpFlg)
@@ -374,6 +384,15 @@ void CSceneGame::PopUpController()
 			break;
 		case POPUPNO_CONTINUE:
 			nowPopUpGame = new CContinueWindow;
+			break;
+		case POPUPNO_POSE:
+			nowPopUpGame = new CPoseWindow;
+			break;
+		case POPUPNO_BACKTOTITLE:
+			nowPopUpGame = new CBackToTitleWindow;
+			break;
+		case POPUPNO_RETRY:
+			nowPopUpGame = new CRetryWindow;
 			break;
 		case NULL:
 			nowPopUpGame = new CCauseOfDeathWindow;
