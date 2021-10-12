@@ -1,14 +1,14 @@
-#include "TrophyWindow.h"
-CTrophyWindow::CTrophyWindow()
+#include "CheckCauseOfDeathWindow.h"
+CCheckCauseOfDeathWindow::CCheckCauseOfDeathWindow()
 {
 
 }
-CTrophyWindow::~CTrophyWindow()
+CCheckCauseOfDeathWindow::~CCheckCauseOfDeathWindow()
 {
 
 }
 
-void CTrophyWindow::Initialize()
+void CCheckCauseOfDeathWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonBackTexture.Load("ButtonBack.png");
@@ -16,24 +16,24 @@ void CTrophyWindow::Initialize()
 	font.Create(64, "MS　明朝");
 	endFlg = false;
 }
-void CTrophyWindow::Update()
+void CCheckCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
 		Release();
 		endFlg = true;
+		nextPopUp = POPUPNO_RESULT;
 	}
 }
-void CTrophyWindow::Render()
+void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "トロフィー");
+	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "死因");
 	buttonBackTexture.Render(buttonBackPosX, buttonBackPosY);
 }
-void CTrophyWindow::Release()
+void CCheckCauseOfDeathWindow::Release()
 {
 	popUpTexture.Release();
 	buttonBackTexture.Release();
