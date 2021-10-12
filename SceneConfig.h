@@ -4,9 +4,9 @@
 class CSceneConfig :public CSceneBase
 {
 private:
-	CTexture	buttonTexture;
-	int			buttonPosX = 800;
-	int			buttonPosY = 800;
+	CTexture	menuButtonTexture;
+	int			menuButtonPosX = 800;
+	int			menuButtonPosY = 800;
 public:
 	CSceneConfig();
 	~CSceneConfig();
@@ -15,7 +15,7 @@ public:
 	void Render() override;
 	void Release() override;
 	CRectangle GetRect() {
-		return CRectangle(buttonPosX, buttonPosY, buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
+		return CRectangle(menuButtonPosX, menuButtonPosY, menuButtonPosX + menuButtonTexture.GetWidth(), menuButtonPosY + menuButtonTexture.GetHeight());
 	};
 };
 

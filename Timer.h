@@ -20,4 +20,5 @@ public:
 	void Render(int xpos,int ypos);
 
 	bool GetUpdateFlg() { return UpdateFlg; }
+	float GetNowtime() { return NowTime; }
 };
