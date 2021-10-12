@@ -382,10 +382,21 @@ void CPlayer::UpdateStatus()
 	}
 
 	//水流
-	if (moveSpeed > 1.0f)
+	if (streamTime > 0)
 	{
-		//moveSpeed
+		streamTime--;
 	}
+	else if (moveSpeed > 1.0f)
+	{
+		// 0.1 ずつ減速
+		moveSpeed -= 0.1f;
+		// 速度の倍率が 1.0 以下になったら 1.0 で初期化
+		if (moveSpeed < 1.0f)
+		{
+			moveSpeed = 1.0f;
+		}
+	}
+
 }
 
 //更新
@@ -568,6 +579,8 @@ void CPlayer::Collision(Enemy& ene)
 				ene.SetShow(false);
 				//速度が二倍に
 				moveSpeed = 2.0f;
+				//持続時間の設定
+				streamTime = STREAM;
 				break;
 
 		}

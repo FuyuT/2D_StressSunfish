@@ -17,11 +17,11 @@
 //ジャンプ力
 #define		JUMP_POWER_X			8.0f
 #define		JUMP_POWER_Y			30.0f
+
 //海面
 #define		SEA_LEVEL				780
 //海底
 #define		UNDER_SEA				2160
-
 
 
 //ステータス( 状態 に関する定数)
@@ -40,6 +40,8 @@
 #define		TEMPERATURE_SPEED		40
 //体温限界値
 #define		TEMPERATURE_LIMIT		100
+//水流による移動速度upの持続時間
+#define		STREAM					200 
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -96,6 +98,8 @@ private:
 	//寄生虫
 	int			parasite;
 	int			parasiteTime;
+	//水流
+	int			streamTime;
 
 public:
 	CPlayer();
@@ -158,7 +162,7 @@ public:
 	void Collision(Enemy& ene);
 
 	//死んでいればtrueを返す
-	bool IsDead()
+	bool GetDead()
 	{
 		return deadFlg;
 	}
@@ -188,6 +192,16 @@ public:
 		//初期位置の20(適当)を引く
 		//X座標の20分の1(適当)を進んだ距離とする
 		return (posX - 200) / 20;
+	}
+	//「ジャンプ」が可能かを返す
+	bool GetJump()
+	{
+		return possibleToJumpFlg;
+	}
+	//「食べる」が可能かを返す
+	bool GetEat()
+	{
+		return possibleToEatFlg;
 	}
 };
 
