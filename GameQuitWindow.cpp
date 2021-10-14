@@ -27,13 +27,13 @@ void CGameQuitWindow::Update()
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		endFlg = true;
 		Release();
+		endFlg = true;
 	}
 }
 void CGameQuitWindow::Render()
 {
-	popUpTexture.Render(200,50);
+	popUpTexture.Render(popUpPosX, popUpPosY);
 	font.RenderString(750, 400,MOF_XRGB(0,0,0), "ÉQÅ[ÉÄÇèIóπÇµÇ‹Ç∑Ç©?");
 	buttonYesTexture.Render(buttonYesPosX,buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);

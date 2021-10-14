@@ -23,13 +23,14 @@ void CCauseOfDeathWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		endFlg = true;
 		Release();
+		endFlg = true;
+		nextPopUp = POPUPNO_RESULT;
 	}
 }
 void CCauseOfDeathWindow::Render()
 {
-	popUpTexture.Render(200, 50);
+	popUpTexture.Render(popUpPosX, popUpPosY);
 	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "Ž€ˆö");
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
 }

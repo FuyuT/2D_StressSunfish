@@ -1,7 +1,7 @@
 #include "SceneTitle.h"
 #include "GameQuitWindow.h"
 
-CPopUpWindowBase* nowPopUp = NULL;
+CPopUpWindowBase* nowPopUpTitle = NULL;
 
 CSceneTitle::CSceneTitle()
 {
@@ -19,8 +19,10 @@ void CSceneTitle::Initialize()
 	gamePrayButtonPosY = 700;
 	gameFinishButtonPosX = 800;
 	gameFinishButtonPosY = 800;
-	nowPopUp = new CGameQuitWindow;
-	nowPopUp->Initialize();
+	nowPopUpTitle = new CGameQuitWindow;
+	nowPopUpTitle->Initialize();
+
+
 }
 
 void CSceneTitle::Update()
@@ -30,7 +32,7 @@ void CSceneTitle::Update()
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
 		endFlg = true;
-		nextScene = SCENENO_GAMEMENU;;
+		nextScene = SCENENO_GAMEMENU;
 		CSceneTitle::Release();
 	}
 	//ƒQ[ƒ€I—¹‚ð‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
@@ -41,9 +43,9 @@ void CSceneTitle::Update()
 	
 	if (popUpFlg)
 	{
-		nowPopUp->Initialize();
-		nowPopUp->Update();
-		if (nowPopUp->IsEnd())
+		nowPopUpTitle->Initialize();
+		nowPopUpTitle->Update();
+		if (nowPopUpTitle->IsEnd())
 		{
 			popUpFlg = false;
 		}
@@ -57,18 +59,18 @@ void CSceneTitle::Render()
 	gameFinishButtonTexture.Render(gameFinishButtonPosX, gameFinishButtonPosY);
 	if (popUpFlg)
 	{
-		nowPopUp->Render();
+		nowPopUpTitle->Render();
 	}
 }
 
 void CSceneTitle::Release()
 {
 	gamePrayButtonTexture.Release();
-	nowPopUp->Release();
-	if (nowPopUp)
+	nowPopUpTitle->Release();
+	if (nowPopUpTitle)
 	{
-		delete nowPopUp;
-		nowPopUp = NULL;
+		delete nowPopUpTitle;
+		nowPopUpTitle = NULL;
 	}
 }
 

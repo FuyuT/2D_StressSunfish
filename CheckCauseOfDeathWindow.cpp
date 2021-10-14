@@ -1,23 +1,22 @@
-#include "CauseOfDeathWindow.h"
-
-CCauseOfDeathWindow::CCauseOfDeathWindow()
+#include "CheckCauseOfDeathWindow.h"
+CCheckCauseOfDeathWindow::CCheckCauseOfDeathWindow()
 {
 
 }
-CCauseOfDeathWindow::~CCauseOfDeathWindow()
+CCheckCauseOfDeathWindow::~CCheckCauseOfDeathWindow()
 {
 
 }
 
-void CCauseOfDeathWindow::Initialize()
+void CCheckCauseOfDeathWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upƒ‰ƒt2.png");
-	buttonNextTexture.Load("ButtonNext.png");
+	buttonBackTexture.Load("ButtonBack.png");
 
 	font.Create(64, "MS@–¾’©");
 	endFlg = false;
 }
-void CCauseOfDeathWindow::Update()
+void CCheckCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
@@ -28,14 +27,14 @@ void CCauseOfDeathWindow::Update()
 		nextPopUp = POPUPNO_RESULT;
 	}
 }
-void CCauseOfDeathWindow::Render()
+void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "Ž€ˆö");
-	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
+	buttonBackTexture.Render(buttonBackPosX, buttonBackPosY);
 }
-void CCauseOfDeathWindow::Release()
+void CCheckCauseOfDeathWindow::Release()
 {
 	popUpTexture.Release();
-	buttonNextTexture.Release();
+	buttonBackTexture.Release();
 }

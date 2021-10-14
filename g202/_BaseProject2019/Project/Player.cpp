@@ -7,12 +7,11 @@ CPlayer::CPlayer() :
 	moveX(0.0f),
 	moveY(0.0f),
 	moveSpeed(1.0f),
-	beforeJumpingPosY(0.0f),
 	random(),
 	jumpFlg(false),
 	deadFlg(false),
 	possibleToJumpFlg(false),
-	possibleToEatFlg(false), 
+	possibleToEatFlg(false),
 	hungry(10),
 	temperature(50)
 {
@@ -25,7 +24,7 @@ CPlayer::~CPlayer()
 bool CPlayer::Load()
 {
 	//プレイヤーのテクスチャの読みこみ
-	if (!texture.Load("Player.png"))
+	if (!texture.Load("マンボウ.png"))
 	{
 		return false;
 	}
@@ -35,6 +34,7 @@ bool CPlayer::Load()
 
 void CPlayer::Initialize()
 {
+	//読み込みを行う
 	Load();
 
 	//確率のために使う変数の初期化
@@ -137,7 +137,7 @@ void CPlayer::UpdateMove()
 
 	
 	//海底(スクリーン下部)　移動制限
-	if (posY + texture.GetHeight() > UNDER_SEA)
+	if (GetRect().Bottom > UNDER_SEA)
 	{
 		posY = UNDER_SEA - texture.GetHeight() + COLLISION_ADJUSTMENT;
 		moveY = 0;
@@ -150,6 +150,7 @@ void CPlayer::UpdateMove()
 		moveY = 0;
 	}
 	
+	
 }
 
 //エサを食べる
@@ -158,6 +159,7 @@ bool CPlayer::Eat()
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A))
 	{
+		
 		possibleToEatFlg = false;
 
 		if (causeOfDeath == CAUSE_None)
@@ -171,6 +173,7 @@ bool CPlayer::Eat()
 				return false;
 			}
 		}
+
 		//空腹を満たす
 		hungry += FEED_SATIETYLEVEL;
 		//満腹値を超えたら
@@ -179,6 +182,7 @@ bool CPlayer::Eat()
 			hungry = FULL_STOMACH;
 		}
 
+		
 		if (causeOfDeath == CAUSE_None)
 		{
 			//死因：喉つまり
@@ -191,6 +195,7 @@ bool CPlayer::Eat()
 		//エサのshowFlgをfalseにする
 		return false;
 	}
+
 	//エサを食べなかったときは、エサのshowFlgをtrueのままにする
 	return true;
 }
@@ -201,9 +206,9 @@ void CPlayer::Jump()
 	//海面に近いときに A を押す
 	//海面から +40(適当)以内の範囲内であれば
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
-		possibleToJumpFlg)
+		possibleToJumpFlg )
 	{
-		jumpFlg = true;
+		jumpFlg = true;	
 		possibleToJumpFlg = false;
 		//寄生虫を振り落とす
 		parasite = 0;
@@ -260,7 +265,7 @@ void CPlayer::UpdateStatus()
 		possibleToJumpFlg = false;
 	}
 
-
+	
 
 	/*********
 	 * 体温
@@ -288,7 +293,7 @@ void CPlayer::UpdateStatus()
 		}
 
 	}
-	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
+	else if(GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 	{
 		//体温下降
 		if (temperature <= 0)
@@ -377,10 +382,21 @@ void CPlayer::UpdateStatus()
 	}
 
 	//水流
-	if (moveSpeed > 1.0f)
+	if (streamTime > 0)
 	{
-		//moveSpeed
+		streamTime--;
 	}
+	else if (moveSpeed > 1.0f)
+	{
+		// 0.1 ずつ減速
+		moveSpeed -= 0.1f;
+		// 速度の倍率が 1.0 以下になったら 1.0 で初期化
+		if (moveSpeed < 1.0f)
+		{
+			moveSpeed = 1.0f;
+		}
+	}
+
 }
 
 //更新
@@ -417,7 +433,7 @@ void CPlayer::Render(float wx, float wy)
 }
 
 //デバッグ描画
-void CPlayer::RenderDebug(float wx, float wy)
+void CPlayer::RenderDebug(float wx,float wy)
 {
 	//「ジャンプ」が可能
 	if (possibleToJumpFlg)
@@ -454,49 +470,50 @@ void CPlayer::RenderDebug(float wx, float wy)
 	//体温
 	CGraphicsUtilities::RenderString(10, 70, MOF_COLOR_BLACK, "体温 : %d", GetTemperature());
 	//寄生虫
-	CGraphicsUtilities::RenderString(10, 100, MOF_COLOR_BLACK, "寄生虫 : %d / %d", GetParasite(), PARASITE_LIMIT / 50);
+	CGraphicsUtilities::RenderString(10, 100, MOF_COLOR_BLACK, "寄生虫 : %d / %d", GetParasite(),PARASITE_LIMIT / 50);
 	//腹減り
-	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d", GetHungry(), FULL_STOMACH);
+	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d", GetHungry(),FULL_STOMACH);
 	//死因
 	switch (causeOfDeath)
 	{
-	case CAUSE_None:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : なし(生存中)");
-		break;
-	case CAUSE_Hyperthermia:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 熱中症");
-		break;
-	case CAUSE_Frozen:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 凍死");
-		break;
-	case CAUSE_Starvation:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 餓死");
-		break;
-	case CAUSE_ChokeOnShell:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 喉つまり");
-		break;
-	case CAUSE_Obesity:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 肥満");
-		break;
-	case CAUSE_Obstacle:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 障害物に衝突");
-		break;
-	case CAUSE_Jump:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : ジャンプの衝撃");
-		break;
-	case CAUSE_Parasite:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 寄生虫");
-		break;
-	case CAUSE_Bubble:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 泡");
-		break;
-	case CAUSE_SeaTurtle:
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : ウミガメショック");
-		break;
+		case CAUSE_None:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : なし(生存中)");
+			break;
+		case CAUSE_Hyperthermia:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 熱中症");
+			break;
+		case CAUSE_Frozen:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 凍死");
+			break;
+		case CAUSE_Starvation:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 餓死");
+			break;
+		case CAUSE_ChokeOnShell:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 喉つまり");
+			break;
+		case CAUSE_Obesity:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 肥満");
+			break;
+		case CAUSE_Obstacle:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 障害物に衝突");
+			break;
+		case CAUSE_Jump:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : ジャンプの衝撃");
+			break;
+		case CAUSE_Parasite:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 寄生虫");
+			break;
+		case CAUSE_Bubble:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : 泡");
+			break;
+		case CAUSE_SeaTurtle:
+			CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "死因 : ウミガメショック");
+			break;
 	}
 
 	//進んだ距離
 	CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "%d m", GetDistance());
+	
 }
 
 //解放
@@ -524,45 +541,47 @@ void CPlayer::Collision(Enemy& ene)
 		switch (ene.GetType())
 		{
 			//ウミガメ
-		case 0:
-			if (causeOfDeath == CAUSE_None)
-			{
-				//死因：ショック死
-				//当たった時点で即死
-				deadFlg = true;
-				causeOfDeath = CAUSE_SeaTurtle;
-			}
-			break;
+			case 0:
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：ショック死
+					//当たった時点で即死
+					deadFlg = true;
+					causeOfDeath = CAUSE_SeaTurtle;
+				}
+				break;
 			//泡
-		case 1:
-			ene.SetShow(false);
-			if (causeOfDeath == CAUSE_None)
-			{
-				//泡死
-				//5%で死ぬ
-				deadFlg = DieInPercentage(5);
-				if (deadFlg)
-					causeOfDeath = CAUSE_Bubble;
-			}
-			break;
+			case 1:
+				ene.SetShow(false);
+				if (causeOfDeath == CAUSE_None)
+				{
+					//泡死
+					//5%で死ぬ
+					deadFlg = DieInPercentage(5);
+					if (deadFlg)
+						causeOfDeath = CAUSE_Bubble;
+				}
+				break;
 			//障害物
-		case 2:
-			ene.SetShow(false);
-			if (causeOfDeath == CAUSE_None)
-			{
-				//死因：衝突死
-				//20%で死ぬ
-				deadFlg = DieInPercentage(20);
-				if (deadFlg)
-					causeOfDeath = CAUSE_Obstacle;
-			}
-			break;
+			case 2:
+				ene.SetShow(false);
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：衝突死
+					//20%で死ぬ
+					deadFlg = DieInPercentage(20);
+					if (deadFlg)
+						causeOfDeath = CAUSE_Obstacle;
+				}
+				break;
 			//水流
-		case 3:
-			ene.SetShow(false);
-			//速度が二倍に
-			moveSpeed = 2.0f;
-			break;
+			case 3:
+				ene.SetShow(false);
+				//速度が二倍に
+				moveSpeed = 2.0f;
+				//持続時間の設定
+				streamTime = STREAM;
+				break;
 
 		}
 
@@ -587,4 +606,5 @@ void CPlayer::Collision(Enemy& ene)
 			possibleToEatFlg = false;
 		}
 	}
+
 }

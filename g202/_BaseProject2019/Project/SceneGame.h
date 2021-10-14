@@ -101,5 +101,6 @@ public:
 	}*/
 
 
+	void PopUpController();
 };
 

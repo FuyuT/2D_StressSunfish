@@ -1,10 +1,17 @@
 #include "SceneGame.h"
 #include "Timer.h"
-#define	PLAYER_SPEED 10
+#include "ContinueWindow.h"
+#include "ResultWindow.h"
+#include "CauseOfDeathWindow.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
 
+#define	PLAYER_SPEED 10
 CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
+CPopUpWindowBase* nowPopUpGame = NULL;
 
 CSceneGame::CSceneGame():
 scrollValueX(0),
@@ -50,11 +57,14 @@ void CSceneGame::Initialize()
 	//seaTurtleTexture.Load("ウミガメ ラフ.png");
 	posX = 500;
 	posY = 500;
-
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
+
+	//ポップアップ
+	nowPopUpGame = new CCauseOfDeathWindow;
+	nowPopUpGame->Initialize();
 }
 
 void CSceneGame::Update()
@@ -118,7 +128,7 @@ void CSceneGame::Update()
 			scrollValueY = stgh - sh;
 		}
 	}
-	
+
 	//体温変化
 	//体温下降
 	if (playerY >= backGroundTexture.GetHeight() - 330)
@@ -202,6 +212,24 @@ void CSceneGame::Update()
 		hungerTimer.SetTotalTime(3);
 	}
 
+	//とりあえずF1でポップアップが出るように
+	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
+	{
+		nowPopUpGame = new CCauseOfDeathWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	{
+		nowPopUpGame = new CPoseWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	if (popUpFlg)
+	{
+		PopUpController();
+	}
+
 	//プレイヤー
 	pl.Update();
 	pl.Collision(ene);
@@ -265,6 +293,12 @@ void CSceneGame::Render()
 	CRectangle rec3(0,hungerRegion, 330, 200);
 	hungerGauge.Render(1400,hungerRegion,rec3);
 
+	//ポップアップ描画
+	if (popUpFlg)
+	{
+		nowPopUpGame->Render();
+	}
+
 	//障害物
 	ene.Render(scrollValueX, scrollValueY);
 	pl.Render(scrollValueX, scrollValueY);
@@ -281,6 +315,7 @@ void CSceneGame::Release()
 	tempNormal.Release();
 	tempHot.Release();
 	tempCold.Release();
+	stressMeter.Release();
 
 	tempMeter.Release();
 	tempMeterFrame.Release();
@@ -294,4 +329,49 @@ void CSceneGame::Release()
 	parasite4.Release();
 	parasite5.Release();
 	ene.Release();
+
+	nowPopUpGame->Release();
+	if (nowPopUpGame)
+	{
+		delete nowPopUpGame;
+		nowPopUpGame = NULL;
+	}
+}
+
+void CSceneGame::PopUpController()
+{
+	nowPopUpGame->Update();
+	if (nowPopUpGame->IsEnd())
+	{
+		//次のポップアップの取得
+		short nextPopUp = nowPopUpGame->GetNextPopUp();
+		//古いポップアップの消去
+		delete nowPopUpGame;
+		//次のポップアップ番号に応じてポップアップを初期化
+		switch (nextPopUp)
+		{
+		case POPUPNO_CAUSEOFDEATH:
+			nowPopUpGame = new CCauseOfDeathWindow;
+			break;
+		case POPUPNO_RESULT:
+			nowPopUpGame = new CResultWindow;
+			break;
+		case POPUPNO_CONTINUE:
+			nowPopUpGame = new CContinueWindow;
+			break;
+		case POPUPNO_POSE:
+			nowPopUpGame = new CPoseWindow;
+			break;
+		case POPUPNO_BACKTOTITLE:
+			nowPopUpGame = new CBackToTitleWindow;
+			break;
+		case POPUPNO_RETRY:
+			nowPopUpGame = new CRetryWindow;
+			break;
+		case NULL:
+			nowPopUpGame = new CCauseOfDeathWindow;
+			popUpFlg = false;
+		}
+		nowPopUpGame->Initialize();
+	}
 }

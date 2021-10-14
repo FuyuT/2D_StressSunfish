@@ -6,16 +6,18 @@ enum tag_POPUPNO {
 	POPUPNO_QUIT,
 	POPUPNO_CAUSEOFDEATH,
 	POPUPNO_CONTINUE,
-	PUPUPNO_BACKTOTITLE,
-	PUPUPNO_POSE,
+	POPUPNO_BACKTOTITLE,
+	POPUPNO_POSE,
 	POPUPNO_RESULT,
 	POPUPNO_RETRY,
-	PUPUPNO_TROPHY,
+	POPUPNO_TROPHY,
 };
 
 class CPopUpWindowBase
 {
 protected:
+	int popUpPosX = 200;
+	int popUpPosY = 50;
 	bool endFlg = false;
 	short	nextPopUp;
 

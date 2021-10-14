@@ -4,41 +4,44 @@
 #include "Enemy.h"
 #include "time.h"
 
-//移動速度
-#define		PLAYER_SPEED		0.6f
+//移動速度	
+#define		PLAYER_SPEED			0.6f
 //最大速度
-#define		PLAYER_MAXSPEED		10.0f
+#define		PLAYER_MAXSPEED			10.0f
 //エサ探知範囲
-#define		FEED_SEARCHRANGE	60.0f
+#define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
 #define		COLLISION_ADJUSTMENT	130.0f
 //重力
-#define		GRAVITY				1.0f
+#define		GRAVITY					1.0f
 //ジャンプ力
-#define		JUMP_POWER_X		8.0f
-#define		JUMP_POWER_Y		30.0f
+#define		JUMP_POWER_X			8.0f
+#define		JUMP_POWER_Y			30.0f
+
 //海面
-#define		SEA_LEVEL			780
+#define		SEA_LEVEL				780
 //海底
-#define		UNDER_SEA			2160
+#define		UNDER_SEA				2160
 
 
 //ステータス( 状態 に関する定数)
 
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL	3
-//空腹になる速度
-#define		HUNGRY_SPEED		300
+#define		FEED_SATIETYLEVEL		3
+//お腹が減る(空腹になる)速度
+#define		HUNGRY_SPEED			300
 //満腹
-#define		FULL_STOMACH		10
+#define		FULL_STOMACH			10
 //寄生虫の増える速度
-#define		PARASITE_SPEED		10
+#define		PARASITE_SPEED			10
 //最大寄生虫許容量
-#define		PARASITE_LIMIT		300
+#define		PARASITE_LIMIT			300
 //体温が上下する速度
-#define		TEMPERATURE_SPEED	40
+#define		TEMPERATURE_SPEED		40
 //体温限界値
-#define		TEMPERATURE_LIMIT	100
+#define		TEMPERATURE_LIMIT		100
+//水流による移動速度upの持続時間
+#define		STREAM					200 
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -55,7 +58,9 @@ enum CAUSE_OF_DEATH
 	CAUSE_Parasite,			//寄生虫				
 	CAUSE_Bubble,			//泡					
 	CAUSE_SeaTurtle			//ショック死(ウミガメ)	
+
 };
+
 
 class CPlayer
 {
@@ -72,8 +77,6 @@ private:
 	float		moveY;
 	//速度の倍数
 	float		moveSpeed;
-	//ジャンプを行う前のY座標
-	float		beforeJumpingPosY;
 	//ジャンプしているかを表すフラグ
 	bool		jumpFlg;
 	//生きているかを表すフラグ
@@ -95,6 +98,8 @@ private:
 	//寄生虫
 	int			parasite;
 	int			parasiteTime;
+	//水流
+	int			streamTime;
 
 public:
 	CPlayer();
@@ -157,7 +162,7 @@ public:
 	void Collision(Enemy& ene);
 
 	//死んでいればtrueを返す
-	bool IsDead()
+	bool GetDead()
 	{
 		return deadFlg;
 	}
@@ -188,6 +193,15 @@ public:
 		//X座標の20分の1(適当)を進んだ距離とする
 		return (posX - 200) / 20;
 	}
-
+	//「ジャンプ」が可能かを返す
+	bool GetJump()
+	{
+		return possibleToJumpFlg;
+	}
+	//「食べる」が可能かを返す
+	bool GetEat()
+	{
+		return possibleToEatFlg;
+	}
 };
 

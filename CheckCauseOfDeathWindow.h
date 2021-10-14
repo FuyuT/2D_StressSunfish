@@ -1,6 +1,7 @@
 #pragma once
 #include "PopUpWindowBase.h"
-class CTrophyWindow : public CPopUpWindowBase
+
+class CCheckCauseOfDeathWindow : public CPopUpWindowBase
 {
 private:
 	CFont		font;
@@ -10,8 +11,8 @@ private:
 	int			buttonBackPosX = 250;
 	int			buttonBackPosY = 200;
 public:
-	CTrophyWindow();
-	~CTrophyWindow();
+	CCheckCauseOfDeathWindow();
+	~CCheckCauseOfDeathWindow();
 	void Initialize() override;
 	void Update() override;
 	void Render() override;

@@ -3,16 +3,22 @@
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
 #include "CauseOfDeathWindow.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
+
 #define	PLAYER_SPEED 10
 CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
-
 CPopUpWindowBase* nowPopUpGame = NULL;
 
 CSceneGame::CSceneGame():
 scrollValueX(0),
-scrollValueY(0)
+scrollValueY(0),
+deadFlag(false),
+posX(0.0f),
+posY(0.0f)
 {
 }
 
@@ -22,6 +28,7 @@ CSceneGame::~CSceneGame()
 
 void CSceneGame::Initialize()
 {
+	pl.Initialize();
 	//stressGauge.Load("gauge.png");
 	backGroundTexture.Load("SeaTexture.png");
 	playerTexture.Load("Player.png");
@@ -44,11 +51,18 @@ void CSceneGame::Initialize()
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
 
+	//障害物
+	ene.Initialize();
+	ene.Start(scrollValueX, scrollValueY, 0);
+	//seaTurtleTexture.Load("ウミガメ ラフ.png");
+	posX = 500;
+	posY = 500;
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
+	//ポップアップ
 	nowPopUpGame = new CCauseOfDeathWindow;
 	nowPopUpGame->Initialize();
 }
@@ -67,7 +81,7 @@ void CSceneGame::Update()
 	hungerTimer.Update();
 	parasiteTimer.Update();
 	//スクロール
-	CRectangle prec = GetRect();
+	CRectangle prec = pl.GetRect();
 	//スクリーン幅
 	float sw = g_pGraphics->GetTargetWidth();
 	float sh = g_pGraphics->GetTargetHeight();
@@ -114,51 +128,6 @@ void CSceneGame::Update()
 			scrollValueY = stgh - sh;
 		}
 	}
-	
-	//移動
-	//初期化（しないと加速するので
-	moveSpeed.x = 0; moveSpeed.y = 0;
-	if (g_pInput->IsKeyHold(MOFKEY_D))
-	{
-		moveSpeed.x += PLAYER_SPEED;
-		distancePlayer += 10.0f;
-	}
-	else if(g_pInput->IsKeyHold(MOFKEY_A))
-	{
-		moveSpeed.x -= PLAYER_SPEED;
-	}
-	if (g_pInput->IsKeyHold(MOFKEY_W))
-	{
-		moveSpeed.y -= PLAYER_SPEED;
-	}
-	else if (g_pInput->IsKeyHold(MOFKEY_S))
-	{
-		moveSpeed.y += PLAYER_SPEED;
-	}
-	//移動制限
-	//左右
-	if (prec.Left < 0)
-	{
-		playerX = 0;
-	}
-	else if (prec.Right > stgw)
-	{
-		playerX = stgw - playerTexture.GetWidth();
-	}
-	//上下
-
-	
-	//実際に移動
-	playerX += moveSpeed.x;
-	playerY += moveSpeed.y;
-
-
-	//else if (prec.Right > backGroundTexture.GetWidth())
-	//{
-	//	playerX = stgw - playerTexture.GetWidth();
-	//}
-
-
 
 	//体温変化
 	//体温下降
@@ -244,14 +213,29 @@ void CSceneGame::Update()
 	}
 
 	//とりあえずF1でポップアップが出るように
-	if (g_pInput->IsKeyPush(MOFKEY_F1))
+	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
 	{
+		nowPopUpGame = new CCauseOfDeathWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	{
+		nowPopUpGame = new CPoseWindow;
+		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}
 	if (popUpFlg)
 	{
 		PopUpController();
 	}
+
+	//プレイヤー
+	pl.Update();
+	pl.Collision(ene);
+
+	//seaTurtle
+	ene.Update();
 }
 
 void CSceneGame::Render()
@@ -259,7 +243,6 @@ void CSceneGame::Render()
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);
-	playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
 	//CGraphicsUtilities::RenderString(100, 300, "game画面");
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
@@ -316,23 +299,23 @@ void CSceneGame::Render()
 		nowPopUpGame->Render();
 	}
 
+	//障害物
+	ene.Render(scrollValueX, scrollValueY);
+	pl.Render(scrollValueX, scrollValueY);
 	//デバッグ用
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "温度  %d", bodyTemp);
-	tempTimer.Render(10, 70);
-	hungerTimer.Render(10, 90);
-	parasiteTimer.Render(10, 110);
+	pl.RenderDebug(scrollValueX, scrollValueY);
 }
 
 void CSceneGame::Release()
 {
 	backGroundTexture.Release();
-	playerTexture.Release();
-
+	pl.Release();
 	stressMeter.Release();
 
 	tempNormal.Release();
 	tempHot.Release();
 	tempCold.Release();
+	stressMeter.Release();
 
 	tempMeter.Release();
 	tempMeterFrame.Release();
@@ -345,6 +328,7 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
+	ene.Release();
 
 	nowPopUpGame->Release();
 	if (nowPopUpGame)
@@ -374,6 +358,15 @@ void CSceneGame::PopUpController()
 			break;
 		case POPUPNO_CONTINUE:
 			nowPopUpGame = new CContinueWindow;
+			break;
+		case POPUPNO_POSE:
+			nowPopUpGame = new CPoseWindow;
+			break;
+		case POPUPNO_BACKTOTITLE:
+			nowPopUpGame = new CBackToTitleWindow;
+			break;
+		case POPUPNO_RETRY:
+			nowPopUpGame = new CRetryWindow;
 			break;
 		case NULL:
 			nowPopUpGame = new CCauseOfDeathWindow;
