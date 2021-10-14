@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="BacktoTitleWindow.cpp" />
     <ClCompile Include="CauseOfDeathWindow.cpp" />
+    <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
     <ClCompile Include="ContinueWindow.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameApp.cpp" />
@@ -128,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="BackToTitleWindow.h" />
     <ClInclude Include="CauseOfDeathWindow.h" />
+    <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameApp.h" />

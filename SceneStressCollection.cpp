@@ -3,7 +3,6 @@
 
 CPopUpWindowBase* nowPopUpStress = NULL;
 
-CCheckCauseOfDeathWindow a;
 CSceneStressCollection::CSceneStressCollection()
 {
 
@@ -16,7 +15,7 @@ void CSceneStressCollection::Initialize()
 {
 	menuButtonTexture.Load("ButtonMenu.png");
 	popUpFlg = false;
-	//nowPopUpStress = new CCheckCauseOfDeathWindow;
+	nowPopUpStress = new CCheckCauseOfDeathWindow;
 	nowPopUpStress->Initialize();
 }
 void CSceneStressCollection::Update()

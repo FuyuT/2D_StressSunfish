@@ -129,6 +129,9 @@
     <ClCompile Include="SceneBase.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CheckCauseOfDeathWindow.cpp">
+      <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -201,6 +204,9 @@
       <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
     </ClInclude>
     <ClInclude Include="ContinueWindow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckCauseOfDeathWindow.h">
       <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
     </ClInclude>
   </ItemGroup>
