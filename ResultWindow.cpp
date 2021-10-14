@@ -24,6 +24,7 @@ void CResultWindow::Update()
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
 		endFlg = true;
+		nextPopUp = POPUPNO_CONTINUE;
 		Release();
 	}
 }

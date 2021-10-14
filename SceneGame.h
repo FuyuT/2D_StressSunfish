@@ -1,14 +1,8 @@
 #pragma once
 #include "SceneBase.h"
-#include "Player.h"
-#include "Enemy.h"
-
 class CSceneGame : public CSceneBase
 {
 private:
-	CPlayer pl;
-	Enemy ene;
-
 	int playerX = 100;
 	int playerY = 100;
 
@@ -17,10 +11,6 @@ private:
 	int stressBarX = 700;
 	int stressBarY = 10;
 	int stressBarChenge = 300;
-
-	int stressNumber = 100;
-
-	int timeCnt = 0;
 
 	int bodyTemp = 10;
 
@@ -53,13 +43,6 @@ private:
 	CTexture parasite3;
 	CTexture parasite4;
 	CTexture parasite5;
-
-	//è·äQï®
-	int posX;
-	int posY;
-	CTexture seaTurtleTexture;
-	bool deadFlag;
-
 public:
 	CSceneGame();
 	~CSceneGame();
@@ -71,35 +54,7 @@ public:
 	CRectangle GetRect() {
 		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
 	};
-		/*
-	//í«â¡
-	float GetScrollX()
-	{
-		return scrollValueX;
-	};
-	float GetScrollY()
-	{
-		return scrollValueY;
-	}
-	*/
-	/*CRectangle GetRect() {
-		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
-	};*/
 
-	/*CRectangle GetRect()
-	{
-		return CRectangle(
-			ePosX,
-			ePosY,
-			ePosX + 100,
-			ePosY + 100
-		);
-	}
-	int GetType()
-	{
-		return 0;
-	}*/
-
-
+	void PopUpController();
 };
 
