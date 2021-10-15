@@ -6,18 +6,26 @@ enum tag_POPUPNO {
 	POPUPNO_QUIT,
 	POPUPNO_CAUSEOFDEATH,
 	POPUPNO_CONTINUE,
-	PUPUPNO_BACKTOTITLE,
-	PUPUPNO_POSE,
+	POPUPNO_BACKTOTITLE,
+	POPUPNO_POSE,
 	POPUPNO_RESULT,
 	POPUPNO_RETRY,
-	PUPUPNO_TROPHY,
+	POPUPNO_TROPHY,
 };
 
 class CPopUpWindowBase
 {
 protected:
+	int popUpPosX = 200;
+	int popUpPosY = 50;
 	bool endFlg = false;
 	short	nextPopUp;
+	//ボタン取得用変数
+	//1初期化
+	//2メニュー画面へ遷移
+	//3タイトル画面へ遷移
+	//4設定画面に遷移
+	int     buttonResult;
 
 public:
 	CPopUpWindowBase() {}
@@ -27,6 +35,7 @@ public:
 	virtual void Render() {}
 	virtual void Release() {}
 	//ゲッター
+	int GetButtonResult() { return buttonResult; }
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 
