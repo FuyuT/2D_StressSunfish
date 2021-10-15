@@ -1,8 +1,5 @@
 #include "SceneGame.h"
-<<<<<<< HEAD
 #include "SceneConfig.h"
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 #include "Timer.h"
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
@@ -15,10 +12,6 @@
 CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
-<<<<<<< HEAD
-=======
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 CPopUpWindowBase* nowPopUpGame = NULL;
 
 CSceneGame::CSceneGame():
@@ -59,27 +52,21 @@ void CSceneGame::Initialize()
 	parasite4.Load("kiseitilyuu4.png");
 	parasite5.Load("kiseitilyuu5.png");
 
-<<<<<<< HEAD
 	//障害物
 	ene.Initialize();
 	ene.Start(scrollValueX, scrollValueY, 0);
 	//seaTurtleTexture.Load("ウミガメ ラフ.png");
 	posX = 500;
 	posY = 500;
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
-<<<<<<< HEAD
 	//ポップアップ
 	popUpFlg = false;
 	nowPopUpGame = new CCauseOfDeathWindow;
 	nowPopUpGame->Initialize();
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 }
 
 void CSceneGame::Update()
@@ -143,54 +130,6 @@ void CSceneGame::Update()
 			scrollValueY = stgh - sh;
 		}
 	}
-<<<<<<< HEAD
-=======
-	
-	//移動
-	//初期化（しないと加速するので
-	moveSpeed.x = 0; moveSpeed.y = 0;
-	if (g_pInput->IsKeyHold(MOFKEY_D))
-	{
-		moveSpeed.x += PLAYER_SPEED;
-		distancePlayer += 10.0f;
-	}
-	else if(g_pInput->IsKeyHold(MOFKEY_A))
-	{
-		moveSpeed.x -= PLAYER_SPEED;
-	}
-	if (g_pInput->IsKeyHold(MOFKEY_W))
-	{
-		moveSpeed.y -= PLAYER_SPEED;
-	}
-	else if (g_pInput->IsKeyHold(MOFKEY_S))
-	{
-		moveSpeed.y += PLAYER_SPEED;
-	}
-	//移動制限
-	//左右
-	if (prec.Left < 0)
-	{
-		playerX = 0;
-	}
-	else if (prec.Right > stgw)
-	{
-		playerX = stgw - playerTexture.GetWidth();
-	}
-	//上下
-
-	
-	//実際に移動
-	playerX += moveSpeed.x;
-	playerY += moveSpeed.y;
-
-
-	//else if (prec.Right > backGroundTexture.GetWidth())
-	//{
-	//	playerX = stgw - playerTexture.GetWidth();
-	//}
-
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 
 	//体温変化
 	//体温下降
@@ -355,21 +294,11 @@ void CSceneGame::Render()
 	hungerGaugeFrame.Render(1400, 0,rec2);
 	CRectangle rec3(0,hungerRegion, 330, 200);
 	hungerGauge.Render(1400,hungerRegion,rec3);
-<<<<<<< HEAD
-=======
-
-	//ポップアップ描画
-	if (popUpFlg)
-	{
-		nowPopUpGame->Render();
-	}
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 
 	//障害物
 	ene.Render(scrollValueX, scrollValueY);
 	pl.Render(scrollValueX, scrollValueY);
 	//デバッグ用
-<<<<<<< HEAD
 	pl.RenderDebug(scrollValueX, scrollValueY);
 
 	//ポップアップ描画
@@ -377,12 +306,6 @@ void CSceneGame::Render()
 	{
 		nowPopUpGame->Render();
 	}
-=======
-	CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "温度  %d", bodyTemp);
-	tempTimer.Render(10, 70);
-	hungerTimer.Render(10, 90);
-	parasiteTimer.Render(10, 110);
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 }
 
 void CSceneGame::Release()
@@ -391,18 +314,10 @@ void CSceneGame::Release()
 	pl.Release();
 	stressMeter.Release();
 
-<<<<<<< HEAD
 	tempNormal.Release();
 	tempHot.Release();
 	tempCold.Release();
 	stressMeter.Release();
-=======
-	stressMeter.Release();
-
-	tempNormal.Release();
-	tempHot.Release();
-	tempCold.Release();
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 
 	tempMeter.Release();
 	tempMeterFrame.Release();
@@ -415,10 +330,7 @@ void CSceneGame::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
-<<<<<<< HEAD
 	ene.Release();
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 
 	nowPopUpGame->Release();
 	if (nowPopUpGame)
@@ -431,7 +343,6 @@ void CSceneGame::Release()
 void CSceneGame::PopUpController()
 {
 	nowPopUpGame->Update();
-<<<<<<< HEAD
 	if (nowPopUpGame->GetButtonResult() == 1)
 	{
 		//リトライ、もしくはコンティニューボタンが押されたら初期化
@@ -455,17 +366,12 @@ void CSceneGame::PopUpController()
 		nextScene = SCENENO_CONFIG;
 		endFlg = true;
 	}
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 	if (nowPopUpGame->IsEnd())
 	{
 		//次のポップアップの取得
 		short nextPopUp = nowPopUpGame->GetNextPopUp();
 		//古いポップアップの消去
-<<<<<<< HEAD
 		nowPopUpGame->Release();
-=======
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 		delete nowPopUpGame;
 		//次のポップアップ番号に応じてポップアップを初期化
 		switch (nextPopUp)

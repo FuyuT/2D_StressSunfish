@@ -30,11 +30,7 @@ void CContinueWindow::Update()
 		//コンティニューボタンが押された際の処理
 		endFlg = true;
 		//ゲーム画面をInitialise
-<<<<<<< HEAD
 		buttonResult = 1;
-=======
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
@@ -43,11 +39,7 @@ void CContinueWindow::Update()
 		//メニュー画面ボタンが押されたときの処理
 		endFlg = true;
 		//メニュー画面へ遷移
-<<<<<<< HEAD
 		buttonResult = 2;
-=======
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
@@ -56,11 +48,7 @@ void CContinueWindow::Update()
 		//タイトル画面ボタンが押された際の処理
 		endFlg = true;
 		//タイトル画面へ遷移
-<<<<<<< HEAD
 		buttonResult = 3;
-=======
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 		nextPopUp = NULL;
 	}
 }

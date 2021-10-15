@@ -31,11 +31,7 @@ void CPoseWindow::Update()
 		endFlg = true;
 		nextPopUp = NULL;
 		//ê›íËâÊñ Ç÷ÇÃëJà⁄
-<<<<<<< HEAD
 		buttonResult = 4;
-=======
-
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -96,8 +92,4 @@ CRectangle CPoseWindow::GetRect(int i)
 		return CRectangle(buttonTitlePosX, buttonTitlePosY, buttonTitlePosX + buttonTitleTexture.GetWidth(), buttonTitlePosY + buttonTitleTexture.GetHeight());
 	else if (i == 3)
 		return CRectangle(buttonReturnGamePosX, buttonReturnGamePosY, buttonReturnGamePosX + buttonReturnGameTexture.GetWidth(), buttonReturnGamePosY + buttonReturnGameTexture.GetHeight());
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
