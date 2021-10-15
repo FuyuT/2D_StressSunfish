@@ -7,7 +7,7 @@ private:
 	CTexture	buttonTexture;
 	int			buttonPosX = 800;
 	int			buttonPosY = 800;
-
+	bool        gamePlayFlg = false;
 public:
 	CSceneConfig();
 	~CSceneConfig();
@@ -18,5 +18,9 @@ public:
 	CRectangle GetRect() {
 		return CRectangle(buttonPosX, buttonPosY, buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
 	};
+	//セッター
+	void SetGamePlayFlg() { gamePlayFlg = true; }
+	//ゲッター
+	bool GetGamePlayFlg() { return gamePlayFlg; }
 };
 

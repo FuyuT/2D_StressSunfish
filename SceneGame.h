@@ -60,6 +60,9 @@ private:
 	CTexture seaTurtleTexture;
 	bool deadFlag;
 
+	//İ’è‰æ–Êƒtƒ‰ƒO
+	bool configFlg = false;
+
 public:
 	CSceneGame();
 	~CSceneGame();
