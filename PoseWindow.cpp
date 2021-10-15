@@ -31,7 +31,7 @@ void CPoseWindow::Update()
 		endFlg = true;
 		nextPopUp = NULL;
 		//Ý’è‰æ–Ê‚Ö‚Ì‘JˆÚ
-
+		buttonResult = 4;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{

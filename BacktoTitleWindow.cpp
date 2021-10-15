@@ -26,7 +26,7 @@ void CBackToTitleWindow::Update()
 		Release();
 		endFlg = true;
 		//ƒ^ƒCƒgƒ‹‰æ–Ê‚É‘JˆÚ
-
+		buttonResult = 3;
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))

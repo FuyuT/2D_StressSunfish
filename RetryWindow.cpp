@@ -26,7 +26,7 @@ void CRetryWindow::Update()
 		Release();
 		endFlg = true;
 		//ƒQ[ƒ€‰æ–Ê‚ð‰Šú‰»
-
+		buttonResult = 1;
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
