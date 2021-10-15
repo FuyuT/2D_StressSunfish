@@ -21,9 +21,11 @@ public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() {}
 	virtual ~CSceneBase() {}
+	virtual bool Load() { return true; }
 	virtual void Initialize() {}
 	virtual void Update() {}
 	virtual void Render() {}
+	virtual void RenderDebug() {}
 	virtual void Release() {}
 	//ゲッター
 	short GetNextScene() { return nextScene; }

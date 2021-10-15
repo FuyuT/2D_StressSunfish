@@ -10,8 +10,7 @@ CSceneConfig::~CSceneConfig()
 }
 void CSceneConfig::Initialize()
 {
-	buttonTexture.Load("ButtonMenu.png");
-
+	menuButtonTexture.Load("ButtonMenu.png");
 }
 void CSceneConfig::Update()
 {
@@ -23,21 +22,13 @@ void CSceneConfig::Update()
 		nextScene = SCENENO_GAMEMENU;
 		CSceneConfig::Release();
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
-	{
-		//ゲーム画面から設定に行くパターン
-		endFlg = true;
-		nextScene = SCENENO_GAME;
-		CSceneConfig::Release();
-	}
-
 }
 void CSceneConfig::Render()
 {
 	CGraphicsUtilities::RenderString(100, 300, "設定画面");
-	buttonTexture.Render(buttonPosX, buttonPosY);
+	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 }
 void CSceneConfig::Release()
 {
-	buttonTexture.Release();
+	menuButtonTexture.Release();
 }

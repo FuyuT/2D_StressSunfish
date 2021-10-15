@@ -61,6 +61,12 @@
     <Filter Include="ソース ファイル\ヘッダー ファイル\Manager">
       <UniqueIdentifier>{591cbf9b-6186-4ea2-a916-15a465d3487f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Obstacle\Food">
+      <UniqueIdentifier>{792c4f9f-3681-4654-b73a-bca169e88b9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\Obstacle\Food">
+      <UniqueIdentifier>{bb1166fc-9947-40cf-ae22-9ed96ed1e05d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneTitle.cpp">
@@ -126,11 +132,29 @@
     <ClCompile Include="ContinueWindow.cpp">
       <Filter>ソース ファイル\PopUpWindow</Filter>
     </ClCompile>
-    <ClCompile Include="SceneBase.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="CheckCauseOfDeathWindow.cpp">
       <Filter>ソース ファイル\PopUpWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneBase.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="FoodCrab.cpp">
+      <Filter>ソース ファイル\Obstacle\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="FoodFish.cpp">
+      <Filter>ソース ファイル\Obstacle\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="FoodShrimp.cpp">
+      <Filter>ソース ファイル\Obstacle\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="Bubble.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Garbage.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Turtle.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +232,27 @@
     </ClInclude>
     <ClInclude Include="CheckCauseOfDeathWindow.h">
       <Filter>ソース ファイル\ヘッダー ファイル\PopUpWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="FoodCrab.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="FoodFish.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="FoodShrimp.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="ObstacleBase.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Bubble.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Garbage.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Turtle.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -2,12 +2,14 @@
 #include "SceneBase.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "ObstacleManager.h"
 
 class CSceneGame : public CSceneBase
 {
 private:
 	CPlayer pl;
 	Enemy ene;
+	CObstacleManager cObstacle;
 
 	int playerX = 100;
 	int playerY = 100;
@@ -63,9 +65,11 @@ private:
 public:
 	CSceneGame();
 	~CSceneGame();
+	bool Load()override;
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
+	void RenderDebug() override;
 	void Release() override;
 
 	CRectangle GetRect() {
