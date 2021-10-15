@@ -13,6 +13,9 @@ CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
 CPopUpWindowBase* nowPopUpGame = NULL;
+//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+CSceneConfig sceneConfig;
 
 CSceneGame::CSceneGame():
 scrollValueX(0),
@@ -65,8 +68,8 @@ void CSceneGame::Initialize()
 
 	//ポップアップ
 	popUpFlg = false;
-	nowPopUpGame = new CCauseOfDeathWindow;
-	nowPopUpGame->Initialize();
+
+	configFlg = false;
 }
 
 void CSceneGame::Update()
@@ -238,6 +241,16 @@ void CSceneGame::Update()
 
 	//seaTurtle
 	ene.Update();
+
+	if (!sceneConfig.GetGamePlayFlg())
+		configFlg = false;
+
+
+	//設定表示
+	if (configFlg)
+	{
+		sceneConfig.Update();
+	}
 }
 
 void CSceneGame::Render()
@@ -306,6 +319,10 @@ void CSceneGame::Render()
 	{
 		nowPopUpGame->Render();
 	}
+	if (configFlg)
+	{
+		sceneConfig.Render();
+	}
 }
 
 void CSceneGame::Release()
@@ -332,11 +349,15 @@ void CSceneGame::Release()
 	parasite5.Release();
 	ene.Release();
 
-	nowPopUpGame->Release();
-	if (nowPopUpGame)
+
+	if (nowPopUpGame != NULL)
 	{
-		delete nowPopUpGame;
-		nowPopUpGame = NULL;
+		nowPopUpGame->Release();
+		if (nowPopUpGame)
+		{
+			delete nowPopUpGame;
+			nowPopUpGame = NULL;
+		}
 	}
 }
 
@@ -362,9 +383,10 @@ void CSceneGame::PopUpController()
 	}
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
-		//設定が押されたら設定画面に遷移
-		nextScene = SCENENO_CONFIG;
-		endFlg = true;
+		//設定が押されたら設定画面を表示
+		configFlg = true;
+		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Initialize();
 	}
 	if (nowPopUpGame->IsEnd())
 	{
@@ -378,26 +400,32 @@ void CSceneGame::PopUpController()
 		{
 		case POPUPNO_CAUSEOFDEATH:
 			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RESULT:
 			nowPopUpGame = new CResultWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_CONTINUE:
 			nowPopUpGame = new CContinueWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_POSE:
 			nowPopUpGame = new CPoseWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
 			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
 			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
-			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame = NULL;
 			popUpFlg = false;
+			break;
 		}
-		nowPopUpGame->Initialize();
 	}
 }
