@@ -243,14 +243,17 @@ void CPlayer::Jump()
 //プレイヤーの状態を更新
 void CPlayer::UpdateStatus()
 {
-	if (deadFlg)
+	if (deadFlg && !jumpFlg)
 	{
 		//死ぬアニメーションの再生とか
 	}
 
 	//速度を座標に反映
 	posX += moveX * moveSpeed;
-	posY += moveY * moveSpeed;
+	if (jumpFlg)
+		posY += moveY;
+	else
+		posY += moveY * moveSpeed;
 
 
 	//ジャンプ可能
@@ -403,7 +406,7 @@ void CPlayer::UpdateStatus()
 void CPlayer::Update()
 {
 	//プレイヤーが死んでいる場合
-	if (deadFlg)
+	if (deadFlg && !jumpFlg)
 		return;
 
 	//ステータス(状態)の更新
@@ -425,7 +428,7 @@ void CPlayer::Update()
 void CPlayer::Render(float wx, float wy)
 {
 	//プレイヤーが死んでいる場合
-	if (deadFlg)
+	if (deadFlg && !jumpFlg)
 		return;
 
 	//プレイヤーの描画
@@ -528,7 +531,7 @@ void CPlayer::Release()
 void CPlayer::Collision(Enemy& ene)
 {
 
-	if (!ene.GetShow())
+	if (!ene.GetShow() || deadFlg)
 	{
 		return;
 	}
