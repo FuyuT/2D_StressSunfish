@@ -26,6 +26,9 @@ CSceneBase* nowScene = NULL;
 						それ以外	失敗、エラーコードが戻り値となる
 *//**************************************************************************/
 MofBool CGameApp::Initialize(void) {
+	//リソースディレクトリの設定
+	CUtilities::SetCurrentDirectory("Resource");
+
 	//シーンの初期化
 	nowScene = new CSceneTitle;
 	nowScene->Initialize();
@@ -44,24 +47,24 @@ MofBool CGameApp::Update(void) {
 	nowScene->Update();
 	if (nowScene->IsEnd())
 	{
-		//次のシーンの取得a
-		short nextScene = nowScene->GetNextScene();
+		//次のシーンの取得
+		short nextScene = nowScene->GetNextScene();		
 		//古いシーンの消去
 		delete nowScene;
 		//次のシーン番号に応じてシーンを作って初期化
 		switch (nextScene)
 		{
 		case SCENENO_TITLE:
-			nowScene = new CSceneTitle();
+			nowScene = new CSceneTitle;
 			break;
 		case SCENENO_GAME:
-			nowScene = new CSceneGame();
+			nowScene = new CSceneGame;
 			break;
 		case SCENENO_GAMEMENU:
-			nowScene = new CSceneGameMenu();
+			nowScene = new CSceneGameMenu;
 			break;
 		case SCENENO_CONFIG:
-			nowScene = new CSceneConfig();
+			nowScene = new CSceneConfig;
 			break;
 		case SCENENO_STRESSCOLLECTION:
 			nowScene = new CSceneStressCollection;
@@ -70,6 +73,7 @@ MofBool CGameApp::Update(void) {
 			nowScene = new CSceneTrophyCollection;
 			break;
 		}
+		nowScene->Initialize();
 	}
 
 	return TRUE;
