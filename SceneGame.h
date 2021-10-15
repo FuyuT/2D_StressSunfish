@@ -18,10 +18,13 @@ private:
 	int stressBarY = 10;
 	int stressBarChenge = 300;
 
+<<<<<<< HEAD
 	int stressNumber = 100;
 
 	int timeCnt = 0;
 
+=======
+>>>>>>> 9c61559dc03cccaa61a1b8e2cccfd8f49851171b
 	int bodyTemp = 10;
 
 	int parasiteCnt = 0;
