@@ -1,4 +1,5 @@
 #include "SceneGame.h"
+#include "SceneConfig.h"
 #include "Timer.h"
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
@@ -24,13 +25,6 @@ posY(0.0f)
 
 CSceneGame::~CSceneGame()
 {
-}
-
-bool CSceneGame::Load()
-{
-	//障害物
-	if(!cObstacle.Load())return false;
-	return true;
 }
 
 void CSceneGame::Initialize()
@@ -64,14 +58,13 @@ void CSceneGame::Initialize()
 	//seaTurtleTexture.Load("ウミガメ ラフ.png");
 	posX = 500;
 	posY = 500;
-	cObstacle.Initialize();
-
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
 	//ポップアップ
+	popUpFlg = false;
 	nowPopUpGame = new CCauseOfDeathWindow;
 	nowPopUpGame->Initialize();
 }
@@ -243,9 +236,8 @@ void CSceneGame::Update()
 	pl.Update();
 	pl.Collision(ene);
 
-	//障害物
+	//seaTurtle
 	ene.Update();
-	cObstacle.Update(scrollValueX, scrollValueY);
 }
 
 void CSceneGame::Render()
@@ -303,28 +295,17 @@ void CSceneGame::Render()
 	CRectangle rec3(0,hungerRegion, 330, 200);
 	hungerGauge.Render(1400,hungerRegion,rec3);
 
+	//障害物
+	ene.Render(scrollValueX, scrollValueY);
+	pl.Render(scrollValueX, scrollValueY);
+	//デバッグ用
+	pl.RenderDebug(scrollValueX, scrollValueY);
+
 	//ポップアップ描画
 	if (popUpFlg)
 	{
 		nowPopUpGame->Render();
 	}
-	//プレイヤー
-	pl.Render(scrollValueX, scrollValueY);
-
-	//障害物
-	ene.Render(scrollValueX, scrollValueY);
-	cObstacle.Render(scrollValueX, scrollValueY);
-
-}
-
-//デバッグ
-void CSceneGame::RenderDebug()
-{
-	//プレイヤー
-	pl.RenderDebug(scrollValueX, scrollValueY);
-	//障害物
-	cObstacle.RenderDebug(scrollValueX, scrollValueY);
-
 }
 
 void CSceneGame::Release()
@@ -357,19 +338,40 @@ void CSceneGame::Release()
 		delete nowPopUpGame;
 		nowPopUpGame = NULL;
 	}
-
-	//障害物
-	cObstacle.Release();
 }
 
 void CSceneGame::PopUpController()
 {
 	nowPopUpGame->Update();
+	if (nowPopUpGame->GetButtonResult() == 1)
+	{
+		//リトライ、もしくはコンティニューボタンが押されたら初期化
+		Initialize();
+	}
+	else if (nowPopUpGame->GetButtonResult() == 2)
+	{
+		//メニューボタンが押されたらメニュー画面に遷移
+		nextScene = SCENENO_GAMEMENU;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 3)
+	{
+		//タイトルボタンが押されたらタイトル画面に遷移
+		nextScene = SCENENO_TITLE;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 4)
+	{
+		//設定が押されたら設定画面に遷移
+		nextScene = SCENENO_CONFIG;
+		endFlg = true;
+	}
 	if (nowPopUpGame->IsEnd())
 	{
 		//次のポップアップの取得
 		short nextPopUp = nowPopUpGame->GetNextPopUp();
 		//古いポップアップの消去
+		nowPopUpGame->Release();
 		delete nowPopUpGame;
 		//次のポップアップ番号に応じてポップアップを初期化
 		switch (nextPopUp)
