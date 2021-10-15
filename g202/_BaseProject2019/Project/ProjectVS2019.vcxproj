@@ -103,12 +103,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BacktoTitleWindow.cpp" />
+    <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="CauseOfDeathWindow.cpp" />
     <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
     <ClCompile Include="ContinueWindow.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FoodCrab.cpp" />
+    <ClCompile Include="FoodFish.cpp" />
+    <ClCompile Include="FoodShrimp.cpp" />
     <ClCompile Include="GameApp.cpp" />
     <ClCompile Include="GameQuitWindow.cpp" />
+    <ClCompile Include="Garbage.cpp" />
     <ClCompile Include="ObstacleManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PoseWindow.cpp" />
@@ -124,16 +129,23 @@
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TrophyWindow.cpp" />
+    <ClCompile Include="Turtle.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackToTitleWindow.h" />
+    <ClInclude Include="Bubble.h" />
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="ObstacleBase.h" />
+    <ClInclude Include="FoodCrab.h" />
+    <ClInclude Include="FoodFish.h" />
+    <ClInclude Include="FoodShrimp.h" />
     <ClInclude Include="GameApp.h" />
     <ClInclude Include="GameQuitWindow.h" />
+    <ClInclude Include="Garbage.h" />
     <ClInclude Include="ObstacleManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PopUpWindowBase.h" />
@@ -152,6 +164,7 @@
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TrophyWindow.h" />
+    <ClInclude Include="Turtle.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />

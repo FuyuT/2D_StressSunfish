@@ -26,6 +26,13 @@ CSceneGame::~CSceneGame()
 {
 }
 
+bool CSceneGame::Load()
+{
+	//障害物
+	if(!cObstacle.Load())return false;
+	return true;
+}
+
 void CSceneGame::Initialize()
 {
 	pl.Initialize();
@@ -57,6 +64,8 @@ void CSceneGame::Initialize()
 	//seaTurtleTexture.Load("ウミガメ ラフ.png");
 	posX = 500;
 	posY = 500;
+	cObstacle.Initialize();
+
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
@@ -234,8 +243,9 @@ void CSceneGame::Update()
 	pl.Update();
 	pl.Collision(ene);
 
-	//seaTurtle
+	//障害物
 	ene.Update();
+	cObstacle.Update(scrollValueX, scrollValueY);
 }
 
 void CSceneGame::Render()
@@ -298,12 +308,23 @@ void CSceneGame::Render()
 	{
 		nowPopUpGame->Render();
 	}
+	//プレイヤー
+	pl.Render(scrollValueX, scrollValueY);
 
 	//障害物
 	ene.Render(scrollValueX, scrollValueY);
-	pl.Render(scrollValueX, scrollValueY);
-	//デバッグ用
+	cObstacle.Render(scrollValueX, scrollValueY);
+
+}
+
+//デバッグ
+void CSceneGame::RenderDebug()
+{
+	//プレイヤー
 	pl.RenderDebug(scrollValueX, scrollValueY);
+	//障害物
+	cObstacle.RenderDebug(scrollValueX, scrollValueY);
+
 }
 
 void CSceneGame::Release()
@@ -336,6 +357,9 @@ void CSceneGame::Release()
 		delete nowPopUpGame;
 		nowPopUpGame = NULL;
 	}
+
+	//障害物
+	cObstacle.Release();
 }
 
 void CSceneGame::PopUpController()

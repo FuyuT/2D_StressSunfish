@@ -73,6 +73,7 @@ MofBool CGameApp::Update(void) {
 			nowScene = new CSceneTrophyCollection;
 			break;
 		}
+		if (!nowScene->Load())return false;
 		nowScene->Initialize();
 	}
 
@@ -93,6 +94,7 @@ MofBool CGameApp::Render(void) {
 	
 	//ƒV[ƒ“‚Ì•`‰æ
 	nowScene->Render();
+	nowScene->RenderDebug();
 
 	//•`‰æ‚ÌI—¹
 	g_pGraphics->RenderEnd();
