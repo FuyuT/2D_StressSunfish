@@ -1,4 +1,5 @@
 #include "SceneGame.h"
+#include "SceneConfig.h"
 #include "Timer.h"
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
@@ -12,6 +13,9 @@ CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
 CPopUpWindowBase* nowPopUpGame = NULL;
+//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+CSceneConfig sceneConfig;
 
 CSceneGame::CSceneGame():
 scrollValueX(0),
@@ -36,44 +40,26 @@ bool CSceneGame::Load()
 void CSceneGame::Initialize()
 {
 	pl.Initialize();
-	//stressGauge.Load("gauge.png");
 	backGroundTexture.Load("SeaTexture.png");
 	playerTexture.Load("Player.png");
 
-	stressMeter.Load("sutoresume--ta-.png");
-
-	tempNormal.Load("nicochyan5.png");
-	tempHot.Load("nicochyan6.png");
-	tempCold.Load("nicochyan4.png");
-
-	tempMeter.Load("temperatureMeter.png");
-	tempMeterFrame.Load("temperatureMeterFrame.png");
-
-	hungerGauge.Load("stomach2.png");
-	hungerGaugeFrame.Load("stomach.png");
-
-	parasite1.Load("kiseitilyuu.png");
-	parasite2.Load("kiseitilyuu2.png");
-	parasite3.Load("kiseitilyuu3.png");
-	parasite4.Load("kiseitilyuu4.png");
-	parasite5.Load("kiseitilyuu5.png");
+	ui.Initialize();
 
 	//障害物
 	ene.Initialize();
 	ene.Start(scrollValueX, scrollValueY, 0);
-	//seaTurtleTexture.Load("ウミガメ ラフ.png");
 	posX = 500;
 	posY = 500;
 	cObstacle.Initialize();
-
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
 	//ポップアップ
-	nowPopUpGame = new CCauseOfDeathWindow;
-	nowPopUpGame->Initialize();
+	popUpFlg = false;
+
+	configFlg = false;
 }
 
 void CSceneGame::Update()
@@ -85,10 +71,6 @@ void CSceneGame::Update()
 		nextScene = SCENENO_TITLE;
 	}
 
-	//タイマー
-	tempTimer.Update();
-	hungerTimer.Update();
-	parasiteTimer.Update();
 	//スクロール
 	CRectangle prec = pl.GetRect();
 	//スクリーン幅
@@ -138,88 +120,6 @@ void CSceneGame::Update()
 		}
 	}
 
-	//体温変化
-	//体温下降
-	if (playerY >= backGroundTexture.GetHeight() - 330)
-	{		
-		//タイマーセット
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
-		{
-			if (bodyTemp > -30)
-			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
-			}
-			tempTimer.SetTotalTime(1);
-		}
-	}
-	//体温上昇
-	else if (playerY <= backGroundTexture.GetHeight() - 1200)
-	{	
-		//タイマーセット
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
-		{
-			if (bodyTemp < 50)
-			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
-			}
-			tempTimer.SetTotalTime(1);
-		}
-	}
-	//体温が一定の値に戻る
-	else
-	{
-		if (bodyTemp > 10)
-		{	
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
-			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
-				tempTimer.SetTotalTime(2);
-			}
-		}
-		else if (bodyTemp < 10)
-		{	
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
-			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
-				tempTimer.SetTotalTime(2);
-			}
-		}
-	}
-
-	//寄生虫
-	if (parasiteFlg < 5)
-	{
-		//タイマーセット
-		parasiteTimer.StartTimer();
-		if (parasiteTimer.GetNowtime() <= 0)
-		{
-			parasiteFlg += 1;
-			parasiteTimer.SetTotalTime(15);
-		}
-
-	}
-
-	//空腹ゲージ
-	//タイマーセット
-	hungerTimer.StartTimer();
-	if (hungerTimer.GetNowtime() <= 0)
-	{
-		if (hungerRegion < 160)
-		{
-			hungerRegion += 3;
-		}		
-		hungerTimer.SetTotalTime(3);
-	}
 
 	//とりあえずF1でポップアップが出るように
 	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
@@ -246,6 +146,16 @@ void CSceneGame::Update()
 	//障害物
 	ene.Update();
 	cObstacle.Update(scrollValueX, scrollValueY);
+
+	if (!sceneConfig.GetGamePlayFlg())
+		configFlg = false;
+
+
+	//設定表示
+	if (configFlg)
+	{
+		sceneConfig.Update();
+	}
 }
 
 void CSceneGame::Render()
@@ -253,66 +163,22 @@ void CSceneGame::Render()
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);
-	//CGraphicsUtilities::RenderString(100, 300, "game画面");
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
-	stressMeter.Render(1600, 0);
-	
-	//体温UI描画
-	if (bodyTemp >=40)
-	{
-		tempHot.Render(1600, 0);
-	}
-	else if (bodyTemp <= -20)
-	{
-		tempCold.Render(1600, 0);
-	}
-	else
-	{
-		tempNormal.Render(1600, 0);
-	}
-
-	//温度計UI描画
-	tempMeterFrame.Render(1550,200);
-	CRectangle rec1(0, tempRegion, 500, 500);
-	tempMeter.Render(1550, 200 + tempRegion,rec1);
-
-	//寄生虫UIの描画
-	switch (parasiteFlg)
-	{
-	case 1:
-		parasite1.Render(1600, 0);
-		break;
-	case 2:
-		parasite2.Render(1600, 0);
-		break;
-	case 3:
-		parasite3.Render(1600, 0);
-		break;
-	case 4:
-		parasite4.Render(1600, 0);
-		break;
-	case 5:
-		parasite5.Render(1600, 0);
-		break;
-	}
-
-	//空腹ゲージUI描画
-	CRectangle rec2(0, 0, 330, 200);
-	hungerGaugeFrame.Render(1400, 0,rec2);
-	CRectangle rec3(0,hungerRegion, 330, 200);
-	hungerGauge.Render(1400,hungerRegion,rec3);
+	//UIの描画
+	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
 	//ポップアップ描画
 	if (popUpFlg)
 	{
 		nowPopUpGame->Render();
 	}
-	//プレイヤー
-	pl.Render(scrollValueX, scrollValueY);
+	if (configFlg)
+	{
+		sceneConfig.Render();
+	}
 
 	//障害物
-	ene.Render(scrollValueX, scrollValueY);
 	cObstacle.Render(scrollValueX, scrollValueY);
 
 }
@@ -325,37 +191,29 @@ void CSceneGame::RenderDebug()
 	//障害物
 	cObstacle.RenderDebug(scrollValueX, scrollValueY);
 
-}
+	//障害物
+	ene.Render(scrollValueX, scrollValueY);
+	pl.Render(scrollValueX, scrollValueY);
+	//デバッグ用
+	pl.RenderDebug(scrollValueX, scrollValueY);
+} 
 
 void CSceneGame::Release()
 {
 	backGroundTexture.Release();
 	pl.Release();
-	stressMeter.Release();
-
-	tempNormal.Release();
-	tempHot.Release();
-	tempCold.Release();
-	stressMeter.Release();
-
-	tempMeter.Release();
-	tempMeterFrame.Release();
-
-	hungerGauge.Release();
-	hungerGaugeFrame.Release();
-
-	parasite1.Release();
-	parasite2.Release();
-	parasite3.Release();
-	parasite4.Release();
-	parasite5.Release();
 	ene.Release();
+	ui.Release();
 
-	nowPopUpGame->Release();
-	if (nowPopUpGame)
+
+	if (nowPopUpGame != NULL)
 	{
-		delete nowPopUpGame;
-		nowPopUpGame = NULL;
+		nowPopUpGame->Release();
+		if (nowPopUpGame)
+		{
+			delete nowPopUpGame;
+			nowPopUpGame = NULL;
+		}
 	}
 
 	//障害物
@@ -365,37 +223,68 @@ void CSceneGame::Release()
 void CSceneGame::PopUpController()
 {
 	nowPopUpGame->Update();
+	if (nowPopUpGame->GetButtonResult() == 1)
+	{
+		//リトライ、もしくはコンティニューボタンが押されたら初期化
+		Initialize();
+	}
+	else if (nowPopUpGame->GetButtonResult() == 2)
+	{
+		//メニューボタンが押されたらメニュー画面に遷移
+		nextScene = SCENENO_GAMEMENU;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 3)
+	{
+		//タイトルボタンが押されたらタイトル画面に遷移
+		nextScene = SCENENO_TITLE;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 4)
+	{
+		//設定が押されたら設定画面を表示
+		configFlg = true;
+		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Initialize();
+	}
 	if (nowPopUpGame->IsEnd())
 	{
 		//次のポップアップの取得
 		short nextPopUp = nowPopUpGame->GetNextPopUp();
 		//古いポップアップの消去
+		nowPopUpGame->Release();
 		delete nowPopUpGame;
 		//次のポップアップ番号に応じてポップアップを初期化
 		switch (nextPopUp)
 		{
 		case POPUPNO_CAUSEOFDEATH:
 			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RESULT:
 			nowPopUpGame = new CResultWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_CONTINUE:
 			nowPopUpGame = new CContinueWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_POSE:
 			nowPopUpGame = new CPoseWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
 			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
 			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
-			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame = NULL;
 			popUpFlg = false;
+			break;
 		}
-		nowPopUpGame->Initialize();
 	}
 }

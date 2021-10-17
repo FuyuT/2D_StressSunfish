@@ -10,7 +10,7 @@ CTurtle::~CTurtle()
 
 bool CTurtle::Load()
 {
-    if (!Texture.Load("Turtle.png"))return false;
+    if (!Texture.Load("Obstacle\\Turtle.png"))return false;
 
     return true;
 }

@@ -2,7 +2,7 @@
 
 #include "Mof.h"
 #include "Enemy.h"
-#include "time.h"
+#include "timer.h"
 
 //ˆÚ“®‘¬“x	
 #define		PLAYER_SPEED			0.6f
@@ -92,14 +92,22 @@ private:
 	//‘Ì‰·
 	int			temperature;
 	int			temperatureTime;
+	int         bodyTemp;
+	float       tempRegion;
 	//‹ó• 
 	int			hungry;
 	int			hungryTime;
+	int         hungerRegion;
 	//Šñ¶’
 	int			parasite;
 	int			parasiteTime;
 	//…—¬
 	int			streamTime;
+
+	//UI
+	CTimer tempTimer;
+	CTimer hungerTimer;
+	CTimer parasiteTimer;
 
 public:
 	CPlayer();
@@ -167,19 +175,23 @@ public:
 		return deadFlg;
 	}
 	//‘Ì‰·‚ğ•Ô‚· 100 ` 0
-	int	GetTemperature()
+	float	GetTemperature()
 	{
-		return temperature;
+		return tempRegion;
+	}
+	int     GetBodyTemp()
+	{
+		return bodyTemp;
 	}
 	//Šñ¶’‚Ì•t’…”‚ğ•Ô‚· 0 ` 6
 	int GetParasite()
 	{
-		return parasite / 50;
+		return parasite;
 	}
 	//‹ó• “x‚ğ•Ô‚· 10`0
 	int GetHungry()
 	{
-		return hungry;
+		return hungerRegion;
 	}
 	//€ˆö‚ğ•Ô‚·
 	int GetCauseOfDeath()
@@ -203,5 +215,6 @@ public:
 	{
 		return possibleToEatFlg;
 	}
+
 };
 

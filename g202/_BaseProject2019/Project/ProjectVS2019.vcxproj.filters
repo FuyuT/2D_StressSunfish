@@ -67,6 +67,12 @@
     <Filter Include="ソース ファイル\ヘッダー ファイル\Obstacle\Food">
       <UniqueIdentifier>{bb1166fc-9947-40cf-ae22-9ed96ed1e05d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\ヘッダー ファイル\UI">
+      <UniqueIdentifier>{2a551b03-d370-4ab6-a04a-a9e63ee3e216}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI">
+      <UniqueIdentifier>{f16ae9ac-ff13-4586-8ad2-e745be4d704f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SceneTitle.cpp">
@@ -155,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="Turtle.cpp">
       <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Ui.cpp">
+      <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="Turtle.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Ui.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

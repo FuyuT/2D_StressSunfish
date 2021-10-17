@@ -10,7 +10,7 @@ CFoodShrimp::~CFoodShrimp()
 
 bool CFoodShrimp::Load()
 {
-	if (!Texture.Load("Shrimp.png"))return false;
+	if (!Texture.Load("Obstacle\\Shrimp.png"))return false;
 
 	return true;
 }

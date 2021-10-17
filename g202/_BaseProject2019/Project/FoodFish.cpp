@@ -10,7 +10,7 @@ CFoodFish::~CFoodFish()
 
 bool CFoodFish::Load()
 {
-	if (!Texture.Load("Fish.png"))return false;
+	if (!Texture.Load("Obstacle\\Fish.png"))return false;
 
 	return true;
 }

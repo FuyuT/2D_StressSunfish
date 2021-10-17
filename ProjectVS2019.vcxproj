@@ -130,6 +130,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TrophyWindow.cpp" />
     <ClCompile Include="Turtle.cpp" />
+    <ClCompile Include="Ui.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TrophyWindow.h" />
     <ClInclude Include="Turtle.h" />
+    <ClInclude Include="Ui.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Version.rc" />

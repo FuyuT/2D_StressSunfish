@@ -20,7 +20,8 @@ protected:
 	int popUpPosY = 50;
 	bool endFlg = false;
 	short	nextPopUp;
-
+	//メモ書き取れてません　申し訳ない
+	int     buttonResult;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -29,6 +30,7 @@ public:
 	virtual void Render() {}
 	virtual void Release() {}
 	//ゲッター
+	int	  GetButtonResult() { return buttonResult; }
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 

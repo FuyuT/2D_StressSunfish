@@ -10,7 +10,7 @@ CFoodCrab::~CFoodCrab()
 
 bool CFoodCrab::Load()
 {
-	if (!Texture.Load("Crab.png"))return false;
+	if (!Texture.Load("Obstacle\\Crab.png"))return false;
 
 	return true;
 }

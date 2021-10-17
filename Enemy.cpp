@@ -20,7 +20,7 @@ void Enemy::Initialize() {
 	speedX = 0;
 	speedY = 0;
 	show = false;
-	seaTurtleTexture.Load("ƒEƒ~ƒKƒ ƒ‰ƒt.png");
+	seaTurtleTexture.Load("Obstacle\\Turtle.png");
 }
 
 void Enemy::Start(float px, float py, int t) {

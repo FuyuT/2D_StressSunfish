@@ -10,7 +10,7 @@ CGarbage::~CGarbage()
 
 bool CGarbage::Load()
 {
-	if (!Texture.Load("Garbage1.png"))return false;
+	if (!Texture.Load("Obstacle\\Garbage1.png"))return false;
 
 	return true;
 }

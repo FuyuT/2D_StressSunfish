@@ -38,7 +38,7 @@ void CPlayer::Initialize()
 	Load();
 
 	//確率のために使う変数の初期化
-	random.SetSeed(time(NULL));
+	//random.SetSeed(time(NULL));
 
 	/********
 	* 初期値
@@ -48,7 +48,10 @@ void CPlayer::Initialize()
 	posY = g_pGraphics->GetTargetHeight() / 2 - texture.GetHeight() / 2;
 	//状態(ステータス)
 	temperature = TEMPERATURE_LIMIT / 2;
+	bodyTemp = 10;
+	tempRegion = 245;
 	hungry = FULL_STOMACH;
+	hungerRegion = 40;
 	parasite = 0;
 	moveX = 0.0f;
 	moveY = 0.0f;
@@ -62,6 +65,11 @@ void CPlayer::Initialize()
 	deadFlg = false;
 	possibleToEatFlg = false;
 	possibleToJumpFlg = false;
+
+	//UIタイマー
+	tempTimer.SetTotalTime(2);
+	hungerTimer.SetTotalTime(3);
+	parasiteTimer.SetTotalTime(15);
 }
 
 //移動
@@ -270,115 +278,124 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 体温
 	 *********/
+
 	if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 	{
-		//体温上昇
-		if (temperature >= TEMPERATURE_LIMIT)
+		tempTimer.StartTimer();
+		if (tempTimer.GetNowtime() <= 0)
 		{
-			if (causeOfDeath == CAUSE_None)
+			if (bodyTemp < 50)
 			{
-				//死因：熱中症
-				deadFlg = true;
-				causeOfDeath = CAUSE_Hyperthermia;
+				bodyTemp += 1;
+				tempRegion -= 4.1;
+				tempTimer.SetTotalTime(1);
+			}
+			else if (bodyTemp >= 50)
+			{
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：熱中症
+					deadFlg = true;
+					causeOfDeath = CAUSE_Hyperthermia;
+				}
 			}
 		}
-		else if (temperatureTime < 0)
-		{
-			temperature += 1;
-			temperatureTime = TEMPERATURE_SPEED;
-		}
-		else
-		{
-			temperatureTime--;
-		}
-
 	}
 	else if(GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 	{
-		//体温下降
-		if (temperature <= 0)
+		tempTimer.StartTimer();
+		if (tempTimer.GetNowtime() <= 0)
 		{
-			if (causeOfDeath == CAUSE_None)
+			if (bodyTemp > -30)
 			{
-				//死因：凍死
-				deadFlg = true;
-				causeOfDeath = CAUSE_Frozen;
+				bodyTemp -= 1;
+				tempRegion += 4.1;
+				tempTimer.SetTotalTime(1);
+			}
+			else if (bodyTemp <= -30)
+			{
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：凍死
+					deadFlg = true;
+					causeOfDeath = CAUSE_Frozen;
+				}
 			}
 		}
-		else if (temperatureTime < 0)
-		{
-			temperature -= 1;
-			temperatureTime = TEMPERATURE_SPEED;
-		}
-		else
-		{
-			temperatureTime--;
-		}
+
 	}
 	else
 	{
-		//体温が平温に近づく
-		if (temperatureTime < 0)
+		if (bodyTemp > 10)
 		{
-			if (temperature > TEMPERATURE_LIMIT / 2)
+			//タイマーセット
+			tempTimer.StartTimer();
+			if (tempTimer.GetNowtime() <= 0)
 			{
-				temperature -= 1;
+				bodyTemp -= 1;
+				tempRegion += 4.1;
+				tempTimer.SetTotalTime(2);
 			}
-			else if (temperature < TEMPERATURE_LIMIT / 2)
-			{
-				temperature += 1;
-			}
-			temperatureTime = TEMPERATURE_SPEED * 2;
 		}
-		else
+		else if (bodyTemp < 10)
 		{
-			temperatureTime--;
+			//タイマーセット
+			tempTimer.StartTimer();
+			if (tempTimer.GetNowtime() <= 0)
+			{
+				bodyTemp += 1;
+				tempRegion -= 4.1;
+				tempTimer.SetTotalTime(2);
+			}
 		}
+
 	}
 
 
 	/*********
 	 * 寄生虫
 	 *********/
-	if (parasite >= PARASITE_LIMIT)
+	if (parasite < 5)
 	{
-		if (causeOfDeath == CAUSE_None)
+		//タイマーセット
+		parasiteTimer.StartTimer();
+		if (parasiteTimer.GetNowtime() <= 0)
 		{
-			//死因：寄生死
-			deadFlg = true;
-			causeOfDeath = CAUSE_Parasite;
+			parasite += 1;
+			if (parasite == 5)
+			{
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：寄生死
+					deadFlg = true;
+					causeOfDeath = CAUSE_Parasite;
+				}
+			}
+			parasiteTimer.SetTotalTime(15);
 		}
-	}
-	else if (parasiteTime < 0)
-	{
-		parasite += 1;
-		parasiteTime = PARASITE_SPEED;
-	}
-	else
-	{
-		parasiteTime--;
 	}
 
 	/*********
 	 * 空腹
 	 *********/
-	if (hungry <= 0)
+	hungerTimer.StartTimer();
+	if (hungerTimer.GetNowtime() <= 0)
 	{
-		if (causeOfDeath == CAUSE_None)
+		if (hungerRegion <= 148)
 		{
-			//死因：餓死
-			deadFlg = true;
-			causeOfDeath = CAUSE_Starvation;
-		}
-	}
-	else if (hungryTime < 0)
-	{
-		hungry -= 1;
-		hungryTime = HUNGRY_SPEED;
-	}
-	else
-	{
-		hungryTime--;
+			hungerRegion += 12;
+			hungry -= 1;
+		    if (hungry == 0)
+		    {
+			    if (causeOfDeath == CAUSE_None)
+			    {
+				    //死因：餓死
+				    deadFlg = true;
+				    causeOfDeath = CAUSE_Starvation;
+			    }
+		    }
+			hungerTimer.SetTotalTime(3);
+		}		
 	}
 
 	//水流
@@ -419,6 +436,9 @@ void CPlayer::Update()
 	//移動更新
 	UpdateMove();
 
+	tempTimer.Update();
+	hungerTimer.Update();
+	parasiteTimer.Update();
 }
 
 //描画
@@ -468,11 +488,11 @@ void CPlayer::RenderDebug(float wx,float wy)
 		MOF_COLOR_GREEN);
 
 	//体温
-	CGraphicsUtilities::RenderString(10, 70, MOF_COLOR_BLACK, "体温 : %d", GetTemperature());
+	CGraphicsUtilities::RenderString(10, 70, MOF_COLOR_BLACK, "体温 : %d", bodyTemp);
 	//寄生虫
-	CGraphicsUtilities::RenderString(10, 100, MOF_COLOR_BLACK, "寄生虫 : %d / %d", GetParasite(),PARASITE_LIMIT / 50);
+	CGraphicsUtilities::RenderString(10, 100, MOF_COLOR_BLACK, "寄生虫 : %d / 5", parasite);
 	//腹減り
-	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d", GetHungry(),FULL_STOMACH);
+	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d",hungry, FULL_STOMACH);
 	//死因
 	switch (causeOfDeath)
 	{
@@ -520,7 +540,6 @@ void CPlayer::RenderDebug(float wx,float wy)
 void CPlayer::Release()
 {
 	texture.Release();
-
 }
 
 
