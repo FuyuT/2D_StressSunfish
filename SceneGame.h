@@ -2,63 +2,55 @@
 #include "SceneBase.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "ObstacleManager.h"
+#include "Ui.h"
+#include "Stage.h"
+
 
 class CSceneGame : public CSceneBase
 {
 private:
-	/*int playerX = 100;
-	int playerY = 100;*/
-
-	/*int ePosX;
-	int ePosY;*/
-
-	//í«â¡
 	CPlayer pl;
+	Stage stg;
 	Enemy ene;
-	
+	CObstacleManager cObstacle;
+	CUi ui;
+
+	int playerX = 100;
+	int playerY = 100;
 
 	int distancePlayer = 0;
 
-	int stressBarX = 700;
-	int stressBarY = 10;
-	int stressBarChenge = 300;
+	Vector2 moveSpeed;
+	/*CTexture backGroundTexture;*/
+	CTexture playerTexture;
 
-	int stressNumber = 100;
+	/*float scrollValueX;
+	float scrollValueY;*/
 
-	int timeCnt = 0;
+	//è·äQï®
+	int posX;
+	int posY;
+	CTexture seaTurtleTexture;
+	bool deadFlag;
 
-	int bodyTemperature = 50;
+	//ê›íËâÊñ ÉtÉâÉO
+	bool configFlg = false;
 
-	int parasiteCnt = 0;
-	int parasiteFlg = 0;
-
-	//Vector2 moveSpeed;
-	CTexture backGroundTexture;
-	//CTexture playerTexture;
-	float scrollValueX;
-	float scrollValueY;
-
-	CTexture temperatureNormal;
-	CTexture temperatureHot;
-	CTexture temperatureCold;
-
-	CTexture hungerGauge;
-	CTexture hungerGaugeFrame;
-
-	CTexture parasite1;
-	CTexture parasite2;
-	CTexture parasite3;
-	CTexture parasite4;
-	CTexture parasite5;
 public:
 	CSceneGame();
 	~CSceneGame();
+	bool Load()override;
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
+	void RenderDebug() override;
 	void Release() override;
 
-	/*
+	CRectangle GetRect() {
+		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());
+	};
+		/*
 	//í«â¡
 	float GetScrollX()
 	{
@@ -88,5 +80,6 @@ public:
 	}*/
 
 
+	void PopUpController();
 };
 

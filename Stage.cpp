@@ -23,6 +23,9 @@ bool Stage::Load() {
 	if (!enemyTexture.Load("ウミガメ 清書.png")) {
 		return false;
 	}
+	if (!enemyTexture.Load("ウミガメ ラフ.png")) {
+		return false;
+	}
 	return true;
 }
 
@@ -34,11 +37,10 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	enemyStart = pSt;
 	enemyCount = cnt;
 	*/
-
 	Load();
 }
 
-void Stage::Update(Enemy* ene, /*int ecnt*/CPlayer& pl) {
+void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 
 	//追加
 	//スクロール
@@ -93,25 +95,23 @@ void Stage::Update(Enemy* ene, /*int ecnt*/CPlayer& pl) {
 		}
 	}
 
-	if (g_pInput->IsKeyPush(MOFKEY_U))
+	/*if (g_pInput->IsKeyPush(MOFKEY_U))
 	{
 		ene[0].SetTexture(&enemyTexture);
 		ene[0].Start(g_pGraphics->GetTargetWidth() + scrollValueX, 1000, 3);
-	}
+	}*/
 
-	/*
-	if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
-		for (int i = 0; i < ecnt; i++) {
-			if (ene[i].GetShow()) {
-				continue;
-			}
-			ene[i].SetTexture(&enemyTexture);
-			ene[i].Start(enemyStart[enemyNo].posX, 0, enemyStart[enemyNo].type);
-			break;
-		}
-		enemyNo++;
-	}
-	*/
+	//if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
+	//	for (int i = 0; i < ecnt; i++) {
+	//		if (ene[i].GetShow()) {
+	//			continue;
+	//		}
+	//		ene[i].SetTexture(&enemyTexture);
+	//		ene[i].Start(enemyStart[enemyNo].posX, 0, enemyStart[enemyNo].type);
+	//		break;
+	//	}
+	//	enemyNo++;
+	//}
 }
 
 void Stage::Render() {

@@ -1,9 +1,28 @@
 #include "SceneGame.h"
+#include "SceneConfig.h"
+#include "Timer.h"
+#include "ContinueWindow.h"
+#include "ResultWindow.h"
+#include "CauseOfDeathWindow.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
 
 #define	PLAYER_SPEED 10
+CTimer tempTimer;
+CTimer hungerTimer;
+CTimer parasiteTimer;
+CPopUpWindowBase* nowPopUpGame = NULL;
+//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+CSceneConfig sceneConfig;
+
 CSceneGame::CSceneGame():
-scrollValueX(0),
-scrollValueY(0)
+//scrollValueX(0),
+//scrollValueY(0),
+deadFlag(false),
+posX(0.0f),
+posY(0.0f)
 {
 }
 
@@ -11,30 +30,38 @@ CSceneGame::~CSceneGame()
 {
 }
 
+bool CSceneGame::Load()
+{
+	//障害物
+	if(!cObstacle.Load())return false;
+	return true;
+}
+
 void CSceneGame::Initialize()
 {
-	//stressGauge.Load("gauge.png");
-	backGroundTexture.Load("SeaTexture.png");
-	//playerTexture.Load("Player.png");
-
-	temperatureNormal.Load("nicochyan5.png");
-	temperatureHot.Load("nicochyan6.png");
-	temperatureCold.Load("nicochyan4.png");
-
-	hungerGauge.Load("stomach2.png");
-	hungerGaugeFrame.Load("stomach.png");
-
-	parasite1.Load("kiseitilyuu.png");
-	parasite2.Load("kiseitilyuu2.png");
-	parasite3.Load("kiseitilyuu3.png");
-	parasite4.Load("kiseitilyuu4.png");
-	parasite5.Load("kiseitilyuu5.png");
-
 	pl.Initialize();
-	ene.Initialize();
+	stg.Initialize();
 
-	//ePosX = 1800;
-	//ePosY = 1000;
+	//backGroundTexture.Load("SeaTexture.png");
+	playerTexture.Load("Player.png");
+
+	ui.Initialize();
+
+	//障害物
+	ene.Initialize();
+	ene.Start(stg.GetScrollX(), stg.GetScrollY(), 0);
+	posX = 500;
+	posY = 500;
+	cObstacle.Initialize();
+	//タイマー
+	tempTimer.SetTotalTime(2);
+	hungerTimer.SetTotalTime(3);
+	parasiteTimer.SetTotalTime(15);
+
+	//ポップアップ
+	popUpFlg = false;
+
+	configFlg = false;
 }
 
 void CSceneGame::Update()
@@ -46,290 +73,227 @@ void CSceneGame::Update()
 		nextScene = SCENENO_TITLE;
 	}
 
-	//スクロール
-	CRectangle prec = pl.GetRect();
-	//スクリーン幅
-	float sw = g_pGraphics->GetTargetWidth();
-	float sh = g_pGraphics->GetTargetHeight();
-	//ステージの幅四割の境界線
-	float hsw = sw * 0.4f;
-	float hsh = sh * 0.4f;
-	//ステージ全体の幅 とりあえず画像の幅で
-	float stgw = backGroundTexture.GetWidth();
-	float stgh = backGroundTexture.GetHeight();
-	//左
-	if (prec.Left - scrollValueX < hsw)
-	{
-		//境界線hswより進んだ値を、scrolValueに入れる
-		scrollValueX -= hsw - (prec.Left - scrollValueX);
-		if (scrollValueX <= 0)
-		{
-			scrollValueX = 0;
-		}
-	}
-	//右
-	if (prec.Right - scrollValueX > sw - hsw)
-	{
-		scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
-		if (scrollValueX >= stgw - sw)
-		{
-			scrollValueX = stgw - sw;
-		}
-	}
-	//上
-	if (prec.Top - scrollValueY < hsh)
-	{
-		scrollValueY -= hsh - (prec.Top - scrollValueY);
-		if (scrollValueY <= 0)
-		{
-			scrollValueY = 0;
-		}
-	}
-	//下
-	if (prec.Bottom - scrollValueY > sh - hsh)
-	{
-		scrollValueY += (prec.Bottom - scrollValueY) - (sh - hsh);
-		if (scrollValueY >= stgh - sh)
-		{
-			scrollValueY = stgh - sh;
-		}
-	}
-	
-	//移動
-	//初期化（しないと加速するので
-	//moveSpeed.x = 0; moveSpeed.y = 0;
-	/*if (g_pInput->IsKeyHold(MOFKEY_D))
-	{
-		moveSpeed.x += PLAYER_SPEED;
-		distancePlayer += 10.0f;
-	}
-	else if(g_pInput->IsKeyHold(MOFKEY_A))
-	{
-		moveSpeed.x -= PLAYER_SPEED;
-	}
-	if (g_pInput->IsKeyHold(MOFKEY_W))
-	{
-		moveSpeed.y -= PLAYER_SPEED;
-	}
-	else if (g_pInput->IsKeyHold(MOFKEY_S))
-	{
-		moveSpeed.y += PLAYER_SPEED;
-	}*/
-	//移動制限
-	//左右
-	//if (prec.Left < 0)
-	//{
-	//	playerX = 0;
-	//}
-	//else if (prec.Right > stgw)
-	//{
-	//	playerX = stgw - playerTexture.GetWidth();
-	//}
-	////上下
+	stg.Update(pl);
 
-	ene.Update();
-	//追加
+	////スクロール
+	//CRectangle prec = pl.GetRect();
+	////スクリーン幅
+	//float sw = g_pGraphics->GetTargetWidth();
+	//float sh = g_pGraphics->GetTargetHeight();
+	////ステージの幅四割の境界線
+	//float hsw = sw * 0.4f;
+	//float hsh = sh * 0.4f;
+	////ステージ全体の幅 とりあえず画像の幅で
+	//float stgw = backGroundTexture.GetWidth();
+	//float stgh = backGroundTexture.GetHeight();
+	////左
+	//if (prec.Left - scrollValueX < hsw)
+	//{
+	//	//境界線hswより進んだ値を、scrolValueに入れる
+	//	scrollValueX -= hsw - (prec.Left - scrollValueX);
+	//	if (scrollValueX <= 0)
+	//	{
+	//		scrollValueX = 0;
+	//	}
+	//}
+	////右
+	//if (prec.Right - scrollValueX > sw - hsw)
+	//{
+	//	scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
+	//	if (scrollValueX >= stgw - sw)
+	//	{
+	//		scrollValueX = stgw - sw;
+	//	}
+	//}
+	////上
+	//if (prec.Top - scrollValueY < hsh)
+	//{
+	//	scrollValueY -= hsh - (prec.Top - scrollValueY);
+	//	if (scrollValueY <= 0)
+	//	{
+	//		scrollValueY = 0;
+	//	}
+	//}
+	////下
+	//if (prec.Bottom - scrollValueY > sh - hsh)
+	//{
+	//	scrollValueY += (prec.Bottom - scrollValueY) - (sh - hsh);
+	//	if (scrollValueY >= stgh - sh)
+	//	{
+	//		scrollValueY = stgh - sh;
+	//	}
+	//}
+
+
+	//とりあえずF1でポップアップが出るように
+	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
+	{
+		nowPopUpGame = new CCauseOfDeathWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	{
+		nowPopUpGame = new CPoseWindow;
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+	if (popUpFlg)
+	{
+		PopUpController();
+	}
+
+	//プレイヤー
 	pl.Update();
-	pl.Collision(ene);
+	pl.Collision(cObstacle);
 
-	//敵
-	/*ePosX -= 1;*/
+	//障害物
+	ene.Update();
+	cObstacle.Update(stg.GetScrollX(), stg.GetScrollY());
 
-
-	//
-	////実際に移動
-	//playerX += moveSpeed.x;
-	//playerY += moveSpeed.y;
+	if (!sceneConfig.GetGamePlayFlg())
+		configFlg = false;
 
 
-	//else if (prec.Right > backGroundTexture.GetWidth())
-	//{
-	//	playerX = stgw - playerTexture.GetWidth();
-	//}
-
-
-	//if (timeCnt == 75)
-	//{
-	//	stressNumber -= 1;
-	//	stressBarChenge -= 3;
-
-	//	timeCnt = 0;
-	//}
-	//else
-	//{
-	//	timeCnt += 1;
-	//}
-
-	//体温変化
-	//体温下降
-	//if (pl.GetPosX() >= backGroundTexture.GetHeight() - 500)
-	//{		
-	//	if (timeCnt >= 40)
-	//	{
-	//		bodyTemperature -= 1;
-
-	//		timeCnt = 0;
-	//	}
-	//	else
-	//	{
-	//		timeCnt += 1;
-	//	}
-	//}
-	////体温上昇
-	//else if (pl.GetPosY() <= backGroundTexture.GetHeight() - 1200)
-	//{		
-	//	if (timeCnt >= 40)
-	//	{
-	//		bodyTemperature += 1;
-
-	//		timeCnt = 0;
-	//	}
-	//	else
-	//	{
-	//		timeCnt += 1;
-	//	}
-	//}
-	////体温が一定の値に戻る
-	//else
-	//{
-	//	if (bodyTemperature > 50)
-	//	{			
-	//		if (timeCnt == 80)
-	//		{
-	//			bodyTemperature -= 1;
-
-	//			timeCnt = 0;
-	//		}
-	//		else
-	//		{
-	//			timeCnt += 1;
-	//		}
-	//	}
-	//	else if (bodyTemperature < 50)
-	//	{			
-	//		if (timeCnt == 80)
-	//		{
-	//			bodyTemperature += 1;
-
-	//			timeCnt = 0;
-	//		}
-	//		else
-	//		{
-	//			timeCnt += 1;
-	//		}
-	//	}
-	//}
-
-	////寄生虫(仮)
-	//parasiteCnt += 1;
-
-	//if (parasiteCnt == 50)
-	//{
-	//	parasiteFlg = 1;
-	//}
-	//else if (parasiteCnt == 100)
-	//{
-	//	parasiteFlg = 2;
-	//}
-	//else if (parasiteCnt == 150)
-	//{
-	//	parasiteFlg = 3;
-	//}
-	//else if (parasiteCnt == 200)
-	//{
-	//	parasiteFlg = 4;
-	//}
-	//else if (parasiteCnt == 250)
-	//{
-	//	parasiteFlg = 5;
-	//}
-	//else if (parasiteCnt == 300)
-	//{
-	//	parasiteFlg = 0;
-	//	parasiteCnt = 0;
-	//}
+	//設定表示
+	if (configFlg)
+	{
+		sceneConfig.Update();
+	}
 }
 
 void CSceneGame::Render()
 {
-	int scw = g_pGraphics->GetTargetWidth();
+	stg.Render();
+
+	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
-	backGroundTexture.Render(-scrollValueX, -scrollValueY);
-	
-	ene.Render(scrollValueX, scrollValueY);
+	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
+	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
+	//UIの描画
+	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
-	pl.Render(scrollValueX, scrollValueY);
-	pl.RenderDebug(scrollValueX, scrollValueY);
+	//ポップアップ描画
+	if (popUpFlg)
+	{
+		nowPopUpGame->Render();
+	}
+	if (configFlg)
+	{
+		sceneConfig.Render();
+	}
 
-	/*CGraphicsUtilities::RenderFillRect(
-		GetRect().Left - scrollValueX,
-		GetRect().Top - scrollValueY,
-		GetRect().Right - scrollValueX,
-		GetRect().Bottom - scrollValueY,
-		MOF_COLOR_RED);*/
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 
-	//playerTexture.Render(playerX - scrollValueX, playerY - scrollValueY);
-	//CGraphicsUtilities::RenderString(100, 300, "game画面");
-	//CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "%d m",distancePlayer);
-	
-	////体温UI描画
-	//if (bodyTemperature >=70)
-	//{
-	//	temperatureHot.Render(1600, 0);
-	//}
-	//else if (bodyTemperature <= 30)
-	//{
-	//	temperatureCold.Render(1600, 0);
-	//}
-	//else
-	//{
-	//	temperatureNormal.Render(1600, 0);
-	//}
+	//障害物
+	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 
-	////寄生虫UIの描画(仮)
-	//switch (parasiteFlg)
-	//{
-	//case 1:
-	//	parasite1.Render(1600, 0);
-	//	break;
-	//case 2:
-	//	parasite2.Render(1600, 0);
-	//	break;
-	//case 3:
-	//	parasite3.Render(1600, 0);
-	//	break;
-	//case 4:
-	//	parasite4.Render(1600, 0);
-	//	break;
-	//case 5:
-	//	parasite5.Render(1600, 0);
-	//	break;
-	//}
-
-	////空腹ゲージUI描画
-	////hungerGauge.Render(1400, 0);
-	//hungerGaugeFrame.Render(1400, 0);
-
-	////デバッグ用
-	//CGraphicsUtilities::RenderString(10, 50,MOF_COLOR_BLACK, "%d", bodyTemperature);
 }
+
+//デバッグ
+void CSceneGame::RenderDebug()
+{
+	//プレイヤー
+	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+	//障害物
+	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+
+	//障害物
+	ene.Render(stg.GetScrollX(), stg.GetScrollY());
+	
+	//デバッグ用
+	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+} 
 
 void CSceneGame::Release()
 {
-	backGroundTexture.Release();
-	//playerTexture.Release();
+	stg.Release();
+	//backGroundTexture.Release();
 	pl.Release();
-	temperatureNormal.Release();
-	temperatureHot.Release();
-	temperatureCold.Release();
+	ene.Release();
+	ui.Release();
 
-	hungerGauge.Release();
-	hungerGaugeFrame.Release();
 
-	parasite1.Release();
-	parasite2.Release();
-	parasite3.Release();
-	parasite4.Release();
-	parasite5.Release();
+	if (nowPopUpGame != NULL)
+	{
+		nowPopUpGame->Release();
+		if (nowPopUpGame)
+		{
+			delete nowPopUpGame;
+			nowPopUpGame = NULL;
+		}
+	}
+
+	//障害物
+	cObstacle.Release();
+}
+
+void CSceneGame::PopUpController()
+{
+	nowPopUpGame->Update();
+	if (nowPopUpGame->GetButtonResult() == 1)
+	{
+		//リトライ、もしくはコンティニューボタンが押されたら初期化
+		Initialize();
+	}
+	else if (nowPopUpGame->GetButtonResult() == 2)
+	{
+		//メニューボタンが押されたらメニュー画面に遷移
+		nextScene = SCENENO_GAMEMENU;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 3)
+	{
+		//タイトルボタンが押されたらタイトル画面に遷移
+		nextScene = SCENENO_TITLE;
+		endFlg = true;
+	}
+	else if (nowPopUpGame->GetButtonResult() == 4)
+	{
+		//設定が押されたら設定画面を表示
+		configFlg = true;
+		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Initialize();
+	}
+	if (nowPopUpGame->IsEnd())
+	{
+		//次のポップアップの取得
+		short nextPopUp = nowPopUpGame->GetNextPopUp();
+		//古いポップアップの消去
+		nowPopUpGame->Release();
+		delete nowPopUpGame;
+		//次のポップアップ番号に応じてポップアップを初期化
+		switch (nextPopUp)
+		{
+		case POPUPNO_CAUSEOFDEATH:
+			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case POPUPNO_RESULT:
+			nowPopUpGame = new CResultWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case POPUPNO_CONTINUE:
+			nowPopUpGame = new CContinueWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case POPUPNO_POSE:
+			nowPopUpGame = new CPoseWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case POPUPNO_BACKTOTITLE:
+			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case POPUPNO_RETRY:
+			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
+			break;
+		case NULL:
+			nowPopUpGame = NULL;
+			popUpFlg = false;
+			break;
+		}
+	}
 }

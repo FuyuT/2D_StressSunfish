@@ -30,7 +30,7 @@ public:
 	~Stage();
 	bool Load();
 	void Initialize(/*ENEMYSTART* pSt, int cnt*/);
-	void Update(Enemy* ene, /*int ecnt*/CPlayer& pl);
+	void Update(/*Enemy* ene, int ecnt */ CPlayer & pl);
 	void Render();
 	void Release();
 

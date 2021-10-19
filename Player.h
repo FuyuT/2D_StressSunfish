@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Mof.h"
-#include "Enemy.h"
+#include "ObstacleManager.h"
+#include "timer.h"
 #include "time.h"
 
 //移動速度	
@@ -86,20 +87,31 @@ private:
 	bool		possibleToEatFlg;
 	//死因
 	int			causeOfDeath;
+	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除するまで無敵にする(デバッグ用))
+	bool		hitFlg;
+
 
 	//使わんかも
 	//ステータス( 状態 に関する変数)
 	//体温
 	int			temperature;
 	int			temperatureTime;
+	int         bodyTemp;
+	float       tempRegion;
 	//空腹
 	int			hungry;
 	int			hungryTime;
+	int         hungerRegion;
 	//寄生虫
 	int			parasite;
 	int			parasiteTime;
 	//水流
 	int			streamTime;
+
+	//UI
+	CTimer tempTimer;
+	CTimer hungerTimer;
+	CTimer parasiteTimer;
 
 public:
 	CPlayer();
@@ -159,7 +171,7 @@ public:
 		);
 	}
 
-	void Collision(Enemy& ene);
+	void Collision(CObstacleManager& cObstacle);
 
 	//死んでいればtrueを返す
 	bool GetDead()
@@ -167,19 +179,23 @@ public:
 		return deadFlg;
 	}
 	//体温を返す 100 ～ 0
-	int	GetTemperature()
+	float	GetTemperature()
 	{
-		return temperature;
+		return tempRegion;
+	}
+	int     GetBodyTemp()
+	{
+		return bodyTemp;
 	}
 	//寄生虫の付着数を返す 0 ～ 6
 	int GetParasite()
 	{
-		return parasite / 50;
+		return parasite;
 	}
 	//空腹度を返す 10～0
 	int GetHungry()
 	{
-		return hungry;
+		return hungerRegion;
 	}
 	//死因を返す
 	int GetCauseOfDeath()
@@ -203,5 +219,6 @@ public:
 	{
 		return possibleToEatFlg;
 	}
+
 };
 
