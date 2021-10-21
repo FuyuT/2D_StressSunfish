@@ -3,7 +3,7 @@
 class CGarbage : public CObstacleBase
 {
 private:
-
+	bool turnFlg;
 public:
 	CGarbage();
 	~CGarbage();

@@ -107,7 +107,7 @@
     <ClCompile Include="CauseOfDeathWindow.cpp" />
     <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
     <ClCompile Include="ContinueWindow.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="WaterFlow.cpp" />
     <ClCompile Include="FoodCrab.cpp" />
     <ClCompile Include="FoodFish.cpp" />
     <ClCompile Include="FoodShrimp.cpp" />
@@ -119,13 +119,13 @@
     <ClCompile Include="PoseWindow.cpp" />
     <ClCompile Include="ResultWindow.cpp" />
     <ClCompile Include="RetryWindow.cpp" />
-    <ClCompile Include="SceneBase.cpp" />
     <ClCompile Include="SceneConfig.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="SceneGameMenu.cpp" />
     <ClCompile Include="SceneStressCollection.cpp" />
     <ClCompile Include="SceneTitle.cpp" />
     <ClCompile Include="SceneTrophyCollection.cpp" />
+    <ClCompile Include="SceneTutorial.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TrophyWindow.cpp" />
@@ -139,7 +139,7 @@
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="WaterFlow.h" />
     <ClInclude Include="ObstacleBase.h" />
     <ClInclude Include="FoodCrab.h" />
     <ClInclude Include="FoodFish.h" />
@@ -161,6 +161,7 @@
     <ClInclude Include="SceneStressCollection.h" />
     <ClInclude Include="SceneTitle.h" />
     <ClInclude Include="SceneTrophyCollection.h" />
+    <ClInclude Include="SceneTutorial.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="Timer.h" />

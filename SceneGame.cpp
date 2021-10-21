@@ -18,8 +18,8 @@ CPopUpWindowBase* nowPopUpGame = NULL;
 CSceneConfig sceneConfig;
 
 CSceneGame::CSceneGame():
-scrollValueX(0),
-scrollValueY(0),
+//scrollValueX(0),
+//scrollValueY(0),
 deadFlag(false),
 posX(0.0f),
 posY(0.0f)
@@ -40,16 +40,14 @@ bool CSceneGame::Load()
 void CSceneGame::Initialize()
 {
 	pl.Initialize();
-	backGroundTexture.Load("SeaTexture.png");
+	stg.Initialize();
+
+	//backGroundTexture.Load("SeaTexture.png");
 	playerTexture.Load("Player.png");
 
 	ui.Initialize();
 
 	//障害物
-	ene.Initialize();
-	ene.Start(scrollValueX, scrollValueY, 0);
-	posX = 500;
-	posY = 500;
 	cObstacle.Initialize();
 	//タイマー
 	tempTimer.SetTotalTime(2);
@@ -71,54 +69,56 @@ void CSceneGame::Update()
 		nextScene = SCENENO_TITLE;
 	}
 
-	//スクロール
-	CRectangle prec = pl.GetRect();
-	//スクリーン幅
-	float sw = g_pGraphics->GetTargetWidth();
-	float sh = g_pGraphics->GetTargetHeight();
-	//ステージの幅四割の境界線
-	float hsw = sw * 0.4f;
-	float hsh = sh * 0.4f;
-	//ステージ全体の幅 とりあえず画像の幅で
-	float stgw = backGroundTexture.GetWidth();
-	float stgh = backGroundTexture.GetHeight();
-	//左
-	if (prec.Left - scrollValueX < hsw)
-	{
-		//境界線hswより進んだ値を、scrolValueに入れる
-		scrollValueX -= hsw - (prec.Left - scrollValueX);
-		if (scrollValueX <= 0)
-		{
-			scrollValueX = 0;
-		}
-	}
-	//右
-	if (prec.Right - scrollValueX > sw - hsw)
-	{
-		scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
-		if (scrollValueX >= stgw - sw)
-		{
-			scrollValueX = stgw - sw;
-		}
-	}
-	//上
-	if (prec.Top - scrollValueY < hsh)
-	{
-		scrollValueY -= hsh - (prec.Top - scrollValueY);
-		if (scrollValueY <= 0)
-		{
-			scrollValueY = 0;
-		}
-	}
-	//下
-	if (prec.Bottom - scrollValueY > sh - hsh)
-	{
-		scrollValueY += (prec.Bottom - scrollValueY) - (sh - hsh);
-		if (scrollValueY >= stgh - sh)
-		{
-			scrollValueY = stgh - sh;
-		}
-	}
+	stg.Update(pl);
+
+	////スクロール
+	//CRectangle prec = pl.GetRect();
+	////スクリーン幅
+	//float sw = g_pGraphics->GetTargetWidth();
+	//float sh = g_pGraphics->GetTargetHeight();
+	////ステージの幅四割の境界線
+	//float hsw = sw * 0.4f;
+	//float hsh = sh * 0.4f;
+	////ステージ全体の幅 とりあえず画像の幅で
+	//float stgw = backGroundTexture.GetWidth();
+	//float stgh = backGroundTexture.GetHeight();
+	////左
+	//if (prec.Left - scrollValueX < hsw)
+	//{
+	//	//境界線hswより進んだ値を、scrolValueに入れる
+	//	scrollValueX -= hsw - (prec.Left - scrollValueX);
+	//	if (scrollValueX <= 0)
+	//	{
+	//		scrollValueX = 0;
+	//	}
+	//}
+	////右
+	//if (prec.Right - scrollValueX > sw - hsw)
+	//{
+	//	scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
+	//	if (scrollValueX >= stgw - sw)
+	//	{
+	//		scrollValueX = stgw - sw;
+	//	}
+	//}
+	////上
+	//if (prec.Top - scrollValueY < hsh)
+	//{
+	//	scrollValueY -= hsh - (prec.Top - scrollValueY);
+	//	if (scrollValueY <= 0)
+	//	{
+	//		scrollValueY = 0;
+	//	}
+	//}
+	////下
+	//if (prec.Bottom - scrollValueY > sh - hsh)
+	//{
+	//	scrollValueY += (prec.Bottom - scrollValueY) - (sh - hsh);
+	//	if (scrollValueY >= stgh - sh)
+	//	{
+	//		scrollValueY = stgh - sh;
+	//	}
+	//}
 
 
 	//とりあえずF1でポップアップが出るように
@@ -141,17 +141,16 @@ void CSceneGame::Update()
 
 	//プレイヤー
 	pl.Update();
-	pl.Collision(ene);
+	pl.Collision(cObstacle);
 
 	//障害物
-	ene.Update();
-	cObstacle.Update(scrollValueX, scrollValueY);
+	cObstacle.Update(stg.GetScrollX(), stg.GetScrollY());
 
-	if (!sceneConfig.GetGamePlayFlg())
-		configFlg = false;
 
 
 	//設定表示
+	if (!sceneConfig.GetGamePlayFlg())
+		configFlg = false;
 	if (configFlg)
 	{
 		sceneConfig.Update();
@@ -160,9 +159,11 @@ void CSceneGame::Update()
 
 void CSceneGame::Render()
 {
-	int scw = g_pGraphics->GetTargetWidth();
+
+	stg.Render();
+	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
-	backGroundTexture.Render(-scrollValueX, -scrollValueY);
+	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UIの描画
@@ -178,8 +179,10 @@ void CSceneGame::Render()
 		sceneConfig.Render();
 	}
 
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+
 	//障害物
-	cObstacle.Render(scrollValueX, scrollValueY);
+	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 
 }
 
@@ -187,22 +190,19 @@ void CSceneGame::Render()
 void CSceneGame::RenderDebug()
 {
 	//プレイヤー
-	pl.RenderDebug(scrollValueX, scrollValueY);
+	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 	//障害物
-	cObstacle.RenderDebug(scrollValueX, scrollValueY);
+	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-	//障害物
-	ene.Render(scrollValueX, scrollValueY);
-	pl.Render(scrollValueX, scrollValueY);
 	//デバッグ用
-	pl.RenderDebug(scrollValueX, scrollValueY);
+	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 } 
 
 void CSceneGame::Release()
 {
-	backGroundTexture.Release();
+	stg.Release();
+	//backGroundTexture.Release();
 	pl.Release();
-	ene.Release();
 	ui.Release();
 
 

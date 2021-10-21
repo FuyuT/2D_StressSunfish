@@ -44,9 +44,9 @@ void Enemy::Render(float px, float py) {
 	if (!show) {
 		return;
 	}
-	seaTurtleTexture.Render(posX - px, posY - py);
-	CRectangle seaTurtleRect(posX - px, posY - py, posX + 500 - px, posY + 450 - py);
-	CGraphicsUtilities::RenderRect(seaTurtleRect, MOF_COLOR_BLACK);
+	//seaTurtleTexture.Render(posX - px, posY - py);
+	//CRectangle seaTurtleRect(posX - px, posY - py, posX + 500 - px, posY + 450 - py);
+	//CGraphicsUtilities::RenderRect(seaTurtleRect, MOF_COLOR_BLACK);
 }
 
 void Enemy::Release()

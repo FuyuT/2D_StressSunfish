@@ -1,16 +1,16 @@
 #pragma once
 #include "SceneBase.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "ObstacleManager.h"
 #include "Ui.h"
+#include "Stage.h"
 
 
 class CSceneGame : public CSceneBase
 {
 private:
 	CPlayer pl;
-	Enemy ene;
+	Stage stg;
 	CObstacleManager cObstacle;
 	CUi ui;
 
@@ -20,10 +20,11 @@ private:
 	int distancePlayer = 0;
 
 	Vector2 moveSpeed;
-	CTexture backGroundTexture;
+	/*CTexture backGroundTexture;*/
 	CTexture playerTexture;
-	float scrollValueX;
-	float scrollValueY;
+
+	/*float scrollValueX;
+	float scrollValueY;*/
 
 	//è·äQï®
 	int posX;

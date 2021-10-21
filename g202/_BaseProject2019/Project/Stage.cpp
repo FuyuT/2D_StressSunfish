@@ -4,7 +4,6 @@ Stage::Stage() :
 	texture(),
 	scrollValueX(0.0f),
 	scrollValueY(0.0f),
-	enemyStart(NULL),
 	enemyCount(0),
 	enemyTexture(),
 	enemyNo(0) {
@@ -15,17 +14,11 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//追加
-	if (texture.Load("SeaTexture.png")) 
+	if (!texture.Load("SeaTexture.png")) 
 	{
 		return false;
 	}
 
-	if (!enemyTexture.Load("ウミガメ 清書.png")) {
-		return false;
-	}
-	if (!enemyTexture.Load("ウミガメ ラフ.png")) {
-		return false;
-	}
 	return true;
 }
 
@@ -40,7 +33,7 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	Load();
 }
 
-void Stage::Update(Enemy* ene, /*int ecnt*/CPlayer& pl) {
+void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 
 	//追加
 	//スクロール
@@ -95,11 +88,11 @@ void Stage::Update(Enemy* ene, /*int ecnt*/CPlayer& pl) {
 		}
 	}
 
-	if (g_pInput->IsKeyPush(MOFKEY_U))
+	/*if (g_pInput->IsKeyPush(MOFKEY_U))
 	{
 		ene[0].SetTexture(&enemyTexture);
 		ene[0].Start(g_pGraphics->GetTargetWidth() + scrollValueX, 1000, 3);
-	}
+	}*/
 
 	//if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
 	//	for (int i = 0; i < ecnt; i++) {
@@ -123,7 +116,6 @@ void Stage::Render() {
 
 	int w = texture.GetWidth();
 	int h = texture.GetHeight();
-	//int sch = g_pGraphics->GetTargetWidth();
 	for (float y = ((int)-scrollValueY % h) - h; y < sch; y += h)
 	{
 		for (float x = ((int)-scrollValueX % w) - w; x < scw; x += w)

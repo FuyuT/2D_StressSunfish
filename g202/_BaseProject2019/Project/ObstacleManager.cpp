@@ -16,6 +16,7 @@ bool CObstacleManager::Load()
 	if (!cGarbage.Load())return false;
 	if (!cBubble.Load())return false;
 	if (!cTurtle.Load())return false;
+	if (!cWaterFlow.Load())return false;
 
 	return true;
 }
@@ -26,9 +27,11 @@ void CObstacleManager::Initialize()
 	cFish.Initialize();
 	cShrimp.Initialize();
 	cCrab.Initialize();
+	//è·äQï®
 	cGarbage.Initialize();
 	cBubble.Initialize();
 	cTurtle.Initialize();
+	cWaterFlow.Initialize();
 
 }
 
@@ -43,6 +46,7 @@ void CObstacleManager::Update(float wx, float wy)
 	cGarbage.Update(wx, wy);
 	cBubble.Update(wx, wy);
 	cTurtle.Update(wx, wy);
+	cWaterFlow.Update(wx, wy);
 }
 
 void CObstacleManager::Render(float wx, float wy)
@@ -56,6 +60,7 @@ void CObstacleManager::Render(float wx, float wy)
 	cGarbage.Render(wx, wy);
 	cBubble.Render(wx, wy);
 	cTurtle.Render(wx, wy);
+	cWaterFlow.Render(wx, wy);
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
@@ -69,6 +74,7 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 	cGarbage.RenderDebug(wx, wy);
 	cBubble.RenderDebug(wx, wy);
 	cTurtle.RenderDebug(wx, wy);
+	cWaterFlow.RenderDebug(wx, wy);
 
 }
 
@@ -80,4 +86,5 @@ void CObstacleManager::Release()
 	cGarbage.Release();
 	cBubble.Release();
 	cTurtle.Release();
+	cWaterFlow.Release();
 }

@@ -18,17 +18,14 @@ bool CFoodFish::Load()
 //初期化
 void CFoodFish::Initialize()
 {
-	pos.x = 1000;
-	pos.y = 500;
-	moveSpeed.x = 2.0f;
+	pos.x = 1500;
+	pos.y = 1500;
 	showFlg = true;
 }
 
 void CFoodFish::Update(float wx, float wy)
 {
 	if (!showFlg)return;
-	//移動
-	pos.x -= moveSpeed.x;
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }

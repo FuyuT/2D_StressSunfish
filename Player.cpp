@@ -38,7 +38,7 @@ void CPlayer::Initialize()
 	Load();
 
 	//確率のために使う変数の初期化
-	//random.SetSeed(time(NULL));
+	random.SetSeed(time(NULL));
 
 	/********
 	* 初期値
@@ -65,6 +65,8 @@ void CPlayer::Initialize()
 	deadFlg = false;
 	possibleToEatFlg = false;
 	possibleToJumpFlg = false;
+	//(デバッグ用)
+	hitFlg = false;
 
 	//UIタイマー
 	tempTimer.SetTotalTime(2);
@@ -173,7 +175,8 @@ bool CPlayer::Eat()
 		if (causeOfDeath == CAUSE_None)
 		{
 			//死因：肥満
-			if (hungry == FULL_STOMACH)
+			if (/*hungry == FULL_STOMACH*/
+				hungerRegion == 40)
 			{
 				deadFlg = true;
 				causeOfDeath = CAUSE_Obesity;
@@ -183,11 +186,16 @@ bool CPlayer::Eat()
 		}
 
 		//空腹を満たす
-		hungry += FEED_SATIETYLEVEL;
+		//hungry += FEED_SATIETYLEVEL;
+		hungerRegion -= 24;
 		//満腹値を超えたら
-		if (hungry > FULL_STOMACH)
+		/*if (hungry > FULL_STOMACH)
 		{
 			hungry = FULL_STOMACH;
+		}*/
+		if (hungerRegion < 40)
+		{
+			hungerRegion = 40;
 		}
 
 		
@@ -258,7 +266,13 @@ void CPlayer::UpdateStatus()
 
 	//速度を座標に反映
 	posX += moveX * moveSpeed;
-	posY += moveY * moveSpeed;
+	if (jumpFlg)
+	{
+		posY += moveY;
+	}
+	else {
+		posY += moveY * moveSpeed;
+	}
 
 
 	//ジャンプ可能
@@ -384,8 +398,9 @@ void CPlayer::UpdateStatus()
 		if (hungerRegion <= 148)
 		{
 			hungerRegion += 12;
-			hungry -= 1;
-		    if (hungry == 0)
+			//hungry -= 1;
+		    if (/*hungry == 0*/
+				hungerRegion == 160)
 		    {
 			    if (causeOfDeath == CAUSE_None)
 			    {
@@ -420,7 +435,7 @@ void CPlayer::UpdateStatus()
 void CPlayer::Update()
 {
 	//プレイヤーが死んでいる場合
-	if (deadFlg)
+	if (deadFlg && !jumpFlg)
 		return;
 
 	//ステータス(状態)の更新
@@ -436,6 +451,16 @@ void CPlayer::Update()
 	//移動更新
 	UpdateMove();
 
+	//無敵(デバッグ用)
+	if (hitFlg)
+	{
+		//無敵の解除
+		if (g_pInput->IsKeyPush(MOFKEY_H))
+		{
+			hitFlg = false;
+		}
+	}
+
 	tempTimer.Update();
 	hungerTimer.Update();
 	parasiteTimer.Update();
@@ -445,7 +470,7 @@ void CPlayer::Update()
 void CPlayer::Render(float wx, float wy)
 {
 	//プレイヤーが死んでいる場合
-	if (deadFlg)
+	if (deadFlg && !jumpFlg)
 		return;
 
 	//プレイヤーの描画
@@ -464,7 +489,7 @@ void CPlayer::RenderDebug(float wx,float wy)
 	//「エサを食べる」が可能
 	if (possibleToEatFlg)
 	{
-		CGraphicsUtilities::RenderString(200, 10, MOF_COLOR_BLACK, "<食べる>");
+		CGraphicsUtilities::RenderString(200, 40, MOF_COLOR_BLACK, "<食べる可能>");
 	}
 
 	//プレイヤーの座標
@@ -488,11 +513,11 @@ void CPlayer::RenderDebug(float wx,float wy)
 		MOF_COLOR_GREEN);
 
 	//体温
-	CGraphicsUtilities::RenderString(10, 70, MOF_COLOR_BLACK, "体温 : %d", bodyTemp);
+	CGraphicsUtilities::RenderString(10, 70, MOF_COLOR_BLACK, "体温 : %d", GetBodyTemp());
 	//寄生虫
 	CGraphicsUtilities::RenderString(10, 100, MOF_COLOR_BLACK, "寄生虫 : %d / 5", parasite);
 	//腹減り
-	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d",hungry, FULL_STOMACH);
+	CGraphicsUtilities::RenderString(10, 130, MOF_COLOR_BLACK, "空腹度 : %d / %d",(GetHungry() - 40) / 12, 10);
 	//死因
 	switch (causeOfDeath)
 	{
@@ -534,6 +559,10 @@ void CPlayer::RenderDebug(float wx,float wy)
 	//進んだ距離
 	CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "%d m", GetDistance());
 	
+	//無敵(デバッグ用)
+	CGraphicsUtilities::RenderString(10, 220, MOF_COLOR_BLACK, "「H」で無敵の解除(長靴や泡の上で連打すると確率で死ねる)");
+	if(hitFlg)
+		CGraphicsUtilities::RenderString(10, 250, MOF_COLOR_BLACK, "無敵");
 }
 
 //解放
@@ -544,86 +573,97 @@ void CPlayer::Release()
 
 
 //敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(Enemy& ene)
+void CPlayer::Collision(CObstacleManager& cObstacle)
 {
+	//SetShowがあれば実装する
+	/*if (!cObstacle.getshow())
+	{
+		return;
+	}*/
 
-	if (!ene.GetShow())
+	if (deadFlg && !jumpFlg)
 	{
 		return;
 	}
 
 	//敵の矩形と自分の矩形で当たり判定
 	CRectangle prec = GetRect();
-	CRectangle erec = ene.GetRect();
-	if (prec.CollisionRect(erec))
+
+	//ウミガメ
+	if (prec.CollisionRect(cObstacle.GetRect(Turtle)) && !hitFlg)
 	{
-		switch (ene.GetType())
+		if (causeOfDeath == CAUSE_None)
 		{
-			//ウミガメ
-			case 0:
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：ショック死
-					//当たった時点で即死
-					deadFlg = true;
-					causeOfDeath = CAUSE_SeaTurtle;
-				}
-				break;
-			//泡
-			case 1:
-				ene.SetShow(false);
-				if (causeOfDeath == CAUSE_None)
-				{
-					//泡死
-					//5%で死ぬ
-					deadFlg = DieInPercentage(5);
-					if (deadFlg)
-						causeOfDeath = CAUSE_Bubble;
-				}
-				break;
-			//障害物
-			case 2:
-				ene.SetShow(false);
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：衝突死
-					//20%で死ぬ
-					deadFlg = DieInPercentage(20);
-					if (deadFlg)
-						causeOfDeath = CAUSE_Obstacle;
-				}
-				break;
-			//水流
-			case 3:
-				ene.SetShow(false);
-				//速度が二倍に
-				moveSpeed = 2.0f;
-				//持続時間の設定
-				streamTime = STREAM;
-				break;
+			//デバッグ用
+			hitFlg = true;
 
+			//死因：ショック死
+			//当たった時点で即死
+			deadFlg = true;
+			causeOfDeath = CAUSE_SeaTurtle;
 		}
-
 	}
-
-	//エサであるならば
-	if (ene.GetType() == 4)
+	//泡
+	else if (prec.CollisionRect(cObstacle.GetRect(Bubble)) && !hitFlg)
 	{
-		//エサとの当たり判定(エサ用のクラスがあるなら、新しくCollsionItem()とかを作ってそこに移す)
-		prec = GetSearchRect();
-		if (prec.CollisionRect(erec))
+		//ene.SetShow(false);
+		if (causeOfDeath == CAUSE_None)
 		{
-			//探知範囲内にエサがある場合true
-			possibleToEatFlg = true;
+			//デバッグ用
+			hitFlg = true;
 
-			//エサを食べる
-			ene.SetShow(Eat());
+			//泡死
+			//5%で死ぬ
+			deadFlg = DieInPercentage(5);
+			if (deadFlg)
+				causeOfDeath = CAUSE_Bubble;
 		}
-		else
+	}
+	//障害物
+	else if (prec.CollisionRect(cObstacle.GetRect(Garbage)) && !hitFlg)
+	{
+
+		//ene.SetShow(false);
+		if (causeOfDeath == CAUSE_None)
 		{
-			//探知範囲内にエサがない場合false
-			possibleToEatFlg = false;
+			//デバッグ用
+			hitFlg = true;
+
+			//死因：衝突死
+			//20%で死ぬ
+			deadFlg = DieInPercentage(20);
+			if (deadFlg)
+				causeOfDeath = CAUSE_Obstacle;
 		}
+	}
+	////水流
+	//else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow)))
+	//{
+	//	//ene.SetShow(false);
+	//		//速度が二倍に
+	//	moveSpeed = 2.0f;
+	//	//持続時間の設定
+	//	streamTime = STREAM;
+	//}
+
+	//エサの探知範囲
+	prec = GetSearchRect();
+	//エサ
+	if (prec.CollisionRect(cObstacle.GetRect(FoodFish)) ||
+		prec.CollisionRect(cObstacle.GetRect(FoodShrimp)) ||
+		prec.CollisionRect(cObstacle.GetRect(FoodCrab)))
+	{
+		//探知範囲内にエサがある場合true
+		possibleToEatFlg = true;
+		//エサを食べる
+		Eat();
+
+		//ene.SetShow();
+	}
+	else
+	{
+		//探知範囲内にエサがない場合false
+		possibleToEatFlg = false;
 	}
 
 }

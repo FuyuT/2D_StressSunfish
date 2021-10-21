@@ -4,6 +4,7 @@ class CObstacleBase
 {
 protected:
 	CTexture Texture;
+	Vector2 initPos;
 	Vector2 pos;
 	Vector2 moveSpeed;
 	bool    showFlg;

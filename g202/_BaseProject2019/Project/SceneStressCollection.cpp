@@ -13,6 +13,62 @@ CSceneStressCollection::~CSceneStressCollection()
 }
 void CSceneStressCollection::Initialize()
 {
+	//死因テクスチャ読み込み
+	//フラグがオンなら対応するテクスチャ、フラグがオフなら未取得テクスチャを読み込む。
+	if(increasedBodyTemperatureFlg)
+		increasedBodyTemperatureIconTexture.Load("siin_aikon.png");
+	else
+		increasedBodyTemperatureIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(lowerBodyTemperatureFlg)
+		lowerBodyTemperatureIconTexture.Load("siin_aikon.png");
+	else
+		lowerBodyTemperatureIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(starvationIconFlg)
+		starvationIconTexture.Load("siin_aikon.png");
+	else
+		starvationIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(cloggedThroatIconFlg)
+		cloggedThroatIconTexture.Load("siin_aikon.png");
+	else
+		cloggedThroatIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(obesityIconFlg)
+		obesityIconTexture.Load("siin_aikon.png");
+	else
+		obesityIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(impactFlg)
+		impactIconTexture.Load("siin_aikon.png");
+	else
+		impactIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(parasiteFlg)
+		parasiteIconTexture.Load("siin_aikon.png");
+	else
+		parasiteIconTexture.Load("siin_aikon_Enpty.png");
+	if(jumpFlg)
+		jumpIconTexture.Load("siin_aikon.png");
+	else
+		jumpIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(bubbleFlg)
+		bubbleIconTexture.Load("siin_aikon.png");
+	else
+		bubbleIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(turtleFlg)
+		turtleIconTexture.Load("siin_aikon.png");
+	else
+		turtleIconTexture.Load("siin_aikon_Enpty.png");
+
+	if(waterFlowFlg)
+		waterFlowIconTexture.Load("siin_aikon.png");
+	else
+		waterFlowIconTexture.Load("siin_aikon_Enpty.png");
+
 	menuButtonTexture.Load("ButtonMenu.png");
 	popUpFlg = false;
 	nowPopUpStress = new CCheckCauseOfDeathWindow;
@@ -55,6 +111,18 @@ void CSceneStressCollection::Render()
 }
 void CSceneStressCollection::Release()
 {
+	increasedBodyTemperatureIconTexture.Release();
+	lowerBodyTemperatureIconTexture.Release();
+	starvationIconTexture.Release();
+	cloggedThroatIconTexture.Release();
+	obesityIconTexture.Release();
+	impactIconTexture.Release();
+	parasiteIconTexture.Release();
+	jumpIconTexture.Release();
+	bubbleIconTexture.Release();
+	turtleIconTexture.Release();
+	waterFlowIconTexture.Release();
+
 	menuButtonTexture.Release();
 	nowPopUpStress->Release();
 }

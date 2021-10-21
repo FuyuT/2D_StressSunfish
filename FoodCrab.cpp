@@ -19,15 +19,12 @@ void CFoodCrab::Initialize()
 {
 	pos.x = 1000;
 	pos.y = 1500;
-	moveSpeed.x = 2.0f;
 	showFlg = true;
 }
 
 void CFoodCrab::Update(float wx, float wy)
 {
 	if (!showFlg)return;
-	//移動
-	pos.x -= moveSpeed.x;
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }

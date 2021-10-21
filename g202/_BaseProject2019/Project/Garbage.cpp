@@ -17,10 +17,13 @@ bool CGarbage::Load()
 
 void CGarbage::Initialize()
 {
-	pos.x = 1000;
-	pos.y = 500;
-	moveSpeed.x = 2.0f;
+	initPos.y = 1700;
+	pos.x = 2000;
+	pos.y = 1700;
+	moveSpeed.x = 1.0f;
+	moveSpeed.y = 2.0f;
 	showFlg = true;
+	turnFlg = false;
 }
 
 void CGarbage::Update(float wx, float wy)
@@ -28,6 +31,25 @@ void CGarbage::Update(float wx, float wy)
 	if (!showFlg)return;
 	//移動
 	pos.x -= moveSpeed.x;
+
+	if (initPos.y - 200 < pos.y && !turnFlg)
+	{
+		pos.y -= moveSpeed.y;
+		if (initPos.y - 200 >= pos.y)
+		{
+			turnFlg = true;
+		}
+	}
+
+	if (initPos.y + 200 > pos.y && turnFlg)
+	{
+		pos.y += moveSpeed.y;
+		if (initPos.y + 200 <= pos.y)
+		{
+			turnFlg = false;
+		}
+	}
+
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }

@@ -1,12 +1,12 @@
 #pragma once
 #include "ObstacleBase.h"
-class CGarbage : public CObstacleBase
+class CWaterFlow : public CObstacleBase
 {
 private:
-	bool turnFlg;
+
 public:
-	CGarbage();
-	~CGarbage();
+	CWaterFlow();
+	~CWaterFlow();
 	bool Load()override;
 	void Initialize()override;
 	void Update(float wx, float wy)override;

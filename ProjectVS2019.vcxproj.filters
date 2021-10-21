@@ -102,9 +102,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル\Chara</Filter>
     </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\Obstacle</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>ソース ファイル\Utilitys</Filter>
     </ClCompile>
@@ -141,9 +138,6 @@
     <ClCompile Include="CheckCauseOfDeathWindow.cpp">
       <Filter>ソース ファイル\PopUpWindow</Filter>
     </ClCompile>
-    <ClCompile Include="SceneBase.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="FoodCrab.cpp">
       <Filter>ソース ファイル\Obstacle\Food</Filter>
     </ClCompile>
@@ -164,6 +158,12 @@
     </ClCompile>
     <ClCompile Include="Ui.cpp">
       <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WaterFlow.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTutorial.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
@@ -265,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="Ui.h">
       <Filter>ソース ファイル\ヘッダー ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WaterFlow.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneTutorial.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
