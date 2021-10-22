@@ -12,7 +12,7 @@
 //エサ探知範囲
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
-#define		COLLISION_ADJUSTMENT	130.0f
+#define		COLLISION_ADJUSTMENT	100.0f
 //重力
 #define		GRAVITY					1.0f
 //ジャンプ力
@@ -168,6 +168,15 @@ public:
 			posY + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
 			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
 			posY + texture.GetHeight() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
+		);
+	}
+	CRectangle GetEyeRect()
+	{
+		return CRectangle(
+			posX + COLLISION_ADJUSTMENT + 150,
+			posY + COLLISION_ADJUSTMENT + 50,
+			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
+			posY + texture.GetHeight() - COLLISION_ADJUSTMENT - 95
 		);
 	}
 
