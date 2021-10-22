@@ -1,7 +1,8 @@
 #pragma once
 
 #include "Mof.h"
-#include "Enemy.h"
+#include "ObstacleManager.h"
+#include "timer.h"
 #include "time.h"
 
 //移動速度	
@@ -17,11 +18,11 @@
 //ジャンプ力
 #define		JUMP_POWER_X			8.0f
 #define		JUMP_POWER_Y			30.0f
+
 //海面
 #define		SEA_LEVEL				780
 //海底
 #define		UNDER_SEA				2160
-
 
 
 //ステータス( 状態 に関する定数)
@@ -40,6 +41,8 @@
 #define		TEMPERATURE_SPEED		40
 //体温限界値
 #define		TEMPERATURE_LIMIT		100
+//水流による移動速度upの持続時間
+#define		STREAM					200 
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -84,18 +87,31 @@ private:
 	bool		possibleToEatFlg;
 	//死因
 	int			causeOfDeath;
+	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除するまで無敵にする(デバッグ用))
+	bool		hitFlg;
+
 
 	//使わんかも
 	//ステータス( 状態 に関する変数)
 	//体温
 	int			temperature;
 	int			temperatureTime;
+	int         bodyTemp;
+	float       tempRegion;
 	//空腹
 	int			hungry;
 	int			hungryTime;
+	int         hungerRegion;
 	//寄生虫
 	int			parasite;
 	int			parasiteTime;
+	//水流
+	int			streamTime;
+
+	//UI
+	CTimer tempTimer;
+	CTimer hungerTimer;
+	CTimer parasiteTimer;
 
 public:
 	CPlayer();
@@ -155,27 +171,31 @@ public:
 		);
 	}
 
-	void Collision(Enemy& ene);
+	void Collision(CObstacleManager& cObstacle);
 
 	//死んでいればtrueを返す
-	bool IsDead()
+	bool GetDead()
 	{
 		return deadFlg;
 	}
 	//体温を返す 100 ～ 0
-	int	GetTemperature()
+	float	GetTemperature()
 	{
-		return temperature;
+		return tempRegion;
+	}
+	int     GetBodyTemp()
+	{
+		return bodyTemp;
 	}
 	//寄生虫の付着数を返す 0 ～ 6
 	int GetParasite()
 	{
-		return parasite / 50;
+		return parasite;
 	}
 	//空腹度を返す 10～0
 	int GetHungry()
 	{
-		return hungry;
+		return hungerRegion;
 	}
 	//死因を返す
 	int GetCauseOfDeath()
@@ -187,7 +207,18 @@ public:
 	{
 		//初期位置の20(適当)を引く
 		//X座標の20分の1(適当)を進んだ距離とする
-		return posX / 20 - 20;
+		return (posX - 200) / 20;
 	}
+	//「ジャンプ」が可能かを返す
+	bool GetJump()
+	{
+		return possibleToJumpFlg;
+	}
+	//「食べる」が可能かを返す
+	bool GetEat()
+	{
+		return possibleToEatFlg;
+	}
+
 };
 
