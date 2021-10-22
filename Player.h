@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Mof.h"
-#include "Enemy.h"
+#include "ObstacleManager.h"
+#include "timer.h"
 #include "time.h"
-#include "Ui.h"
 
 //移動速度	
 #define		PLAYER_SPEED			0.6f
@@ -87,6 +87,9 @@ private:
 	bool		possibleToEatFlg;
 	//死因
 	int			causeOfDeath;
+	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除するまで無敵にする(デバッグ用))
+	bool		hitFlg;
+
 
 	//使わんかも
 	//ステータス( 状態 に関する変数)
@@ -106,7 +109,6 @@ private:
 	int			streamTime;
 
 	//UI
-	CUi ui;
 	CTimer tempTimer;
 	CTimer hungerTimer;
 	CTimer parasiteTimer;
@@ -169,7 +171,7 @@ public:
 		);
 	}
 
-	void Collision(Enemy& ene);
+	void Collision(CObstacleManager& cObstacle);
 
 	//死んでいればtrueを返す
 	bool GetDead()
@@ -217,6 +219,10 @@ public:
 	{
 		return possibleToEatFlg;
 	}
-
+	//プレイヤーのX座標を返す
+	int GetPosX()
+	{
+		return posX;
+	}
 };
 
