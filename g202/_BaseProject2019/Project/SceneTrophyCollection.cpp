@@ -13,6 +13,8 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 }
 void CSceneTrophyCollection::Initialize()
 {
+	backGroundTex.Load("Title.png");
+
 	//トロフィーテクスチャ読み込み
 	//フラグがオンなら対応するテクスチャ、フラグがオフなら未取得テクスチャを読み込む。
 	//とりあえず仮テクスチャ読み込み
@@ -129,6 +131,7 @@ void CSceneTrophyCollection::Update()
 }
 void CSceneTrophyCollection::Render()
 {
+	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "トロフィー画面");
 	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 	if (popUpFlg)
@@ -138,6 +141,7 @@ void CSceneTrophyCollection::Render()
 }
 void CSceneTrophyCollection::Release()
 {
+	backGroundTex.Release();
 	riverIconTexture.Release();
 	waterFallIconTexture.Release();
 	lakeIconTexture.Release();

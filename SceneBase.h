@@ -17,9 +17,16 @@ protected:
 	bool		endFlg = false;
 	short		nextScene;
 	bool		popUpFlg = false;
+	CTexture    backGroundTex;
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
-	CSceneBase() {}
+	CSceneBase() :
+	endFlg(false),
+	nextScene(0),
+	popUpFlg(false),
+	backGroundTex()
+	{
+	}
 	virtual ~CSceneBase() {}
 	virtual bool Load() { return true; }
 	virtual void Initialize() {}

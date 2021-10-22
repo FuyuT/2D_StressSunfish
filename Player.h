@@ -38,7 +38,7 @@
 //最大寄生虫許容量
 #define		PARASITE_LIMIT			300
 //体温が上下する速度
-#define		TEMPERATURE_SPEED		40
+#define		TEMPERATURE_SPEED		3
 //体温限界値
 #define		TEMPERATURE_LIMIT		100
 //水流による移動速度upの持続時間

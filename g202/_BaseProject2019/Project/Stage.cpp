@@ -30,7 +30,6 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	enemyStart = pSt;
 	enemyCount = cnt;
 	*/
-	Load();
 }
 
 void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {

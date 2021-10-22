@@ -34,9 +34,6 @@ bool CPlayer::Load()
 
 void CPlayer::Initialize()
 {
-	//読み込みを行う
-	Load();
-
 	//確率のために使う変数の初期化
 	random.SetSeed(time(NULL));
 
@@ -45,9 +42,9 @@ void CPlayer::Initialize()
 	*********/
 	//座標
 	posX = 200;   // 200は適当　仮置き
-	posY = g_pGraphics->GetTargetHeight() / 2 - texture.GetHeight() / 2;
+	posY = g_pGraphics->GetTargetHeight() * 0.5 - texture.GetHeight() * 0.5;
 	//状態(ステータス)
-	temperature = TEMPERATURE_LIMIT / 2;
+	temperature = TEMPERATURE_LIMIT * 0.5;
 	bodyTemp = 10;
 	tempRegion = 245;
 	hungry = FULL_STOMACH;
@@ -300,18 +297,18 @@ void CPlayer::UpdateStatus()
 		{
 			if (bodyTemp < 50)
 			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
+				bodyTemp += TEMPERATURE_SPEED;
+				tempRegion -= 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(1);
 			}
-			else if (bodyTemp >= 50)
+		}
+		//死因：熱中症
+		if (bodyTemp >= 50)
+		{
+			if (causeOfDeath == CAUSE_None)
 			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：熱中症
-					deadFlg = true;
-					causeOfDeath = CAUSE_Hyperthermia;
-				}
+				deadFlg = true;
+				causeOfDeath = CAUSE_Hyperthermia;
 			}
 		}
 	}
@@ -322,18 +319,18 @@ void CPlayer::UpdateStatus()
 		{
 			if (bodyTemp > -30)
 			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
+				bodyTemp -= TEMPERATURE_SPEED;
+				tempRegion += 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(1);
 			}
-			else if (bodyTemp <= -30)
+		}
+		//死因：凍死
+		if (bodyTemp <= -30)
+		{
+			if (causeOfDeath == CAUSE_None)
 			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：凍死
-					deadFlg = true;
-					causeOfDeath = CAUSE_Frozen;
-				}
+				deadFlg = true;
+				causeOfDeath = CAUSE_Frozen;
 			}
 		}
 
@@ -346,8 +343,8 @@ void CPlayer::UpdateStatus()
 			tempTimer.StartTimer();
 			if (tempTimer.GetNowtime() <= 0)
 			{
-				bodyTemp -= 1;
-				tempRegion += 4.1;
+				bodyTemp -= TEMPERATURE_SPEED;
+				tempRegion += 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(2);
 			}
 		}
@@ -357,8 +354,8 @@ void CPlayer::UpdateStatus()
 			tempTimer.StartTimer();
 			if (tempTimer.GetNowtime() <= 0)
 			{
-				bodyTemp += 1;
-				tempRegion -= 4.1;
+				bodyTemp += TEMPERATURE_SPEED;
+				tempRegion -= 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(2);
 			}
 		}

@@ -69,7 +69,6 @@ bool CUi::Load()
 
 void CUi::Initialize()
 {
-	Load();
 
 	////タイマー
 	//tempTimer.SetTotalTime(2);

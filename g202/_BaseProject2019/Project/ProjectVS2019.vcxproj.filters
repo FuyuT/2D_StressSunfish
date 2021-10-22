@@ -200,9 +200,6 @@
     <ClInclude Include="Stage.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Stage1.h">
-      <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
     </ClInclude>

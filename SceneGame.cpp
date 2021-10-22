@@ -32,7 +32,9 @@ CSceneGame::~CSceneGame()
 
 bool CSceneGame::Load()
 {
-	//障害物
+	if (!pl.Load())return false;
+	if (!ui.Load())return false;
+	if (!stg.Load())return false;
 	if(!cObstacle.Load())return false;
 	return true;
 }
@@ -40,15 +42,12 @@ bool CSceneGame::Load()
 void CSceneGame::Initialize()
 {
 	pl.Initialize();
-	stg.Initialize();
-
-	//backGroundTexture.Load("SeaTexture.png");
-	playerTexture.Load("Player.png");
-
 	ui.Initialize();
-
-	//障害物
+	stg.Initialize();
 	cObstacle.Initialize();
+
+
+
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
@@ -62,12 +61,19 @@ void CSceneGame::Initialize()
 
 void CSceneGame::Update()
 {
-	//画面遷移
+	//デバッグ用　初期化
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	{
+		Initialize();
+	}
+	//画面遷移 
+	//プレイヤーが死んだとき
 	if (g_pInput->IsKeyPush(MOFKEY_1))
 	{
 		endFlg = true;
 		nextScene = SCENENO_TITLE;
 	}
+
 
 	stg.Update(pl);
 
@@ -121,13 +127,14 @@ void CSceneGame::Update()
 	//}
 
 
-	//とりあえずF1でポップアップが出るように
-	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
+	//死んだら、もしくはF1でゲームオーバー画面
+	if (g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead() && !popUpFlg)
 	{
 		nowPopUpGame = new CCauseOfDeathWindow;
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}
+	//Rでポーズ画面
 	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
 	{
 		nowPopUpGame = new CPoseWindow;
@@ -169,6 +176,11 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
+
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+
+	//障害物
+	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 	//ポップアップ描画
 	if (popUpFlg)
 	{
@@ -178,11 +190,6 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
-
-	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-
-	//障害物
-	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 
 }
 

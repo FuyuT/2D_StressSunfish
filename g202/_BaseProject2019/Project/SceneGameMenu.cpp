@@ -11,6 +11,7 @@ CSceneGameMenu::~CSceneGameMenu()
 }
 void CSceneGameMenu::Initialize()
 {
+	backGroundTex.Load("Title.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
 	configButtonTexture.Load("ButtonConfig.png");
 	stressButtonTexture.Load("ButtonStressCollection.png");
@@ -87,17 +88,17 @@ void CSceneGameMenu::Update()
 }
 void CSceneGameMenu::Render()
 {
+	backGroundTex.Render(0,0);
 	gamePlayButtonTexture.Render(gamePlayButtonPosX, gamePlayButtonPosY);
 	configButtonTexture.Render(configButtonPosX, configButtonPosY);
 	stressButtonTexture.Render(stressButtonPosX, stressButtonPosY);
 	torophyButtonTexture.Render(torophyButtonPosX, torophyButtonPosY);
 	tutorialButtonTexture.Render(tutorialButtonPosX, tutorialButtonPosY);
 	titleButtonTexture.Render(titleButtonPosX, titleButtonPosY);
-
-	CGraphicsUtilities::RenderString(100, 300, "ÉQÅ[ÉÄÉÅÉjÉÖÅ[âÊñ ");
 }
 void CSceneGameMenu::Release()
 {
+	backGroundTex.Release();
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();

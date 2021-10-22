@@ -163,7 +163,6 @@
     <ClInclude Include="SceneTrophyCollection.h" />
     <ClInclude Include="SceneTutorial.h" />
     <ClInclude Include="Stage.h" />
-    <ClInclude Include="Stage1.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TrophyWindow.h" />
     <ClInclude Include="Turtle.h" />

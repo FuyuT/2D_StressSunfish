@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Ui.h"
 #include "ObstacleManager.h"
+#include "Stage.h"
 #include "Timer.h"
 
 class CSceneTutorial : public CSceneBase

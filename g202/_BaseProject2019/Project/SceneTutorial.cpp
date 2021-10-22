@@ -10,6 +10,9 @@ CSceneTutorial::~CSceneTutorial()
 
 bool CSceneTutorial::Load()
 {
+	if (!pl.Load())return false;
+	if (!ui.Load())return false;
+	if (!cObstacle.Load())return false;
 	return true;
 }
 

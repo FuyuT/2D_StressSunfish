@@ -13,6 +13,8 @@ CSceneStressCollection::~CSceneStressCollection()
 }
 void CSceneStressCollection::Initialize()
 {
+	backGroundTex.Load("Title.png");
+
 	//死因テクスチャ読み込み
 	//フラグがオンなら対応するテクスチャ、フラグがオフなら未取得テクスチャを読み込む。
 	if(increasedBodyTemperatureFlg)
@@ -102,6 +104,7 @@ void CSceneStressCollection::Update()
 }
 void CSceneStressCollection::Render()
 {
+	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "ストレス集画面");
 	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
 	if (popUpFlg)
@@ -111,6 +114,7 @@ void CSceneStressCollection::Render()
 }
 void CSceneStressCollection::Release()
 {
+	backGroundTex.Release();
 	increasedBodyTemperatureIconTexture.Release();
 	lowerBodyTemperatureIconTexture.Release();
 	starvationIconTexture.Release();

@@ -76,7 +76,6 @@ MofBool CGameApp::Update(void) {
 		if (!nowScene->Load())return false;
 		nowScene->Initialize();
 	}
-
 	return TRUE;
 }
 /*************************************************************************//*!

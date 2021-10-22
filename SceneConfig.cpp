@@ -10,10 +10,13 @@ CSceneConfig::~CSceneConfig()
 }
 void CSceneConfig::Initialize()
 {
+	backGroundTex.Load("Title.png");
+
 	if (!gamePlayFlg)
 		buttonTexture.Load("ButtonMenu.png");
 	else if (gamePlayFlg)
 		buttonTexture.Load("ButtonReturnGame.png");
+
 }
 void CSceneConfig::Update()
 {
@@ -34,11 +37,12 @@ void CSceneConfig::Update()
 }
 void CSceneConfig::Render()
 {
-	CGraphicsUtilities::RenderFillRect(0, 0, g_pGraphics->GetTargetWidth(), g_pGraphics->GetTargetHeight(), MOF_XRGB(0, 0, 255));
+	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "ê›íËâÊñ ");
 	buttonTexture.Render(buttonPosX, buttonPosY);
 }
 void CSceneConfig::Release()
 {
+	//backGroundTex.Release();
 	buttonTexture.Release();
 }

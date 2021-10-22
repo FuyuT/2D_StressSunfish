@@ -4,6 +4,7 @@
 class CSceneTitle : public CSceneBase
 {
 private:
+	CTexture	titleLogoTex;
 	CTexture	gamePrayButtonTexture;
 	CTexture	gameFinishButtonTexture;
 	int			gamePrayButtonPosX;
