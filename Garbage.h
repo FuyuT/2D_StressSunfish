@@ -29,5 +29,9 @@ public:
 		return CRectangle(pos.x, pos.y, pos.x + garbageShoes.GetWidth(), pos.y + garbageShoes.GetHeight());
 	}
 
+	bool GetShow()
+	{
+		return showFlg;
+	}
 };
 

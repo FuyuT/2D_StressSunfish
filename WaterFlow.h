@@ -16,6 +16,9 @@ public:
 	CRectangle GetRect() {
 		return CRectangle(pos.x, pos.y, pos.x + Texture.GetWidth(), pos.y + Texture.GetHeight());
 	}
-
+	bool GetShow()
+	{
+		return showFlg;
+	}
 };
 
