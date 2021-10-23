@@ -34,6 +34,8 @@ private:
 
 	//設定画面フラグ
 	bool configFlg = false;
+	//ポーズ画面フラグ
+	bool poseFlg;
 
 public:
 	CSceneGame();

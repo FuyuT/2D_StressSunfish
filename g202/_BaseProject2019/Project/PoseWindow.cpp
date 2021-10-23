@@ -26,12 +26,13 @@ void CPoseWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
+		//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
+		//Release();
 		//設定の処理
-		endFlg = true;
-		nextPopUp = NULL;
+		//endFlg = true;
+		//nextPopUp = NULL;
 		//設定画面への遷移
-
+		buttonResult = 4;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -39,14 +40,15 @@ void CPoseWindow::Update()
 		Release();
 		endFlg = true;
 		nextPopUp = POPUPNO_RETRY;
+		buttonResult = 1;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
 		//タイトル画面ボタンが押された際の処理
 		Release();
 		endFlg = true;
-		Release();
 		nextPopUp = POPUPNO_BACKTOTITLE;
+		buttonResult = 3;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -54,6 +56,7 @@ void CPoseWindow::Update()
 		Release();
 		endFlg = true;
 		nextPopUp = NULL;
+		buttonResult = 5;
 	}
 }
 void CPoseWindow::Render()

@@ -18,6 +18,9 @@
 
 //シーンクラス
 CSceneBase* nowScene = NULL;
+
+//デバッグ用
+bool debugShowFlg = false;
 /*************************************************************************//*!
 		@brief			アプリケーションの初期化
 		@param			None
@@ -44,6 +47,15 @@ MofBool CGameApp::Initialize(void) {
 MofBool CGameApp::Update(void) {
 	//キーの更新
 	g_pInput->RefreshKey();
+
+	//デバッグ用
+	if (g_pInput->IsKeyPush(MOFKEY_0))
+	{
+		if (debugShowFlg) debugShowFlg = false;
+		else if(!debugShowFlg) debugShowFlg = true;
+	}
+
+	//画面遷移
 	nowScene->Update();
 	if (nowScene->IsEnd())
 	{
@@ -76,6 +88,8 @@ MofBool CGameApp::Update(void) {
 		if (!nowScene->Load())return false;
 		nowScene->Initialize();
 	}
+
+
 	return TRUE;
 }
 /*************************************************************************//*!
@@ -93,8 +107,10 @@ MofBool CGameApp::Render(void) {
 	
 	//シーンの描画
 	nowScene->Render();
-	nowScene->RenderDebug();
-
+	if (debugShowFlg)
+	{
+		nowScene->RenderDebug();
+	}
 	//描画の終了
 	g_pGraphics->RenderEnd();
 	return TRUE;

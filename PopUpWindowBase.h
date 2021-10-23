@@ -31,6 +31,7 @@ public:
 	virtual void Release() {}
 	//ƒQƒbƒ^[
 	int	  GetButtonResult() { return buttonResult; }
+	void  SetButtonResult(int buttonResult) { this->buttonResult = buttonResult; }
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 

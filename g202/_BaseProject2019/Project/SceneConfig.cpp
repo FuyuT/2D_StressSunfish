@@ -12,6 +12,7 @@ void CSceneConfig::Initialize()
 {
 	backGroundTex.Load("Title.png");
 
+	//SceneGameMenuの時とSceneGameuの時で読込みを変更
 	if (!gamePlayFlg)
 		buttonTexture.Load("ButtonMenu.png");
 	else if (gamePlayFlg)
@@ -22,15 +23,16 @@ void CSceneConfig::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
+	//SceneGameMenu
 	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
 	{
 		endFlg = true;
 		nextScene = SCENENO_GAMEMENU;
 		CSceneConfig::Release();
 	}
+	//SceneGame
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) && gamePlayFlg)
 	{
-		//ゲーム画面から設定に行くパターン
 		CSceneConfig::Release();
 		gamePlayFlg = false;
 	}
@@ -43,6 +45,6 @@ void CSceneConfig::Render()
 }
 void CSceneConfig::Release()
 {
-	//backGroundTex.Release();
+	backGroundTex.Release();
 	buttonTexture.Release();
 }
