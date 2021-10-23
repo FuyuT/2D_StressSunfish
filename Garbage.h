@@ -1,9 +1,21 @@
 #pragma once
 #include "ObstacleBase.h"
+#define		DECELERATE_SPEED		0.3f
+#define MAX_MOVE_SPEED  5.0f
+
+enum GARBAGE_NO {
+	GarbageShoes,
+	GarbageTire,
+	GarbageBag
+};
 class CGarbage : public CObstacleBase
 {
 private:
-	bool turnFlg;
+	CTexture	garbageShoes;
+	CTexture	garbageTire;
+	CTexture	garbageBag;
+	short garbageNo;
+	bool moveUpFlg;
 public:
 	CGarbage();
 	~CGarbage();
