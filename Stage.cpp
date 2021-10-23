@@ -22,10 +22,17 @@ bool Stage::Load() {
 	return true;
 }
 
-void Stage::Initialize() {
+void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
+	//	scroll = 0;
+
+	/*
+	enemyNo = 0;
+	enemyStart = pSt;
+	enemyCount = cnt;
+	*/
 }
 
-void Stage::Update(CPlayer& pl) {
+void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 
 	//’Ç‰Á
 	//ƒXƒNƒ[ƒ‹
@@ -80,6 +87,23 @@ void Stage::Update(CPlayer& pl) {
 		}
 	}
 
+	/*if (g_pInput->IsKeyPush(MOFKEY_U))
+	{
+		ene[0].SetTexture(&enemyTexture);
+		ene[0].Start(g_pGraphics->GetTargetWidth() + scrollValueX, 1000, 3);
+	}*/
+
+	//if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
+	//	for (int i = 0; i < ecnt; i++) {
+	//		if (ene[i].GetShow()) {
+	//			continue;
+	//		}
+	//		ene[i].SetTexture(&enemyTexture);
+	//		ene[i].Start(enemyStart[enemyNo].posX, 0, enemyStart[enemyNo].type);
+	//		break;
+	//	}
+	//	enemyNo++;
+	//}
 }
 
 void Stage::Render() {
@@ -87,6 +111,7 @@ void Stage::Render() {
 	//’Ç‰Á
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
+	//texture.Render(-scrollValueX, -scrollValueY);
 
 	int w = texture.GetWidth();
 	int h = texture.GetHeight();
@@ -97,6 +122,12 @@ void Stage::Render() {
 			texture.Render(x, y);
 		}
 	}
+
+	/*
+	for (float x = ((int)scrollValueX % w) + w; x > sch; x -= w) {
+		texture.Render(-scrollValueX - x, -scrollValueY);
+	}
+	*/
 }
 
 void Stage::Release() {

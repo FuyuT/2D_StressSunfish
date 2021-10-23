@@ -1,5 +1,4 @@
 #include "Garbage.h"
-
 CGarbage::CGarbage()
 {
 }
@@ -10,7 +9,9 @@ CGarbage::~CGarbage()
 
 bool CGarbage::Load()
 {
-	if (!Texture.Load("Obstacle\\Garbage1.png"))return false;
+	if (!garbageShoes.Load("Obstacle\\Garbage1.png"))return false;
+	if (!garbageTire.Load("Obstacle\\Garbage2.png"))return false;
+	if (!garbageBag.Load("Obstacle\\Garbage3.png"))return false;
 
 	return true;
 }
@@ -20,44 +21,63 @@ void CGarbage::Initialize()
 	initPos.y = 1700;
 	pos.x = 2000;
 	pos.y = 1700;
-	moveSpeed.x = 1.0f;
-	moveSpeed.y = 2.0f;
+	moveSpeed.x = 3.0f;
+	moveSpeed.y = MAX_MOVE_SPEED;
 	showFlg = true;
-	turnFlg = false;
+	moveUpFlg = true;
+	garbageNo = 0;
 }
 
 void CGarbage::Update(float wx, float wy)
 {
 	if (!showFlg)return;
 	//移動
+	//idousokudo tyousei
+	if (moveSpeed.y > MAX_MOVE_SPEED)
+	{
+		moveSpeed.y = MAX_MOVE_SPEED;
+		moveUpFlg = false;
+	}
+	else if (moveSpeed.y < -MAX_MOVE_SPEED)
+	{
+		moveSpeed.y = -MAX_MOVE_SPEED;
+		moveUpFlg = true;
+	}
+
+	if (moveUpFlg == true) {
+		moveSpeed.y += DECELERATE_SPEED;
+	}
+	else
+	{
+		moveSpeed.y -= DECELERATE_SPEED;
+	}
+
+
+	//zissainiidou
 	pos.x -= moveSpeed.x;
-
-	if (initPos.y - 200 < pos.y && !turnFlg)
-	{
-		pos.y -= moveSpeed.y;
-		if (initPos.y - 200 >= pos.y)
-		{
-			turnFlg = true;
-		}
-	}
-
-	if (initPos.y + 200 > pos.y && turnFlg)
-	{
-		pos.y += moveSpeed.y;
-		if (initPos.y + 200 <= pos.y)
-		{
-			turnFlg = false;
-		}
-	}
+	pos.y -= moveSpeed.y;
 
 	//スクリーンから出たらshowFlgをfalse
-	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	if (pos.x + garbageShoes.GetWidth() <= wx)showFlg = false;
 }
 
 void CGarbage::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx, pos.y - wy);
+	switch (garbageNo)
+	{
+	case GarbageShoes:
+		garbageShoes.Render(pos.x - wx, pos.y - wy);
+		break;
+	case GarbageTire:
+		garbageTire.Render(pos.x - wx, pos.y - wy);
+		break;
+	case GarbageBag:
+		garbageBag.Render(pos.x - wx, pos.y - wy);
+		break;
+	default:
+		break;
+	}
 }
 
 void CGarbage::RenderDebug(float wx, float wy)
@@ -69,5 +89,7 @@ void CGarbage::RenderDebug(float wx, float wy)
 
 void CGarbage::Release()
 {
-	Texture.Release();
+	garbageShoes.Release();
+	garbageTire.Release();
+	garbageBag.Release();
 }

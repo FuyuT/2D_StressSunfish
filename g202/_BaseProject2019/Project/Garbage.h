@@ -1,9 +1,21 @@
 #pragma once
 #include "ObstacleBase.h"
+#define		DECELERATE_SPEED		0.3f
+#define MAX_MOVE_SPEED  5.0f
+
+enum GARBAGE_NO {
+	GarbageShoes,
+	GarbageTire,
+	GarbageBag
+};
 class CGarbage : public CObstacleBase
 {
 private:
-	bool turnFlg;
+	CTexture	garbageShoes;
+	CTexture	garbageTire;
+	CTexture	garbageBag;
+	short garbageNo;
+	bool moveUpFlg;
 public:
 	CGarbage();
 	~CGarbage();
@@ -14,8 +26,12 @@ public:
 	void RenderDebug(float wx, float wy)override;
 	void Release()override;
 	CRectangle GetRect() {
-		return CRectangle(pos.x, pos.y, pos.x + Texture.GetWidth(), pos.y + Texture.GetHeight());
+		return CRectangle(pos.x, pos.y, pos.x + garbageShoes.GetWidth(), pos.y + garbageShoes.GetHeight());
 	}
 
+	bool GetShow()
+	{
+		return showFlg;
+	}
 };
 
