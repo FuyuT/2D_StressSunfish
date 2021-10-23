@@ -25,7 +25,7 @@ void CGarbage::Initialize()
 	moveSpeed.y = MAX_MOVE_SPEED;
 	showFlg = true;
 	moveUpFlg = true;
-	garbageNo = 2;
+	garbageNo = 0;
 }
 
 void CGarbage::Update(float wx, float wy)
@@ -58,7 +58,7 @@ void CGarbage::Update(float wx, float wy)
 	pos.y -= moveSpeed.y;
 
 	//スクリーンから出たらshowFlgをfalse
-	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	if (pos.x + garbageShoes.GetWidth() <= wx)showFlg = false;
 }
 
 void CGarbage::Render(float wx, float wy)

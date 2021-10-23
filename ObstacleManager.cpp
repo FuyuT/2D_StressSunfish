@@ -10,7 +10,7 @@ CObstacleManager::~CObstacleManager()
 
 bool CObstacleManager::Load()
 {
-	if(!cFish.Load())return false;
+	if (!cFish.Load())return false;
 	if (!cShrimp.Load())return false;
 	if (!cCrab.Load())return false;
 	if (!cGarbage.Load())return false;
@@ -52,7 +52,7 @@ void CObstacleManager::Update(float wx, float wy)
 void CObstacleManager::Render(float wx, float wy)
 {
 	//H‚×•¨
-	cFish.Render(wx, wy);	
+	cFish.Render(wx, wy);
 	cShrimp.Render(wx, wy);
 	cCrab.Render(wx, wy);
 

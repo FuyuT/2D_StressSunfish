@@ -26,7 +26,7 @@ public:
 	void RenderDebug(float wx, float wy)override;
 	void Release()override;
 	CRectangle GetRect() {
-		return CRectangle(pos.x, pos.y, pos.x + Texture.GetWidth(), pos.y + Texture.GetHeight());
+		return CRectangle(pos.x, pos.y, pos.x + garbageShoes.GetWidth(), pos.y + garbageShoes.GetHeight());
 	}
 
 };
