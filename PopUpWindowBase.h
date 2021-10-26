@@ -20,13 +20,8 @@ protected:
 	int popUpPosY = 50;
 	bool endFlg = false;
 	short	nextPopUp;
-	//ボタン取得用変数
-	//1初期化
-	//2メニュー画面へ遷移
-	//3タイトル画面へ遷移
-	//4設定画面に遷移
+	//メモ書き取れてません　申し訳ない
 	int     buttonResult;
-
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -35,7 +30,8 @@ public:
 	virtual void Render() {}
 	virtual void Release() {}
 	//ゲッター
-	int GetButtonResult() { return buttonResult; }
+	int	  GetButtonResult() { return buttonResult; }
+	void  SetButtonResult(int buttonResult) { this->buttonResult = buttonResult; }
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 
