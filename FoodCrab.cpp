@@ -1,50 +1,48 @@
-#include"FoodFish.h"
+#include "FoodCrab.h"
 
-CFoodFish::CFoodFish()
+CFoodCrab::CFoodCrab()
 {
 }
 
-CFoodFish::~CFoodFish()
+CFoodCrab::~CFoodCrab()
 {
 }
 
-bool CFoodFish::Load()
+bool CFoodCrab::Load()
 {
-	if (!Texture.Load("Obstacle\\Fish.png"))return false;
+	if (!Texture.Load("Obstacle\\Crab.png"))return false;
 
 	return true;
 }
 
-//初期化
-void CFoodFish::Initialize()
+void CFoodCrab::Initialize()
 {
-	//pos.x = 1500;
+	//pos.x = 1000;
 	//pos.y = 1500;
 	//showFlg = true;
 }
 
-void CFoodFish::Update(float wx, float wy)
+void CFoodCrab::Update(float wx, float wy)
 {
 	if (!showFlg)return;
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }
 
-void CFoodFish::Render(float wx, float wy)
+void CFoodCrab::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx,pos.y - wy);
+	Texture.Render(pos.x - wx, pos.y - wy);
 }
 
-void CFoodFish::RenderDebug(float wx, float wy)
+void CFoodCrab::RenderDebug(float wx, float wy)
 {
 	if (!showFlg)return;
 	CRectangle rect = GetRect();
 	CGraphicsUtilities::RenderRect(rect.Left - wx, rect.Top - wy, rect.Right - wx, rect.Bottom - wy, MOF_COLOR_RED);
-
 }
 
-void CFoodFish::Release()
+void CFoodCrab::Release()
 {
 	Texture.Release();
 }

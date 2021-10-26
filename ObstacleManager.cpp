@@ -1,4 +1,5 @@
 #include "ObstacleManager.h"
+#include <time.h>
 
 CObstacleManager::CObstacleManager()
 {
@@ -20,6 +21,7 @@ bool CObstacleManager::Load()
 		if (!cTurtle[n].Load())return false;
 		if (!cWaterFlow[n].Load())return false;
 	}
+
 	return true;
 }
 
@@ -38,82 +40,176 @@ void CObstacleManager::Initialize()
 		cWaterFlow[n].Initialize();
 	}
 
+	obstacleRandom.SetSeed((MofU32)time(NULL));
+	posYRndom.SetSeed((MofU32)time(NULL));
 }
 
-void CObstacleManager::Update(float wx, float wy)
+void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 {
 	//選ぶタイミング条件後で追加
-
-
-	//showFlgがfalseの食べ物を一つランダムで選んで、
-	foodNum = foodRandom.Random(4, 7);
-	//障害物の位置指定とshowflgをtrue
-	switch (foodNum)
+	if (distance % 30 == 0 && distance != 0)
 	{
-	case FoodFish:
-		for (int n = 0; n < 3; n++)
+		//showFlgがfalseの食べ物,障害物を一つランダムで選んで、
+		obstacleNum = obstacleRandom.Random(0, 7);
+		//障害物の位置指定とshowflgをtrue
+		switch (obstacleNum)
 		{
-			if (!cFish[n].GetShowflg())
+		case Turtle:
+			for (int n = 0; n < 3; n++)
 			{
-				cFish[n].SetShowFlg(true);
-				//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
-			
-				//cFish[n].SetInitPos(Vector2 initPos(pl.GetPosX() + g_pInput->GetTargetWidth(),))
+				if (!cTurtle[n].GetShow())
+				{
+					cTurtle[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
-				return;
+					cTurtle[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cTurtle[n].SetPosy(posY);
+					return;
+				}
 			}
+			//全てshowFlgがtrue
+			break;
+		case Garbage:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cGarbage[n].GetShow())
+				{
+					cGarbage[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cGarbage[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cGarbage[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
+		case WaterFlow:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cWaterFlow[n].GetShow())
+				{
+					cWaterFlow[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cWaterFlow[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cWaterFlow[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
+		case Bubble:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cBubble[n].GetShow())
+				{
+					cBubble[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cBubble[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cBubble[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
+		case FoodFish:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cFish[n].GetShow())
+				{
+					cFish[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cFish[n].SetPosy(posY);
+					return;
+				}
+			}
+			//全てshowFlgがtrue
+			break;
+		case FoodShrimp:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cShrimp[n].GetShow())
+				{
+					cShrimp[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cShrimp[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cShrimp[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
+		case FoodCrab:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cCrab[n].GetShow())
+				{
+					cCrab[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cCrab[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cCrab[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
 		}
-		//全てshowFlgがtrue
-		break;
-	case FoodShrimp:
-		break;
-	case FoodCrab:
-		break;
 	}
 
 	
-	//食べ物
-	//cFish.Update(wx, wy);
-	//cShrimp.Update(wx, wy);
-	//cCrab.Update(wx, wy);
 
-	////障害物
-	//cGarbage.Update(wx, wy);
-	//cBubble.Update(wx, wy);
-	//cTurtle.Update(wx, wy);
-	//cWaterFlow.Update(wx, wy);
+	for (int n = 0; n < 3; n++)
+	{
+		//食べ物
+		cFish[n].Update(wx, wy);
+		cShrimp[n].Update(wx, wy);
+		cCrab[n].Update(wx, wy);
+		//障害物
+		cGarbage[n].Update(wx, wy);
+	    cBubble[n].Update(wx, wy);
+		cTurtle[n].Update(wx, wy);
+		cWaterFlow[n].Update(wx, wy);
+	}
 }
 
 void CObstacleManager::Render(float wx, float wy)
 {
-	////食べ物	
-	//fishFlg = ObstaclePercentage(20);
-	//if(fishFlg)
-	//	cFish.Render(wx, wy);
- //   		
-	//cShrimp.Render(wx, wy);
-	//cCrab.Render(wx, wy);
-
-	////障害物
-	//cGarbage.Render(wx, wy);
-	//cBubble.Render(wx, wy);
-	//cTurtle.Render(wx, wy);
-	//cWaterFlow.Render(wx, wy);
+	for (int n = 0; n < 3; n++)
+	{
+		//食べ物
+		cFish[n].Render(wx, wy);
+		cShrimp[n].Render(wx, wy);
+		cCrab[n].Render(wx, wy);
+		//障害物
+		cGarbage[n].Render(wx, wy);
+		cBubble[n].Render(wx, wy);
+		cTurtle[n].Render(wx, wy);
+		cWaterFlow[n].Render(wx, wy);
+	}
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
 {
-	////食べ物
-	//cFish.RenderDebug(wx, wy);
-	//cShrimp.RenderDebug(wx, wy);
-	//cCrab.RenderDebug(wx, wy);
-
-	////障害物
-	//cGarbage.RenderDebug(wx, wy);
-	//cBubble.RenderDebug(wx, wy);
-	//cTurtle.RenderDebug(wx, wy);
-	//cWaterFlow.RenderDebug(wx, wy);
-
+	for (int n = 0; n < 3; n++)
+	{
+		//食べ物
+		cFish[n].RenderDebug(wx, wy);
+		cShrimp[n].RenderDebug(wx, wy);
+		cCrab[n].RenderDebug(wx, wy);
+		//障害物
+		cGarbage[n].RenderDebug(wx, wy);
+		cBubble[n].RenderDebug(wx, wy);
+		cTurtle[n].RenderDebug(wx, wy);
+		cWaterFlow[n].RenderDebug(wx, wy);
+	}
 }
 
 void CObstacleManager::Release()
@@ -130,6 +226,31 @@ void CObstacleManager::Release()
 		cTurtle[n].Release();
 		cWaterFlow[n].Release();
 	}
-
 }
 
+void CObstacleManager::PosYRndom()
+{	
+	if (obstacleNum == 1 || obstacleNum == 2)
+		posYNum = posYRndom.Random(1, 4);
+	else
+		posYNum = posYRndom.Random(1, 6);
+
+	switch (posYNum)
+	{
+	case 1:
+		posY = 780;
+		break;
+	case 2:
+		posY = 1125;
+		break;
+	case 3:
+		posY = 1470;
+		break;
+	case 4:
+		posY = 1815;
+		break;
+	case 5:
+		posY = 2160;
+		break;
+	}
+}
