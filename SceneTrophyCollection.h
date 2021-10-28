@@ -47,19 +47,19 @@ private:
 	CTexture	seaOf​​JapanIconTexture;	//日本海級
 	bool		seaOf​​JapanFlg = true;
 	CTexture	aroundTheGlobeIconTexture;	//地球一周級
-	bool		aroundTheGlobeFlg = true;
+	bool		aroundTheGlobeFlg = false;
 	CTexture	zeroMotivationIconTexture;	//やる気ゼロ級
-	bool		zeroMotivationFlg = true;
+	bool		zeroMotivationFlg = false;
 	CTexture	mountFujiIconTexture;	//富士山級
-	bool		mountFujiFlg = true;
+	bool		mountFujiFlg = false;
 	CTexture	osakaMarathonIconTexture;	//大阪マラソン級
-	bool		osakaMarathonFlg = true;
+	bool		osakaMarathonFlg = false;
 	CTexture	biwaLakeIconTexture;	//琵琶湖級
-	bool		biwaLakeFlg = true;
+	bool		biwaLakeFlg = false;
 	CTexture	jackPodIconTexture;		//ジャックポット級
-	bool		jackPodFlg = true;
+	bool		jackPodFlg = false;
 	CTexture	talentedDemonIconTexture;	//才能魔級
-	bool		talentedDemonFlg = true;
+	bool		talentedDemonFlg = false;
 
 	//上段のX座標
 	int			iconFirstRowPosX = 350;
@@ -69,7 +69,7 @@ private:
 	int			icon2PageFirstRowPosX = 600;
 	int			icon2pageSecondRowPosX = 1100;
 	//一行目のY座標
-	int			iconOneLinePosY = 100;
+	int			iconOneLinePosY = 200;
 	//二行目のY座標
 	int			iconTwoLinePosY = 500;
 
@@ -77,13 +77,8 @@ private:
 	int			page;
 
 	CTexture	menuButtonTexture;
-	CTexture	leftButtonTexture;
-	CTexture	rightButtonTexture;
-	int			menuButtonPosX = 1500;
-	int			menuButtonPosY = 900;
-	int			rightButtonPosX = 950;
-	int			leftButtonPosX = 850;
-	int			leftAndRightButtonPosY = 900;
+	int			menuButtonPosX = 800;
+	int			menuButtonPosY = 800;
 public:
 	CSceneTrophyCollection();
 	~CSceneTrophyCollection();
@@ -92,13 +87,8 @@ public:
 	void Update() override;
 	void Render() override;
 	void Release() override;
-	CRectangle ButtonGetRect(int i);
+	CRectangle ButtonGetRect() {
+		return CRectangle(menuButtonPosX, menuButtonPosY, menuButtonPosX + menuButtonTexture.GetWidth(), menuButtonPosY + menuButtonTexture.GetHeight());};
 	CRectangle GetRect(int i);
 
-	//ゲームシーンでフラグを変えるための関数
-	void GetTrophy(int i);
-
-	//表示フラグの保存、読み込み関数
-	void SaveTrophyFlg();
-	void LoadTrophyFlg();
 	};

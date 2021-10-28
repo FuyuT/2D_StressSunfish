@@ -10,8 +10,8 @@ protected:
 	bool    showFlg;
 public:
 	CObstacleBase() :
-		pos(0, 0),
-		moveSpeed(0, 0),
+		pos(0,0),
+		moveSpeed(0,0),
 		showFlg(false)
 	{};
 	virtual ~CObstacleBase() {}
@@ -21,5 +21,8 @@ public:
 	virtual void Render(float wx, float wy) {}
 	virtual void RenderDebug(float wx, float wy) {}
 	virtual void Release() {}
+	bool GetShowflg() { return showFlg; }
+	void SetShowFlg(bool flg) { showFlg = flg; }
+	void SetInitPos(Vector2 pos) { this->pos = pos; }
 };
 

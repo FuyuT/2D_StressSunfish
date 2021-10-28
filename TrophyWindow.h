@@ -6,12 +6,9 @@ private:
 	CFont		font;
 	CTexture	popUpTexture;
 	CTexture	buttonBackTexture;
-	CTexture	trophyTexture;
 
 	int			buttonBackPosX = 250;
 	int			buttonBackPosY = 200;
-	int			trophyTexturePosX = 815;
-	int			trophyTexturePosY = 350;
 public:
 	CTrophyWindow();
 	~CTrophyWindow();

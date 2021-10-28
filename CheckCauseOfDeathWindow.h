@@ -7,12 +7,9 @@ private:
 	CFont		font;
 	CTexture	popUpTexture;
 	CTexture	buttonBackTexture;
-	CTexture	causeOfDeathTexture;
 
 	int			buttonBackPosX = 250;
 	int			buttonBackPosY = 200;
-	int			causeOfDeathTextureTexturePosX = 815;
-	int			causeOfDeathTextureTexturePosY = 350;
 public:
 	CCheckCauseOfDeathWindow();
 	~CCheckCauseOfDeathWindow();

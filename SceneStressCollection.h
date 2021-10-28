@@ -59,13 +59,8 @@ private:
 	int			page;
 
 	CTexture	menuButtonTexture;
-	CTexture	leftButtonTexture;
-	CTexture	rightButtonTexture;
-	int			menuButtonPosX = 1200;
+	int			menuButtonPosX = 800;
 	int			menuButtonPosY = 800;
-	int			rightButtonPosX = 950;
-	int			leftButtonPosX = 850;
-	int			leftAndRightButtonPosY = 800;
 
 
 public:
@@ -76,14 +71,9 @@ public:
 	void Update() override;
 	void Render() override;
 	void Release() override;
-	CRectangle ButtonGetRect(int i);
+	CRectangle ButtonGetRect() { return CRectangle(menuButtonPosX, menuButtonPosY, menuButtonPosX + menuButtonTexture.GetWidth(), menuButtonPosY + menuButtonTexture.GetHeight()); };
 	CRectangle GetRect( int i);
 
 	//ゲームシーンでフラグを変えるための関数
-	void GetStress(int i);
-
-	//表示フラグの保存、読み込み関数
-	void SaveStressFlg();
-	void LoadStressFlg();
 };
 
