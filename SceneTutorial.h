@@ -6,37 +6,38 @@
 #include "Stage.h"
 #include "Timer.h"
 
+#define	 MESSAGE_WINDOW_POS_X 210
+#define	 MESSAGE_WINDOW_POS_Y 650
+#define  FIRST_LETTER_POS_X   400
+#define  FIRST_LETTER_POS_Y   750
+
 class CSceneTutorial : public CSceneBase
 {
 private:
-	CPlayer			 pl;
+	Stage			 stg;
 	CUi				 ui;
-	CObstacleManager cObstacle;
+	CPlayer			 pl;
+	CObstacleManager obs;
 
 	//タイマー
 	CTimer			 tempTimer;
 	CTimer			 hungerTimer;
 	CTimer			 parasiteTimer;
 
-	//設定画面フラグ
-	bool configFlg = false;
-
-	//背景
-	float scrollValueX;
-	float scrollValueY;
-	CTexture backGroundTexture;
-
+	//チュートリアルメッセージ
+	CTexture		 messageWindowImg;
+	char*			 fBuffer;
 public:
 	CSceneTutorial();
 	~CSceneTutorial();
 	bool Load()override;
+	bool TextLoad();
 	void Initialize() override;
 	void Update() override;
 	void Render() override;
 	void RenderDebug() override;
 	void Release() override;
 
-	void ScreenScroll();
 
 };
 

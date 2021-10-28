@@ -74,7 +74,7 @@ void CSceneGameMenu::Update()
 			//チュートリアルモード
 			flgTutorial = true;
 			endFlg = true;
-			nextScene = SCENENO_GAME;
+			nextScene = SCENENO_TUTORIAL;
 			Release();
 		}
 		else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))

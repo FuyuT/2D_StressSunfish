@@ -15,6 +15,7 @@
 #include	"SceneConfig.h"
 #include	"SceneStressCollection.h"
 #include	"SceneTrophyCollection.h"
+#include	"SceneTutorial.h"
 
 //シーンクラス
 CSceneBase* nowScene = NULL;
@@ -83,6 +84,9 @@ MofBool CGameApp::Update(void) {
 			break;
 		case SCENENO_TROPHY:
 			nowScene = new CSceneTrophyCollection;
+			break;
+		case SCENENO_TUTORIAL:
+			nowScene = new CSceneTutorial;
 			break;
 		}
 		if (!nowScene->Load())return false;
