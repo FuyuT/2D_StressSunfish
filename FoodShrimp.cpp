@@ -17,9 +17,9 @@ bool CFoodShrimp::Load()
 
 void CFoodShrimp::Initialize()
 {
-	pos.x = 1000;
-	pos.y = 1000;
-	showFlg = true;
+	//pos.x = 1000;
+	//pos.y = 1000;
+	//showFlg = true;
 }
 
 void CFoodShrimp::Update(float wx, float wy)

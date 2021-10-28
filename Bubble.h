@@ -20,5 +20,17 @@ public:
 	{
 		return showFlg;
 	}
+	void SetShow(bool flg)
+	{
+		showFlg = flg;
+	}
+	void SetPosx(int posx)
+	{
+		pos.x = posx;
+	}
+	void SetPosy(int posy)
+	{
+		pos.y = posy;
+	}
 };
 

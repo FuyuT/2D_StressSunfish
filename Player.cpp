@@ -166,7 +166,7 @@ bool CPlayer::Eat()
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A))
 	{
-		
+
 		possibleToEatFlg = false;
 
 		if (causeOfDeath == CAUSE_None)
@@ -190,7 +190,7 @@ bool CPlayer::Eat()
 			hungerRegion = 40;
 		}
 
-		
+
 		if (causeOfDeath == CAUSE_None)
 		{
 			//死因：喉つまり
@@ -266,6 +266,7 @@ void CPlayer::UpdateStatus()
 	}
 
 
+
 	//ジャンプ可能
 	//40は仮の数字 海面からどれくらいの範囲がジャンプ可能エリアか
 	if (GetRect().Top < SEA_LEVEL + 40.0f &&
@@ -278,12 +279,9 @@ void CPlayer::UpdateStatus()
 		possibleToJumpFlg = false;
 	}
 
-	
-
 	/*********
 	 * 体温
 	 *********/
-
 	if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 	{
 		tempTimer.StartTimer();
@@ -303,7 +301,7 @@ void CPlayer::UpdateStatus()
 			causeOfDeath = CAUSE_Hyperthermia;
 		}
 	}
-	else if(GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
+	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 	{
 		tempTimer.StartTimer();
 		if (tempTimer.GetNowtime() <= 0)
@@ -387,18 +385,18 @@ void CPlayer::UpdateStatus()
 		{
 			hungerRegion += 12;
 			//hungry -= 1;
-		    if (/*hungry == 0*/
+			if (/*hungry == 0*/
 				hungerRegion >= 160)
-		    {
-			    if (causeOfDeath == CAUSE_None)
-			    {
-				    //死因：餓死
-				    deadFlg = true;
-				    causeOfDeath = CAUSE_Starvation;
-			    }
-		    }
+			{
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：餓死
+					deadFlg = true;
+					causeOfDeath = CAUSE_Starvation;
+				}
+			}
 			hungerTimer.SetTotalTime(3);
-		}		
+		}
 	}
 
 	//水流
@@ -416,7 +414,6 @@ void CPlayer::UpdateStatus()
 			moveSpeed = 1.0f;
 		}
 	}
-
 }
 
 //更新

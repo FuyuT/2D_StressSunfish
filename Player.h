@@ -12,7 +12,7 @@
 //エサ探知範囲
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
-#define		COLLISION_ADJUSTMENT	100.0f
+#define		COLLISION_ADJUSTMENT	130.0f
 //重力
 #define		GRAVITY					1.0f
 //ジャンプ力
