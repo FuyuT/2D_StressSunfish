@@ -12,7 +12,7 @@
 //エサ探知範囲
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
-#define		COLLISION_ADJUSTMENT	100.0f
+#define		COLLISION_ADJUSTMENT	130.0f
 //重力
 #define		GRAVITY					1.0f
 //ジャンプ力
@@ -38,7 +38,7 @@
 //最大寄生虫許容量
 #define		PARASITE_LIMIT			300
 //体温が上下する速度
-#define		TEMPERATURE_SPEED		3
+#define		TEMPERATURE_SPEED		40
 //体温限界値
 #define		TEMPERATURE_LIMIT		100
 //水流による移動速度upの持続時間
@@ -227,6 +227,11 @@ public:
 	bool GetEat()
 	{
 		return possibleToEatFlg;
+	}
+	//プレイヤーのX座標を返す
+	int GetPosX()
+	{
+		return posX;
 	}
 
 };

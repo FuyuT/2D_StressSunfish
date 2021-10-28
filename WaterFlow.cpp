@@ -16,10 +16,10 @@ bool CWaterFlow::Load()
 
 void CWaterFlow::Initialize()
 {
-    pos.x = 2500;
-    pos.y = 1000;
+    //pos.x = 2500;
+    //pos.y = 1000;
     moveSpeed.x = 0.0f;
-    showFlg = true;
+    //showFlg = true;
 }
 
 void CWaterFlow::Update(float wx, float wy)

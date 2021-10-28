@@ -5,7 +5,6 @@
 #include "Ui.h"
 #include "Stage.h"
 
-
 class CSceneGame : public CSceneBase
 {
 private:
