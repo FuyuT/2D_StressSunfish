@@ -587,8 +587,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle)
 	CRectangle prec = GetRect();
 
 	//ÉEÉ~ÉKÉÅ
-	if (prec.CollisionRect(cObstacle.GetRect(Turtle)) &&
-		cObstacle.GetShow(Bubble) && !hitFlg)
+	if (prec.CollisionRect(cObstacle.GetRect(Turtle)) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{

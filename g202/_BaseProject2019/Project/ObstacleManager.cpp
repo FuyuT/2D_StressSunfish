@@ -1,5 +1,4 @@
 #include "ObstacleManager.h"
-
 CObstacleManager::CObstacleManager()
 {
 }
