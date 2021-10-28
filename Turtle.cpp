@@ -17,10 +17,10 @@ bool CTurtle::Load()
 
 void CTurtle::Initialize()
 {
-    //pos.x = 2000;
-    //pos.y = 1000;
+    pos.x = 2000;
+    pos.y = 1000;
     moveSpeed.x = 2.0f;
-    //showFlg = true;
+    showFlg = true;
 }
 
 void CTurtle::Update(float wx, float wy)

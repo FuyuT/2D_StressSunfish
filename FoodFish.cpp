@@ -18,9 +18,9 @@ bool CFoodFish::Load()
 //èâä˙âª
 void CFoodFish::Initialize()
 {
-	//pos.x = 1500;
-	//pos.y = 1500;
-	//showFlg = true;
+	pos.x = 1500;
+	pos.y = 1500;
+	showFlg = true;
 }
 
 void CFoodFish::Update(float wx, float wy)

@@ -24,13 +24,6 @@ public:
 	{
 		return showFlg;
 	}
-	void SetPosx(int posx)
-	{
-		pos.x = posx;
-	}
-	void SetPosy(int posy)
-	{
-		pos.y = posy;
-	}
+
 };
 

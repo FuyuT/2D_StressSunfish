@@ -17,9 +17,9 @@ bool CFoodCrab::Load()
 
 void CFoodCrab::Initialize()
 {
-	//pos.x = 1000;
-	//pos.y = 1500;
-	//showFlg = true;
+	pos.x = 1000;
+	pos.y = 1500;
+	showFlg = true;
 }
 
 void CFoodCrab::Update(float wx, float wy)

@@ -21,31 +21,23 @@ enum obstacle {
 class CObstacleManager
 {
 private:
-	CFoodFish   cFish[3];
-	CFoodShrimp cShrimp[3];
-	CFoodCrab   cCrab[3];
-	CGarbage	cGarbage[3];
-	CBubble		cBubble[3];
-	CTurtle     cTurtle[3];
-	CWaterFlow  cWaterFlow[3];
-
-	CRandom obstacleRandom;
-	CRandom posYRndom;
-
-	int obstacleNum;
-	int posY;
-	int posYNum;
+	CFoodFish   cFish;
+	CFoodShrimp cShrimp;
+	CFoodCrab   cCrab;
+	CGarbage	cGarbage;
+	CBubble		cBubble;
+	CTurtle     cTurtle;
+	CWaterFlow  cWaterFlow;
 
 public:
 	CObstacleManager();
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance,int posx, float wx, float wy);
+	void Update(float wx, float wy);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
-	void PosYRndom();
 
 	//“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 	CRectangle GetRect(int type)
@@ -53,25 +45,25 @@ public:
 		switch (type)
 		{
 			case Turtle:
-				return cTurtle[0].GetRect();
+				return cTurtle.GetRect();
 				break;
 			case Garbage:
-				return cGarbage[0].GetRect();
+				return cGarbage.GetRect();
 				break;
 			case WaterFlow:
-				return cWaterFlow[0].GetRect();
+				return cWaterFlow.GetRect();
 				break;
 			case Bubble:
-				return cBubble[0].GetRect();
+				return cBubble.GetRect();
 				break;
 			case FoodFish:
-				return cFish[0].GetRect();
+				return cFish.GetRect();
 				break;
 			case FoodShrimp:
-				return cShrimp[0].GetRect();
+				return cShrimp.GetRect();
 				break;
 			case FoodCrab:
-				return cCrab[0].GetRect();
+				return cCrab.GetRect();
 				break;
 		}
 		
@@ -83,13 +75,13 @@ public:
 		switch (type)
 		{
 			case FoodFish:
-				cFish[0].SetShow(flg);
+				cFish.SetShow(flg);
 				break;
 			case FoodShrimp:
-				cShrimp[0].SetShow(flg);
+				cShrimp.SetShow(flg);
 				break;
 			case FoodCrab:
-				cCrab[0].SetShow(flg);
+				cCrab.SetShow(flg);
 				break;
 		}
 	}
@@ -100,16 +92,16 @@ public:
 		switch (type)
 		{
 			case Bubble:
-				return cBubble[0].GetShow();
+				return cBubble.GetShow();
 				break;
 			case FoodFish:
-				return cFish[0].GetShow();
+				return cFish.GetShow();
 				break;
 			case FoodShrimp:
-				return cShrimp[0].GetShow();
+				return cShrimp.GetShow();
 				break;
 			case FoodCrab:
-				return cCrab[0].GetShow();
+				return cCrab.GetShow();
 				break;
 		}
 	}

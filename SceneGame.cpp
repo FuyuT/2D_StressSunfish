@@ -111,7 +111,10 @@ void CSceneGame::Update()
 	pl.Collision(cObstacle);
 
 	//è·äQï®
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	cObstacle.Update(stg.GetScrollX(), stg.GetScrollY());
+
+
+
 }
 
 void CSceneGame::Render()

@@ -171,37 +171,23 @@ bool CPlayer::Eat()
 
 		if (causeOfDeath == CAUSE_None)
 		{
-
-			//HEAD
-			//if (/*hungry == FULL_STOMACH*/
-			//	hungerRegion == 40)
-			//{
-			//	//エサを食べたことを返す
-			//	return true;
-
 			//死因：肥満
-			if (hungry == FULL_STOMACH)
+			if (/*hungry == FULL_STOMACH*/
+				hungerRegion == 40)
 			{
 				deadFlg = true;
 				causeOfDeath = CAUSE_Obesity;
-				//エサのshowFlgをfalseにする
-				return false;
+				//エサを食べたことを返す
+				return true;
 			}
 		}
 
-		//HEAD
-		//hungerRegion -= 24;
-		////満腹値を超えたら
-		//if (hungerRegion < 40)
-		//{
-		//	hungerRegion = 40;
-
 		//空腹を満たす
-		hungry += FEED_SATIETYLEVEL;
+		hungerRegion -= 24;
 		//満腹値を超えたら
-		if (hungry > FULL_STOMACH)
+		if (hungerRegion < 40)
 		{
-			hungry = FULL_STOMACH;
+			hungerRegion = 40;
 		}
 
 		
@@ -214,19 +200,11 @@ bool CPlayer::Eat()
 				causeOfDeath = CAUSE_ChokeOnShell;
 		}
 
-		//HEAD
 		//エサを食べたことを返す
-	//	return true;
-	//}
-
-	//return false;
-
-		//エサのshowFlgをfalseにする
-		return false;
+		return true;
 	}
 
-	//エサを食べなかったときは、エサのshowFlgをtrueのままにする
-	return true;
+	return false;
 }
 
 //ジャンプ
@@ -253,12 +231,8 @@ void CPlayer::Jump()
 		//落下による勢いで少し潜るように +50(適当)
 		if (posY > SEA_LEVEL + 50.0f)
 		{
-			//HEAD
-			//moveY = PLAYER_MAXSPEED;
-			//moveX = PLAYER_MAXSPEED;
-			
-			moveY = 0;
-			moveX = 0;
+			moveY = PLAYER_MAXSPEED;
+			moveX = PLAYER_MAXSPEED;
 			jumpFlg = false;
 			if (causeOfDeath == CAUSE_None)
 			{
@@ -283,16 +257,13 @@ void CPlayer::UpdateStatus()
 
 	//速度を座標に反映
 	posX += moveX * moveSpeed;
-	//HEAD
-	//if (jumpFlg)
-	//{
-	//	posY += moveY;
-	//}
-	//else {
-	//	posY += moveY * moveSpeed;
-	//}
-
-	posY += moveY * moveSpeed;
+	if (jumpFlg)
+	{
+		posY += moveY;
+	}
+	else {
+		posY += moveY * moveSpeed;
+	}
 
 
 	//ジャンプ可能
@@ -320,31 +291,16 @@ void CPlayer::UpdateStatus()
 		{
 			if (bodyTemp < 50)
 			{
-		//HEAD
-		//		bodyTemp += TEMPERATURE_SPEED;
-		//		tempRegion -= 4.1 * TEMPERATURE_SPEED;
-		//		tempTimer.SetTotalTime(1);
-		//	}
-		//}
-		////死因：熱中症
-		//if (bodyTemp >= 50)
-		//{
-		//	deadFlg = true;
-		//	causeOfDeath = CAUSE_Hyperthermia;
-
-				bodyTemp += 1;
-				tempRegion -= 4.1;
+				bodyTemp += TEMPERATURE_SPEED;
+				tempRegion -= 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(1);
 			}
-			else if (bodyTemp >= 50)
-			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：熱中症
-					deadFlg = true;
-					causeOfDeath = CAUSE_Hyperthermia;
-				}
-			}
+		}
+		//死因：熱中症
+		if (bodyTemp >= 50)
+		{
+			deadFlg = true;
+			causeOfDeath = CAUSE_Hyperthermia;
 		}
 	}
 	else if(GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
@@ -354,31 +310,18 @@ void CPlayer::UpdateStatus()
 		{
 			if (bodyTemp > -30)
 			{
-				//HEAD
-		//		bodyTemp -= TEMPERATURE_SPEED;
-		//		tempRegion += 4.1 * TEMPERATURE_SPEED;
-		//		tempTimer.SetTotalTime(1);
-		//	}
-		//}
-		////死因：凍死
-		//if (bodyTemp <= -30)
-		//{
-		//	if (bodyTemp > -30)
-		//	{
-		//		deadFlg = true;
-		//		causeOfDeath = CAUSE_Frozen;
-				bodyTemp -= 1;
-				tempRegion += 4.1;
+				bodyTemp -= TEMPERATURE_SPEED;
+				tempRegion += 4.1 * TEMPERATURE_SPEED;
 				tempTimer.SetTotalTime(1);
 			}
-			else if (bodyTemp <= -30)
+		}
+		//死因：凍死
+		if (bodyTemp <= -30)
+		{
+			if (bodyTemp > -30)
 			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：凍死
-					deadFlg = true;
-					causeOfDeath = CAUSE_Frozen;
-				}
+				deadFlg = true;
+				causeOfDeath = CAUSE_Frozen;
 			}
 		}
 
@@ -473,6 +416,7 @@ void CPlayer::UpdateStatus()
 			moveSpeed = 1.0f;
 		}
 	}
+
 }
 
 //更新
@@ -622,95 +566,6 @@ void CPlayer::RenderDebug(float wx,float wy)
 void CPlayer::Release()
 {
 	texture.Release();
-
-	ui.Release();
-
-}
-
-
-//敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(Enemy& ene)
-{
-
-	if (!ene.GetShow())
-	{
-		return;
-	}
-
-	//敵の矩形と自分の矩形で当たり判定
-	CRectangle prec = GetRect();
-	CRectangle erec = ene.GetRect();
-	if (prec.CollisionRect(erec))
-	{
-		switch (ene.GetType())
-		{
-			//ウミガメ
-			case 0:
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：ショック死
-					//当たった時点で即死
-					deadFlg = true;
-					causeOfDeath = CAUSE_SeaTurtle;
-				}
-				break;
-			//泡
-			case 1:
-				ene.SetShow(false);
-				if (causeOfDeath == CAUSE_None)
-				{
-					//泡死
-					//5%で死ぬ
-					deadFlg = DieInPercentage(5);
-					if (deadFlg)
-						causeOfDeath = CAUSE_Bubble;
-				}
-				break;
-			//障害物
-			case 2:
-				ene.SetShow(false);
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：衝突死
-					//20%で死ぬ
-					deadFlg = DieInPercentage(20);
-					if (deadFlg)
-						causeOfDeath = CAUSE_Obstacle;
-				}
-				break;
-			//水流
-			case 3:
-				ene.SetShow(false);
-				//速度が二倍に
-				moveSpeed = 2.0f;
-				//持続時間の設定
-				streamTime = STREAM;
-				break;
-
-		}
-
-	}
-
-	//エサであるならば
-	if (ene.GetType() == 4)
-	{
-		//エサとの当たり判定(エサ用のクラスがあるなら、新しくCollsionItem()とかを作ってそこに移す)
-		prec = GetSearchRect();
-		if (prec.CollisionRect(erec))
-		{
-			//探知範囲内にエサがある場合true
-			possibleToEatFlg = true;
-
-			//エサを食べる
-			ene.SetShow(Eat());
-		}
-		else
-		{
-			//探知範囲内にエサがない場合false
-			possibleToEatFlg = false;
-		}
-	}
-
 }
 
 

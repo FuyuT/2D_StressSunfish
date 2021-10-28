@@ -19,11 +19,11 @@ bool CGarbage::Load()
 void CGarbage::Initialize()
 {
 	initPos.y = 1700;
-	//pos.x = 2000;
-	//pos.y = 1700;
+	pos.x = 2000;
+	pos.y = 1700;
 	moveSpeed.x = 3.0f;
 	moveSpeed.y = MAX_MOVE_SPEED;
-	//showFlg = true;
+	showFlg = true;
 	moveUpFlg = true;
 	garbageNo = 0;
 }
