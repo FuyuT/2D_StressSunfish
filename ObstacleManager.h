@@ -6,6 +6,7 @@
 #include "Bubble.h"
 #include "Turtle.h"
 #include "WaterFlow.h"
+#include "Timer.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -26,15 +27,18 @@ private:
 	CFoodCrab   cCrab[3];
 	CGarbage	cGarbage[3];
 	CBubble		cBubble[3];
-	CTurtle     cTurtle[3];
-	CWaterFlow  cWaterFlow[3];
+	CTurtle     cTurtle;
+	CWaterFlow  cWaterFlow;
 
 	CRandom obstacleRandom;
+	CRandom createRandom;
 	CRandom posYRndom;
 
 	int obstacleNum;
 	int posY;
 	int posYNum;
+
+	bool createFlg;
 
 public:
 	CObstacleManager();
@@ -47,19 +51,29 @@ public:
 	void Release();
 	void PosYRndom();
 
+	bool ObstaclePercentage(int percent)
+	{
+		//Šm—¦‚É‚æ‚Á‚Ätrue‚ð•Ô‚·
+		if (createRandom.Random(1, 100 / percent + 1) == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	//“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 	CRectangle GetRect(int type)
 	{
 		switch (type)
 		{
 			case Turtle:
-				return cTurtle[0].GetRect();
+				return cTurtle.GetRect();
 				break;
 			case Garbage:
 				return cGarbage[0].GetRect();
 				break;
 			case WaterFlow:
-				return cWaterFlow[0].GetRect();
+				return cWaterFlow.GetRect();
 				break;
 			case Bubble:
 				return cBubble[0].GetRect();
