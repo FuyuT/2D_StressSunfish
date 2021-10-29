@@ -18,10 +18,10 @@ bool CObstacleManager::Load()
 		if (!cCrab[n].Load())return false;
 		if (!cGarbage[n].Load())return false;
 		if (!cBubble[n].Load())return false;
-		if (!cTurtle[n].Load())return false;
-		if (!cWaterFlow[n].Load())return false;
+		
 	}
-
+	if (!cTurtle.Load())return false;
+	if (!cWaterFlow.Load())return false;
 	return true;
 }
 
@@ -36,18 +36,22 @@ void CObstacleManager::Initialize()
 		//障害物
 		cGarbage[n].Initialize();
 		cBubble[n].Initialize();
-		cTurtle[n].Initialize();
-		cWaterFlow[n].Initialize();
+		
 	}
+	cTurtle.Initialize();
+	cWaterFlow.Initialize();
 
+	//ランダム設定
 	obstacleRandom.SetSeed((MofU32)time(NULL));
+	createRandom.SetSeed((MofU32)time(NULL));
 	posYRndom.SetSeed((MofU32)time(NULL));
+
 }
 
 void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 {
 	//選ぶタイミング条件後で追加
-	if (distance % 30 == 0 && distance != 0)
+	if (distance % 35 == 0 && distance != 0)
 	{
 		//showFlgがfalseの食べ物,障害物を一つランダムで選んで、
 		obstacleNum = obstacleRandom.Random(0, 7);
@@ -55,26 +59,28 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 		switch (obstacleNum)
 		{
 		case Turtle:
-			for (int n = 0; n < 3; n++)
+			if (!cTurtle.GetShow())
 			{
-				if (!cTurtle[n].GetShow())
-				{
-					cTurtle[n].SetShow(true);
-					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
-
-					cTurtle[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
-					PosYRndom();
-					cTurtle[n].SetPosy(posY);
+				createFlg = ObstaclePercentage(25);
+				if (!createFlg)
 					return;
-				}
+				cTurtle.SetShow(true);
+				//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+				cTurtle.SetPosx(posx + g_pGraphics->GetTargetWidth());
+				PosYRndom();
+				cTurtle.SetPosy(posY);
+				return;
 			}
-			//全てshowFlgがtrue
 			break;
 		case Garbage:
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cGarbage[n].GetShow())
 				{
+					createFlg = ObstaclePercentage(50);
+					if (!createFlg)
+						return;
 					cGarbage[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
@@ -86,19 +92,20 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 			}
 			break;
 		case WaterFlow:
-			for (int n = 0; n < 3; n++)
+			if (!cWaterFlow.GetShow())
 			{
-				if (!cWaterFlow[n].GetShow())
-				{
-					cWaterFlow[n].SetShow(true);
-					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
-
-					cWaterFlow[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
-					PosYRndom();
-					cWaterFlow[n].SetPosy(posY);
+				createFlg = ObstaclePercentage(25);
+				if (!createFlg)
 					return;
-				}
+				cWaterFlow.SetShow(true);
+				//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+				cWaterFlow.SetPosx(posx + g_pGraphics->GetTargetWidth());
+				PosYRndom();
+				cWaterFlow.SetPosy(posY);
+				return;
 			}
+
 			break;
 		case Bubble:
 			for (int n = 0; n < 3; n++)
@@ -126,10 +133,17 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cFish[n].SetPosy(posY);
+					////重なった場合表示しない
+					//for (int i = 0; i < 7; i++)
+					//{
+					//	if (GetRect(FoodFish).CollisionRect(GetRect(i)) && FoodFish != i)
+					//	{
+					//		cFish[n].SetShow(false);
+					//	}
+					//}
 					return;
 				}
 			}
-			//全てshowFlgがtrue
 			break;
 		case FoodShrimp:
 			for (int n = 0; n < 3; n++)
@@ -175,9 +189,10 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 		//障害物
 		cGarbage[n].Update(wx, wy);
 	    cBubble[n].Update(wx, wy);
-		cTurtle[n].Update(wx, wy);
-		cWaterFlow[n].Update(wx, wy);
+		
 	}
+	cTurtle.Update(wx, wy);
+	cWaterFlow.Update(wx, wy);
 }
 
 void CObstacleManager::Render(float wx, float wy)
@@ -191,9 +206,10 @@ void CObstacleManager::Render(float wx, float wy)
 		//障害物
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
-		cTurtle[n].Render(wx, wy);
-		cWaterFlow[n].Render(wx, wy);
+		
 	}
+	cTurtle.Render(wx, wy);
+	cWaterFlow.Render(wx, wy);
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
@@ -207,9 +223,10 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		//障害物
 		cGarbage[n].RenderDebug(wx, wy);
 		cBubble[n].RenderDebug(wx, wy);
-		cTurtle[n].RenderDebug(wx, wy);
-		cWaterFlow[n].RenderDebug(wx, wy);
+		
 	}
+	cTurtle.RenderDebug(wx, wy);
+	cWaterFlow.RenderDebug(wx, wy);
 }
 
 void CObstacleManager::Release()
@@ -223,34 +240,37 @@ void CObstacleManager::Release()
 		//障害物
 		cGarbage[n].Release();
 		cBubble[n].Release();
-		cTurtle[n].Release();
-		cWaterFlow[n].Release();
+		
 	}
+	cTurtle.Release();
+	cWaterFlow.Release();
 }
 
 void CObstacleManager::PosYRndom()
 {	
 	if (obstacleNum == 1 || obstacleNum == 2)
 		posYNum = posYRndom.Random(1, 4);
+	else if(obstacleNum == 3)
+		posYNum = posYRndom.Random(2, 6);
 	else
 		posYNum = posYRndom.Random(1, 6);
 
 	switch (posYNum)
 	{
 	case 1:
-		posY = 780;
+		posY = 850;
 		break;
 	case 2:
-		posY = 1125;
+		posY = 1175;
 		break;
 	case 3:
-		posY = 1470;
+		posY = 1500;
 		break;
 	case 4:
-		posY = 1815;
+		posY = 1825;
 		break;
 	case 5:
-		posY = 2160;
+		posY = 2150;
 		break;
 	}
 }
