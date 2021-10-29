@@ -3,6 +3,7 @@
 
 CPopUpWindowBase* nowPopUpTrophy = NULL;
 
+
 CSceneTrophyCollection::CSceneTrophyCollection()
 {
 
@@ -13,6 +14,9 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 }
 void CSceneTrophyCollection::Initialize()
 {
+	//背景読み込み
+	backGroundTex.Load("Title.png");
+
 	page = 1;
 
 	LoadTrophyFlg();
@@ -268,6 +272,7 @@ void CSceneTrophyCollection::Update()
 }
 void CSceneTrophyCollection::Render()
 {
+	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "トロフィー画面");
 	if (page == 1)
 	{
@@ -326,6 +331,7 @@ void CSceneTrophyCollection::Render()
 }
 void CSceneTrophyCollection::Release()
 {
+	backGroundTex.Release();
 	riverIconTexture.Release();
 	waterFallIconTexture.Release();
 	lakeIconTexture.Release();
@@ -345,6 +351,8 @@ void CSceneTrophyCollection::Release()
 
 	menuButtonTexture.Release();
 	nowPopUpTrophy->Release();
+
+	free(fileBuffer);
 }
 
 CRectangle CSceneTrophyCollection::GetRect(int i)
@@ -461,11 +469,13 @@ void CSceneTrophyCollection::GetTrophy(int i)
 	//才能魔級
 	if (i == TROPHY_TALENTEDDEMON)
 		talentedDemonFlg = true;
+
+	SaveTrophyFlg();
 }
 
 void CSceneTrophyCollection::SaveTrophyFlg()
 {
-	FILE* fp = fopen("Save.dat", "wb");
+	FILE* fp = fopen("SaveTrophy.dat", "wb");
 	if (fp)
 	{
 		fwrite(&riverFlg, sizeof(bool), 1, fp);
@@ -490,7 +500,7 @@ void CSceneTrophyCollection::SaveTrophyFlg()
 
 void CSceneTrophyCollection::LoadTrophyFlg()
 {
-	FILE* fp = fopen("Save.dat", "rb");
+	FILE* fp = fopen("SaveTrophy.dat", "rb");
 	if (fp)
 	{
 		fread(&riverFlg, sizeof(bool), 1, fp);

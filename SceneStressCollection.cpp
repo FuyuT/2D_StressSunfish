@@ -13,6 +13,9 @@ CSceneStressCollection::~CSceneStressCollection()
 }
 void CSceneStressCollection::Initialize()
 {
+	//背景読み込み
+	backGroundTex.Load("Title.png");
+
 	//ストレスフラグ読み込み
 	LoadStressFlg();
 
@@ -200,8 +203,8 @@ void CSceneStressCollection::Update()
 }
 void CSceneStressCollection::Render()
 {
+	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 100, "ストレス集画面");
-
 	if (page == 1)
 	{
 		//1ページ目に表示
@@ -246,6 +249,7 @@ void CSceneStressCollection::Render()
 }
 void CSceneStressCollection::Release()
 {
+	backGroundTex.Release();
 	increasedBodyTemperatureIconTexture.Release();
 	lowerBodyTemperatureIconTexture.Release();
 	starvationIconTexture.Release();
@@ -314,43 +318,56 @@ CRectangle CSceneStressCollection::ButtonGetRect(int i)
 void CSceneStressCollection::GetStress(int i)
 {
 	//死因:体温上昇ゲット
-	if (i == CASE_INCREASEDBODYTEMPERATURE)
+	if (i == CASE_INCREASEDBODYTEMPERATURE && !increasedBodyTemperatureFlg)
 		increasedBodyTemperatureFlg = true;
+	else return;
 	//死因:体温低下ゲット
-	if (i == CASE_LOWERBODYTEMPERATURE)
+	if (i == CASE_LOWERBODYTEMPERATURE && !lowerBodyTemperatureFlg)
 		lowerBodyTemperatureFlg = true;
+	else return;
 	//死因:餓死ゲット
-	if (i == CASE_STARVATION)
+	if (i == CASE_STARVATION && !starvationFlg)
 		starvationFlg == true;
+	else return;
 	//死因:喉詰まりゲット
-	if (i == CASE_CLOGGEDTHROAT)
+	if (i == CASE_CLOGGEDTHROAT && !cloggedThroatFlg)
 		cloggedThroatFlg = true;
+	else return;
 	//死因:肥満ゲット
-	if (i == CASE_OBESITY)
+	if (i == CASE_OBESITY && !obesityFlg)
 		obesityFlg = true;
+	else return;
 	//死因:障害物と衝突ゲット
-	if (i == CASE_IMPACT)
+	if (i == CASE_IMPACT  && !impactFlg)
 		impactFlg = true;
+	else return;
 	//死因:寄生虫ゲット
-	if (i == CASE_PARASITE)
+	if (i == CASE_PARASITE && !parasiteFlg)
 		parasiteFlg = true;
+	else return;
 	//死因:ジャンプゲット
-	if (i == CASE_JUMP)
+	if (i == CASE_JUMP && !jumpFlg)
 		jumpFlg == true;
+	else return;
 	//死因:泡ゲット
-	if (i == CASE_BUBBLE)
+	if (i == CASE_BUBBLE && !bubbleFlg)
 		bubbleFlg = true;
+	else return;
 	//死因:ウミガメゲット
-	if (i == CASE_TURTLE)
+	if (i == CASE_TURTLE && !turtleFlg)
 		turtleFlg = true;
+	else return;
 	//死因:水流ゲット
-	if (i == CASE_WATERFLOW)
+	if (i == CASE_WATERFLOW && !waterFlowFlg)
 		waterFlowFlg = true;
+	else return;
+
+	SaveStressFlg();
 }
 
 void CSceneStressCollection::SaveStressFlg()
 {
-	FILE* fp = fopen("Save.dat", "wb");
+	FILE* fp = fopen("SaveStress.dat", "wb");
 	if (fp)
 	{
 		fwrite(&increasedBodyTemperatureFlg, sizeof(bool), 1, fp);
@@ -370,7 +387,7 @@ void CSceneStressCollection::SaveStressFlg()
 
 void CSceneStressCollection::LoadStressFlg()
 {
-	FILE* fp = fopen("Save.dat", "rb");
+	FILE* fp = fopen("SaveStress.dat", "rb");
 	if (fp)
 	{
 		fread(&increasedBodyTemperatureFlg, sizeof(bool), 1, fp);
