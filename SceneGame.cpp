@@ -7,6 +7,7 @@
 #include "PoseWindow.h"
 #include "BackToTitleWindow.h"
 #include "RetryWindow.h"
+#include "SceneBase.h"
 
 #define	PLAYER_SPEED 10
 CTimer tempTimer;
@@ -22,7 +23,8 @@ CSceneGame::CSceneGame():
 //scrollValueY(0),
 deadFlag(false),
 posX(0.0f),
-posY(0.0f)
+posY(0.0f),
+poseFlg(false)
 {
 }
 
@@ -32,7 +34,9 @@ CSceneGame::~CSceneGame()
 
 bool CSceneGame::Load()
 {
-	//障害物
+	if (!pl.Load())return false;
+	if (!ui.Load())return false;
+	if (!stg.Load())return false;
 	if(!cObstacle.Load())return false;
 	return true;
 }
@@ -40,19 +44,12 @@ bool CSceneGame::Load()
 void CSceneGame::Initialize()
 {
 	pl.Initialize();
-	stg.Initialize();
-
-	//backGroundTexture.Load("SeaTexture.png");
-	playerTexture.Load("Player.png");
-
 	ui.Initialize();
-
-	//障害物
-	ene.Initialize();
-	ene.Start(stg.GetScrollX(), stg.GetScrollY(), 0);
-	posX = 500;
-	posY = 500;
+	stg.Initialize();
 	cObstacle.Initialize();
+
+
+
 	//タイマー
 	tempTimer.SetTotalTime(2);
 	hungerTimer.SetTotalTime(3);
@@ -62,110 +59,68 @@ void CSceneGame::Initialize()
 	popUpFlg = false;
 
 	configFlg = false;
+	poseFlg = false;
 }
 
 void CSceneGame::Update()
 {
-	//画面遷移
-	if (g_pInput->IsKeyPush(MOFKEY_1))
+	//デバッグ用　エンターで初期化
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
-		endFlg = true;
-		nextScene = SCENENO_TITLE;
+		Initialize();
 	}
-
-	stg.Update(pl);
-
-	////スクロール
-	//CRectangle prec = pl.GetRect();
-	////スクリーン幅
-	//float sw = g_pGraphics->GetTargetWidth();
-	//float sh = g_pGraphics->GetTargetHeight();
-	////ステージの幅四割の境界線
-	//float hsw = sw * 0.4f;
-	//float hsh = sh * 0.4f;
-	////ステージ全体の幅 とりあえず画像の幅で
-	//float stgw = backGroundTexture.GetWidth();
-	//float stgh = backGroundTexture.GetHeight();
-	////左
-	//if (prec.Left - scrollValueX < hsw)
-	//{
-	//	//境界線hswより進んだ値を、scrolValueに入れる
-	//	scrollValueX -= hsw - (prec.Left - scrollValueX);
-	//	if (scrollValueX <= 0)
-	//	{
-	//		scrollValueX = 0;
-	//	}
-	//}
-	////右
-	//if (prec.Right - scrollValueX > sw - hsw)
-	//{
-	//	scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
-	//	if (scrollValueX >= stgw - sw)
-	//	{
-	//		scrollValueX = stgw - sw;
-	//	}
-	//}
-	////上
-	//if (prec.Top - scrollValueY < hsh)
-	//{
-	//	scrollValueY -= hsh - (prec.Top - scrollValueY);
-	//	if (scrollValueY <= 0)
-	//	{
-	//		scrollValueY = 0;
-	//	}
-	//}
-	////下
-	//if (prec.Bottom - scrollValueY > sh - hsh)
-	//{
-	//	scrollValueY += (prec.Bottom - scrollValueY) - (sh - hsh);
-	//	if (scrollValueY >= stgh - sh)
-	//	{
-	//		scrollValueY = stgh - sh;
-	//	}
-	//}
-
-
-	//とりあえずF1でポップアップが出るように
-	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
+	//画面遷移 ポップアップ画面 
+	//死んだら、もしくはF1でゲームオーバー画面
+	if (g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead() && !popUpFlg)
 	{
 		nowPopUpGame = new CCauseOfDeathWindow;
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}
+	//Rでポーズ画面
 	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
 	{
 		nowPopUpGame = new CPoseWindow;
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
+		poseFlg = true;
 	}
-	if (popUpFlg)
-	{
-		PopUpController();
-	}
-
-	//プレイヤー
-	pl.Update();
-	pl.Collision(cObstacle);
-
-	//障害物
-	ene.Update();
-	cObstacle.Update(stg.GetScrollX(), stg.GetScrollY());
-
-	if (!sceneConfig.GetGamePlayFlg())
-		configFlg = false;
-
 
 	//設定表示
+	//ゲーム画面に戻ったらconfigFlgをfalse
+	if (!sceneConfig.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
+		configFlg = false;
+		
 	if (configFlg)
 	{
 		sceneConfig.Update();
 	}
+	if (popUpFlg && !configFlg)
+	{
+		PopUpController();
+	}
+	//ポーズ画面を開いていたら、閉じるまで更新しない
+	if (poseFlg)return;
+
+
+	//スクロール
+	stg.Update(pl);
+
+	//プレイヤー
+	pl.Update();
+
+	for (int i = 0; i < 3; i++)
+	{
+		pl.Collision(cObstacle,i);
+	}
+	//障害物
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
 }
 
 void CSceneGame::Render()
 {
-	stg.Render();
 
+	stg.Render();
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
@@ -174,6 +129,11 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
+
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+
+	//障害物
+	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 	//ポップアップ描画
 	if (popUpFlg)
 	{
@@ -183,11 +143,6 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
-
-	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-
-	//障害物
-	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 
 }
 
@@ -199,9 +154,6 @@ void CSceneGame::RenderDebug()
 	//障害物
 	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-	//障害物
-	ene.Render(stg.GetScrollX(), stg.GetScrollY());
-	
 	//デバッグ用
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 } 
@@ -209,9 +161,7 @@ void CSceneGame::RenderDebug()
 void CSceneGame::Release()
 {
 	stg.Release();
-	//backGroundTexture.Release();
 	pl.Release();
-	ene.Release();
 	ui.Release();
 
 
@@ -252,10 +202,21 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
+		nextScene = SCENENO_CONFIG;
 		configFlg = true;
 		sceneConfig.SetGamePlayFlg();
 		sceneConfig.Initialize();
+		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
+		nowPopUpGame->SetButtonResult(0);
 	}
+	else if (nowPopUpGame->GetButtonResult() == 5)
+	{
+		//ゲームに戻るが押されたら
+		poseFlg = false;
+	}
+
+
+	//ポップアップの変更
 	if (nowPopUpGame->IsEnd())
 	{
 		//次のポップアップの取得
@@ -283,12 +244,12 @@ void CSceneGame::PopUpController()
 			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
-			nowPopUpGame = new CBackToTitleWindow;
-			nowPopUpGame->Initialize();
+			//nowPopUpGame = new CBackToTitleWindow;
+			//nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
-			nowPopUpGame = new CRetryWindow;
-			nowPopUpGame->Initialize();
+			//nowPopUpGame = new CRetryWindow;
+			//nowPopUpGame->Initialize();
 			break;
 		case NULL:
 			nowPopUpGame = NULL;
