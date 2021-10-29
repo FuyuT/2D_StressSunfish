@@ -21,19 +21,20 @@ enum tag_TROPHY {
 	TROPHY_BIWALAKE,			//琵琶湖級
 	TROPHY_JACKPOD,			//ジャックポット級
 	TROPHY_TALENTEDDEMON,		//才能魔級
+	TROPHY_TOTAL_NO,
 };
-
 
 class CSceneTrophyCollection : public CSceneBase
 {
 private:
+
 	//トロフィーテクスチャと表示フラグ宣言
 	CTexture	riverIconTexture;		//川級
-	bool		riverFlg = true;
+	bool		riverFlg = false;
 	CTexture	waterFallIconTexture;	//滝級
-	bool		waterFallFlg = true;
+	bool		waterFallFlg = false;
 	CTexture	lakeIconTexture;		//湖級
-	bool		lakeFlg = true;
+	bool		lakeFlg = false;
 	CTexture	damIconTexture;			//ダム級
 	bool		damFlg = true;
 	CTexture	sewerIconTexture;		//下水道級
@@ -84,6 +85,7 @@ private:
 	int			rightButtonPosX = 950;
 	int			leftButtonPosX = 850;
 	int			leftAndRightButtonPosY = 900;
+
 public:
 	CSceneTrophyCollection();
 	~CSceneTrophyCollection();
@@ -101,4 +103,5 @@ public:
 	//表示フラグの保存、読み込み関数
 	void SaveTrophyFlg();
 	void LoadTrophyFlg();
+	
 	};
