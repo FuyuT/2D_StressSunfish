@@ -64,6 +64,7 @@ void CSceneGame::Initialize()
 
 	configFlg = false;
 	poseFlg = false;
+
 	trophy.LoadTrophyFlg();
 	caseOfDeth.LoadStressFlg();
 }
@@ -117,14 +118,16 @@ void CSceneGame::Update()
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
-
 	//スクロール
 	stg.Update(pl);
 
 	//プレイヤー
 	pl.Update();
-	pl.Collision(cObstacle);
 
+	for (int i = 0; i < 3; i++)
+	{
+		pl.Collision(cObstacle,i);
+	}
 	//障害物
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
 }
@@ -141,7 +144,6 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
-
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 
 	//障害物
@@ -155,7 +157,6 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
-
 }
 
 //デバッグ

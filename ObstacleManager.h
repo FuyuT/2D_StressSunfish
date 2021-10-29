@@ -48,69 +48,78 @@ public:
 	void PosYRndom();
 
 	//当たり判定の判別のため追加
-	CRectangle GetRect(int type)
+	CRectangle GetRect(int type,int num)
 	{
 		switch (type)
 		{
 			case Turtle:
-				return cTurtle[0].GetRect();
+				return cTurtle[num].GetRect();
 				break;
 			case Garbage:
-				return cGarbage[0].GetRect();
+				return cGarbage[num].GetRect();
 				break;
 			case WaterFlow:
-				return cWaterFlow[0].GetRect();
+				return cWaterFlow[num].GetRect();
 				break;
 			case Bubble:
-				return cBubble[0].GetRect();
+				return cBubble[num].GetRect();
 				break;
 			case FoodFish:
-				return cFish[0].GetRect();
+				return cFish[num].GetRect();
 				break;
 			case FoodShrimp:
-				return cShrimp[0].GetRect();
+				return cShrimp[num].GetRect();
 				break;
 			case FoodCrab:
-				return cCrab[0].GetRect();
+				return cCrab[num].GetRect();
 				break;
 		}
 		
 	}
 
 	//player側から非表示にするため追加
-	void SetShow(bool flg, int type)
+	void SetShow(bool flg, int type,int num)
 	{
 		switch (type)
 		{
 			case FoodFish:
-				cFish[0].SetShow(flg);
+				cFish[num].SetShow(flg);
 				break;
 			case FoodShrimp:
-				cShrimp[0].SetShow(flg);
+				cShrimp[num].SetShow(flg);
 				break;
 			case FoodCrab:
-				cCrab[0].SetShow(flg);
+				cCrab[num].SetShow(flg);
 				break;
 		}
 	}
 
 	//player側から「画面何に存在するか」を確認するため追加
-	bool GetShow(int type)
+	bool GetShow(int type, int num)
 	{
 		switch (type)
 		{
-			case Bubble:
-				return cBubble[0].GetShow();
-				break;
-			case FoodFish:
-				return cFish[0].GetShow();
-				break;
-			case FoodShrimp:
-				return cShrimp[0].GetShow();
-				break;
-			case FoodCrab:
-				return cCrab[0].GetShow();
-				break;
+		case Turtle:
+			return cTurtle[num].GetShow();
+			break;
+		case Garbage:
+			return cGarbage[num].GetShow();
+			break;
+		case WaterFlow:
+			return cWaterFlow[num].GetShow();
+			break;
+		case Bubble:
+			return cBubble[num].GetShow();
+			break;
+		case FoodFish:
+			return cFish[num].GetShow();
+			break;
+		case FoodShrimp:
+			return cShrimp[num].GetShow();
+			break;
+		case FoodCrab:
+			return cCrab[num].GetShow();
+			break;
 		}
 	}
 };

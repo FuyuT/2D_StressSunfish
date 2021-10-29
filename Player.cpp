@@ -56,14 +56,17 @@ void CPlayer::Initialize()
 	causeOfDeath = CAUSE_None;
 	//タイマー
 	hungryTime = HUNGRY_SPEED;
+	waterFlowTimer.SetTotalTime(4);
 
 	//フラグ
 	jumpFlg = false;
 	deadFlg = false;
 	possibleToEatFlg = false;
 	possibleToJumpFlg = false;
-	//(デバッグ用)
+	waterFlowFlg = false;
+	//連続衝突を避ける
 	hitFlg = false;
+	hitTimer.SetTotalTime(1);
 
 	//UIタイマー
 	tempTimer.SetTotalTime(2);
@@ -400,18 +403,30 @@ void CPlayer::UpdateStatus()
 	}
 
 	//水流
-	if (streamTime > 0)
+	if (waterFlowFlg)
 	{
-		streamTime--;
-	}
-	else if (moveSpeed > 1.0f)
-	{
-		// 0.1 ずつ減速
-		moveSpeed -= 0.1f;
-		// 速度の倍率が 1.0 以下になったら 1.0 で初期化
-		if (moveSpeed < 1.0f)
+		waterFlowTimer.StartTimer();
+		if (waterFlowTimer.GetNowtime() <= 0)
 		{
-			moveSpeed = 1.0f;
+			if (moveSpeed <= 1.0f)
+			{
+				waterFlowTimer.StopTimer();
+				moveSpeed = 1.0f;
+				waterFlowFlg = false;
+			}
+			else
+			{
+				moveSpeed -= WATERFLOW_SPEED;
+			}
+
+		}
+		else if (WATERFLOW_MAXSPEED <= moveSpeed)
+		{
+			moveSpeed = WATERFLOW_MAXSPEED;
+		}
+		else
+		{
+			moveSpeed += WATERFLOW_SPEED;
 		}
 	}
 }
@@ -433,23 +448,29 @@ void CPlayer::Update()
 	hungerTimer.Update();
 	parasiteTimer.Update();
 
+	waterFlowTimer.Update();
+	hitTimer.Update();
+
+
+	//無敵(デバッグ用)
+	if (hitFlg)
+	{
+		hitTimer.StartTimer();
+		//無敵の解除
+		if (g_pInput->IsKeyPush(MOFKEY_H) ||
+			hitTimer.GetNowtime() <= 0)
+		{
+			hitTimer.StopTimer();
+			hitFlg = false;
+		}
+	}
+
 	//ジャンプ中は他の操作が行えないように
 	if (jumpFlg)
 		return;
 
 	//移動更新
 	UpdateMove();
-
-	//無敵(デバッグ用)
-	if (hitFlg)
-	{
-		//無敵の解除
-		if (g_pInput->IsKeyPush(MOFKEY_H))
-		{
-			hitFlg = false;
-		}
-	}
-
 }
 
 //描画
@@ -567,7 +588,7 @@ void CPlayer::Release()
 
 
 //敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(CObstacleManager& cObstacle)
+void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 {
 	//SetShowがあれば実装する
 	/*if (!cObstacle.getshow())
@@ -584,12 +605,14 @@ void CPlayer::Collision(CObstacleManager& cObstacle)
 	CRectangle prec = GetRect();
 
 	//ウミガメ
-	if (prec.CollisionRect(cObstacle.GetRect(Turtle)) && !hitFlg)
+	if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
+		cObstacle.GetShow(Turtle, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//デバッグ用
 			hitFlg = true;
+			//hitTimer.SetTotalTime(1);
 
 			//死因：ショック死
 			//当たった時点で即死
@@ -598,13 +621,14 @@ void CPlayer::Collision(CObstacleManager& cObstacle)
 		}
 	}
 	//障害物
-	else if (prec.CollisionRect(cObstacle.GetRect(Garbage)) &&
-		cObstacle.GetShow(Bubble) && !hitFlg)
+	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
+		cObstacle.GetShow(Garbage, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//デバッグ用
 			hitFlg = true;
+			hitTimer.SetTotalTime(1);
 
 			//死因：衝突死
 			//20%で死ぬ
@@ -614,25 +638,26 @@ void CPlayer::Collision(CObstacleManager& cObstacle)
 		}
 	}
 	//水流
-	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow)) &&
-		cObstacle.GetShow(Bubble))
+	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow, num)) &&
+		cObstacle.GetShow(WaterFlow, num))
 	{
-		//速度が二倍に
-		moveSpeed = 2.0f;
+		//水流に当たったことを確認
+		waterFlowFlg = true;
 		//持続時間の設定
-		streamTime = STREAM;
+		waterFlowTimer.SetTotalTime(4);
 	}
 
 	//泡用の目の当たり判定
 	prec = GetEyeRect();
 	//泡
-	if (prec.CollisionRect(cObstacle.GetRect(Bubble)) &&
-		cObstacle.GetShow(Bubble) && !hitFlg)
+	if (prec.CollisionRect(cObstacle.GetRect(Bubble, num)) &&
+		cObstacle.GetShow(Bubble, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//デバッグ用
 			hitFlg = true;
+			hitTimer.SetTotalTime(1);
 
 			//泡死
 			//5%で死ぬ
@@ -646,37 +671,37 @@ void CPlayer::Collision(CObstacleManager& cObstacle)
 	//エサの探知範囲
 	prec = GetSearchRect();
 	//エサ
-	if (prec.CollisionRect(cObstacle.GetRect(FoodFish)) &&
-		cObstacle.GetShow(FoodFish))
+	if (prec.CollisionRect(cObstacle.GetRect(FoodFish, num)) &&
+		cObstacle.GetShow(FoodFish, num))
 	{
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg = true;
 		//エサを食べる
 		if (Eat())
 		{
-			cObstacle.SetShow(false, FoodFish);
+			cObstacle.SetShow(false, FoodFish, num);
 		}
 	}
-	else if (prec.CollisionRect(cObstacle.GetRect(FoodShrimp)) &&
-		cObstacle.GetShow(FoodShrimp))
+	else if (prec.CollisionRect(cObstacle.GetRect(FoodShrimp, num)) &&
+		cObstacle.GetShow(FoodShrimp, num))
 	{
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg = true;
 		//エサを食べる
 		if (Eat())
 		{
-			cObstacle.SetShow(false, FoodShrimp);
+			cObstacle.SetShow(false, FoodShrimp, num);
 		}
 	}
-	else if (prec.CollisionRect(cObstacle.GetRect(FoodCrab)) &&
-		cObstacle.GetShow(FoodCrab))
+	else if (prec.CollisionRect(cObstacle.GetRect(FoodCrab, num)) &&
+		cObstacle.GetShow(FoodCrab, num))
 	{
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg = true;
 		//エサを食べる
 		if (Eat())
 		{
-			cObstacle.SetShow(false, FoodCrab);
+			cObstacle.SetShow(false, FoodCrab, num);
 		}
 	}
 	else

@@ -41,8 +41,10 @@
 #define		TEMPERATURE_SPEED		3
 //体温限界値
 #define		TEMPERATURE_LIMIT		100
-//水流による移動速度upの持続時間
-#define		STREAM					200 
+//水流による最大加速度
+#define		WATERFLOW_MAXSPEED		2.0f
+//水流による加速度
+#define		WATERFLOW_SPEED			0.02f
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -89,6 +91,7 @@ private:
 	int			causeOfDeath;
 	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除するまで無敵にする(デバッグ用))
 	bool		hitFlg;
+	CTimer		hitTimer;
 
 
 	//使わんかも
@@ -106,7 +109,8 @@ private:
 	int			parasite;
 	int			parasiteTime;
 	//水流
-	int			streamTime;
+	CTimer		waterFlowTimer;
+	bool		waterFlowFlg;
 
 	//UI
 	CTimer tempTimer;
@@ -180,7 +184,7 @@ public:
 		);
 	}
 
-	void Collision(CObstacleManager& cObstacle);
+	void Collision(CObstacleManager& cObstacle,int num);
 
 	//死んでいればtrueを返す
 	bool GetDead()
