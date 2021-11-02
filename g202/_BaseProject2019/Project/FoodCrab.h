@@ -1,5 +1,10 @@
 #pragma once
 #include "ObstacleBase.h"
+#define  CRAB_RECT_TOP_ADJ 20
+#define  CRAB_RECT_LEFT_ADJ 20
+#define  CRAB_RECT_RIGHT_ADJ -20
+#define  CRAB_RECT_BUTTOM_ADJ -20
+
 class CFoodCrab : public CObstacleBase
 {
 private:
@@ -14,7 +19,8 @@ public:
 	void RenderDebug(float wx, float wy)override;
 	void Release()override;
 	CRectangle GetRect() {
-		return CRectangle(pos.x, pos.y, pos.x + Texture.GetWidth(), pos.y + Texture.GetHeight());
+		return CRectangle(pos.x + CRAB_RECT_LEFT_ADJ, pos.y + CRAB_RECT_TOP_ADJ,
+			pos.x + Texture.GetWidth() + CRAB_RECT_RIGHT_ADJ, pos.y + Texture.GetHeight() + CRAB_RECT_BUTTOM_ADJ);
 	}
 	void SetShow(bool flg)
 	{

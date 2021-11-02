@@ -4,6 +4,8 @@
 #include "ContinueWindow.h"
 #include "ResultWindow.h"
 #include "CauseOfDeathWindow.h"
+#include "SceneTrophyCollection.h"
+#include "SceneStressCollection.h"
 #include "PoseWindow.h"
 #include "BackToTitleWindow.h"
 #include "RetryWindow.h"
@@ -13,6 +15,8 @@
 CTimer tempTimer;
 CTimer hungerTimer;
 CTimer parasiteTimer;
+CSceneTrophyCollection trophy;
+CSceneStressCollection caseOfDeth;
 CPopUpWindowBase* nowPopUpGame = NULL;
 //GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
 //ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
@@ -30,6 +34,7 @@ poseFlg(false)
 
 CSceneGame::~CSceneGame()
 {
+	Release();
 }
 
 bool CSceneGame::Load()
@@ -60,6 +65,9 @@ void CSceneGame::Initialize()
 
 	configFlg = false;
 	poseFlg = false;
+
+	trophy.LoadTrophyFlg();
+	caseOfDeth.LoadStressFlg();
 }
 
 void CSceneGame::Update()
@@ -73,6 +81,15 @@ void CSceneGame::Update()
 	//死んだら、もしくはF1でゲームオーバー画面
 	if (g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead() && !popUpFlg)
 	{
+		//熱中症
+		if(pl.GetCauseOfDeath() + 1 == CASE_INCREASEDBODYTEMPERATURE);
+		{
+			nowPopUpGame = new CCauseOfDeathWindow;
+			nowPopUpGame->Initialize();
+			popUpFlg = true;
+			nowPopUpGame->SetButtonResult(CASE_INCREASEDBODYTEMPERATURE);
+			caseOfDeth.GetStress(CASE_INCREASEDBODYTEMPERATURE);
+		}
 		nowPopUpGame = new CCauseOfDeathWindow;
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
@@ -102,14 +119,16 @@ void CSceneGame::Update()
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
-
 	//スクロール
 	stg.Update(pl);
 
 	//プレイヤー
 	pl.Update();
-	pl.Collision(cObstacle);
 
+	for (int i = 0; i < 3; i++)
+	{
+		pl.Collision(cObstacle,i);
+	}
 	//障害物
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
 }
@@ -126,7 +145,6 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
 
-
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 
 	//障害物
@@ -140,7 +158,6 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
-
 }
 
 //デバッグ

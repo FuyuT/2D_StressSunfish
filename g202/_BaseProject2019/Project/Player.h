@@ -5,47 +5,66 @@
 #include "timer.h"
 #include "time.h"
 
+//初期位置 X
+#define		STARTPOS_X				200
+
+//座標を進んだ距離に変換する割合
+#define		TRANSLATE_DISTANCE		20
+
 //移動速度	
 #define		PLAYER_SPEED			0.6f
 //最大速度
 #define		PLAYER_MAXSPEED			10.0f
+//重力
+#define		GRAVITY					1.0f
+
 //エサ探知範囲
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
 #define		COLLISION_ADJUSTMENT	130.0f
-//重力
-#define		GRAVITY					1.0f
+
 //ジャンプ力
-#define		JUMP_POWER_X			8.0f
+#define		JUMP_POWER_X			9.0f
 #define		JUMP_POWER_Y			30.0f
+//ジャンプ後に潜る量
+#define		WATER_LANDING_DEEP		50.0f
+//海面からどこまでがジャンプ可能か
+#define		JUMP_ZONE				40.0f
 
 //海面
 #define		SEA_LEVEL				780
 //海底
 #define		UNDER_SEA				2160
 
-
-//ステータス( 状態 に関する定数)
-
+//お腹が空く度合い
+#define		HUNGRYLEVEL				12
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		3
-//お腹が減る(空腹になる)速度
-#define		HUNGRY_SPEED			300
+#define		FEED_SATIETYLEVEL		36
 //満腹
-#define		FULL_STOMACH			10
-//寄生虫の増える速度
-#define		PARASITE_SPEED			10
-//最大寄生虫許容量
-#define		PARASITE_LIMIT			300
-//体温が上下する速度
-#define		TEMPERATURE_SPEED		3
-//体温限界値
-#define		TEMPERATURE_LIMIT		100
-//水流による移動速度upの持続時間
-#define		STREAM					200 
+#define		FULL_STOMACH			40
+//餓死
+#define		STARVATION				160
+
+//寄生虫許容限界数
+#define		PARASITE_LIMIT			5
+
+//体温が上変動する度合い
+#define		TEMPERATURE_LEVEL		3
+//標準体温
+#define		STANDARD_TEMPERATURE	10
+//体温限界値(熱中症)
+#define		HYPERTHERMIA_LIMIT		50
+//体温限界値(凍死)
+#define		FROZEN_LIMIT			30
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
+//水流による最大加速度
+#define		WATERFLOW_MAXSPEED		1.5f
+//水流による加速度
+#define		WATERFLOW_SPEED			0.02f
+
+//死因一覧
 enum CAUSE_OF_DEATH
 {
 	CAUSE_None,				//死んでいない
@@ -58,7 +77,8 @@ enum CAUSE_OF_DEATH
 	CAUSE_Jump,				//ジャンプ				
 	CAUSE_Parasite,			//寄生虫				
 	CAUSE_Bubble,			//泡					
-	CAUSE_SeaTurtle			//ショック死(ウミガメ)	
+	CAUSE_SeaTurtle,			//ショック死(ウミガメ)
+	CAUSE_WaterFlow,		//急な加速(水流)
 
 };
 
@@ -87,26 +107,24 @@ private:
 	bool		possibleToEatFlg;
 	//死因
 	int			causeOfDeath;
-	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除するまで無敵にする(デバッグ用))
+	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除されるまで無敵にする)
 	bool		hitFlg;
+	CTimer		hitTimer;
 
-
-	//使わんかも
 	//ステータス( 状態 に関する変数)
 	//体温
-	int			temperature;
-	int			temperatureTime;
 	int         bodyTemp;
 	float       tempRegion;
 	//空腹
-	int			hungry;
-	int			hungryTime;
 	int         hungerRegion;
 	//寄生虫
 	int			parasite;
-	int			parasiteTime;
 	//水流
-	int			streamTime;
+	CTimer		waterFlowTimer;
+	bool		waterFlowFlg;
+
+	//ブレーキ(テスト)
+	CTimer		brakeTimer;
 
 	//UI
 	CTimer tempTimer;
@@ -173,14 +191,14 @@ public:
 	CRectangle GetEyeRect()
 	{
 		return CRectangle(
-			posX + COLLISION_ADJUSTMENT + 150,
-			posY + COLLISION_ADJUSTMENT + 50,
 			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
-			posY + texture.GetHeight() - COLLISION_ADJUSTMENT - 95
+			posY + COLLISION_ADJUSTMENT + 25,
+			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + 30,
+			posY + COLLISION_ADJUSTMENT + 55
 		);
 	}
 
-	void Collision(CObstacleManager& cObstacle);
+	void Collision(CObstacleManager& cObstacle,int num);
 
 	//死んでいればtrueを返す
 	bool GetDead()
@@ -214,9 +232,8 @@ public:
 	//進んだ距離(m数)を返す
 	int GetDistance()
 	{
-		//初期位置の20(適当)を引く
 		//X座標の20分の1(適当)を進んだ距離とする
-		return (posX - 200) / 20;
+		return (posX - STARTPOS_X) / TRANSLATE_DISTANCE;
 	}
 	//「ジャンプ」が可能かを返す
 	bool GetJump()

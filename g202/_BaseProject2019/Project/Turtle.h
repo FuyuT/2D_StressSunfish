@@ -1,5 +1,9 @@
 #pragma once
 #include "ObstacleBase.h"
+#define  TURTLE_RECT_TOP_ADJ 150
+#define  TURTLE_RECT_LEFT_ADJ 0
+#define  TURTLE_RECT_RIGHT_ADJ 0
+#define  TURTLE_RECT_BOTTOM_ADJ -100
 class CTurtle : public CObstacleBase
 {
 private:
@@ -14,7 +18,8 @@ public:
 	void RenderDebug(float wx, float wy)override;
 	void Release()override;
 	CRectangle GetRect() {
-		return CRectangle(pos.x, pos.y, pos.x + Texture.GetWidth(), pos.y + Texture.GetHeight());
+		return CRectangle(pos.x + TURTLE_RECT_LEFT_ADJ, pos.y + TURTLE_RECT_TOP_ADJ,
+			pos.x + Texture.GetWidth() + TURTLE_RECT_RIGHT_ADJ,pos.y + Texture.GetHeight() + TURTLE_RECT_BOTTOM_ADJ);
 	}
 	bool GetShow()
 	{

@@ -34,6 +34,7 @@ poseFlg(false)
 
 CSceneGame::~CSceneGame()
 {
+	Release();
 }
 
 bool CSceneGame::Load()

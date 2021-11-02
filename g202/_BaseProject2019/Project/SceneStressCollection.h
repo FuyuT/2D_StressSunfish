@@ -14,6 +14,7 @@ enum tag_CASE {
 	CASE_BUBBLE,					//泡
 	CASE_TURTLE,					//ウミガメ
 	CASE_WATERFLOW,					//水流
+	CASE_TOTAL_NO,
 };
 
 class CSceneStressCollection : public CSceneBase
@@ -21,27 +22,27 @@ class CSceneStressCollection : public CSceneBase
 private:
 	//死因用アイコンテクスチャと表示フラグ宣言
 	CTexture	increasedBodyTemperatureIconTexture;	//体温上昇
-	bool		increasedBodyTemperatureFlg = true;
+	bool		increasedBodyTemperatureFlg = false;
 	CTexture	lowerBodyTemperatureIconTexture;		//体温低下
-	bool		lowerBodyTemperatureFlg = true;
+	bool		lowerBodyTemperatureFlg = false;
 	CTexture	starvationIconTexture;					//餓死
-	bool		starvationFlg = true;
+	bool		starvationFlg = false;
 	CTexture	cloggedThroatIconTexture;				//餌が喉に刺さる
-	bool		cloggedThroatFlg = true;
+	bool		cloggedThroatFlg = false;
 	CTexture	obesityIconTexture;						//肥満
-	bool		obesityFlg = true;
+	bool		obesityFlg = false;
 	CTexture	impactIconTexture;						//障害物と衝突
-	bool		impactFlg = true;
+	bool		impactFlg = false;
 	CTexture	parasiteIconTexture;					//寄生虫
-	bool		parasiteFlg = true;
+	bool		parasiteFlg = false;
 	CTexture	jumpIconTexture;						//ジャンプ
-	bool		jumpFlg = true;
+	bool		jumpFlg = false;
 	CTexture	bubbleIconTexture;						//泡
-	bool		bubbleFlg = true;
+	bool		bubbleFlg = false;
 	CTexture	turtleIconTexture;						//ウミガメ
-	bool		turtleFlg = true;
+	bool		turtleFlg = false;
 	CTexture	waterFlowIconTexture;					//水流
-	bool		waterFlowFlg = true;
+	bool		waterFlowFlg = false;
 
 	//1ページ目、2ページ目上段のX座標
 	int			iconFirstRowPosX = 350;
@@ -85,5 +86,8 @@ public:
 	//表示フラグの保存、読み込み関数
 	void SaveStressFlg();
 	void LoadStressFlg();
+
+
+
 };
 

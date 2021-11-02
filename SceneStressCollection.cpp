@@ -263,7 +263,15 @@ void CSceneStressCollection::Release()
 	waterFlowIconTexture.Release();
 
 	menuButtonTexture.Release();
-	nowPopUpStress->Release();
+	if (nowPopUpStress != NULL)
+	{
+		nowPopUpStress->Release();
+		if (nowPopUpStress)
+		{
+			delete nowPopUpStress;
+			nowPopUpStress = NULL;
+		}
+	}
 }
 
 CRectangle CSceneStressCollection::GetRect(int i)

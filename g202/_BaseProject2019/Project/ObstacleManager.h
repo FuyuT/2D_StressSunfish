@@ -26,91 +26,113 @@ private:
 	CFoodCrab   cCrab[3];
 	CGarbage	cGarbage[3];
 	CBubble		cBubble[3];
-	CTurtle     cTurtle[3];
-	CWaterFlow  cWaterFlow[3];
+	CTurtle     cTurtle;
+	CWaterFlow  cWaterFlow;
 
 	CRandom obstacleRandom;
+	CRandom createRandom;
 	CRandom posYRndom;
 
 	int obstacleNum;
 	int posY;
 	int posYNum;
 
+	bool createFlg;
+
 public:
 	CObstacleManager();
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance,int posx, float wx, float wy);
+	void Update(int distance, int posx, float wx, float wy);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
 	void PosYRndom();
 
+		bool ObstaclePercentage(int percent)
+	{
+		//確率によってtrueを返す
+		if (createRandom.Random(1, 100 / percent + 1) == 1)
+		{
+			return true;
+		}
+		return false;
+	}
+
 	//当たり判定の判別のため追加
-	CRectangle GetRect(int type)
+	CRectangle GetRect(int type, int num)
 	{
 		switch (type)
 		{
-			case Turtle:
-				return cTurtle[0].GetRect();
-				break;
-			case Garbage:
-				return cGarbage[0].GetRect();
-				break;
-			case WaterFlow:
-				return cWaterFlow[0].GetRect();
-				break;
-			case Bubble:
-				return cBubble[0].GetRect();
-				break;
-			case FoodFish:
-				return cFish[0].GetRect();
-				break;
-			case FoodShrimp:
-				return cShrimp[0].GetRect();
-				break;
-			case FoodCrab:
-				return cCrab[0].GetRect();
-				break;
+		case Turtle:
+			return cTurtle.GetRect();
+			break;
+		case Garbage:
+			return cGarbage[num].GetRect();
+			break;
+		case WaterFlow:
+			return cWaterFlow.GetRect();
+			break;
+		case Bubble:
+			return cBubble[num].GetRect();
+			break;
+		case FoodFish:
+			return cFish[num].GetRect();
+			break;
+		case FoodShrimp:
+			return cShrimp[num].GetRect();
+			break;
+		case FoodCrab:
+			return cCrab[num].GetRect();
+			break;
 		}
-		
+
 	}
 
 	//player側から非表示にするため追加
-	void SetShow(bool flg, int type)
+	void SetShow(bool flg, int type, int num)
 	{
 		switch (type)
 		{
-			case FoodFish:
-				cFish[0].SetShow(flg);
-				break;
-			case FoodShrimp:
-				cShrimp[0].SetShow(flg);
-				break;
-			case FoodCrab:
-				cCrab[0].SetShow(flg);
-				break;
+		case FoodFish:
+			cFish[num].SetShow(flg);
+			break;
+		case FoodShrimp:
+			cShrimp[num].SetShow(flg);
+			break;
+		case FoodCrab:
+			cCrab[num].SetShow(flg);
+			break;
 		}
 	}
 
-	//player側から「画面何に存在するか」を確認するため追加
-	bool GetShow(int type)
+	//player側から「画面内に存在するか」を確認するため追加
+	bool GetShow(int type, int num)
 	{
 		switch (type)
 		{
-			case Bubble:
-				return cBubble[0].GetShow();
-				break;
-			case FoodFish:
-				return cFish[0].GetShow();
-				break;
-			case FoodShrimp:
-				return cShrimp[0].GetShow();
-				break;
-			case FoodCrab:
-				return cCrab[0].GetShow();
-				break;
+		case Turtle:
+			return cTurtle.GetShow();
+			break;
+		case Garbage:
+			return cGarbage[num].GetShow();
+			break;
+		case WaterFlow:
+			return cWaterFlow.GetShow();
+			break;
+		case Bubble:
+			return cBubble[num].GetShow();
+			break;
+		case FoodFish:
+			return cFish[num].GetShow();
+			break;
+		case FoodShrimp:
+			return cShrimp[num].GetShow();
+			break;
+		case FoodCrab:
+			return cCrab[num].GetShow();
+			break;
 		}
 	}
 };

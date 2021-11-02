@@ -350,9 +350,15 @@ void CSceneTrophyCollection::Release()
 	talentedDemonIconTexture.Release();
 
 	menuButtonTexture.Release();
-	nowPopUpTrophy->Release();
-
-	free(fileBuffer);
+	if (nowPopUpTrophy != NULL)
+	{
+		nowPopUpTrophy->Release();
+		if (nowPopUpTrophy)
+		{
+			delete nowPopUpTrophy;
+			nowPopUpTrophy = NULL;
+		}
+	}
 }
 
 CRectangle CSceneTrophyCollection::GetRect(int i)
