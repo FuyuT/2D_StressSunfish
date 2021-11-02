@@ -56,6 +56,7 @@ void CSceneStressCollection::Initialize()
 		parasiteIconTexture.Load("siin_aikon.png");
 	else
 		parasiteIconTexture.Load("siin_aikon_Enpty.png");
+
 	if(jumpFlg)
 		jumpIconTexture.Load("siin_aikon.png");
 	else
@@ -263,7 +264,15 @@ void CSceneStressCollection::Release()
 	waterFlowIconTexture.Release();
 
 	menuButtonTexture.Release();
-	nowPopUpStress->Release();
+	if (nowPopUpStress != NULL)
+	{
+		nowPopUpStress->Release();
+		if (nowPopUpStress)
+		{
+			delete nowPopUpStress;
+			nowPopUpStress = NULL;
+		}
+	}
 }
 
 CRectangle CSceneStressCollection::GetRect(int i)
@@ -315,54 +324,87 @@ CRectangle CSceneStressCollection::ButtonGetRect(int i)
 		return CRectangle(rightButtonPosX, leftAndRightButtonPosY, rightButtonPosX + rightButtonTexture.GetWidth(), leftAndRightButtonPosY + rightButtonTexture.GetHeight());
 }
 
-void CSceneStressCollection::GetStress(int i)
+bool CSceneStressCollection::GetStress(int i)
 {
-	//死因:体温上昇ゲット
-	if (i == CASE_INCREASEDBODYTEMPERATURE && !increasedBodyTemperatureFlg)
-		increasedBodyTemperatureFlg = true;
-	else return;
-	//死因:体温低下ゲット
-	if (i == CASE_LOWERBODYTEMPERATURE && !lowerBodyTemperatureFlg)
-		lowerBodyTemperatureFlg = true;
-	else return;
-	//死因:餓死ゲット
-	if (i == CASE_STARVATION && !starvationFlg)
-		starvationFlg == true;
-	else return;
-	//死因:喉詰まりゲット
-	if (i == CASE_CLOGGEDTHROAT && !cloggedThroatFlg)
-		cloggedThroatFlg = true;
-	else return;
-	//死因:肥満ゲット
-	if (i == CASE_OBESITY && !obesityFlg)
-		obesityFlg = true;
-	else return;
-	//死因:障害物と衝突ゲット
-	if (i == CASE_IMPACT  && !impactFlg)
-		impactFlg = true;
-	else return;
-	//死因:寄生虫ゲット
-	if (i == CASE_PARASITE && !parasiteFlg)
-		parasiteFlg = true;
-	else return;
-	//死因:ジャンプゲット
-	if (i == CASE_JUMP && !jumpFlg)
-		jumpFlg == true;
-	else return;
-	//死因:泡ゲット
-	if (i == CASE_BUBBLE && !bubbleFlg)
-		bubbleFlg = true;
-	else return;
-	//死因:ウミガメゲット
-	if (i == CASE_TURTLE && !turtleFlg)
-		turtleFlg = true;
-	else return;
-	//死因:水流ゲット
-	if (i == CASE_WATERFLOW && !waterFlowFlg)
-		waterFlowFlg = true;
-	else return;
 
-	SaveStressFlg();
+	//熱中症ゲット
+	if (i == CASE_INCREASEDBODYTEMPERATURE && !increasedBodyTemperatureFlg)
+	{
+		increasedBodyTemperatureFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//体温低下ゲット
+	if (i == CASE_LOWERBODYTEMPERATURE && !lowerBodyTemperatureFlg)
+	{
+		lowerBodyTemperatureFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//餓死
+	if (i == CASE_STARVATION && !starvationFlg)
+	{
+		starvationFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//喉詰まり
+	if (i == CASE_CLOGGEDTHROAT && !cloggedThroatFlg)
+	{
+		cloggedThroatFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//肥満
+	if (i == CASE_OBESITY && !obesityFlg)
+	{
+		obesityFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//衝突
+	if (i == CASE_IMPACT && !impactFlg)
+	{
+		impactFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//寄生虫
+	if (i == CASE_PARASITE && !parasiteFlg)
+	{
+		parasiteFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//ジャンプ
+	if (i == CASE_JUMP && !jumpFlg)
+	{
+		jumpFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//泡
+	if (i == CASE_BUBBLE && !bubbleFlg)
+	{
+		bubbleFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//ウミガメ
+	if (i == CASE_TURTLE && !turtleFlg)
+	{
+		turtleFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	//水流
+	if (i == CASE_WATERFLOW && !waterFlowFlg)
+	{
+		waterFlowFlg = true;
+		SaveStressFlg();
+		return true;
+	}
+	return false;
 }
 
 void CSceneStressCollection::SaveStressFlg()

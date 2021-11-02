@@ -81,7 +81,7 @@ public:
 	CRectangle GetRect( int i);
 
 	//ゲームシーンでフラグを変えるための関数
-	void GetStress(int i);
+	bool GetStress(int i);
 
 	//表示フラグの保存、読み込み関数
 	void SaveStressFlg();
