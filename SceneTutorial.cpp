@@ -54,6 +54,7 @@ void CSceneTutorial::Initialize()
 	ui.Initialize();
 	fBufferOffset = 0;
 	mShowDelay = 0;
+	messegeEndFlg = false;
 	
 }
 
@@ -67,8 +68,22 @@ void CSceneTutorial::Update()
 
 void CSceneTutorial::MessageUpdate()
 {
-	//ï∂éöóÒÇÃèIí[Ç‹Ç≈ÇÃä‘é¿çs
-	if (fBuffer[fBufferOffset] != '\0')
+	//ï∂éöóÒÇ™èIóπ(â¸çsÇÃéüÇ…â¸çsÇ™Ç†ÇÈ)ÇµÇΩÇÁÅAENTERÇ≈éüÇÃê‡ñæÇ÷
+	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
+	{
+		messegeEndFlg = true;
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
+			{
+				fLineBuffer[n]= NULL;
+			}
+			fBufferOffset++; //ÉeÉLÉXÉgÇï™ÇØÇƒÇ¢ÇÈâ¸çsÇÕï\é¶ï∂éöÇ…ì¸ÇÍÇ»Ç¢ÇÃÇ≈ÅAîÚÇŒÇ∑
+			messegeEndFlg = false;
+		}
+	}
+	//ï∂éöóÒÇÃèIí[Ç‹Ç≈ï∂éöÇí«â¡ÇµÇƒÇ¢Ç≠
+	else if (fBuffer[fBufferOffset] != '\0')
 	{
 		int nl = strlen(fLineBuffer);
 		//â¸çsÇÃèÍçáÅAï\é¶ï∂éöóÒÇâ¸çsÇ∑ÇÈ
@@ -84,31 +99,22 @@ void CSceneTutorial::MessageUpdate()
 		{
 			//àÍíËéûä‘Ç≤Ç∆Ç…àÍï∂éöÇ∏Ç¬fLineBufferÇ…Ç¢ÇÍÇƒÇ¢Ç≠
 			mShowDelay++;
-			if (mShowDelay >= 5)
+			if (mShowDelay >= MESSAGE_DELAY_FRAME)
 			{
 				mShowDelay = 0;
-				//ëSäpï∂éöîªíË
-				if (IsDBCSLeadByte(fBuffer[fBufferOffset]))
+				if (IsDBCSLeadByte(fBuffer[fBufferOffset]))			//ëSäpï∂éöîªíË
 				{
-					//ëSäpï∂éöÇÃèÍçáÇQÉoÉCÉgï™Ç≈àÍï∂éöÇ…Ç»ÇÈ
+					//ëSäpï∂éöÇÃèÍçáÇQÉoÉCÉgï™Ç≈àÍï∂éöÇ…Ç»ÇÈ (ï∂éöÉRÅ[ÉhShift_JIS)
 					fLineBuffer[nl++] = fBuffer[fBufferOffset++];
 					fLineBuffer[nl++] = fBuffer[fBufferOffset++];
 					fLineBuffer[nl] = '\0';
 				}
-				//îºäpÇÃèÍçá
-				else
+				else                                      			//îºäpÇÃèÍçá
 				{
 					fLineBuffer[nl++] = fBuffer[fBufferOffset++];
 					fLineBuffer[nl] = '\0';
 				}
 			}
-		}
-	}
-	//ï∂éöóÒÇ™èIóπÇµÇΩÇÁÅAENTERÇ≈éüÇÃê‡ñæÇ÷
-	else
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_RETURN))
-		{
 		}
 	}
 }
@@ -119,9 +125,11 @@ void CSceneTutorial::Render()
 	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetBodyTemp(), pl.GetTemperature());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
-	//char* test = "É`ÉÖÅ[ÉgÉäÉAÉãÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQ\n\nTutorialÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQ\n\nÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQÅQ";
-	//CGraphicsUtilities::RenderString(FIRST_LETTER_POS_X,FIRST_LETTER_POS_Y,"%s",test);
-	CGraphicsUtilities::RenderString(400, 750, fLineBuffer);
+	CGraphicsUtilities::RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
+	if (messegeEndFlg)
+	{
+		CGraphicsUtilities::RenderString(1200, 980, "SpaceÇâüÇµÇƒéüÇ÷Å®");
+	}
 }
 
 void CSceneTutorial::RenderDebug()

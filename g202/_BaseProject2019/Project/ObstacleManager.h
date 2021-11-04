@@ -6,6 +6,7 @@
 #include "Bubble.h"
 #include "Turtle.h"
 #include "WaterFlow.h"
+#include "RottenHorsemackerel.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -16,6 +17,7 @@ enum obstacle {
 	FoodFish,
 	FoodShrimp,
 	FoodCrab,
+	RottenHorsemackerel,
 };
 
 class CObstacleManager
@@ -26,6 +28,7 @@ private:
 	CFoodCrab   cCrab[3];
 	CGarbage	cGarbage[3];
 	CBubble		cBubble[3];
+	CRottenHorsemackerel  cRottenHorsemackerel[3];
 	CTurtle     cTurtle;
 	CWaterFlow  cWaterFlow;
 
@@ -86,6 +89,9 @@ public:
 		case FoodCrab:
 			return cCrab[num].GetRect();
 			break;
+		case RottenHorsemackerel:
+			return cRottenHorsemackerel[num].GetRect();
+			break;
 		}
 
 	}
@@ -103,6 +109,9 @@ public:
 			break;
 		case FoodCrab:
 			cCrab[num].SetShow(flg);
+			break;
+		case RottenHorsemackerel:
+			cRottenHorsemackerel[num].SetShow(flg);
 			break;
 		}
 	}
@@ -132,6 +141,9 @@ public:
 			break;
 		case FoodCrab:
 			return cCrab[num].GetShow();
+			break;
+		case RottenHorsemackerel:
+			return cRottenHorsemackerel[num].GetShow();
 			break;
 		}
 	}

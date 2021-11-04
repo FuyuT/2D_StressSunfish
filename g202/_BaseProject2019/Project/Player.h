@@ -73,11 +73,11 @@ enum CAUSE_OF_DEATH
 	CAUSE_Starvation,		//餓死(空腹度・エサ)	
 	CAUSE_ChokeOnShell,		//喉つまり(エサ)		
 	CAUSE_Obesity,			//肥満(エサ)			
-	CAUSE_Obstacle,			//衝突(障害物)			
-	CAUSE_Jump,				//ジャンプ				
-	CAUSE_Parasite,			//寄生虫				
+	CAUSE_Obstacle,			//衝突(障害物)		
+	CAUSE_Parasite,			//寄生虫	
+	CAUSE_Jump,				//ジャンプ								
 	CAUSE_Bubble,			//泡					
-	CAUSE_SeaTurtle,			//ショック死(ウミガメ)
+	CAUSE_SeaTurtle,		//ショック死(ウミガメ)
 	CAUSE_WaterFlow,		//急な加速(水流)
 
 };

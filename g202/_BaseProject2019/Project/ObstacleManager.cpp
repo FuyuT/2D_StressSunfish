@@ -18,6 +18,7 @@ bool CObstacleManager::Load()
 		if (!cCrab[n].Load())return false;
 		if (!cGarbage[n].Load())return false;
 		if (!cBubble[n].Load())return false;
+		if (!cRottenHorsemackerel[n].Load())return false;
 	}
 	if (!cTurtle.Load())return false;
 	if (!cWaterFlow.Load())return false;
@@ -32,6 +33,7 @@ void CObstacleManager::Initialize()
 		cFish[n].Initialize();
 		cShrimp[n].Initialize();
 		cCrab[n].Initialize();
+		cRottenHorsemackerel[n].Initialize();
 		//障害物
 		cGarbage[n].Initialize();
 		cBubble[n].Initialize();
@@ -65,6 +67,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				cTurtle.SetPosx(posx + g_pGraphics->GetTargetWidth());
 				PosYRndom();
 				cTurtle.SetPosy(posY);
+				//重なった場合表示しない
+				for (int i = 0; i < 7; i++)
+				{
+					for (int m = 0; m < 3; m++)
+					{
+						if (GetRect(Turtle,m).CollisionRect(GetRect(i, m)))
+						{
+							if (i == Turtle)
+							{
+								return;
+							}
+							cTurtle.SetShow(false);
+							return;
+						}
+					}
+				}
 				return;
 			}
 			break;
@@ -82,6 +100,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cGarbage[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cGarbage[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(Garbage, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == Garbage && n == m)
+								{
+									return;
+								}
+								cGarbage[n].SetShow(false);
+								return;
+							}
+						}
+					}
 					return;
 				}
 			}
@@ -98,6 +132,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				cWaterFlow.SetPosx(posx + g_pGraphics->GetTargetWidth());
 				PosYRndom();
 				cWaterFlow.SetPosy(posY);
+				//重なった場合表示しない
+				for (int i = 0; i < 7; i++)
+				{
+					for (int m = 0; m < 3; m++)
+					{
+						if (GetRect(WaterFlow, m).CollisionRect(GetRect(i, m)))
+						{
+							if (i == WaterFlow)
+							{
+								return;
+							}
+							cWaterFlow.SetShow(false);
+							return;
+						}
+					}
+				}
 				return;
 			}
 
@@ -113,6 +163,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cBubble[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cBubble[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(Bubble, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == Bubble && n == m)
+								{
+									return;
+								}
+								cBubble[n].SetShow(false);
+								return;
+							}
+						}
+					}
 					return;
 				}
 			}
@@ -128,14 +194,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cFish[n].SetPosy(posY);
-					////重なった場合表示しない
-					//for (int i = 0; i < 7; i++)
-					//{
-					//	if (GetRect(FoodFish).CollisionRect(GetRect(i)) && FoodFish != i)
-					//	{
-					//		cFish[n].SetShow(false);
-					//	}
-					//}
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(FoodFish, n).CollisionRect(GetRect(i, m)))
+							{
+								if (i == FoodFish && n == m)
+								{
+									return;
+								}
+								cFish[n].SetShow(false);
+								return;
+							}
+						}						
+					}
 					return;
 				}
 			}
@@ -151,6 +225,22 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cShrimp[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cShrimp[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(FoodShrimp, n).CollisionRect(GetRect(i, m)))
+							{
+								if (i == FoodShrimp && n == m)
+								{
+									return;
+								}
+								cShrimp[n].SetShow(false);
+								return;
+							}
+						}
+					}
 					return;
 				}
 			}
@@ -166,6 +256,37 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					cCrab[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cCrab[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(FoodCrab, n).CollisionRect(GetRect(i, m)))
+							{
+								if (i == FoodCrab && n == m)
+								{
+									return;
+								}
+								cCrab[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+			break;
+		case RottenHorsemackerel:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cRottenHorsemackerel[n].GetShow())
+				{
+					cRottenHorsemackerel[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cRottenHorsemackerel[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cRottenHorsemackerel[n].SetPosy(posY);
 					return;
 				}
 			}
@@ -181,6 +302,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 		cFish[n].Update(wx, wy);
 		cShrimp[n].Update(wx, wy);
 		cCrab[n].Update(wx, wy);
+		cRottenHorsemackerel[n].Update(wx, wy);
 		//障害物
 		cGarbage[n].Update(wx, wy);
 		cBubble[n].Update(wx, wy);
@@ -198,6 +320,7 @@ void CObstacleManager::Render(float wx, float wy)
 		cFish[n].Render(wx, wy);
 		cShrimp[n].Render(wx, wy);
 		cCrab[n].Render(wx, wy);
+		cRottenHorsemackerel[n].Render(wx, wy);
 		//障害物
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
@@ -214,6 +337,7 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		cFish[n].RenderDebug(wx, wy);
 		cShrimp[n].RenderDebug(wx, wy);
 		cCrab[n].RenderDebug(wx, wy);
+		cRottenHorsemackerel[n].RenderDebug(wx, wy);
 		//障害物
 		cGarbage[n].RenderDebug(wx, wy);
 		cBubble[n].RenderDebug(wx, wy);
@@ -230,6 +354,7 @@ void CObstacleManager::Release()
 		cFish[n].Release();
 		cShrimp[n].Release();
 		cCrab[n].Release();
+		cRottenHorsemackerel[n].Release();
 		//障害物
 		cGarbage[n].Release();
 		cBubble[n].Release();
@@ -242,6 +367,8 @@ void CObstacleManager::PosYRndom()
 {	
 	if (obstacleNum == 1 || obstacleNum == 2)
 		posYNum = posYRndom.Random(1, 4);
+	else if (obstacleNum == 3)
+		posYNum = posYRndom.Random(2, 6);
 	else
 		posYNum = posYRndom.Random(1, 6);
 
