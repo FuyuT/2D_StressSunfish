@@ -18,6 +18,7 @@ bool CObstacleManager::Load()
 		if (!cCrab[n].Load())return false;
 		if (!cGarbage[n].Load())return false;
 		if (!cBubble[n].Load())return false;
+		if (!cRottenHorsemackerel[n].Load())return false;
 	}
 	if (!cTurtle.Load())return false;
 	if (!cWaterFlow.Load())return false;
@@ -32,6 +33,7 @@ void CObstacleManager::Initialize()
 		cFish[n].Initialize();
 		cShrimp[n].Initialize();
 		cCrab[n].Initialize();
+		cRottenHorsemackerel[n].Initialize();
 		//è·äQï®
 		cGarbage[n].Initialize();
 		cBubble[n].Initialize();
@@ -274,6 +276,21 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				}
 			}
 			break;
+		case RottenHorsemackerel:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cRottenHorsemackerel[n].GetShow())
+				{
+					cRottenHorsemackerel[n].SetShow(true);
+					//PlayerÇÃpos.x + screenWidthÇ∆yÇÃposÅiäCÇ©ÇÁèoÇ»Ç¢ÇÊÇ§Ç…ÉâÉìÉ_ÉÄÅj
+
+					cRottenHorsemackerel[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cRottenHorsemackerel[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
 		}
 	}
 
@@ -285,6 +302,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 		cFish[n].Update(wx, wy);
 		cShrimp[n].Update(wx, wy);
 		cCrab[n].Update(wx, wy);
+		cRottenHorsemackerel[n].Update(wx, wy);
 		//è·äQï®
 		cGarbage[n].Update(wx, wy);
 		cBubble[n].Update(wx, wy);
@@ -302,6 +320,7 @@ void CObstacleManager::Render(float wx, float wy)
 		cFish[n].Render(wx, wy);
 		cShrimp[n].Render(wx, wy);
 		cCrab[n].Render(wx, wy);
+		cRottenHorsemackerel[n].Render(wx, wy);
 		//è·äQï®
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
@@ -318,6 +337,7 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		cFish[n].RenderDebug(wx, wy);
 		cShrimp[n].RenderDebug(wx, wy);
 		cCrab[n].RenderDebug(wx, wy);
+		cRottenHorsemackerel[n].RenderDebug(wx, wy);
 		//è·äQï®
 		cGarbage[n].RenderDebug(wx, wy);
 		cBubble[n].RenderDebug(wx, wy);
@@ -334,6 +354,7 @@ void CObstacleManager::Release()
 		cFish[n].Release();
 		cShrimp[n].Release();
 		cCrab[n].Release();
+		cRottenHorsemackerel[n].Release();
 		//è·äQï®
 		cGarbage[n].Release();
 		cBubble[n].Release();
