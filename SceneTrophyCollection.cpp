@@ -425,58 +425,122 @@ CRectangle CSceneTrophyCollection::ButtonGetRect(int i)
 		return CRectangle(rightButtonPosX, leftAndRightButtonPosY, rightButtonPosX + rightButtonTexture.GetWidth(), leftAndRightButtonPosY + rightButtonTexture.GetHeight());
 }
 
-void CSceneTrophyCollection::GetTrophy(int i)
+bool CSceneTrophyCollection::GetTrophy(int i)
 {
 	//トロフィー:川級ゲット
-	if (i == TROPHY_RIVER)
+	if (i == TROPHY_RIVER && !riverFlg)
+	{
 		riverFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:滝級ゲット
-	if (i == TROPHY_WATERFALL)
+	if (i == TROPHY_WATERFALL && !waterFallFlg)
+	{
 		waterFallFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:湖級ゲット
-	if (i == TROPHY_LAKE)
+	if (i == TROPHY_LAKE && !lakeFlg)
+	{
 		lakeFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:ダム級ゲット
-	if (i == TROPHY_DAM)
+	if (i == TROPHY_DAM && !damFlg)
+	{
 		damFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:下水道級ゲット
-	if (i == TROPHY_SEWER)
+	if (i == TROPHY_SEWER && !sewerFlg)
+	{
 		sewerFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:インド洋級ゲット
-	if (i == TROPHY_INDIANOCEAN)
+	if (i == TROPHY_INDIANOCEAN && !indianOceanFlg)
+	{
 		indianOceanFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:アマゾン川級ゲット
-	if (i == TROPHY_AMAZONROVER)
+	if (i == TROPHY_AMAZONROVER && !amazonRiverFlg)
+	{
 		amazonRiverFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:海級ゲット
-	if (i == TROPHY_OCEAN)
+	if (i == TROPHY_OCEAN && !oceanFlg)
+	{
 		oceanFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:日本階級ゲット
-	if (i == TROPHY_SEAOFJAPAN)
+	if (i == TROPHY_SEAOFJAPAN && !seaOf​​JapanFlg)
+	{
 		seaOf​​JapanFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:地球一周級ゲット
-	if (i == TROPHY_AROUNDTHEGLOBE)
+	if (i == TROPHY_AROUNDTHEGLOBE && !aroundTheGlobeFlg)
+	{
 		aroundTheGlobeFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:やる気ゼロ級ゲット
-	if (i == TROPHY_ZEROMOTIVATION)
+	if (i == TROPHY_ZEROMOTIVATION && !zeroMotivationFlg)
+	{
 		zeroMotivationFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:富士山級ゲット
-	if (i == TROPHY_MOUNTFJI)
+	if (i == TROPHY_MOUNTFJI && !mountFujiFlg)
+	{
 		mountFujiFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:大阪マラソン級ゲット
-	if (i == TROPHY_OSAKAMARATHON)
+	if (i == TROPHY_OSAKAMARATHON && !osakaMarathonFlg)
+	{
 		osakaMarathonFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:琵琶湖級ゲット
-	if (i == TROPHY_BIWALAKE)
+	if (i == TROPHY_BIWALAKE && !biwaLakeFlg)
+	{
 		biwaLakeFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//トロフィー:ジャックポット級ゲット
-	if (i == TROPHY_JACKPOD)
+	if (i == TROPHY_JACKPOD && !jackPodFlg)
+	{
 		jackPodFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 	//才能魔級
-	if (i == TROPHY_TALENTEDDEMON)
+	if (i == TROPHY_TALENTEDDEMON && !talentedDemonFlg)
+	{
 		talentedDemonFlg = true;
+		SaveTrophyFlg();
+		return true;
+	}
 
-	SaveTrophyFlg();
+	return false;
 }
 
 void CSceneTrophyCollection::SaveTrophyFlg()

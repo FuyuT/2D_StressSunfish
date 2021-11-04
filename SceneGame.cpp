@@ -77,25 +77,13 @@ void CSceneGame::Update()
 	{
 		Initialize();
 	}
+
 	//画面遷移 ポップアップ画面 
 	//死んだら、もしくはF1でゲームオーバー画面
-	if (g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead() && !popUpFlg)
-	{
-		//熱中症
-		if(pl.GetCauseOfDeath() + 1 == CASE_INCREASEDBODYTEMPERATURE);
-		{
-			nowPopUpGame = new CCauseOfDeathWindow;
-			nowPopUpGame->Initialize();
-			popUpFlg = true;
-			nowPopUpGame->SetButtonResult(CASE_INCREASEDBODYTEMPERATURE);
-			caseOfDeth.GetStress(CASE_INCREASEDBODYTEMPERATURE);
-		}
-		nowPopUpGame = new CCauseOfDeathWindow;
-		nowPopUpGame->Initialize();
-		popUpFlg = true;
-	}
+	CaseOfDethController();
+
 	//Rでポーズ画面
-	else if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
 	{
 		nowPopUpGame = new CPoseWindow;
 		nowPopUpGame->Initialize();
@@ -270,5 +258,160 @@ void CSceneGame::PopUpController()
 			popUpFlg = false;
 			break;
 		}
+	}
+}
+
+void CSceneGame::CaseOfDethController()
+{
+	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg)
+	{
+		nowPopUpGame = new CCauseOfDeathWindow;
+		switch (pl.GetCauseOfDeath() - 1)
+		{
+			//熱中症
+		case CASE_INCREASEDBODYTEMPERATURE:
+			nowPopUpGame->SetDethResult(CASE_INCREASEDBODYTEMPERATURE);
+			newGetDeth = caseOfDeth.GetStress(CASE_INCREASEDBODYTEMPERATURE);
+			break;
+			//体温低下
+		case CASE_LOWERBODYTEMPERATURE:
+			nowPopUpGame->SetDethResult(CASE_LOWERBODYTEMPERATURE);
+			newGetDeth = caseOfDeth.GetStress(CASE_LOWERBODYTEMPERATURE);
+			break;
+			//餓死
+		case CASE_STARVATION:
+			nowPopUpGame->SetDethResult(CASE_STARVATION);
+			newGetDeth = caseOfDeth.GetStress(CASE_STARVATION);
+			break;
+			//喉詰まり
+		case CASE_CLOGGEDTHROAT:
+			nowPopUpGame->SetDethResult(CASE_CLOGGEDTHROAT);
+			newGetDeth = caseOfDeth.GetStress(CASE_CLOGGEDTHROAT);
+			break;
+			//肥満
+		case CASE_OBESITY:
+			nowPopUpGame->SetDethResult(CASE_OBESITY);
+			newGetDeth = caseOfDeth.GetStress(CASE_OBESITY);
+			break;
+			//衝突
+		case CASE_IMPACT:
+			nowPopUpGame->SetDethResult(CASE_IMPACT);
+			newGetDeth = caseOfDeth.GetStress(CASE_IMPACT);
+			break;
+			//寄生虫
+		case CASE_PARASITE:
+			nowPopUpGame->SetDethResult(CASE_PARASITE);
+			newGetDeth = caseOfDeth.GetStress(CASE_PARASITE);
+			break;
+			//ジャンプ
+		case CASE_JUMP:
+			nowPopUpGame->SetDethResult(CASE_JUMP);
+			newGetDeth = caseOfDeth.GetStress(CASE_JUMP);
+			break;
+			//泡
+		case CASE_BUBBLE:
+			nowPopUpGame->SetDethResult(CASE_BUBBLE);
+			newGetDeth = caseOfDeth.GetStress(CASE_BUBBLE);
+			break;
+			//ウミガメ
+		case CASE_TURTLE:
+			nowPopUpGame->SetDethResult(CASE_TURTLE);
+			newGetDeth = caseOfDeth.GetStress(CASE_TURTLE);
+			break;
+			//水流
+		case CASE_WATERFLOW:
+			nowPopUpGame->SetDethResult(CASE_WATERFLOW);
+			newGetDeth = caseOfDeth.GetStress(CASE_WATERFLOW);
+			break;
+		}
+		nowPopUpGame->SetNewGetDeth(newGetDeth);
+		nowPopUpGame->Initialize();
+		popUpFlg = true;
+	}
+}
+
+void CSceneGame::TrophyController()
+{
+	//川級
+	if (pl.GetDistance() <= 10000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_RIVER);
+	}
+	//滝級
+	else if (pl.GetDistance() <= 50000)
+	{
+
+	}
+	//湖級
+	else if (pl.GetDistance() <= 100000)
+	{
+
+	}
+	//ダム級
+	else if (pl.GetDistance() <= 500000)
+	{
+
+	}
+	//下水道級
+	else if (pl.GetDistance() <= 1000000)
+	{
+
+	}
+	//インド洋級
+	else if (pl.GetDistance() <= 3000000)
+	{
+
+	}
+	//アマゾン川級
+	else if (pl.GetDistance() <= 5000000)
+	{
+
+	}
+	//海級
+	else if (pl.GetDistance() <= 10000000)
+	{
+
+	}
+	//日本海級
+	else if (pl.GetDistance() <= 30000000)
+	{
+
+	}
+	//地球一周級
+	else if (pl.GetDistance() <= 40000000)
+	{
+
+	}
+
+	//特別級
+	//やる気ゼロ級
+	if (pl.GetDistance() < 10000)
+	{
+
+	}
+	//富士山級
+	if (3000 <= pl.GetDistance() <= 5000)
+	{
+
+	}
+	//大阪マラソン級
+	if (20000 <= pl.GetDistance() <= 42000)
+	{
+
+	}
+	//琵琶湖級
+	if (40000 <= pl.GetDistance() <= 63000)
+	{
+
+	}
+	//ジャックポット級
+	if (777000 <= pl.GetDistance() <= 888000)
+	{
+
+	}
+	//才能魔級
+	if (99999000 <= pl.GetDistance())
+	{
+
 	}
 }

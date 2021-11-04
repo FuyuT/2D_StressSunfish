@@ -14,13 +14,53 @@ void CCauseOfDeathWindow::Initialize()
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonNextTexture.Load("ButtonNext.png");
 	//死因テクスチャ読み込み
-	switch (buttonResult)
+	switch (dethResult)
 	{
 	case CASE_INCREASEDBODYTEMPERATURE:
+		//死因：体温上昇画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_LOWERBODYTEMPERATURE:
+		//死因：体温低下画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_STARVATION:
+		//死因：餓死画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_CLOGGEDTHROAT:
+		//死因：喉つまり画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_OBESITY:
+		//死因：肥満画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_IMPACT:
+		//死因：衝突画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_PARASITE:
+		//死因：寄生虫画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_JUMP:
+		//死因：ジャンプ画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_BUBBLE:
+		//死因：泡画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_TURTLE:
+		//死因：ウミガメ画像を読み込む
+		caseOfDethTexture.Load("siin_aikon.png");
+		break;
+	case CASE_WATERFLOW:
+		//死因：水流アイコンを読み込む
 		caseOfDethTexture.Load("siin_aikon.png");
 		break;
 	}
-
 	font.Create(64, "MS　明朝");
 	endFlg = false;
 }
@@ -38,7 +78,46 @@ void CCauseOfDeathWindow::Update()
 void CCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "死因");
+	switch (dethResult)
+	{
+	case CASE_INCREASEDBODYTEMPERATURE:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:熱中症");
+		break;
+	case CASE_LOWERBODYTEMPERATURE:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:体温低下");
+		break;
+	case CASE_STARVATION:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:餓死");
+		break;
+	case CASE_CLOGGEDTHROAT:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:喉詰まり");
+		break;
+	case CASE_OBESITY:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:肥満");
+		break;
+	case CASE_IMPACT:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:障害物と衝突");
+		break;
+	case CASE_PARASITE:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:寄生虫");
+		break;
+	case CASE_JUMP:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ジャンプ");
+		break;
+	case CASE_BUBBLE:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:泡");
+		break;
+	case CASE_TURTLE:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ウミガメ");
+		break;
+	case CASE_WATERFLOW:
+		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:水流");
+		break;
+	}
+	if (newGetDethFlg)
+	{
+		font.RenderString(350, 250, MOF_XRGB(0, 0, 0), "NEW");
+	}
 	caseOfDethTexture.Render(300,500);
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
 }

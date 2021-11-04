@@ -22,6 +22,10 @@ protected:
 	short	nextPopUp;
 	//メモ書き取れてません　申し訳ない
 	int     buttonResult;
+	int		dethResult;
+	//新規入手フラグ
+	bool	newGetDethFlg;
+	bool	newGetTrophyFlg;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -31,7 +35,10 @@ public:
 	virtual void Release() {}
 	//ゲッター
 	int	  GetButtonResult() { return buttonResult; }
-	void  SetButtonResult(int buttonResult) { this->buttonResult = buttonResult; }
+	void  SetButtonResult(int setButtonResult) { buttonResult = setButtonResult; }
+	void  SetDethResult(int setDethResult) { dethResult = setDethResult; }
+	void  SetNewGetDeth(bool setNewGetDethFlg) { newGetDethFlg = setNewGetDethFlg; }
+	void  SetNewGetTrophy(bool setNewGetTrophyFlg) {newGetTrophyFlg = setNewGetTrophyFlg ; }
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 

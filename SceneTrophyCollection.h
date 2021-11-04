@@ -98,7 +98,8 @@ public:
 	CRectangle GetRect(int i);
 
 	//ゲームシーンでフラグを変えるための関数
-	void GetTrophy(int i);
+	//未入手ならtrueを、取得済みならfalseを返す。
+	bool GetTrophy(int i);
 
 	//表示フラグの保存、読み込み関数
 	void SaveTrophyFlg();

@@ -35,6 +35,9 @@ private:
 	bool configFlg = false;
 	//ポーズ画面フラグ
 	bool poseFlg;
+	//新規入手フラグ
+	bool newGetTrophy;
+	bool newGetDeth;
 
 public:
 	CSceneGame();
@@ -80,5 +83,7 @@ public:
 
 
 	void PopUpController();
+	void CaseOfDethController();
+	void TrophyController();
 };
 
