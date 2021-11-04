@@ -27,6 +27,9 @@ private:
 	//チュートリアルメッセージ
 	CTexture		 messageWindowImg;
 	char*			 fBuffer;
+	int				 fBufferOffset;			//現在表示できている位置
+	char			 fLineBuffer[256] = "\0";		//一度に表示するバッファ
+	int				 mShowDelay;
 public:
 	CSceneTutorial();
 	~CSceneTutorial();
@@ -34,6 +37,7 @@ public:
 	bool TextLoad();
 	void Initialize() override;
 	void Update() override;
+	void MessageUpdate();
 	void Render() override;
 	void RenderDebug() override;
 	void Release() override;
