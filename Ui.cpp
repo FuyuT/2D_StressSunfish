@@ -69,7 +69,6 @@ bool CUi::Load()
 
 void CUi::Initialize()
 {
-	Load();
 
 	////タイマー
 	//tempTimer.SetTotalTime(2);
@@ -86,16 +85,16 @@ void CUi::Update()
 
 }
 
-void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum)
 {
 	stressMeter.Render(1600, 0);
 
 	//体温UI描画
-	if (bodyTempNum >= 40)
+	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
 	}
-	else if (bodyTempNum <= -20)
+	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
 	}
@@ -106,8 +105,8 @@ void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum
 
 	//温度計UI描画
 	tempMeterFrame.Render(1550, 200);
-	CRectangle rec1(0, tempRegionNum, 500, 500);
-	tempMeter.Render(1550, 200 + tempRegionNum, rec1);
+	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
+	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
 	//寄生虫UIの描画
 	switch (parasiteNum)
