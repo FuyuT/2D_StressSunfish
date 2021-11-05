@@ -15,28 +15,28 @@ void CCheckCauseOfDeathWindow::Initialize()
 	buttonBackTexture.Load("ButtonBack.png");
 
 	if (buttonResult == CASE_INCREASEDBODYTEMPERATURE)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("マンボウ 体温上昇.png");
 
 	if (buttonResult == CASE_LOWERBODYTEMPERATURE)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("マンボウ 体温低下.png");
 
 	if (buttonResult == CASE_STARVATION)
-		causeOfDeathTexture.Load("siin_aikon.png");	
+		causeOfDeathTexture.Load("マンボウ 空腹2.png");	
 	
 	if (buttonResult == CASE_CLOGGEDTHROAT)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("マンボウ　喉つまり.png");
 
 	if (buttonResult == CASE_OBESITY)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("肥満マンボウ2.png");
 
 	if (buttonResult == CASE_IMPACT)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("障害物にあたって死亡.png");
 
 	if (buttonResult == CASE_PARASITE)
 		causeOfDeathTexture.Load("siin_aikon.png");
 
 	if (buttonResult == CASE_JUMP)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("水面にたたきつけられ死亡.png");
 
 	if (buttonResult == CASE_BUBBLE)
 		causeOfDeathTexture.Load("siin_aikon.png");
@@ -45,7 +45,7 @@ void CCheckCauseOfDeathWindow::Initialize()
 		causeOfDeathTexture.Load("siin_aikon.png");
 
 	if (buttonResult == CASE_WATERFLOW)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("加速死.png");
 
 	font.Create(64, "MS　明朝");
 
