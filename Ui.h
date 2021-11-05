@@ -34,11 +34,14 @@ private:
 	CTimer tempTimer;
 	CTimer hungerTimer;
 	CTimer parasiteTimer;
+
+	CFont font;
 public:
 	bool Load();
 	void Initialize();
 	void Update();
-	void Render(int parasiteNum,int hungry,int bodyTempNum,float tempRegionNum);
+	void RenderNumber(int x, int num);
+	void Render(int parasiteNum,int hungry,int bodyTempNum,float tempRegionNum,int distanceNum);
 	void Release();
 };
 

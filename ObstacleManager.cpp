@@ -18,7 +18,9 @@ bool CObstacleManager::Load()
 		if (!cCrab[n].Load())return false;
 		if (!cGarbage[n].Load())return false;
 		if (!cBubble[n].Load())return false;
-		if (!cRottenHorsemackerel[n].Load())return false;
+		if (!cRottenFish[n].Load())return false;
+		if (!cRottenCrab[n].Load())return false;
+		if (!cRottenShrimp[n].Load())return false;
 	}
 	if (!cTurtle.Load())return false;
 	if (!cWaterFlow.Load())return false;
@@ -33,7 +35,9 @@ void CObstacleManager::Initialize()
 		cFish[n].Initialize();
 		cShrimp[n].Initialize();
 		cCrab[n].Initialize();
-		cRottenHorsemackerel[n].Initialize();
+		cRottenFish[n].Initialize();
+		cRottenShrimp[n].Initialize();
+		cRottenCrab[n].Initialize();
 		//障害物
 		cGarbage[n].Initialize();
 		cBubble[n].Initialize();
@@ -51,7 +55,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 	if (distance % 35 == 0 && distance != 0)
 	{
 		//showFlgがfalseの食べ物,障害物を一つランダムで選んで、
-		obstacleNum = obstacleRandom.Random(0, 7);
+		obstacleNum = obstacleRandom.Random(0, 10);
 		//障害物の位置指定とshowflgをtrue
 		switch (obstacleNum)
 		{
@@ -276,17 +280,79 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				}
 			}
 			break;
-		case RottenHorsemackerel:
+		case RottenFish:
 			for (int n = 0; n < 3; n++)
 			{
-				if (!cRottenHorsemackerel[n].GetShow())
+				if (!cRottenFish[n].GetShow())
 				{
-					cRottenHorsemackerel[n].SetShow(true);
+					cRottenFish[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
-					cRottenHorsemackerel[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					cRottenFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
-					cRottenHorsemackerel[n].SetPosy(posY);
+					cRottenFish[n].SetPosy(posY);
+					return;
+				}
+			}
+			break;
+		case RottenShrimp:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cRottenShrimp[n].GetShow())
+				{
+					cRottenShrimp[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cRottenShrimp[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cRottenShrimp[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(RottenShrimp, n).CollisionRect(GetRect(i, m)))
+							{
+								if (i == RottenShrimp && n == m)
+								{
+									return;
+								}
+								cRottenShrimp[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+			break;
+		case RottenCrab:
+			for (int n = 0; n < 3; n++)
+			{
+				if (!cRottenCrab[n].GetShow())
+				{
+					cRottenCrab[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cRottenCrab[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
+					PosYRndom();
+					cRottenCrab[n].SetPosy(posY);
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(RottenCrab, n).CollisionRect(GetRect(i, m)))
+							{
+								if (i == RottenCrab && n == m)
+								{
+									return;
+								}
+								cRottenCrab[n].SetShow(false);
+								return;
+							}
+						}
+					}
 					return;
 				}
 			}
@@ -302,7 +368,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 		cFish[n].Update(wx, wy);
 		cShrimp[n].Update(wx, wy);
 		cCrab[n].Update(wx, wy);
-		cRottenHorsemackerel[n].Update(wx, wy);
+		cRottenFish[n].Update(wx, wy);
+		cRottenShrimp[n].Update(wx, wy);
+		cRottenCrab[n].Update(wx, wy);
 		//障害物
 		cGarbage[n].Update(wx, wy);
 		cBubble[n].Update(wx, wy);
@@ -320,7 +388,9 @@ void CObstacleManager::Render(float wx, float wy)
 		cFish[n].Render(wx, wy);
 		cShrimp[n].Render(wx, wy);
 		cCrab[n].Render(wx, wy);
-		cRottenHorsemackerel[n].Render(wx, wy);
+		cRottenFish[n].Render(wx, wy);
+		cRottenShrimp[n].Render(wx, wy);
+		cRottenCrab[n].Render(wx, wy);
 		//障害物
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
@@ -337,7 +407,9 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		cFish[n].RenderDebug(wx, wy);
 		cShrimp[n].RenderDebug(wx, wy);
 		cCrab[n].RenderDebug(wx, wy);
-		cRottenHorsemackerel[n].RenderDebug(wx, wy);
+		cRottenFish[n].RenderDebug(wx, wy);
+		cRottenShrimp[n].RenderDebug(wx, wy);
+		cRottenCrab[n].RenderDebug(wx, wy);
 		//障害物
 		cGarbage[n].RenderDebug(wx, wy);
 		cBubble[n].RenderDebug(wx, wy);
@@ -354,7 +426,9 @@ void CObstacleManager::Release()
 		cFish[n].Release();
 		cShrimp[n].Release();
 		cCrab[n].Release();
-		cRottenHorsemackerel[n].Release();
+		cRottenFish[n].Release();
+		cRottenShrimp[n].Release();
+		cRottenCrab[n].Release();
 		//障害物
 		cGarbage[n].Release();
 		cBubble[n].Release();
