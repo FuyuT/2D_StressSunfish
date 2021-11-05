@@ -18,27 +18,27 @@ void CCauseOfDeathWindow::Initialize()
 	{
 	case CASE_INCREASEDBODYTEMPERATURE:
 		//死因：体温上昇画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("マンボウ 体温上昇.png");
 		break;
 	case CASE_LOWERBODYTEMPERATURE:
 		//死因：体温低下画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("マンボウ 体温低下.png");
 		break;
 	case CASE_STARVATION:
 		//死因：餓死画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("マンボウ 空腹2.png");
 		break;
 	case CASE_CLOGGEDTHROAT:
 		//死因：喉つまり画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("マンボウ　喉つまり.png");
 		break;
 	case CASE_OBESITY:
 		//死因：肥満画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("肥満マンボウ2.png");
 		break;
 	case CASE_IMPACT:
 		//死因：衝突画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("障害物にあたって死亡.png");
 		break;
 	case CASE_PARASITE:
 		//死因：寄生虫画像を読み込む
@@ -46,7 +46,7 @@ void CCauseOfDeathWindow::Initialize()
 		break;
 	case CASE_JUMP:
 		//死因：ジャンプ画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("水面にたたきつけられ死亡.png");
 		break;
 	case CASE_BUBBLE:
 		//死因：泡画像を読み込む
@@ -58,7 +58,7 @@ void CCauseOfDeathWindow::Initialize()
 		break;
 	case CASE_WATERFLOW:
 		//死因：水流アイコンを読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("加速死.png");
 		break;
 	}
 	font.Create(64, "MS　明朝");
@@ -118,7 +118,7 @@ void CCauseOfDeathWindow::Render()
 	{
 		font.RenderString(350, 250, MOF_XRGB(0, 0, 0), "NEW");
 	}
-	caseOfDethTexture.Render(300,500);
+	caseOfDethTexture.Render(715,350);
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
 }
 void CCauseOfDeathWindow::Release()
