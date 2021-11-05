@@ -165,7 +165,13 @@
     <ClCompile Include="SceneTutorial.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="RottenHorsemackerel.cpp">
+    <ClCompile Include="RottenCrab.cpp">
+      <Filter>ソース ファイル\Obstacle\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="RottenFish.cpp">
+      <Filter>ソース ファイル\Obstacle\Food</Filter>
+    </ClCompile>
+    <ClCompile Include="RottenShrimp.cpp">
       <Filter>ソース ファイル\Obstacle\Food</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,7 +275,13 @@
     <ClInclude Include="SceneTutorial.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="RottenHorsemackerel.h">
+    <ClInclude Include="RottenCrab.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="RottenFish.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
+    </ClInclude>
+    <ClInclude Include="RottenShrimp.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Obstacle\Food</Filter>
     </ClInclude>
   </ItemGroup>

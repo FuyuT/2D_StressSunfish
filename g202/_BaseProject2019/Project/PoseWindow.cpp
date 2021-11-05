@@ -47,7 +47,8 @@ void CPoseWindow::Update()
 		//タイトル画面ボタンが押された際の処理
 		Release();
 		endFlg = true;
-		nextPopUp = POPUPNO_BACKTOTITLE;
+		nextPopUp = NULL;
+		//nextPopUp = POPUPNO_BACKTOTITLE;
 		buttonResult = 3;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY))

@@ -107,7 +107,9 @@
     <ClCompile Include="CauseOfDeathWindow.cpp" />
     <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
     <ClCompile Include="ContinueWindow.cpp" />
-    <ClCompile Include="RottenHorsemackerel.cpp" />
+    <ClCompile Include="RottenCrab.cpp" />
+    <ClCompile Include="RottenFish.cpp" />
+    <ClCompile Include="RottenShrimp.cpp" />
     <ClCompile Include="WaterFlow.cpp" />
     <ClCompile Include="FoodCrab.cpp" />
     <ClCompile Include="FoodFish.cpp" />
@@ -140,7 +142,9 @@
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
-    <ClInclude Include="RottenHorsemackerel.h" />
+    <ClInclude Include="RottenCrab.h" />
+    <ClInclude Include="RottenFish.h" />
+    <ClInclude Include="RottenShrimp.h" />
     <ClInclude Include="WaterFlow.h" />
     <ClInclude Include="ObstacleBase.h" />
     <ClInclude Include="FoodCrab.h" />

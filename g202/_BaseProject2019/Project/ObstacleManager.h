@@ -6,7 +6,9 @@
 #include "Bubble.h"
 #include "Turtle.h"
 #include "WaterFlow.h"
-#include "RottenHorsemackerel.h"
+#include "RottenFish.h"
+#include "RottenCrab.h"
+#include "RottenShrimp.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -17,7 +19,9 @@ enum obstacle {
 	FoodFish,
 	FoodShrimp,
 	FoodCrab,
-	RottenHorsemackerel,
+	RottenFish,
+	RottenCrab,
+	RottenShrimp,
 };
 
 class CObstacleManager
@@ -28,7 +32,9 @@ private:
 	CFoodCrab   cCrab[3];
 	CGarbage	cGarbage[3];
 	CBubble		cBubble[3];
-	CRottenHorsemackerel  cRottenHorsemackerel[3];
+	CRottenFish  cRottenFish[3];
+	CRottenCrab cRottenCrab[3];
+	CRottenShrimp cRottenShrimp[3];
 	CTurtle     cTurtle;
 	CWaterFlow  cWaterFlow;
 
@@ -89,8 +95,14 @@ public:
 		case FoodCrab:
 			return cCrab[num].GetRect();
 			break;
-		case RottenHorsemackerel:
-			return cRottenHorsemackerel[num].GetRect();
+		case RottenFish:
+			return cRottenFish[num].GetRect();
+			break;
+		case RottenCrab :
+			return cRottenCrab[num].GetRect();
+			break;
+		case RottenShrimp :
+			return cRottenShrimp[num].GetRect();
 			break;
 		}
 
@@ -110,8 +122,14 @@ public:
 		case FoodCrab:
 			cCrab[num].SetShow(flg);
 			break;
-		case RottenHorsemackerel:
-			cRottenHorsemackerel[num].SetShow(flg);
+		case RottenFish:
+			cRottenFish[num].SetShow(flg);
+			break;
+		case RottenCrab:
+			cRottenCrab[num].SetShow(flg);
+			break;
+		case RottenShrimp:
+			cRottenShrimp[num].SetShow(flg);
 			break;
 		}
 	}
@@ -142,8 +160,14 @@ public:
 		case FoodCrab:
 			return cCrab[num].GetShow();
 			break;
-		case RottenHorsemackerel:
-			return cRottenHorsemackerel[num].GetShow();
+		case RottenFish:
+			return cRottenFish[num].GetShow();
+			break;
+		case RottenCrab:
+			return cRottenCrab[num].GetShow();
+			break;
+		case RottenShrimp:
+			return cRottenShrimp[num].GetShow();
 			break;
 		}
 	}

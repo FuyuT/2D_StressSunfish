@@ -131,7 +131,7 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UI‚Ì•`‰æ
-	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
+	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature(),pl.GetDistance());
 
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 
@@ -165,7 +165,7 @@ void CSceneGame::Release()
 	stg.Release();
 	pl.Release();
 	ui.Release();
-
+	sceneConfig.Release();
 
 	if (nowPopUpGame != NULL)
 	{
@@ -340,78 +340,78 @@ void CSceneGame::TrophyController()
 	//‘ê‹‰
 	else if (pl.GetDistance() <= 50000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_WATERFALL);
 	}
 	//ŒÎ‹‰
 	else if (pl.GetDistance() <= 100000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_LAKE);
 	}
 	//ƒ_ƒ€‹‰
 	else if (pl.GetDistance() <= 500000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_DAM);
 	}
 	//‰º…“¹‹‰
 	else if (pl.GetDistance() <= 1000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEWER);
 	}
 	//ƒCƒ“ƒh—m‹‰
 	else if (pl.GetDistance() <= 3000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_INDIANOCEAN);
 	}
 	//ƒAƒ}ƒ]ƒ“ì‹‰
 	else if (pl.GetDistance() <= 5000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_AMAZONROVER);
 	}
 	//ŠC‹‰
 	else if (pl.GetDistance() <= 10000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_OCEAN);
 	}
 	//“ú–{ŠC‹‰
 	else if (pl.GetDistance() <= 30000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEAOFJAPAN);
 	}
 	//’n‹…ˆêŽü‹‰
 	else if (pl.GetDistance() <= 40000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_AROUNDTHEGLOBE);
 	}
 
 	//“Á•Ê‹‰
 	//‚â‚é‹Cƒ[ƒ‹‰
 	if (pl.GetDistance() < 10000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_ZEROMOTIVATION);
 	}
 	//•xŽmŽR‹‰
 	if (3000 <= pl.GetDistance() <= 5000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_MOUNTFJI);
 	}
 	//‘åãƒ}ƒ‰ƒ\ƒ“‹‰
 	if (20000 <= pl.GetDistance() <= 42000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_OSAKAMARATHON);
 	}
 	//”ú”iŒÎ‹‰
 	if (40000 <= pl.GetDistance() <= 63000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_BIWALAKE);
 	}
 	//ƒWƒƒƒbƒNƒ|ƒbƒg‹‰
 	if (777000 <= pl.GetDistance() <= 888000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_JACKPOD);
 	}
 	//Ë”\–‚‹‰
 	if (99999000 <= pl.GetDistance())
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_TALENTEDDEMON);
 	}
 }

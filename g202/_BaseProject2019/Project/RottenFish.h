@@ -5,13 +5,13 @@
 #define  ROTTENHORSEMACKEREL_RECT_RIGHT_ADJ -20
 #define  ROTTENHORSEMACKEREL_RECT_BUTTOM_ADJ -20
 
-class CRottenHorsemackerel : public CObstacleBase
+class CRottenFish : public CObstacleBase
 {
 private:
 
 public:
-	CRottenHorsemackerel();
-	~CRottenHorsemackerel();
+	CRottenFish();
+	~CRottenFish();
 	bool Load()override;
 	void Initialize()override;
 	void Update(float wx, float wy)override;

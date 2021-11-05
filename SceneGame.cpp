@@ -131,7 +131,7 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UI‚Ì•`‰æ
-	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature());
+	ui.Render(pl.GetParasite(),pl.GetHungry(),pl.GetBodyTemp(),pl.GetTemperature(),pl.GetDistance());
 
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 

@@ -39,14 +39,14 @@ bool CPlayer::Load()
 	{
 		return false;
 	}
-	if (!eatTexture.Load("sheet_manbo si_manbo 2_Eat_anim.png"))
-	{
-		return false;
-	}
-	if (!deathTexture.Load("sheet_manbo si_manbo 2_Death.png"))
-	{
-		return false;
-	}
+	//if (!eatTexture.Load("sheet_manbo si_manbo 2_Eat_anim.png"))
+	//{
+	//	return false;
+	//}
+	//if (!deathTexture.Load("sheet_manbo si_manbo 2_Death.png"))
+	//{
+	//	return false;
+	//}
 
 
 	return true;
