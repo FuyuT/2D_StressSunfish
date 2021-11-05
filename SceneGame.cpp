@@ -165,7 +165,7 @@ void CSceneGame::Release()
 	stg.Release();
 	pl.Release();
 	ui.Release();
-
+	sceneConfig.Release();
 
 	if (nowPopUpGame != NULL)
 	{
@@ -340,78 +340,78 @@ void CSceneGame::TrophyController()
 	//滝級
 	else if (pl.GetDistance() <= 50000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_WATERFALL);
 	}
 	//湖級
 	else if (pl.GetDistance() <= 100000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_LAKE);
 	}
 	//ダム級
 	else if (pl.GetDistance() <= 500000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_DAM);
 	}
 	//下水道級
 	else if (pl.GetDistance() <= 1000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEWER);
 	}
 	//インド洋級
 	else if (pl.GetDistance() <= 3000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_INDIANOCEAN);
 	}
 	//アマゾン川級
 	else if (pl.GetDistance() <= 5000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_AMAZONROVER);
 	}
 	//海級
 	else if (pl.GetDistance() <= 10000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_OCEAN);
 	}
 	//日本海級
 	else if (pl.GetDistance() <= 30000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEAOFJAPAN);
 	}
 	//地球一周級
 	else if (pl.GetDistance() <= 40000000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_AROUNDTHEGLOBE);
 	}
 
 	//特別級
 	//やる気ゼロ級
 	if (pl.GetDistance() < 10000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_ZEROMOTIVATION);
 	}
 	//富士山級
 	if (3000 <= pl.GetDistance() <= 5000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_MOUNTFJI);
 	}
 	//大阪マラソン級
 	if (20000 <= pl.GetDistance() <= 42000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_OSAKAMARATHON);
 	}
 	//琵琶湖級
 	if (40000 <= pl.GetDistance() <= 63000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_BIWALAKE);
 	}
 	//ジャックポット級
 	if (777000 <= pl.GetDistance() <= 888000)
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_JACKPOD);
 	}
 	//才能魔級
 	if (99999000 <= pl.GetDistance())
 	{
-
+		newGetTrophy = trophy.GetTrophy(TROPHY_TALENTEDDEMON);
 	}
 }
