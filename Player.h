@@ -39,13 +39,11 @@
 //お腹が空く度合い
 #define		HUNGRYLEVEL				12
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		24
+#define		FEED_SATIETYLEVEL		36
 //満腹
 #define		FULL_STOMACH			40
 //餓死
 #define		STARVATION				160
-//同じエサが一度に画面に出てくる最大数
-#define FEED_MAXCOUNT 3
 
 //寄生虫許容限界数
 #define		PARASITE_LIMIT			5
@@ -55,9 +53,9 @@
 //標準体温
 #define		STANDARD_TEMPERATURE	10
 //体温限界値(熱中症)
-#define		HYPERTHERMIA_LIMIT		50
+#define		HYPERTHERMIA_LIMIT		0
 //体温限界値(凍死)
-#define		FROZEN_LIMIT			30
+#define		FROZEN_LIMIT			100
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -202,6 +200,15 @@ public:
 			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT + 25,
 			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT + 30,
+			posY + COLLISION_ADJUSTMENT + 55
+		);
+	}
+	CRectangle GetEyeRect()
+	{
+		return CRectangle(
+			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
+			posY + COLLISION_ADJUSTMENT + 25,
+			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + 30,
 			posY + COLLISION_ADJUSTMENT + 55
 		);
 	}

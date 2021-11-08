@@ -122,7 +122,7 @@ void CUi::RenderNumber(int x,int num)
 	}
 }
 
-void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum,int distanceNum)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum)
 {
 	//m”•\¦ ˜g‘g‚İ
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -173,11 +173,11 @@ void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum
 	stressMeter.Render(1600, 0);
 
 	//‘Ì‰·UI•`‰æ
-	if (bodyTempNum >= 40)
+	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
 	}
-	else if (bodyTempNum <= -20)
+	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
 	}
@@ -188,8 +188,8 @@ void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum
 
 	//‰·“xŒvUI•`‰æ
 	tempMeterFrame.Render(1550, 200);
-	CRectangle rec1(0, tempRegionNum, 500, 500);
-	tempMeter.Render(1550, 200 + tempRegionNum, rec1);
+	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
+	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
 	//Šñ¶’UI‚Ì•`‰æ
 	switch (parasiteNum)
