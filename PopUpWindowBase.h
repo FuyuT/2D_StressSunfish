@@ -1,5 +1,6 @@
 #pragma once
 #include	"Mof.h"
+#include "SceneTrophyCollection.h"
 
 //シーンの列挙
 enum tag_POPUPNO {
@@ -26,6 +27,7 @@ protected:
 	//新規入手フラグ
 	bool	newGetDethFlg;
 	bool	newGetTrophyFlg;
+	int		numberOfTrophy[3];
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -39,6 +41,9 @@ public:
 	void  SetDethResult(int setDethResult) { dethResult = setDethResult; }
 	void  SetNewGetDeth(bool setNewGetDethFlg) { newGetDethFlg = setNewGetDethFlg; }
 	void  SetNewGetTrophy(bool setNewGetTrophyFlg) {newGetTrophyFlg = setNewGetTrophyFlg ; }
+	//トロフィーポップアップ用　3個まで保存して取得できるようにする。
+	void  SetNumberOfTrophy(int trophy[3]) {for (int i = 0; i < 3; i++) { numberOfTrophy[i] = trophy[i]; }}
+
 	short GetNextPopUp() { return nextPopUp; }
 	bool IsEnd() { return endFlg; }
 

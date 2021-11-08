@@ -7,8 +7,14 @@ private:
 	CTexture	popUpTexture;
 	CTexture	buttonNextTexture;
 
+	CTexture	trophyTexture;
+	CTexture	trophyTexture2;
+	CTexture	trophyTexture3;
+
 	int			buttonNextPosX = 1500;
 	int			buttonNextPosY = 850;
+	int			trophyTexturePosX = 815;
+	int			trophyTexturePosY = 350;
 public:
 	CResultWindow();
 	~CResultWindow();
