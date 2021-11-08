@@ -1,7 +1,9 @@
 #include "SceneTutorial.h"
-CFont FontPopRumCute;
-CFont f1;
-CSceneTutorial::CSceneTutorial()
+CSceneTutorial::CSceneTutorial():
+	fBuffer(NULL),
+	fBufferOffset(0),
+	mShowDelay(0),
+	messageEndFlg(false)
 {
 }
 
@@ -9,22 +11,11 @@ CSceneTutorial::~CSceneTutorial()
 {
 }
 
-bool CSceneTutorial::Load()
-{
-	if (!stg.Load())return false;
-	if (!ui.Load())return false;
-	if (!pl.Load())return false;
-	if (!obs.Load())return false;
-	if (!messageWindowImg.Load("MessageWindow.png"))return false;
-	if (!TextLoad())return false;
-	//fontの作成
-	FontPopRumCute.Create(64, "MS　ゴシック");
-	f1.Create(64, "MS　明朝");
-	//FontPopRumCute.Create(64, "	ポプらむ☆キュート");
-	
-	return true;
-}
+////////////////////////////
+// メソッド
+////////////////////////////
 
+//テキストの読込み
 bool CSceneTutorial::TextLoad()
 {
 	//テキストファイルを開く
@@ -47,31 +38,21 @@ bool CSceneTutorial::TextLoad()
 	return true;
 }
 
-void CSceneTutorial::Initialize()
+//フォントの読込み
+void CSceneTutorial::FontLoad()
 {
-	stg.Initialize();
-	pl.Initialize();
-	ui.Initialize();
-	fBufferOffset = 0;
-	mShowDelay = 0;
-	messegeEndFlg = false;
-	
+	//fontの作成
+	CFontCharaInputArray(fontAdd);
+	FontPopRumCute.Create(26, "PoPRumCute");
 }
 
-void CSceneTutorial::Update()
-{
-	stg.Update(pl);
-	pl.Update();
-	ui.Update();
-	MessageUpdate();
-}
-
+//メッセージの更新
 void CSceneTutorial::MessageUpdate()
 {
 	//文字列が終了(改行の次に改行がある)したら、ENTERで次の説明へ
 	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
 	{
-		messegeEndFlg = true;
+		messageEndFlg = true;
 		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
@@ -79,7 +60,7 @@ void CSceneTutorial::MessageUpdate()
 				fLineBuffer[n]= NULL;
 			}
 			fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
-			messegeEndFlg = false;
+			messageEndFlg = false;
 		}
 	}
 	//文字列の終端まで文字を追加していく
@@ -119,17 +100,59 @@ void CSceneTutorial::MessageUpdate()
 	}
 }
 
-void CSceneTutorial::Render()
+//メッセ―ジの描画
+void CSceneTutorial::MessageRender()
 {
-	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetBodyTemp(), pl.GetTemperature(),pl.GetDistance());
-	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
-	CGraphicsUtilities::RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messegeEndFlg)
+	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
+	if (messageEndFlg)
 	{
 		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押して次へ→");
 	}
+}
+
+
+////////////////////////////
+// 制御機構
+////////////////////////////
+
+bool CSceneTutorial::Load()
+{
+	if (!stg.Load())return false;
+	if (!ui.Load())return false;
+	if (!pl.Load())return false;
+	if (!obs.Load())return false;
+	if (!messageWindowImg.Load("MessageWindow.png"))return false;
+	if (!TextLoad())return false;
+	//フォントの読込み
+	FontLoad();
+	return true;
+}
+
+void CSceneTutorial::Initialize()
+{
+	stg.Initialize();
+	pl.Initialize();
+	ui.Initialize();
+	fBufferOffset = 0;
+	mShowDelay = 0;
+	messageEndFlg = false;
+}
+
+void CSceneTutorial::Update()
+{
+	stg.Update(pl);
+	pl.Update();
+	ui.Update();
+	MessageUpdate();
+}
+
+void CSceneTutorial::Render()
+{
+	stg.Render();
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance());
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+	MessageRender();
 }
 
 void CSceneTutorial::RenderDebug()

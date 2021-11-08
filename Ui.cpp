@@ -122,7 +122,7 @@ void CUi::RenderNumber(int x,int num)
 	}
 }
 
-void CUi::Render(int parasiteNum,int hungry,float tempRegionNum)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum)
 {
 	//m”•\¦ ˜g‘g‚İ
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);

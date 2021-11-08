@@ -65,7 +65,7 @@ void CPlayer::Initialize()
 	posY = g_pGraphics->GetTargetHeight() * 0.5 - standTexture.GetHeight() * 0.5;
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
-	tempRegion = 245;
+	tempRegion = 50;
 	//空腹度
 	hungerRegion = FULL_STOMACH;
 	//寄生虫
@@ -357,18 +357,22 @@ void CPlayer::UpdateStatus()
 	 *********/
 	if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 	{
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
+		if (tempRegion > 0)
 		{
-			if (bodyTemp < HYPERTHERMIA_LIMIT)
-			{
-				bodyTemp += TEMPERATURE_LEVEL;
-				tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-				tempTimer.SetTotalTime(1);
-			}
-		}
+			tempRegion -= 0.15f;
+		}		
+		//tempTimer.StartTimer();
+		//if (tempTimer.GetNowtime() <= 0)
+		//{
+		//	if (bodyTemp < HYPERTHERMIA_LIMIT)
+		//	{
+		//		bodyTemp += TEMPERATURE_LEVEL;
+		//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
+		//		tempTimer.SetTotalTime(1);
+		//	}
+		//}
 		//死因：熱中症
-		if (bodyTemp >= HYPERTHERMIA_LIMIT)
+		if (tempRegion <= HYPERTHERMIA_LIMIT)
 		{
 			deadFlg = true;
 			causeOfDeath = CAUSE_Hyperthermia;
@@ -376,18 +380,22 @@ void CPlayer::UpdateStatus()
 	}
 	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 	{
-		tempTimer.StartTimer();
-		if (tempTimer.GetNowtime() <= 0)
+		if (tempRegion < 100)
 		{
-			if (bodyTemp > -FROZEN_LIMIT)
-			{
-				bodyTemp -= TEMPERATURE_LEVEL;
-				tempRegion += 4.1 * TEMPERATURE_LEVEL;
-				tempTimer.SetTotalTime(1);
-			}
-		}
+			tempRegion += 0.15f;
+		}		
+		//tempTimer.StartTimer();
+		//if (tempTimer.GetNowtime() <= 0)
+		//{
+		//	if (bodyTemp > -FROZEN_LIMIT)
+		//	{
+		//		bodyTemp -= TEMPERATURE_LEVEL;
+		//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
+		//		tempTimer.SetTotalTime(1);
+		//	}
+		//}
 		//死因：凍死
-		if (bodyTemp <= -FROZEN_LIMIT)
+		if (tempRegion >= FROZEN_LIMIT)
 		{
 			deadFlg = true;
 			causeOfDeath = CAUSE_Frozen;
@@ -395,29 +403,36 @@ void CPlayer::UpdateStatus()
 	}
 	else
 	{
-		if (bodyTemp > STANDARD_TEMPERATURE)
+		if (tempRegion < 50)
 		{
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
-			{
-				bodyTemp -= TEMPERATURE_LEVEL;
-				tempRegion += 4.1 * TEMPERATURE_LEVEL;
-				tempTimer.SetTotalTime(2);
-			}
+			tempRegion += 0.05f;
 		}
-		else if (bodyTemp < STANDARD_TEMPERATURE)
+		else if (tempRegion > 50)
 		{
-			//タイマーセット
-			tempTimer.StartTimer();
-			if (tempTimer.GetNowtime() <= 0)
-			{
-				bodyTemp += TEMPERATURE_LEVEL;
-				tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-				tempTimer.SetTotalTime(2);
-			}
+			tempRegion -= 0.05f;
 		}
-
+		//if (bodyTemp > STANDARD_TEMPERATURE)
+		//{
+		//	//タイマーセット
+		//	tempTimer.StartTimer();
+		//	if (tempTimer.GetNowtime() <= 0)
+		//	{
+		//		bodyTemp -= TEMPERATURE_LEVEL;
+		//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
+		//		tempTimer.SetTotalTime(2);
+		//	}
+		//}
+		//else if (bodyTemp < STANDARD_TEMPERATURE)
+		//{
+		//	//タイマーセット
+		//	tempTimer.StartTimer();
+		//	if (tempTimer.GetNowtime() <= 0)
+		//	{
+		//		bodyTemp += TEMPERATURE_LEVEL;
+		//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
+		//		tempTimer.SetTotalTime(2);
+		//	}
+		//}
 	}
 
 

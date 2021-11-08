@@ -40,7 +40,7 @@ public:
 	void Initialize();
 	void Update();
 	void RenderNumber(int x, int num);
-	void Render(int parasiteNum,int hungry,float tempRegionNum);
+	void Render(int parasiteNum,int hungry,float tempRegionNum, int distanceNum);
 	void Release();
 };
 

@@ -11,7 +11,7 @@ CPlayer::CPlayer() :
 	jumpFlg(false),
 	deadFlg(false),
 	possibleToJumpFlg(false),
-	possibleToEatFlg(false),
+	possibleToEatFlg(),
 	causeOfDeath(0),
 	hitFlg(false),
 	hitTimer(),
@@ -62,7 +62,7 @@ void CPlayer::Initialize()
 	random.SetSeed(time(NULL));
 	//座標
 	posX = STARTPOS_X;
-	posY = g_pGraphics->GetTargetHeight() * 0.5 - texture.GetHeight() * 0.5;
+	posY = g_pGraphics->GetTargetHeight() * 0.5 - standTexture.GetHeight() * 0.5;
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
 	tempRegion = 50;
@@ -667,13 +667,9 @@ void CPlayer::RenderDebug(float wx,float wy)
 //解放
 void CPlayer::Release()
 {
-<<<<<<< HEAD
 	standTexture.Release();
 	eatTexture.Release();
 	deathTexture.Release();
-=======
-	texture.Release();
->>>>>>> Mori
 }
 
 
@@ -697,7 +693,6 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		{
 			//衝突
 			hitFlg = true;
-<<<<<<< HEAD
 
 			//死因：ショック死
 			//当たった時点で即死
@@ -715,25 +710,6 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 			hitFlg = true;
 			hitTimer.SetTotalTime(1);
 
-=======
-
-			//死因：ショック死
-			//当たった時点で即死
-			deadFlg = true;
-			causeOfDeath = CAUSE_SeaTurtle;
-		}
-	}
-	//障害物
-	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
-		cObstacle.GetShow(Garbage, num) && !hitFlg)
-	{
-		if (causeOfDeath == CAUSE_None)
-		{
-			//衝突
-			hitFlg = true;
-			hitTimer.SetTotalTime(1);
-
->>>>>>> Mori
 			//死因：衝突死
 			//20%で死ぬ
 			deadFlg = DieInPercentage(20);
@@ -748,13 +724,8 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		if (causeOfDeath == CAUSE_None && !waterFlowFlg)
 		{
 			//死因：加速死
-<<<<<<< HEAD
 			//5%で死ぬ
 			deadFlg = DieInPercentage(5);
-=======
-			//10%で死ぬ
-			deadFlg = DieInPercentage(10);
->>>>>>> Mori
 			if (deadFlg)
 				causeOfDeath = CAUSE_WaterFlow;
 		}
@@ -794,7 +765,6 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		cObstacle.GetShow(FoodFish, num))
 	{
 		//探知範囲内にエサがある場合true
-<<<<<<< HEAD
 		possibleToEatFlg[num] = true;
 		//エサを食べる
 		if (Eat(false))
@@ -863,41 +833,6 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 	{
 		//探知範囲内にエサがない場合false
 		possibleToEatFlg[num] = false;
-=======
-		possibleToEatFlg = true;
-		//エサを食べる
-		if (Eat())
-		{
-			cObstacle.SetShow(false, FoodFish, num);
-		}
-	}
-	else if (prec.CollisionRect(cObstacle.GetRect(FoodShrimp, num)) &&
-		cObstacle.GetShow(FoodShrimp, num))
-	{
-		//探知範囲内にエサがある場合true
-		possibleToEatFlg = true;
-		//エサを食べる
-		if (Eat())
-		{
-			cObstacle.SetShow(false, FoodShrimp, num);
-		}
-	}
-	else if (prec.CollisionRect(cObstacle.GetRect(FoodCrab, num)) &&
-		cObstacle.GetShow(FoodCrab, num))
-	{
-		//探知範囲内にエサがある場合true
-		possibleToEatFlg = true;
-		//エサを食べる
-		if (Eat())
-		{
-			cObstacle.SetShow(false, FoodCrab, num);
-		}
-	}
-	else
-	{
-		//探知範囲内にエサがない場合false
-		possibleToEatFlg = false;
->>>>>>> Mori
 	}
 
 }

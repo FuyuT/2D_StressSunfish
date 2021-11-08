@@ -8,10 +8,6 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	Mof::LPFramework pFrame = new Mof::CDX11GameFramework();
 	Mof::WINDOWSGAMEFRAMEWORKINITIALIZEINFO Info;
 	Info.WindowCreateInfo.hIcon = ::LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	//フォントの追加
-	AddFontResource("Text\\poprum.otf");
-	//RemoveFontResource("poprum.otf");
-
 	Info.pApplication = new CGameApp();
 	//画面サイズ指定
 	Info.WindowCreateInfo.Width = 1920;

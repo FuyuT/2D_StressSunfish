@@ -26,22 +26,29 @@ private:
 	CTimer			 hungerTimer;
 	CTimer			 parasiteTimer;
 
+	//フォント
+	LPMofChar fontAdd = "Test\\PopRumCute.otf";
+	CFont FontPopRumCute;
+	
 	//チュートリアルメッセージ
 	CTexture		 messageWindowImg;
 	char*			 fBuffer;
 	int				 fBufferOffset;	  //現在表示できている位置
+
 	//一度に表示するバッファ 全角は(MESSAGE_ARRAY_BYTE/2)文字まで表示可能(文字コードShift_JISの場合)
 	char			 fLineBuffer[MESSAGE_ARRAY_BYTE] = "\0";
 	int				 mShowDelay;
-	bool			 messegeEndFlg;
+	bool			 messageEndFlg;
 public:
 	CSceneTutorial();
 	~CSceneTutorial();
-	bool Load()override;
 	bool TextLoad();
+	void FontLoad();
+	void MessageUpdate();
+	void MessageRender();
+	bool Load()override;
 	void Initialize() override;
 	void Update() override;
-	void MessageUpdate();
 	void Render() override;
 	void RenderDebug() override;
 	void Release() override;

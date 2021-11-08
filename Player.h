@@ -44,6 +44,8 @@
 #define		FULL_STOMACH			40
 //餓死
 #define		STARVATION				160
+//同じエサが一度に画面に出てくる最大数
+#define FEED_MAXCOUNT 3
 
 //寄生虫許容限界数
 #define		PARASITE_LIMIT			5
@@ -200,15 +202,6 @@ public:
 			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT + 25,
 			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT + 30,
-			posY + COLLISION_ADJUSTMENT + 55
-		);
-	}
-	CRectangle GetEyeRect()
-	{
-		return CRectangle(
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
-			posY + COLLISION_ADJUSTMENT + 25,
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + 30,
 			posY + COLLISION_ADJUSTMENT + 55
 		);
 	}

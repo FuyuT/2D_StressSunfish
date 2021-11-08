@@ -21,7 +21,7 @@ enum tag_TROPHY {
 	TROPHY_BIWALAKE,			//琵琶湖級
 	TROPHY_JACKPOD,			//ジャックポット級
 	TROPHY_TALENTEDDEMON,		//才能魔級
-	TROPHY_TOTAL_NO,
+	TROPHY_NULL,
 };
 
 class CSceneTrophyCollection : public CSceneBase
@@ -86,6 +86,9 @@ private:
 	int			leftButtonPosX = 850;
 	int			leftAndRightButtonPosY = 900;
 
+	//取得したトロフィーを三つ保存するための配列ポインタ
+	int*			numberOfTrophy[3];
+
 public:
 	CSceneTrophyCollection();
 	~CSceneTrophyCollection();
@@ -98,8 +101,9 @@ public:
 	CRectangle GetRect(int i);
 
 	//ゲームシーンでフラグを変えるための関数
-	//未入手ならtrueを、取得済みならfalseを返す。
+	//未入手トロフィーならtrueを、取得済みトロフィーならfalseを返す。
 	bool GetTrophy(int i);
+	int* GetNumberOfTrophy() { return *numberOfTrophy; };
 
 	//表示フラグの保存、読み込み関数
 	void SaveTrophyFlg();
