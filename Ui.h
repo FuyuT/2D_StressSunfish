@@ -30,14 +30,22 @@ private:
 	CTexture parasite4;
 	CTexture parasite5;
 
+	CTexture jumpPoss;
+	CTexture eatPoss;
+
+	CTexture cautionUi;
+
 	CTimer tempTimer;
 	CTimer hungerTimer;
 	CTimer parasiteTimer;
+
+	CFont font;
 public:
 	bool Load();
 	void Initialize();
 	void Update();
-	void Render(int parasiteNum,int hungry,float tempRegionNum);
+	void RenderNumber(int x, int num);
+	void Render(int parasiteNum,int hungry,float tempRegionNum, int distanceNum,bool jumpFlg,bool eatFlg);
 	void Release();
 };
 

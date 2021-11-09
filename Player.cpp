@@ -1,7 +1,7 @@
 #include "Player.h"
 
 CPlayer::CPlayer() :
-	texture(),
+	standTexture(),
 	random(),
 	posX(0.0f),
 	posY(0.0f),
@@ -11,7 +11,7 @@ CPlayer::CPlayer() :
 	jumpFlg(false),
 	deadFlg(false),
 	possibleToJumpFlg(false),
-	possibleToEatFlg(false),
+	possibleToEatFlg(),
 	causeOfDeath(0),
 	hitFlg(false),
 	hitTimer(),
@@ -35,10 +35,19 @@ CPlayer::~CPlayer()
 bool CPlayer::Load()
 {
 	//プレイヤーのテクスチャの読みこみ
-	if (!texture.Load("マンボウ.png"))
+	if (!standTexture.Load("マンボウ.png"))
 	{
 		return false;
 	}
+	//if (!eatTexture.Load("sheet_manbo si_manbo 2_Eat_anim.png"))
+	//{
+	//	return false;
+	//}
+	//if (!deathTexture.Load("sheet_manbo si_manbo 2_Death.png"))
+	//{
+	//	return false;
+	//}
+
 
 	return true;
 }
@@ -53,7 +62,7 @@ void CPlayer::Initialize()
 	random.SetSeed(time(NULL));
 	//座標
 	posX = STARTPOS_X;
-	posY = g_pGraphics->GetTargetHeight() * 0.5 - texture.GetHeight() * 0.5;
+	posY = g_pGraphics->GetTargetHeight() * 0.5 - standTexture.GetHeight() * 0.5;
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
 	tempRegion = 50;
@@ -73,7 +82,12 @@ void CPlayer::Initialize()
 	//フラグ
 	jumpFlg = false;
 	deadFlg = false;
-	possibleToEatFlg = false;
+
+	for (int i = 0; i < FEED_MAXCOUNT; i++)
+	{
+		possibleToEatFlg[i] = false;
+	}
+
 	possibleToJumpFlg = false;
 	waterFlowFlg = false;
 
@@ -194,7 +208,7 @@ void CPlayer::UpdateMove()
 	//海底(スクリーン下部)　移動制限
 	if (GetRect().Bottom > UNDER_SEA)
 	{
-		posY = UNDER_SEA - texture.GetHeight() + COLLISION_ADJUSTMENT;
+		posY = UNDER_SEA - standTexture.GetHeight() + COLLISION_ADJUSTMENT;
 		moveY = 0;
 	}
 	
@@ -207,12 +221,15 @@ void CPlayer::UpdateMove()
 }
 
 //エサを食べる
-bool CPlayer::Eat()
+bool CPlayer::Eat(bool rottenFlg)
 {
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A))
 	{
-		possibleToEatFlg = false;
+		for (int i = 0; i < FEED_MAXCOUNT; i++)
+		{
+			possibleToEatFlg[i] = false;
+		}
 
 		//死因が確定していない
 		if (causeOfDeath == CAUSE_None)
@@ -240,11 +257,15 @@ bool CPlayer::Eat()
 		//死因が確定していない
 		if (causeOfDeath == CAUSE_None)
 		{
-			//死因：喉つまり
-			//20%で死ぬ
-			deadFlg = DieInPercentage(20);
-			if (deadFlg)
-				causeOfDeath = CAUSE_ChokeOnShell;
+			//腐っていれば確率で死ぬ
+			if (rottenFlg)
+			{
+				//死因：喉つまり
+				//20%で死ぬ
+				deadFlg = DieInPercentage(20);
+				if (deadFlg)
+					causeOfDeath = CAUSE_ChokeOnShell;
+			}
 		}
 
 		//エサを食べたことを返す
@@ -441,25 +462,39 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 空腹
 	 *********/
-	hungerTimer.StartTimer();
-	if (hungerTimer.GetNowtime() <= 0)
+	if (hungerRegion < 100)
 	{
-		if (hungerRegion < STARVATION)
+		hungerRegion += 0.05f;
+	}
+	if (hungerRegion >= 85)
+	{
+		if (causeOfDeath == CAUSE_None)
 		{
-			//空腹度が増加する
-			hungerRegion += HUNGRYLEVEL;
-			if (hungerRegion >= STARVATION)
-			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：餓死
-					deadFlg = true;
-					causeOfDeath = CAUSE_Starvation;
-				}
-			}
-			hungerTimer.SetTotalTime(3);
+			//死因：餓死
+			deadFlg = true;
+			causeOfDeath = CAUSE_Starvation;
 		}
 	}
+	
+	//hungerTimer.StartTimer();
+	//if (hungerTimer.GetNowtime() <= 0)
+	//{
+	//	if (hungerRegion < STARVATION)
+	//	{
+	//		//空腹度が増加する
+	//		hungerRegion += HUNGRYLEVEL;
+	//		if (hungerRegion >= STARVATION)
+	//		{
+	//			if (causeOfDeath == CAUSE_None)
+	//			{
+	//				//死因：餓死
+	//				deadFlg = true;
+	//				causeOfDeath = CAUSE_Starvation;
+	//			}
+	//		}
+	//		hungerTimer.SetTotalTime(3);
+	//	}
+	//}
 
 	/*********
 	*  水流
@@ -542,7 +577,7 @@ void CPlayer::Render(float wx, float wy)
 		return;
 
 	//プレイヤーの描画
-	texture.Render(posX - wx, posY - wy);
+	standTexture.Render(posX - wx, posY - wy);
 }
 
 //デバッグ描画
@@ -555,7 +590,7 @@ void CPlayer::RenderDebug(float wx,float wy)
 	}
 
 	//「エサを食べる」が可能
-	if (possibleToEatFlg)
+	if (GetEat())
 	{
 		CGraphicsUtilities::RenderString(200, 40, MOF_COLOR_BLACK, "<食べる可能>");
 	}
@@ -646,7 +681,9 @@ void CPlayer::RenderDebug(float wx,float wy)
 //解放
 void CPlayer::Release()
 {
-	texture.Release();
+	standTexture.Release();
+	eatTexture.Release();
+	deathTexture.Release();
 }
 
 
@@ -701,8 +738,8 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		if (causeOfDeath == CAUSE_None && !waterFlowFlg)
 		{
 			//死因：加速死
-			//10%で死ぬ
-			deadFlg = DieInPercentage(10);
+			//5%で死ぬ
+			deadFlg = DieInPercentage(5);
 			if (deadFlg)
 				causeOfDeath = CAUSE_WaterFlow;
 		}
@@ -742,9 +779,9 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		cObstacle.GetShow(FoodFish, num))
 	{
 		//探知範囲内にエサがある場合true
-		possibleToEatFlg = true;
+		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat())
+		if (Eat(false))
 		{
 			cObstacle.SetShow(false, FoodFish, num);
 		}
@@ -753,9 +790,9 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		cObstacle.GetShow(FoodShrimp, num))
 	{
 		//探知範囲内にエサがある場合true
-		possibleToEatFlg = true;
+		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat())
+		if (Eat(false))
 		{
 			cObstacle.SetShow(false, FoodShrimp, num);
 		}
@@ -764,17 +801,52 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		cObstacle.GetShow(FoodCrab, num))
 	{
 		//探知範囲内にエサがある場合true
-		possibleToEatFlg = true;
+		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat())
+		if (Eat(false))
 		{
 			cObstacle.SetShow(false, FoodCrab, num);
 		}
 	}
+	//腐ったエサ
+	else if (prec.CollisionRect(cObstacle.GetRect(RottenFish, num)) &&
+		cObstacle.GetShow(RottenFish, num))
+	{
+		//探知範囲内にエサがある場合true
+		possibleToEatFlg[num] = true;
+		//エサを食べる
+		if (Eat(true))
+		{
+			cObstacle.SetShow(false, RottenFish, num);
+		}
+	}
+	else if (prec.CollisionRect(cObstacle.GetRect(RottenShrimp, num)) &&
+		cObstacle.GetShow(RottenShrimp, num))
+	{
+		//探知範囲内にエサがある場合true
+		possibleToEatFlg[num] = true;
+		//エサを食べる
+		if (Eat(true))
+		{
+			cObstacle.SetShow(false, RottenShrimp, num);
+		}
+	}
+	else if (prec.CollisionRect(cObstacle.GetRect(RottenCrab, num)) &&
+		cObstacle.GetShow(RottenCrab, num))
+	{
+		//探知範囲内にエサがある場合true
+		possibleToEatFlg[num] = true;
+		//エサを食べる
+		if (Eat(true))
+		{
+			cObstacle.SetShow(false, RottenCrab, num);
+		}
+	}
+
 	else
 	{
 		//探知範囲内にエサがない場合false
-		possibleToEatFlg = false;
+		possibleToEatFlg[num] = false;
 	}
 
 }
