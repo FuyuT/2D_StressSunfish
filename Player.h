@@ -22,6 +22,8 @@
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
 #define		COLLISION_ADJUSTMENT	130.0f
+//テクスチャの幅(仮)
+#define		TEXTURE_SIZE			384
 
 //ジャンプ力
 #define		JUMP_POWER_X			9.0f
@@ -39,7 +41,7 @@
 //お腹が空く度合い
 #define		HUNGRYLEVEL				12
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		20
+#define		FEED_SATIETYLEVEL		36
 //満腹
 #define		FULL_STOMACH			15
 //餓死
@@ -84,6 +86,16 @@ enum CAUSE_OF_DEATH
 
 };
 
+//アニメーション種類
+enum MOTION
+{
+	MOTION_STAND,
+	MOTION_EAT,
+	MOTION_JUMP,
+	MOTION_DEATH,
+
+	MOTION_COUNT,
+};
 
 class CPlayer
 {
@@ -128,7 +140,7 @@ private:
 	CTimer		waterFlowTimer;
 	bool		waterFlowFlg;
 	//アニメーション
-	//CSpriteMotionController		
+	CSpriteMotionController	motion;
 
 	//ブレーキ(テスト)
 	CTimer		brakeTimer;
@@ -181,8 +193,8 @@ public:
 		return CRectangle(
 			posX + COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT,
-			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT,
-			posY + standTexture.GetHeight() - COLLISION_ADJUSTMENT
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT
 		);
 	}
 
@@ -192,16 +204,16 @@ public:
 		return CRectangle(
 			posX + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
 			posY + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
-			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
-			posY + standTexture.GetHeight() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
 		);
 	}
 	CRectangle GetEyeRect()
 	{
 		return CRectangle(
-			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT + 25,
-			posX + standTexture.GetWidth() - COLLISION_ADJUSTMENT + 30,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + 30,
 			posY + COLLISION_ADJUSTMENT + 55
 		);
 	}
