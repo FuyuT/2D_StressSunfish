@@ -66,18 +66,18 @@ bool CUi::Load()
 
 	//行動可能UI
 	//ジャンプ
-	if (!jumpPoss.Load("janpuUI.png"))
+	if (!jumpPoss.Load("UI_Jump.png"))
 	{
 		return false;
 	}
 	//食事
-	if (!eatPoss.Load("shokuziUI.png"))
+	if (!eatPoss.Load("UI_Eat.png"))
 	{
 		return false;
 	}
 
 	//注意UI
-	if (!cautionUi.Load("caution.png"))
+	if (!cautionUi.Load("UI_Caution.png"))
 	{
 		return false;
 	}
@@ -162,12 +162,12 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 	//ジャンプ
 	if (jumpFlg)
 	{
-		jumpPoss.Render(1500, 200);
+		jumpPoss.Render(1400, 0);
 	}
 	//食事
 	if (eatFlg)
 	{
-		eatPoss.Render(1500, 400);
+		eatPoss.Render(1400, 100);
 	}
 
 	//注意UIの描画(仮)

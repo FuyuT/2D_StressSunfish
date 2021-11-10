@@ -103,6 +103,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BacktoTitleWindow.cpp" />
+    <ClCompile Include="Blinking.cpp" />
     <ClCompile Include="Bubble.cpp" />
     <ClCompile Include="CauseOfDeathWindow.cpp" />
     <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
@@ -110,6 +111,7 @@
     <ClCompile Include="RottenCrab.cpp" />
     <ClCompile Include="RottenFish.cpp" />
     <ClCompile Include="RottenShrimp.cpp" />
+    <ClCompile Include="ShoalSardine.cpp" />
     <ClCompile Include="WaterFlow.cpp" />
     <ClCompile Include="FoodCrab.cpp" />
     <ClCompile Include="FoodFish.cpp" />
@@ -138,6 +140,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackToTitleWindow.h" />
+    <ClInclude Include="Blinking.h" />
     <ClInclude Include="Bubble.h" />
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
@@ -145,6 +148,7 @@
     <ClInclude Include="RottenCrab.h" />
     <ClInclude Include="RottenFish.h" />
     <ClInclude Include="RottenShrimp.h" />
+    <ClInclude Include="ShoalSardine.h" />
     <ClInclude Include="WaterFlow.h" />
     <ClInclude Include="ObstacleBase.h" />
     <ClInclude Include="FoodCrab.h" />

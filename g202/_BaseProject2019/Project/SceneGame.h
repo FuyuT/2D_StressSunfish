@@ -38,6 +38,8 @@ private:
 	//新規入手フラグ
 	bool newGetTrophy;
 	bool newGetDeth;
+	//トロフィー用配列
+	int	numberOfTrophy[3];
 
 public:
 	CSceneGame();

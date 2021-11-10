@@ -29,10 +29,10 @@ private:
 	//フォント
 	LPMofChar fontAdd = "Test\\PopRumCute.otf";
 	CFont FontPopRumCute;
-	
+
 	//チュートリアルメッセージ
 	CTexture		 messageWindowImg;
-	char*			 fBuffer;
+	char* fBuffer;
 	int				 fBufferOffset;	  //現在表示できている位置
 
 	//一度に表示するバッファ 全角は(MESSAGE_ARRAY_BYTE/2)文字まで表示可能(文字コードShift_JISの場合)
@@ -55,4 +55,3 @@ public:
 
 
 };
-

@@ -432,11 +432,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		riverFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_RIVER;
-		}
 		return true;
 	}
 	//トロフィー:滝級ゲット
@@ -444,11 +439,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		waterFallFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_WATERFALL;
-		}
 		return true;
 	}
 	//トロフィー:湖級ゲット
@@ -456,11 +446,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		lakeFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_LAKE;
-		}
 		return true;
 	}
 	//トロフィー:ダム級ゲット
@@ -468,11 +453,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		damFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_DAM;
-		}
 		return true;
 	}
 	//トロフィー:下水道級ゲット
@@ -480,11 +460,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		sewerFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_SEWER;
-		}
 		return true;
 	}
 	//トロフィー:インド洋級ゲット
@@ -492,11 +467,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		indianOceanFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_INDIANOCEAN;
-		}
 		return true;
 	}
 	//トロフィー:アマゾン川級ゲット
@@ -504,11 +474,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		amazonRiverFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_AMAZONROVER;
-		}
 		return true;
 	}
 	//トロフィー:海級ゲット
@@ -516,11 +481,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		oceanFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_OCEAN;
-		}
 		return true;
 	}
 	//トロフィー:日本階級ゲット
@@ -528,11 +488,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		seaOf​​JapanFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_SEAOFJAPAN;
-		}
 		return true;
 	}
 	//トロフィー:地球一周級ゲット
@@ -540,11 +495,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		aroundTheGlobeFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_AROUNDTHEGLOBE;
-		}
 		return true;
 	}
 	//トロフィー:やる気ゼロ級ゲット
@@ -552,11 +502,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		zeroMotivationFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_ZEROMOTIVATION;
-		}
 		return true;
 	}
 	//トロフィー:富士山級ゲット
@@ -564,11 +509,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		mountFujiFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_MOUNTFJI;
-		}
 		return true;
 	}
 	//トロフィー:大阪マラソン級ゲット
@@ -576,11 +516,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		osakaMarathonFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_OSAKAMARATHON;
-		}
 		return true;
 	}
 	//トロフィー:琵琶湖級ゲット
@@ -588,11 +523,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		biwaLakeFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_BIWALAKE;
-		}
 		return true;
 	}
 	//トロフィー:ジャックポット級ゲット
@@ -600,11 +530,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		jackPodFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_JACKPOD;
-		}
 		return true;
 	}
 	//才能魔級
@@ -612,11 +537,6 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 	{
 		talentedDemonFlg = true;
 		SaveTrophyFlg();
-		for (int i = 0; i < 3; i++)
-		{
-			if (*numberOfTrophy[i] == NULL)
-				*numberOfTrophy[i] = TROPHY_TALENTEDDEMON;
-		}
 		return true;
 	}
 

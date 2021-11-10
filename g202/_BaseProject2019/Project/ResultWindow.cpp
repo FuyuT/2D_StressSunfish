@@ -11,6 +11,7 @@ CResultWindow::~CResultWindow()
 
 void CResultWindow::Initialize()
 {
+	distans = 
 	popUpTexture.Load("Pop_upƒ‰ƒt2.png");
 	buttonNextTexture.Load("ButtonNext.png");
 	if (numberOfTrophy[0] != TROPHY_NULL)
@@ -310,6 +311,9 @@ void CResultWindow::Render()
 }
 void CResultWindow::Release()
 {
+	trophyTexture.Release();
+	trophyTexture2.Release();
+	trophyTexture3.Release();
 	popUpTexture.Release();
 	buttonNextTexture.Release();
 }

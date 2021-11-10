@@ -37,14 +37,19 @@ public:
 	virtual void Release() {}
 	//ゲッター
 	int	  GetButtonResult() { return buttonResult; }
+	short GetNextPopUp() { return nextPopUp; }
+	//
 	void  SetButtonResult(int setButtonResult) { buttonResult = setButtonResult; }
 	void  SetDethResult(int setDethResult) { dethResult = setDethResult; }
 	void  SetNewGetDeth(bool setNewGetDethFlg) { newGetDethFlg = setNewGetDethFlg; }
 	void  SetNewGetTrophy(bool setNewGetTrophyFlg) {newGetTrophyFlg = setNewGetTrophyFlg ; }
 	//トロフィーポップアップ用　3個まで保存して取得できるようにする。
-	void  SetNumberOfTrophy(int trophy[3]) {for (int i = 0; i < 3; i++) { numberOfTrophy[i] = trophy[i]; }}
-
-	short GetNextPopUp() { return nextPopUp; }
+	void SetNumberOfTrophy(int *trophy) {
+		for (int i = 0; i < 3; i++)
+		{
+			numberOfTrophy[i] =trophy[i];
+		}
+	}
 	bool IsEnd() { return endFlg; }
 
 };
