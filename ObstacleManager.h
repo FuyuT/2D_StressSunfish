@@ -9,6 +9,7 @@
 #include "RottenFish.h"
 #include "RottenCrab.h"
 #include "RottenShrimp.h"
+#include "ShoalSardine.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -22,6 +23,7 @@ enum obstacle {
 	RottenFish,
 	RottenCrab,
 	RottenShrimp,
+	ShoalSardine,
 };
 
 class CObstacleManager
@@ -37,6 +39,7 @@ private:
 	CRottenShrimp cRottenShrimp[3];
 	CTurtle     cTurtle;
 	CWaterFlow  cWaterFlow;
+	CShoalSardine cShoalSardine;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
@@ -104,6 +107,9 @@ public:
 		case RottenShrimp :
 			return cRottenShrimp[num].GetRect();
 			break;
+		case ShoalSardine:
+			return cShoalSardine.GetRect();
+			break;
 		}
 
 	}
@@ -168,6 +174,9 @@ public:
 			break;
 		case RottenShrimp:
 			return cRottenShrimp[num].GetShow();
+			break;
+		case ShoalSardine:
+			return cShoalSardine.GetShow();
 			break;
 		}
 	}
