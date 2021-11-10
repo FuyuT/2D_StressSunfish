@@ -10,7 +10,6 @@ private:
 	int parasiteCnt = 0;
 	int parasiteFlg = 0;
 
-	float tempRegion = 245;
 	int hungerRegion = 40;
 
 	CTexture stressMeter;
@@ -40,8 +39,7 @@ public:
 	bool Load();
 	void Initialize();
 	void Update();
-	void RenderNumber(int x, int num);
-	void Render(int parasiteNum,int hungry,int bodyTempNum,float tempRegionNum,int distanceNum);
+	void Render(int parasiteNum,int hungry,float tempRegionNum, int distanceNum);
 	void Release();
 };
 

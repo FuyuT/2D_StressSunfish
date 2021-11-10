@@ -85,99 +85,22 @@ void CUi::Update()
 
 }
 
-void CUi::RenderNumber(int x,int num)
-{
-	switch (num)
-	{
-		case 0:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "0");
-			break;
-		case 1:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "1");
-			break;
-		case 2:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "2");
-			break;
-		case 3:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "3");
-			break;
-		case 4:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "4");
-			break;
-		case 5:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "5");
-			break;
-		case 6:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "6");
-			break;
-		case 7:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "7");
-			break;
-		case 8:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "8");
-			break;
-		case 9:
-			font.RenderString(x, 10, MOF_COLOR_BLACK, "9");
-			break;
-	}
-}
-
-void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum,int distanceNum)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum)
 {
 	//m”•\¦ ˜g‘g‚İ
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
 	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
 
-	//m”•\¦ ”š
-	int headFlg = false;
-	int num = distanceNum;
-	if (num / 100000 != 0 || headFlg)
-	{
-		RenderNumber(10, num / 100000);
-		headFlg = true;
-	}
-	num = num % 100000;
-	if (num / 10000 != 0 || headFlg)
-	{
-		RenderNumber(35, num / 10000);
-		headFlg = true;
-	}
-	num = num % 10000;
-	if (num / 1000 != 0 || headFlg)
-	{
-		RenderNumber(60, num / 1000);
-		headFlg = true;
-	}
-	num = num % 1000;
-	if (num / 100 != 0 || headFlg)
-	{
-		RenderNumber(85, num / 100);
-		headFlg = true;
-	}
-	num = num % 100;
-	if (num / 10 != 0 || headFlg)
-	{
-		RenderNumber(110, num / 10);
-		headFlg = true;
-	}
-	if (num % 10 != 0 || headFlg)
-	{
-		RenderNumber(135, num % 10);
-		headFlg = true;
-	}
-	//m”•\¦ m
-	font.RenderString(160, 10,MOF_COLOR_BLACK, " m");
-	//CGraphicsUtilities::RenderString(160, 10, MOF_COLOR_BLACK, "%d", num);
-	//font.RenderString(160, 10, MOF_COLOR_BLACK, "%d");
+	font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%d m", distanceNum);
 
 	stressMeter.Render(1600, 0);
 
 	//‘Ì‰·UI•`‰æ
-	if (bodyTempNum >= 40)
+	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
 	}
-	else if (bodyTempNum <= -20)
+	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
 	}
@@ -188,8 +111,8 @@ void CUi::Render(int parasiteNum,int hungry,int bodyTempNum, float tempRegionNum
 
 	//‰·“xŒvUI•`‰æ
 	tempMeterFrame.Render(1550, 200);
-	CRectangle rec1(0, tempRegionNum, 500, 500);
-	tempMeter.Render(1550, 200 + tempRegionNum, rec1);
+	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
+	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
 	//Šñ¶’UI‚Ì•`‰æ
 	switch (parasiteNum)
@@ -237,6 +160,5 @@ void CUi::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
-
 	font.Release();
 }
