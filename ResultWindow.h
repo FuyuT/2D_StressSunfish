@@ -1,5 +1,6 @@
 #pragma once
 #include "PopUpWindowBase.h"
+#include "Player.h"
 class CResultWindow : public CPopUpWindowBase
 {
 private:
@@ -15,6 +16,8 @@ private:
 	int			buttonNextPosY = 850;
 	int			trophyTexturePosX = 815;
 	int			trophyTexturePosY = 350;
+
+	int			distans;
 public:
 	CResultWindow();
 	~CResultWindow();
