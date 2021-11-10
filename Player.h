@@ -39,9 +39,9 @@
 //お腹が空く度合い
 #define		HUNGRYLEVEL				12
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		36
+#define		FEED_SATIETYLEVEL		20
 //満腹
-#define		FULL_STOMACH			40
+#define		FULL_STOMACH			15
 //餓死
 #define		STARVATION				160
 //同じエサが一度に画面に出てくる最大数
@@ -121,7 +121,7 @@ private:
 	int         bodyTemp;
 	float       tempRegion;
 	//空腹
-	int         hungerRegion;
+	float         hungerRegion;
 	//寄生虫
 	int			parasite;
 	//水流
@@ -228,7 +228,7 @@ public:
 		return parasite;
 	}
 	//空腹度を返す 10～0
-	int GetHungry()
+	float GetHungry()
 	{
 		return hungerRegion;
 	}

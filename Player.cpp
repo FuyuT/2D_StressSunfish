@@ -462,25 +462,39 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 空腹
 	 *********/
-	hungerTimer.StartTimer();
-	if (hungerTimer.GetNowtime() <= 0)
+	if (hungerRegion < 100)
 	{
-		if (hungerRegion < STARVATION)
+		hungerRegion += 0.05f;
+	}
+	if (hungerRegion >= 85)
+	{
+		if (causeOfDeath == CAUSE_None)
 		{
-			//空腹度が増加する
-			hungerRegion += HUNGRYLEVEL;
-			if (hungerRegion >= STARVATION)
-			{
-				if (causeOfDeath == CAUSE_None)
-				{
-					//死因：餓死
-					deadFlg = true;
-					causeOfDeath = CAUSE_Starvation;
-				}
-			}
-			hungerTimer.SetTotalTime(3);
+			//死因：餓死
+			deadFlg = true;
+			causeOfDeath = CAUSE_Starvation;
 		}
 	}
+	
+	//hungerTimer.StartTimer();
+	//if (hungerTimer.GetNowtime() <= 0)
+	//{
+	//	if (hungerRegion < STARVATION)
+	//	{
+	//		//空腹度が増加する
+	//		hungerRegion += HUNGRYLEVEL;
+	//		if (hungerRegion >= STARVATION)
+	//		{
+	//			if (causeOfDeath == CAUSE_None)
+	//			{
+	//				//死因：餓死
+	//				deadFlg = true;
+	//				causeOfDeath = CAUSE_Starvation;
+	//			}
+	//		}
+	//		hungerTimer.SetTotalTime(3);
+	//	}
+	//}
 
 	/*********
 	*  水流

@@ -64,6 +64,24 @@ bool CUi::Load()
 		return false;
 	}
 
+	//行動可能UI
+	//ジャンプ
+	if (!jumpPoss.Load("janpuUI.png"))
+	{
+		return false;
+	}
+	//食事
+	if (!eatPoss.Load("shokuziUI.png"))
+	{
+		return false;
+	}
+
+	//注意UI
+	if (!cautionUi.Load("caution.png"))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -122,7 +140,7 @@ void CUi::RenderNumber(int x,int num)
 	}
 }
 
-void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,bool jumpFlg,bool eatFlg)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -214,8 +232,23 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum)
 	//空腹ゲージUI描画
 	CRectangle rec2(0, 0, 330, 200);
 	hungerGaugeFrame.Render(1400, 0, rec2);
-	CRectangle rec3(0, hungry, 330, 200);
-	hungerGauge.Render(1400, hungry, rec3);
+	CRectangle rec3(0, 200 * (hungry * 0.01f), 330, 200);
+	hungerGauge.Render(1400, 200 * (hungry * 0.01f), rec3);
+	
+	//行動可能UIの描画
+	//ジャンプ
+	if (jumpFlg)
+	{
+		jumpPoss.Render(1500, 200);
+	}
+	//食事
+	if (eatFlg)
+	{
+		eatPoss.Render(1500, 400);
+	}
+
+	//注意UIの描画(仮)
+	cautionUi.Render(1000, 0);
 }
 
 void CUi::Release()
