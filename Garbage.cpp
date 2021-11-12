@@ -19,13 +19,13 @@ bool CGarbage::Load()
 void CGarbage::Initialize()
 {
 	initPos.y = 1700;
-	pos.x = 2000;
-	pos.y = 1700;
+	//pos.x = 2000;
+	//pos.y = 1700;
 	moveSpeed.x = 3.0f;
 	moveSpeed.y = MAX_MOVE_SPEED;
-	showFlg = true;
+	//showFlg = true;
 	moveUpFlg = true;
-	garbageNo = 2;
+	garbageNo = GARBAGE_NOT_SHOW;
 }
 
 void CGarbage::Update(float wx, float wy)
@@ -58,21 +58,21 @@ void CGarbage::Update(float wx, float wy)
 	pos.y -= moveSpeed.y;
 
 	//スクリーンから出たらshowFlgをfalse
-	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	if (pos.x + garbageShoes.GetWidth() <= wx)showFlg = false;
 }
 
 void CGarbage::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	switch (garbageNo)
+	switch (garbageNo = 2)
 	{
-	case GarbageShoes:
+	case GARBAGE_SHOES:
 		garbageShoes.Render(pos.x - wx, pos.y - wy);
 		break;
-	case GarbageTire:
+	case GARBAGE_TIRE:
 		garbageTire.Render(pos.x - wx, pos.y - wy);
 		break;
-	case GarbageBag:
+	case GARBAGE_BAG:
 		garbageBag.Render(pos.x - wx, pos.y - wy);
 		break;
 	default:
