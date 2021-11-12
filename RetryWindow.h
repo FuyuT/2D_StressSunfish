@@ -8,10 +8,10 @@ private:
 	CTexture	buttonYesTexture;
 	CTexture	buttonNoTexture;
 
-	int			buttonYesPosX = 500;
-	int			buttonYesPosY = 600;
-	int			buttonNoPosX = 1000;
-	int			buttonNoPosY = 600;
+	const int			buttonYesPosX = 500;
+	const int			buttonYesPosY = 600;
+	const int			buttonNoPosX = 1000;
+	const int			buttonNoPosY = 600;
 public:
 	CRetryWindow();
 	~CRetryWindow();

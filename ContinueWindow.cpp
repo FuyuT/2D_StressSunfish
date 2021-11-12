@@ -40,6 +40,7 @@ void CContinueWindow::Update()
 		endFlg = true;
 		//メニュー画面へ遷移
 		buttonResult = 2;
+
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
@@ -49,6 +50,7 @@ void CContinueWindow::Update()
 		endFlg = true;
 		//タイトル画面へ遷移
 		buttonResult = 3;
+
 		nextPopUp = NULL;
 	}
 }

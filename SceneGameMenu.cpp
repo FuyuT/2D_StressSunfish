@@ -11,6 +11,7 @@ CSceneGameMenu::~CSceneGameMenu()
 }
 void CSceneGameMenu::Initialize()
 {
+	backGroundTex.Load("Title.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
 	configButtonTexture.Load("ButtonConfig.png");
 	stressButtonTexture.Load("ButtonStressCollection.png");
@@ -18,19 +19,7 @@ void CSceneGameMenu::Initialize()
 	tutorialButtonTexture.Load("ButtonTutorial.png");
 	titleButtonTexture.Load("ButtonTitle.png");
 
-	//後でテキストデータを読み込む
-	gamePlayButtonPosX = 100;
-	gamePlayButtonPosY = 400;
-	configButtonPosX = 100;
-	configButtonPosY = 500;
-	stressButtonPosX = 100;
-	stressButtonPosY = 600;
-	torophyButtonPosX = 100;
-	torophyButtonPosY = 700;
-	tutorialButtonPosX = 100;
-	tutorialButtonPosY = 800;
-	titleButtonPosX = 1200;
-	titleButtonPosY = 800;
+	
 	
 }
 void CSceneGameMenu::Update()
@@ -73,7 +62,7 @@ void CSceneGameMenu::Update()
 			//チュートリアルモード
 			flgTutorial = true;
 			endFlg = true;
-			nextScene = SCENENO_GAME;
+			nextScene = SCENENO_TUTORIAL;
 			Release();
 		}
 		else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
@@ -87,17 +76,17 @@ void CSceneGameMenu::Update()
 }
 void CSceneGameMenu::Render()
 {
-	gamePlayButtonTexture.Render(gamePlayButtonPosX, gamePlayButtonPosY);
-	configButtonTexture.Render(configButtonPosX, configButtonPosY);
-	stressButtonTexture.Render(stressButtonPosX, stressButtonPosY);
-	torophyButtonTexture.Render(torophyButtonPosX, torophyButtonPosY);
-	tutorialButtonTexture.Render(tutorialButtonPosX, tutorialButtonPosY);
+	backGroundTex.Render(0,0);
+	gamePlayButtonTexture.Render(buttonPosX, gamePlayButtonPosY);
+	configButtonTexture.Render(buttonPosX, configButtonPosY);
+	stressButtonTexture.Render(buttonPosX, stressButtonPosY);
+	torophyButtonTexture.Render(buttonPosX, torophyButtonPosY);
+	tutorialButtonTexture.Render(buttonPosX, tutorialButtonPosY);
 	titleButtonTexture.Render(titleButtonPosX, titleButtonPosY);
-
-	CGraphicsUtilities::RenderString(100, 300, "ゲームメニュー画面");
 }
 void CSceneGameMenu::Release()
 {
+	backGroundTex.Release();
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();
@@ -121,15 +110,15 @@ void CSceneGameMenu::Release()
 CRectangle CSceneGameMenu::GetRect(int i)
 {
 	if (i == 0)
-		return CRectangle(gamePlayButtonPosX, gamePlayButtonPosY, gamePlayButtonPosX + gamePlayButtonTexture.GetWidth(), gamePlayButtonPosY + gamePlayButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, gamePlayButtonPosY, buttonPosX + gamePlayButtonTexture.GetWidth(), gamePlayButtonPosY + gamePlayButtonTexture.GetHeight());
 	else if (i == 1)
-		return CRectangle(configButtonPosX, configButtonPosY, configButtonPosX + configButtonTexture.GetWidth(), configButtonPosY + configButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, configButtonPosY, buttonPosX + configButtonTexture.GetWidth(), configButtonPosY + configButtonTexture.GetHeight());
 	else if (i == 2)
-		return CRectangle(stressButtonPosX, stressButtonPosY, stressButtonPosX + stressButtonTexture.GetWidth(), stressButtonPosY + stressButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, stressButtonPosY, buttonPosX + stressButtonTexture.GetWidth(), stressButtonPosY + stressButtonTexture.GetHeight());
 	else if (i == 3)
-		return CRectangle(torophyButtonPosX, torophyButtonPosY, torophyButtonPosX + torophyButtonTexture.GetWidth(), torophyButtonPosY + torophyButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, torophyButtonPosY,buttonPosX + torophyButtonTexture.GetWidth(), torophyButtonPosY + torophyButtonTexture.GetHeight());
 	else if (i == 4)
-		return CRectangle(tutorialButtonPosX, tutorialButtonPosY, tutorialButtonPosX + tutorialButtonTexture.GetWidth(), tutorialButtonPosY + tutorialButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, tutorialButtonPosY,buttonPosX + tutorialButtonTexture.GetWidth(), tutorialButtonPosY + tutorialButtonTexture.GetHeight());
 	else if (i == 5)
 		return CRectangle(titleButtonPosX, titleButtonPosY, titleButtonPosX + titleButtonTexture.GetWidth(), titleButtonPosY + titleButtonTexture.GetHeight());
 

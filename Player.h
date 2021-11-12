@@ -22,6 +22,8 @@
 #define		FEED_SEARCHRANGE		60.0f
 //当たり判定の幅調整
 #define		COLLISION_ADJUSTMENT	130.0f
+//テクスチャの幅(仮)
+#define		TEXTURE_SIZE			384
 
 //ジャンプ力
 #define		JUMP_POWER_X			9.0f
@@ -41,9 +43,11 @@
 //エサを食べたときに得られる満腹度
 #define		FEED_SATIETYLEVEL		36
 //満腹
-#define		FULL_STOMACH			40
+#define		FULL_STOMACH			15
 //餓死
 #define		STARVATION				160
+//同じエサが一度に画面に出てくる最大数
+#define FEED_MAXCOUNT 3
 
 //寄生虫許容限界数
 #define		PARASITE_LIMIT			5
@@ -53,9 +57,9 @@
 //標準体温
 #define		STANDARD_TEMPERATURE	10
 //体温限界値(熱中症)
-#define		HYPERTHERMIA_LIMIT		50
+#define		HYPERTHERMIA_LIMIT		0
 //体温限界値(凍死)
-#define		FROZEN_LIMIT			30
+#define		FROZEN_LIMIT			100
 //体温変動区域
 #define		TEMPERATURE_CHANGEZONE	500
 
@@ -82,12 +86,25 @@ enum CAUSE_OF_DEATH
 
 };
 
+//アニメーション種類
+enum MOTION
+{
+	MOTION_STAND,
+	MOTION_EAT,
+	MOTION_JUMP,
+	MOTION_DEATH,
+
+	MOTION_COUNT,
+};
 
 class CPlayer
 {
 private:
 	//テクスチャ
-	CTexture	texture;
+	CTexture	standTexture;
+	CTexture	eatTexture;
+	CTexture	jumpTexture;
+	CTexture	deathTexture;
 	//確率
 	CRandom		random;
 	//座標
@@ -104,7 +121,7 @@ private:
 	bool		deadFlg;
 	//アクション可能であるか表すフラグ
 	bool		possibleToJumpFlg;
-	bool		possibleToEatFlg;
+	bool		possibleToEatFlg[FEED_MAXCOUNT];
 	//死因
 	int			causeOfDeath;
 	//無敵(連続で同じ障害物にぶつかり続けてしまうため、衝突後は解除されるまで無敵にする)
@@ -116,12 +133,14 @@ private:
 	int         bodyTemp;
 	float       tempRegion;
 	//空腹
-	int         hungerRegion;
+	float         hungerRegion;
 	//寄生虫
 	int			parasite;
 	//水流
 	CTimer		waterFlowTimer;
 	bool		waterFlowFlg;
+	//アニメーション
+	CSpriteMotionController	motion;
 
 	//ブレーキ(テスト)
 	CTimer		brakeTimer;
@@ -148,7 +167,8 @@ public:
 		return false;
 	}
 	//食べる
-	bool Eat();
+	//腐っていればtrueを、そうでなければfalseを入れる 喉つまりを起こすかどうかの判断に使う
+	bool Eat(bool rottenFlg);
 	//ジャンプ
 	void Jump();
 	void UpdateStatus();
@@ -173,8 +193,8 @@ public:
 		return CRectangle(
 			posX + COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT,
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
-			posY + texture.GetHeight() - COLLISION_ADJUSTMENT
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT
 		);
 	}
 
@@ -184,16 +204,16 @@ public:
 		return CRectangle(
 			posX + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
 			posY + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
-			posY + texture.GetHeight() - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
 		);
 	}
 	CRectangle GetEyeRect()
 	{
 		return CRectangle(
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
 			posY + COLLISION_ADJUSTMENT + 25,
-			posX + texture.GetWidth() - COLLISION_ADJUSTMENT + 30,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + 30,
 			posY + COLLISION_ADJUSTMENT + 55
 		);
 	}
@@ -220,7 +240,7 @@ public:
 		return parasite;
 	}
 	//空腹度を返す 10～0
-	int GetHungry()
+	float GetHungry()
 	{
 		return hungerRegion;
 	}
@@ -233,7 +253,7 @@ public:
 	int GetDistance()
 	{
 		//X座標の20分の1(適当)を進んだ距離とする
-		return (posX - STARTPOS_X) / TRANSLATE_DISTANCE;
+		return ((posX - STARTPOS_X) / TRANSLATE_DISTANCE);
 	}
 	//「ジャンプ」が可能かを返す
 	bool GetJump()
@@ -243,7 +263,15 @@ public:
 	//「食べる」が可能かを返す
 	bool GetEat()
 	{
-		return possibleToEatFlg;
+		for (int i = 0; i < FEED_MAXCOUNT; i++)
+		{
+			//どれか一つでもtrueであれば
+			if (possibleToEatFlg[i])
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 };

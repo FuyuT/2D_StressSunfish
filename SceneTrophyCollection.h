@@ -36,43 +36,43 @@ private:
 	CTexture	lakeIconTexture;		//湖級
 	bool		lakeFlg = false;
 	CTexture	damIconTexture;			//ダム級
-	bool		damFlg = true;
+	bool		damFlg = false;
 	CTexture	sewerIconTexture;		//下水道級
-	bool		sewerFlg = true;
+	bool		sewerFlg = false;
 	CTexture	indianOceanIconTexture;	//インド洋級
-	bool		indianOceanFlg = true;
+	bool		indianOceanFlg = false;
 	CTexture	amazonRiverIconTexture;	//アマゾン川級
-	bool		amazonRiverFlg = true;
+	bool		amazonRiverFlg = false;
 	CTexture	oceanIconTexture;		//海級
-	bool		oceanFlg = true;
+	bool		oceanFlg = false;
 	CTexture	seaOf​​JapanIconTexture;	//日本海級
-	bool		seaOf​​JapanFlg = true;
+	bool		seaOf​​JapanFlg = false;
 	CTexture	aroundTheGlobeIconTexture;	//地球一周級
-	bool		aroundTheGlobeFlg = true;
+	bool		aroundTheGlobeFlg = false;
 	CTexture	zeroMotivationIconTexture;	//やる気ゼロ級
-	bool		zeroMotivationFlg = true;
+	bool		zeroMotivationFlg = false;
 	CTexture	mountFujiIconTexture;	//富士山級
-	bool		mountFujiFlg = true;
+	bool		mountFujiFlg = false;
 	CTexture	osakaMarathonIconTexture;	//大阪マラソン級
-	bool		osakaMarathonFlg = true;
+	bool		osakaMarathonFlg = false;
 	CTexture	biwaLakeIconTexture;	//琵琶湖級
-	bool		biwaLakeFlg = true;
+	bool		biwaLakeFlg = false;
 	CTexture	jackPodIconTexture;		//ジャックポット級
-	bool		jackPodFlg = true;
+	bool		jackPodFlg = false;
 	CTexture	talentedDemonIconTexture;	//才能魔級
-	bool		talentedDemonFlg = true;
+	bool		talentedDemonFlg = false;
 
 	//上段のX座標
-	int			iconFirstRowPosX = 350;
-	int			iconSecondRowPosX = 850;
-	int			iconThirdRowPosX = 1350;
+	const int			iconFirstRowPosX = 350;
+	const int			iconSecondRowPosX = 850;
+	const int			iconThirdRowPosX = 1350;
 	//2ページ目以降の下段のX座標
-	int			icon2PageFirstRowPosX = 600;
-	int			icon2pageSecondRowPosX = 1100;
+	const int			icon2PageFirstRowPosX = 600;
+	const int			icon2pageSecondRowPosX = 1100;
 	//一行目のY座標
-	int			iconOneLinePosY = 100;
+	const int			iconOneLinePosY = 100;
 	//二行目のY座標
-	int			iconTwoLinePosY = 500;
+	const int			iconTwoLinePosY = 500;
 
 	//ページ数
 	int			page;
@@ -80,11 +80,11 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
-	int			menuButtonPosX = 1500;
-	int			menuButtonPosY = 900;
-	int			rightButtonPosX = 950;
-	int			leftButtonPosX = 850;
-	int			leftAndRightButtonPosY = 900;
+	const int			menuButtonPosX = 1500;
+	const int			menuButtonPosY = 900;
+	const int			rightButtonPosX = 950;
+	const int			leftButtonPosX = 850;
+	const int			leftAndRightButtonPosY = 900;
 
 	//取得したトロフィーを三つ保存するための配列ポインタ
 	int*			numberOfTrophy[3];

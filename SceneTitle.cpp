@@ -13,12 +13,10 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::Initialize()
 {
+	backGroundTex.Load("Title.png");
+	titleLogoTex.Load("TitleLogo.png");
 	gamePrayButtonTexture.Load("ButtonStart.png");
 	gameFinishButtonTexture.Load("ButtonFinish.png");
-	gamePrayButtonPosX = 800;
-	gamePrayButtonPosY = 700;
-	gameFinishButtonPosX = 800;
-	gameFinishButtonPosY = 800;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
 
@@ -54,7 +52,8 @@ void CSceneTitle::Update()
 
 void CSceneTitle::Render()
 {
-	CGraphicsUtilities::RenderString(100, 300, "ƒ^ƒCƒgƒ‹‰æ–Ê");
+	backGroundTex.Render(0, 0);
+	titleLogoTex.Render(-100, -150);
 	gamePrayButtonTexture.Render(gamePrayButtonPosX, gamePrayButtonPosY);
 	gameFinishButtonTexture.Render(gameFinishButtonPosX, gameFinishButtonPosY);
 	if (popUpFlg)
@@ -65,6 +64,8 @@ void CSceneTitle::Render()
 
 void CSceneTitle::Release()
 {
+	backGroundTex.Release();
+	titleLogoTex.Release();
 	gamePrayButtonTexture.Release();
 	nowPopUpTitle->Release();
 	if (nowPopUpTitle)
