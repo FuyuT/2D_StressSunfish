@@ -9,7 +9,7 @@
 #define		STARTPOS_X				200
 
 //座標を進んだ距離に変換する割合
-#define		TRANSLATE_DISTANCE		20
+#define		TRANSLATE_DISTANCE		10
 
 //移動速度	
 #define		PLAYER_SPEED			0.6f
@@ -18,10 +18,14 @@
 //重力
 #define		GRAVITY					1.0f
 
+//当たり判定の幅調整
+#define		COLLISION_ADJUSTMENT_TOP	100.0f
+#define		COLLISION_ADJUSTMENT_LEFT	110.0f
+#define		COLLISION_ADJUSTMENT_RIGHT	150.0f
+#define		COLLISION_ADJUSTMENT_BOTTOM	160.0f
+
 //エサ探知範囲
 #define		FEED_SEARCHRANGE		60.0f
-//当たり判定の幅調整
-#define		COLLISION_ADJUSTMENT	130.0f
 //テクスチャの幅(仮)
 #define		TEXTURE_SIZE			384
 
@@ -39,21 +43,21 @@
 #define		UNDER_SEA				2160
 
 //お腹が空く度合い
-#define		HUNGRYLEVEL				12
+#define		HUNGRYLEVEL				0.05f
 //エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		36
+#define		FEED_SATIETYLEVEL		36.0f
 //満腹
-#define		FULL_STOMACH			40
+#define		FULL_STOMACH			20
 //餓死
-#define		STARVATION				160
+#define		STARVATION				85
 //同じエサが一度に画面に出てくる最大数
 #define FEED_MAXCOUNT 3
 
 //寄生虫許容限界数
 #define		PARASITE_LIMIT			5
 
-//体温が上変動する度合い
-#define		TEMPERATURE_LEVEL		3
+//体温が変動する度合い(速さ)
+#define		TEMPERATURE_LEVEL		0.13f
 //標準体温
 #define		STANDARD_TEMPERATURE	10
 //体温限界値(熱中症)
@@ -100,6 +104,7 @@ enum MOTION
 class CPlayer
 {
 private:
+
 	//テクスチャ
 	CTexture	standTexture;
 	CTexture	eatTexture;
@@ -133,7 +138,7 @@ private:
 	int         bodyTemp;
 	float       tempRegion;
 	//空腹
-	int         hungerRegion;
+	float       hungerRegion;
 	//寄生虫
 	int			parasite;
 	//水流
@@ -149,6 +154,13 @@ private:
 	CTimer tempTimer;
 	CTimer hungerTimer;
 	CTimer parasiteTimer;
+
+	//チュートリアル用
+	int		tutorialStep;
+	bool	upTaskFlg;
+	bool	downTaskFlg;
+	bool	jumpTaskFlg;
+	bool	eatTaskFlg;
 
 public:
 	CPlayer();
@@ -191,10 +203,10 @@ public:
 	CRectangle GetRect()
 	{
 		return CRectangle(
-			posX + COLLISION_ADJUSTMENT,
-			posY + COLLISION_ADJUSTMENT,
-			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
-			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT
+			posX + COLLISION_ADJUSTMENT_LEFT,
+			posY + COLLISION_ADJUSTMENT_TOP,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT_RIGHT,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT_BOTTOM
 		);
 	}
 
@@ -202,19 +214,19 @@ public:
 	CRectangle GetSearchRect()
 	{
 		return CRectangle(
-			posX + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
-			posY + COLLISION_ADJUSTMENT - FEED_SEARCHRANGE,
-			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE,
-			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT + FEED_SEARCHRANGE
+			posX + COLLISION_ADJUSTMENT_LEFT - FEED_SEARCHRANGE,
+			posY + COLLISION_ADJUSTMENT_TOP - FEED_SEARCHRANGE,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT_RIGHT + FEED_SEARCHRANGE,
+			posY + TEXTURE_SIZE - COLLISION_ADJUSTMENT_BOTTOM + FEED_SEARCHRANGE
 		);
 	}
 	CRectangle GetEyeRect()
 	{
 		return CRectangle(
-			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT,
-			posY + COLLISION_ADJUSTMENT + 25,
-			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT + 30,
-			posY + COLLISION_ADJUSTMENT + 55
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT_LEFT - 70,
+			posY + COLLISION_ADJUSTMENT_TOP + 30,
+			posX + TEXTURE_SIZE - COLLISION_ADJUSTMENT_RIGHT,
+			posY + COLLISION_ADJUSTMENT_BOTTOM
 		);
 	}
 
@@ -240,7 +252,7 @@ public:
 		return parasite;
 	}
 	//空腹度を返す 10～0
-	int GetHungry()
+	float GetHungry()
 	{
 		return hungerRegion;
 	}
@@ -273,6 +285,7 @@ public:
 		}
 		return false;
 	}
+	//bool Get
 
 };
 
