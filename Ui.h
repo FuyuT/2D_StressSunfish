@@ -1,6 +1,7 @@
 #pragma once
 #include "Mof.h"
 #include "timer.h"
+#include "Blinking.h"
 
 class CUi
 {
@@ -39,12 +40,13 @@ private:
 	CTimer hungerTimer;
 	CTimer parasiteTimer;
 
+	CBlinking cautionB;
+
 	CFont font;
 public:
 	bool Load();
 	void Initialize();
 	void Update();
-	void RenderNumber(int x, int num);
 	void Render(int parasiteNum,int hungry,float tempRegionNum, int distanceNum,bool jumpFlg,bool eatFlg);
 	void Release();
 };
