@@ -25,7 +25,7 @@ void CGarbage::Initialize()
 	moveSpeed.y = MAX_MOVE_SPEED;
 	//showFlg = true;
 	moveUpFlg = true;
-	garbageNo = 0;
+	garbageNo = GARBAGE_NOT_SHOW;
 }
 
 void CGarbage::Update(float wx, float wy)
@@ -66,13 +66,13 @@ void CGarbage::Render(float wx, float wy)
 	if (!showFlg)return;
 	switch (garbageNo)
 	{
-	case GarbageShoes:
+	case GARBAGE_SHOES:
 		garbageShoes.Render(pos.x - wx, pos.y - wy);
 		break;
-	case GarbageTire:
+	case GARBAGE_TIRE:
 		garbageTire.Render(pos.x - wx, pos.y - wy);
 		break;
-	case GarbageBag:
+	case GARBAGE_BAG:
 		garbageBag.Render(pos.x - wx, pos.y - wy);
 		break;
 	default:
