@@ -243,7 +243,7 @@ void CResultWindow::Render()
 	}
 	else
 	{
-		sprintf_s(meter, 6, "%dm", 99999);
+		sprintf_s(meter, 10 ,"%dm", 99999);
 	}
 	CRectangle rec;
 	CRectangle drec;
