@@ -23,42 +23,42 @@ void CSceneStressCollection::Initialize()
 	//死因テクスチャ読み込み
 	//フラグがオンなら対応するテクスチャ、フラグがオフなら未取得テクスチャを読み込む。
 	if(increasedBodyTemperatureFlg)
-		increasedBodyTemperatureIconTexture.Load("siin_aikon.png");
+		increasedBodyTemperatureIconTexture.Load("マンボウ 体温上昇icon.png");
 	else
 		increasedBodyTemperatureIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(lowerBodyTemperatureFlg)
-		lowerBodyTemperatureIconTexture.Load("siin_aikon.png");
+		lowerBodyTemperatureIconTexture.Load("マンボウ 体温低下icon.png");
 	else
 		lowerBodyTemperatureIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(starvationFlg)
-		starvationIconTexture.Load("siin_aikon.png");
+		starvationIconTexture.Load("マンボウ 空腹icon.png");
 	else
 		starvationIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(cloggedThroatFlg)
-		cloggedThroatIconTexture.Load("siin_aikon.png");
+		cloggedThroatIconTexture.Load("マンボウ　喉つまりicon.png");
 	else
 		cloggedThroatIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(obesityFlg)
-		obesityIconTexture.Load("siin_aikon.png");
+		obesityIconTexture.Load("肥満マンボウ2icon.png");
 	else
 		obesityIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(impactFlg)
-		impactIconTexture.Load("siin_aikon.png");
+		impactIconTexture.Load("障害物にあたって死亡icon.png");
 	else
 		impactIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(parasiteFlg)
-		parasiteIconTexture.Load("siin_aikon.png");
+		parasiteIconTexture.Load("マンボウ寄生虫ストレスicon.png");
 	else
 		parasiteIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(jumpFlg)
-		jumpIconTexture.Load("siin_aikon.png");
+		jumpIconTexture.Load("水面にたたきつけられ死亡 海なしicon.png");
 	else
 		jumpIconTexture.Load("siin_aikon_Enpty.png");
 
@@ -68,12 +68,12 @@ void CSceneStressCollection::Initialize()
 		bubbleIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(turtleFlg)
-		turtleIconTexture.Load("siin_aikon.png");
+		turtleIconTexture.Load("マンボウ亀予感icon.png");
 	else
 		turtleIconTexture.Load("siin_aikon_Enpty.png");
 
 	if(waterFlowFlg)
-		waterFlowIconTexture.Load("siin_aikon.png");
+		waterFlowIconTexture.Load("加速死icon.png");
 	else
 		waterFlowIconTexture.Load("siin_aikon_Enpty.png");
 
@@ -114,41 +114,41 @@ void CSceneStressCollection::Update()
 	{
 		if (page == 1)
 		{
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_INCREASEDBODYTEMPERATURE).CollisionPoint(mousePosX, mousePosY))
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Hyperthermia).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:体温上昇の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_INCREASEDBODYTEMPERATURE);
+				nowPopUpStress->SetButtonResult(CAUSE_Hyperthermia);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_LOWERBODYTEMPERATURE).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Frozen).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:体温低下の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_LOWERBODYTEMPERATURE);
+				nowPopUpStress->SetButtonResult(CAUSE_Frozen);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_STARVATION).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Starvation).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:餓死の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_STARVATION);
+				nowPopUpStress->SetButtonResult(CAUSE_Starvation);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_CLOGGEDTHROAT).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_ChokeOnShell).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:喉詰まりの死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_CLOGGEDTHROAT);
+				nowPopUpStress->SetButtonResult(CAUSE_ChokeOnShell);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_OBESITY).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obesity).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:肥満の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_OBESITY);
+				nowPopUpStress->SetButtonResult(CAUSE_Obesity);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_IMPACT).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obstacle).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:障害物と衝突の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_IMPACT);
+				nowPopUpStress->SetButtonResult(CAUSE_Obstacle);
 			}
 
 			if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX,mousePosY)))
@@ -158,35 +158,35 @@ void CSceneStressCollection::Update()
 		}
 		else if (page == 2)
 		{
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_PARASITE).CollisionPoint(mousePosX, mousePosY))
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Parasite).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:寄生虫の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_PARASITE);
+				nowPopUpStress->SetButtonResult(CAUSE_Parasite);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_JUMP).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Jump).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:ジャンプの死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_JUMP);
+				nowPopUpStress->SetButtonResult(CAUSE_Jump);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_BUBBLE).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Bubble).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:泡の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_BUBBLE);
+				nowPopUpStress->SetButtonResult(CAUSE_Bubble);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_TURTLE).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_SeaTurtle).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:ウミガメの死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_TURTLE);
+				nowPopUpStress->SetButtonResult(CAUSE_SeaTurtle);
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CASE_WATERFLOW).CollisionPoint(mousePosX, mousePosY))
+			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_WaterFlow).CollisionPoint(mousePosX, mousePosY))
 			{
 				popUpFlg = true;
 				//ポップアップに死因:水流の死因画像を表示させる
-				nowPopUpStress->SetButtonResult(CASE_WATERFLOW);
+				nowPopUpStress->SetButtonResult(CAUSE_WaterFlow);
 			}
 
 			if (g_pInput->IsKeyPush(MOFKEY_LEFT) ||  (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON)&& ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
@@ -278,38 +278,38 @@ void CSceneStressCollection::Release()
 CRectangle CSceneStressCollection::GetRect(int i)
 {
 	//死因:体温上昇クリック時
-	if (i == CASE_INCREASEDBODYTEMPERATURE && increasedBodyTemperatureFlg)
+	if (i == CAUSE_Hyperthermia && increasedBodyTemperatureFlg)
 		return CRectangle(iconFirstRowPosX, iconOneLinePosY, iconFirstRowPosX + increasedBodyTemperatureIconTexture.GetWidth(), iconOneLinePosY + increasedBodyTemperatureIconTexture.GetHeight());
 	//死因:体温低下クリック時
-	if (i == CASE_LOWERBODYTEMPERATURE && lowerBodyTemperatureFlg)
+	if (i == CAUSE_Frozen && lowerBodyTemperatureFlg)
 		return CRectangle(iconSecondRowPosX, iconOneLinePosY, iconSecondRowPosX + lowerBodyTemperatureIconTexture.GetWidth(), iconOneLinePosY + lowerBodyTemperatureIconTexture.GetHeight());
 	//死因:餓死クリック時
-	if (i == CASE_STARVATION && starvationFlg)
+	if (i == CAUSE_Starvation && starvationFlg)
 		return CRectangle(iconThirdRowPosX, iconOneLinePosY, iconThirdRowPosX + starvationIconTexture.GetWidth(), iconOneLinePosY + starvationIconTexture.GetHeight());
 	//死因:喉に刺さるクリック時
-	if (i == CASE_CLOGGEDTHROAT && cloggedThroatFlg)
+	if (i == CAUSE_ChokeOnShell && cloggedThroatFlg)
 		return CRectangle(iconFirstRowPosX, iconTwoLinePosY, iconFirstRowPosX + cloggedThroatIconTexture.GetWidth(), iconTwoLinePosY + cloggedThroatIconTexture.GetHeight());
 	//死因:肥満クリック時
-	if(i == CASE_OBESITY && obesityFlg)
+	if(i == CAUSE_Obesity && obesityFlg)
 		return  CRectangle(iconSecondRowPosX, iconTwoLinePosY, iconSecondRowPosX + obesityIconTexture.GetWidth(), iconTwoLinePosY + obesityIconTexture.GetHeight());
 	//死因:障害物と衝突クリック時
-	if (i == CASE_IMPACT && impactFlg)
+	if (i == CAUSE_Obstacle && impactFlg)
 		return CRectangle(iconThirdRowPosX, iconTwoLinePosY, iconThirdRowPosX + impactIconTexture.GetWidth(), iconTwoLinePosY + impactIconTexture.GetHeight());
 
 	//死因:寄生虫クリック時
-	if(i == CASE_PARASITE && parasiteFlg)
+	if(i == CAUSE_Parasite && parasiteFlg)
 		return CRectangle(iconFirstRowPosX, iconOneLinePosY, iconFirstRowPosX + parasiteIconTexture.GetWidth(), iconOneLinePosY +parasiteIconTexture.GetHeight());
 	//死因:ジャンプクリック時
-	if (i == CASE_JUMP && jumpFlg)
+	if (i == CAUSE_Jump && jumpFlg)
 		return CRectangle(iconSecondRowPosX, iconOneLinePosY, iconSecondRowPosX + jumpIconTexture.GetWidth(), iconOneLinePosY + jumpIconTexture.GetHeight());
 	//死因:泡クリック時
-	if(i == CASE_BUBBLE && bubbleFlg)
+	if(i == CAUSE_Bubble && bubbleFlg)
 		return CRectangle(iconThirdRowPosX, iconOneLinePosY, iconThirdRowPosX + bubbleIconTexture.GetWidth(), iconOneLinePosY + bubbleIconTexture.GetHeight());
 	//死因:ウミガメ接触クリック時
-	if(i == CASE_TURTLE && turtleFlg)
+	if(i == CAUSE_SeaTurtle && turtleFlg)
 		return CRectangle(icon2PageFirstRowPosX, iconTwoLinePosY, icon2PageFirstRowPosX + turtleIconTexture.GetWidth(), iconTwoLinePosY + turtleIconTexture.GetHeight());
 	//死因:水流
-	if(i == CASE_WATERFLOW && waterFlowFlg)
+	if(i == CAUSE_WaterFlow && waterFlowFlg)
 		return CRectangle(icon2pageSecondRowPosX, iconTwoLinePosY, icon2pageSecondRowPosX + waterFlowIconTexture.GetWidth(), iconTwoLinePosY + waterFlowIconTexture.GetHeight());
 
 }
@@ -328,77 +328,77 @@ bool CSceneStressCollection::GetStress(int i)
 {
 
 	//熱中症ゲット
-	if (i == CASE_INCREASEDBODYTEMPERATURE && !increasedBodyTemperatureFlg)
+	if (i == CAUSE_Hyperthermia && !increasedBodyTemperatureFlg)
 	{
 		increasedBodyTemperatureFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//体温低下ゲット
-	if (i == CASE_LOWERBODYTEMPERATURE && !lowerBodyTemperatureFlg)
+	if (i == CAUSE_Frozen && !lowerBodyTemperatureFlg)
 	{
 		lowerBodyTemperatureFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//餓死
-	if (i == CASE_STARVATION && !starvationFlg)
+	if (i == CAUSE_Starvation && !starvationFlg)
 	{
 		starvationFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//喉詰まり
-	if (i == CASE_CLOGGEDTHROAT && !cloggedThroatFlg)
+	if (i == CAUSE_ChokeOnShell && !cloggedThroatFlg)
 	{
 		cloggedThroatFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//肥満
-	if (i == CASE_OBESITY && !obesityFlg)
+	if (i == CAUSE_Obesity && !obesityFlg)
 	{
 		obesityFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//衝突
-	if (i == CASE_IMPACT && !impactFlg)
+	if (i == CAUSE_Obstacle && !impactFlg)
 	{
 		impactFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//寄生虫
-	if (i == CASE_PARASITE && !parasiteFlg)
+	if (i == CAUSE_Parasite && !parasiteFlg)
 	{
 		parasiteFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//ジャンプ
-	if (i == CASE_JUMP && !jumpFlg)
+	if (i == CAUSE_Jump && !jumpFlg)
 	{
 		jumpFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//泡
-	if (i == CASE_BUBBLE && !bubbleFlg)
+	if (i == CAUSE_Bubble && !bubbleFlg)
 	{
 		bubbleFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//ウミガメ
-	if (i == CASE_TURTLE && !turtleFlg)
+	if (i == CAUSE_SeaTurtle && !turtleFlg)
 	{
 		turtleFlg = true;
 		SaveStressFlg();
 		return true;
 	}
 	//水流
-	if (i == CASE_WATERFLOW && !waterFlowFlg)
+	if (i == CAUSE_WaterFlow && !waterFlowFlg)
 	{
 		waterFlowFlg = true;
 		SaveStressFlg();

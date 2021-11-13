@@ -9,12 +9,12 @@ private:
 	CTexture	buttonMenuTexture;
 	CTexture	buttonTitleTexture;
 
-	int			buttonContinuePosX = 850;
-	int			buttonContinuePosY = 500;
-	int			buttonMenuPosX = 850;
-	int			buttonMenuPosY = 600;
-	int			buttonTitlePosX = 850;
-	int			buttonTitlePosY = 700;
+	const int			buttonContinuePosX = 850;
+	const int			buttonContinuePosY = 500;
+	const int			buttonMenuPosX = 850;
+	const int			buttonMenuPosY = 600;
+	const int			buttonTitlePosX = 850;
+	const int			buttonTitlePosY = 700;
 
 public:
 	CContinueWindow();

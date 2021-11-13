@@ -17,10 +17,6 @@ void CSceneTitle::Initialize()
 	titleLogoTex.Load("TitleLogo.png");
 	gamePrayButtonTexture.Load("ButtonStart.png");
 	gameFinishButtonTexture.Load("ButtonFinish.png");
-	gamePrayButtonPosX = 800;
-	gamePrayButtonPosY = 700;
-	gameFinishButtonPosX = 800;
-	gameFinishButtonPosY = 800;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
 

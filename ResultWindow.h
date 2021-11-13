@@ -5,6 +5,7 @@ class CResultWindow : public CPopUpWindowBase
 {
 private:
 	CFont		font;
+	CFont		distanceFont;
 	CTexture	popUpTexture;
 	CTexture	buttonNextTexture;
 
@@ -12,12 +13,12 @@ private:
 	CTexture	trophyTexture2;
 	CTexture	trophyTexture3;
 
-	int			buttonNextPosX = 1500;
-	int			buttonNextPosY = 850;
-	int			trophyTexturePosX = 815;
-	int			trophyTexturePosY = 350;
+	const int			buttonNextPosX = 1500;
+	const int			buttonNextPosY = 850;
+	const int			trophyTexturePosX = 1400;
+	const int			trophyTexturePosY = 220;
 
-	int			distans;
+	char		meter[10];
 public:
 	CResultWindow();
 	~CResultWindow();

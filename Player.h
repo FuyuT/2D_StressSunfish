@@ -253,7 +253,7 @@ public:
 	int GetDistance()
 	{
 		//X座標の20分の1(適当)を進んだ距離とする
-		return (posX - STARTPOS_X) / TRANSLATE_DISTANCE;
+		return ((posX - STARTPOS_X) / TRANSLATE_DISTANCE);
 	}
 	//「ジャンプ」が可能かを返す
 	bool GetJump()

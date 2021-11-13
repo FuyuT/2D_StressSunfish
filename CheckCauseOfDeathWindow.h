@@ -1,5 +1,6 @@
 #pragma once
 #include "PopUpWindowBase.h"
+#include "Player.h"
 
 class CCheckCauseOfDeathWindow : public CPopUpWindowBase
 {
@@ -9,10 +10,10 @@ private:
 	CTexture	buttonBackTexture;
 	CTexture	causeOfDeathTexture;
 
-	int			buttonBackPosX = 250;
-	int			buttonBackPosY = 200;
-	int			causeOfDeathTextureTexturePosX = 815;
-	int			causeOfDeathTextureTexturePosY = 350;
+	const int			buttonBackPosX = 250;
+	const int			buttonBackPosY = 200;
+	const int			causeOfDeathTextureTexturePosX = 815;
+	const int			causeOfDeathTextureTexturePosY = 350;
 public:
 	CCheckCauseOfDeathWindow();
 	~CCheckCauseOfDeathWindow();

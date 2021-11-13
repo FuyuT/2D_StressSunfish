@@ -271,62 +271,62 @@ void CSceneGame::CaseOfDethController()
 	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg)
 	{
 		nowPopUpGame = new CCauseOfDeathWindow;
-		switch (pl.GetCauseOfDeath() - 1)
+		switch (pl.GetCauseOfDeath())
 		{
 			//熱中症
-		case CASE_INCREASEDBODYTEMPERATURE:
-			nowPopUpGame->SetDethResult(CASE_INCREASEDBODYTEMPERATURE);
-			newGetDeth = caseOfDeth.GetStress(CASE_INCREASEDBODYTEMPERATURE);
+		case CAUSE_Hyperthermia:
+			nowPopUpGame->SetDethResult(CAUSE_Hyperthermia);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Hyperthermia);
 			break;
 			//体温低下
-		case CASE_LOWERBODYTEMPERATURE:
-			nowPopUpGame->SetDethResult(CASE_LOWERBODYTEMPERATURE);
-			newGetDeth = caseOfDeth.GetStress(CASE_LOWERBODYTEMPERATURE);
+		case CAUSE_Frozen:
+			nowPopUpGame->SetDethResult(CAUSE_Frozen);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Frozen);
 			break;
 			//餓死
-		case CASE_STARVATION:
-			nowPopUpGame->SetDethResult(CASE_STARVATION);
-			newGetDeth = caseOfDeth.GetStress(CASE_STARVATION);
+		case CAUSE_Starvation:
+			nowPopUpGame->SetDethResult(CAUSE_Starvation);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Starvation);
 			break;
 			//喉詰まり
-		case CASE_CLOGGEDTHROAT:
-			nowPopUpGame->SetDethResult(CASE_CLOGGEDTHROAT);
-			newGetDeth = caseOfDeth.GetStress(CASE_CLOGGEDTHROAT);
+		case CAUSE_ChokeOnShell:
+			nowPopUpGame->SetDethResult(CAUSE_ChokeOnShell);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_ChokeOnShell);
 			break;
 			//肥満
-		case CASE_OBESITY:
-			nowPopUpGame->SetDethResult(CASE_OBESITY);
-			newGetDeth = caseOfDeth.GetStress(CASE_OBESITY);
+		case CAUSE_Obesity:
+			nowPopUpGame->SetDethResult(CAUSE_Obesity);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Obesity);
 			break;
 			//衝突
-		case CASE_IMPACT:
-			nowPopUpGame->SetDethResult(CASE_IMPACT);
-			newGetDeth = caseOfDeth.GetStress(CASE_IMPACT);
+		case CAUSE_Obstacle:
+			nowPopUpGame->SetDethResult(CAUSE_Obstacle);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Obstacle);
 			break;
 			//寄生虫
-		case CASE_PARASITE:
-			nowPopUpGame->SetDethResult(CASE_PARASITE);
-			newGetDeth = caseOfDeth.GetStress(CASE_PARASITE);
+		case CAUSE_Parasite:
+			nowPopUpGame->SetDethResult(CAUSE_Parasite);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Parasite);
 			break;
 			//ジャンプ
-		case CASE_JUMP:
-			nowPopUpGame->SetDethResult(CASE_JUMP);
-			newGetDeth = caseOfDeth.GetStress(CASE_JUMP);
+		case CAUSE_Jump:
+			nowPopUpGame->SetDethResult(CAUSE_Jump);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Jump);
 			break;
 			//泡
-		case CASE_BUBBLE:
-			nowPopUpGame->SetDethResult(CASE_BUBBLE);
-			newGetDeth = caseOfDeth.GetStress(CASE_BUBBLE);
+		case CAUSE_Bubble:
+			nowPopUpGame->SetDethResult(CAUSE_Bubble);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_Bubble);
 			break;
 			//ウミガメ
-		case CASE_TURTLE:
-			nowPopUpGame->SetDethResult(CASE_TURTLE);
-			newGetDeth = caseOfDeth.GetStress(CASE_TURTLE);
+		case CAUSE_SeaTurtle:
+			nowPopUpGame->SetDethResult(CAUSE_SeaTurtle);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_SeaTurtle);
 			break;
 			//水流
-		case CASE_WATERFLOW:
-			nowPopUpGame->SetDethResult(CASE_WATERFLOW);
-			newGetDeth = caseOfDeth.GetStress(CASE_WATERFLOW);
+		case CAUSE_WaterFlow:
+			nowPopUpGame->SetDethResult(CAUSE_WaterFlow);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
 			break;
 		}
 		nowPopUpGame->SetNewGetDeth(newGetDeth);
@@ -338,61 +338,61 @@ void CSceneGame::CaseOfDethController()
 void CSceneGame::TrophyController()
 {
 	//川級
-	if (pl.GetDistance() <= 10000)
+	if (pl.GetDistance() <= 1000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_RIVER);
 		numberOfTrophy[0] = TROPHY_RIVER;
 	}
 	//滝級
-	else if (pl.GetDistance() <= 50000)
+	else if (pl.GetDistance() <= 2500)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_WATERFALL);
 		numberOfTrophy[0] = TROPHY_WATERFALL;
 	}
 	//湖級
-	else if (pl.GetDistance() <= 100000)
+	else if (pl.GetDistance() <= 5000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_LAKE);
 		numberOfTrophy[0] = TROPHY_LAKE;
 	}
 	//ダム級
-	else if (pl.GetDistance() <= 500000)
+	else if (pl.GetDistance() <= 10000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_DAM);
 		numberOfTrophy[0] = TROPHY_DAM;
 	}
 	//下水道級
-	else if (pl.GetDistance() <= 1000000)
+	else if (pl.GetDistance() <= 25000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_SEWER);
 		numberOfTrophy[0] = TROPHY_SEWER;
 	}
 	//インド洋級
-	else if (pl.GetDistance() <= 3000000)
+	else if (pl.GetDistance() <= 50000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_INDIANOCEAN);
 		numberOfTrophy[0] = TROPHY_INDIANOCEAN;
 	}
 	//アマゾン川級
-	else if (pl.GetDistance() <= 5000000)
+	else if (pl.GetDistance() <= 100000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_AMAZONROVER);
 		numberOfTrophy[0] = TROPHY_AMAZONROVER;
 	}
 	//海級
-	else if (pl.GetDistance() <= 10000000)
+	else if (pl.GetDistance() <= 200000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_OCEAN);
 		numberOfTrophy[0] = TROPHY_OCEAN;
 	}
 	//日本海級
-	else if (pl.GetDistance() <= 30000000)
+	else if (pl.GetDistance() <= 300000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_SEAOFJAPAN);
 		numberOfTrophy[0] = TROPHY_SEAOFJAPAN;
 	}
 	//地球一周級
-	else if (pl.GetDistance() <= 40000000)
+	else if (30001<= pl.GetDistance())
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_AROUNDTHEGLOBE);
 		numberOfTrophy[0] = TROPHY_AROUNDTHEGLOBE;
@@ -400,7 +400,7 @@ void CSceneGame::TrophyController()
 
 	//特別級
 	//やる気ゼロ級
-	if (pl.GetDistance() < 10000)
+	if (pl.GetDistance() < 1000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_ZEROMOTIVATION);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -413,7 +413,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 	//富士山級
-	if (3000 <= pl.GetDistance() <= 5000)
+	if (3000 <= pl.GetDistance() && pl.GetDistance() < 4000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_MOUNTFJI);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -426,7 +426,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 	//大阪マラソン級
-	if (20000 <= pl.GetDistance() <= 42000)
+	if (42000 <= pl.GetDistance() && pl.GetDistance() < 43000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_OSAKAMARATHON);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -439,7 +439,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 	//琵琶湖級
-	if (40000 <= pl.GetDistance() <= 63000)
+	if (63000 <= pl.GetDistance() && pl.GetDistance() < 64000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_BIWALAKE);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -452,7 +452,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 	//ジャックポット級
-	if (777000 <= pl.GetDistance() <= 888000)
+	if (777000 <= pl.GetDistance() && pl.GetDistance() < 778000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_JACKPOD);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -465,7 +465,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 	//才能魔級
-	if (99999000 <= pl.GetDistance())
+	if (999000 <= pl.GetDistance())
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_TALENTEDDEMON);
 		if (numberOfTrophy[1] == TROPHY_NULL)
@@ -478,5 +478,7 @@ void CSceneGame::TrophyController()
 		}
 	}
 
+	nowPopUpGame->SetNewGetTrophy(newGetTrophy);
+	nowPopUpGame->SetDistance(pl.GetDistance());
 	nowPopUpGame->SetNumberOfTrophy(numberOfTrophy);
 }
