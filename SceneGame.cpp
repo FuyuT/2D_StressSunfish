@@ -123,6 +123,8 @@ void CSceneGame::Update()
 	}
 	//è·äQï®
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+
+	ui.Update();
 }
 
 void CSceneGame::Render()

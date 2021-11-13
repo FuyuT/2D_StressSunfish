@@ -421,26 +421,29 @@ void CPlayer::UpdateStatus()
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
-			if (tempRegion > HYPERTHERMIA_LIMIT)
+			if (tempRegion > 0)
 			{
-				tempRegion -= TEMPERATURE_LEVEL;
+				tempRegion -= 0.15f;
 			}
-			//tempTimer.StartTimer();
-			//if (tempTimer.GetNowtime() <= 0)
-			//{
-			//	if (bodyTemp < HYPERTHERMIA_LIMIT)
-			//	{
-			//		bodyTemp += TEMPERATURE_LEVEL;
-			//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-			//		tempTimer.SetTotalTime(1);
-			//	}
-			//}
 			//死因：熱中症
 			if (tempRegion <= HYPERTHERMIA_LIMIT)
 			{
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_Hyperthermia;
 			}
+		}
+	}
+	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
+	{
+		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
+		{
+			tempRegion += 0.15f;
+		}		
+		//死因：凍死
+		if (tempRegion >= FROZEN_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Frozen;
 		}
 		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
@@ -475,28 +478,6 @@ void CPlayer::UpdateStatus()
 			{
 				tempRegion -= TEMPERATURE_LEVEL / 3.0f;
 			}
-			//if (bodyTemp > STANDARD_TEMPERATURE)
-			//{
-			//	//タイマーセット
-			//	tempTimer.StartTimer();
-			//	if (tempTimer.GetNowtime() <= 0)
-			//	{
-			//		bodyTemp -= TEMPERATURE_LEVEL;
-			//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
-			//		tempTimer.SetTotalTime(2);
-			//	}
-			//}
-			//else if (bodyTemp < STANDARD_TEMPERATURE)
-			//{
-			//	//タイマーセット
-			//	tempTimer.StartTimer();
-			//	if (tempTimer.GetNowtime() <= 0)
-			//	{
-			//		bodyTemp += TEMPERATURE_LEVEL;
-			//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-			//		tempTimer.SetTotalTime(2);
-			//	}
-			//}
 		}
 	}
 
@@ -535,31 +516,19 @@ void CPlayer::UpdateStatus()
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
-			//死因：餓死
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Starvation;
+			//空腹度が増加する
+			if (hungerRegion >= STARVATION)
+			{
+				if (causeOfDeath == CAUSE_None)
+				{
+					//死因：餓死
+					motion.ChangeMotion(MOTION_DEATH);
+					causeOfDeath = CAUSE_Starvation;
+				}
+			}
 		}
 	}
 	
-	//hungerTimer.StartTimer();
-	//if (hungerTimer.GetNowtime() <= 0)
-	//{
-	//	if (hungerRegion < STARVATION)
-	//	{
-	//		//空腹度が増加する
-	//		hungerRegion += HUNGRYLEVEL;
-	//		if (hungerRegion >= STARVATION)
-	//		{
-	//			if (causeOfDeath == CAUSE_None)
-	//			{
-	//				//死因：餓死
-	//				deadFlg = true;
-	//				causeOfDeath = CAUSE_Starvation;
-	//			}
-	//		}
-	//		hungerTimer.SetTotalTime(3);
-	//	}
-	//}
 
 	/*********
 	*  水流
