@@ -42,8 +42,8 @@ bool CSceneTutorial::TextLoad()
 void CSceneTutorial::FontLoad()
 {
 	//fontの作成
-	CFontCharaInputArray(fontAdd);
-	FontPopRumCute.Create(26, "PoPRumCute");
+    CFontCharaInputArray(fontAdd);
+	FontPopRumCute.Create(32, "PopRumCute");
 }
 
 //メッセージの更新
