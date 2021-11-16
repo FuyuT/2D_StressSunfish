@@ -27,7 +27,7 @@ private:
 	CTimer			 parasiteTimer;
 
 	//フォント
-	LPMofChar fontAdd = "Test\\PopRumCute.otf";
+	LPMofChar fontAdd = "Text\\PopRumCute.otf";
 	CFont FontPopRumCute;
 
 	//チュートリアルメッセージ

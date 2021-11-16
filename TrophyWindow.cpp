@@ -7,7 +7,7 @@ CTrophyWindow::CTrophyWindow()
 }
 CTrophyWindow::~CTrophyWindow()
 {
-
+	Release();
 }
 
 void CTrophyWindow::Initialize()

@@ -9,6 +9,7 @@ CSceneTitle::CSceneTitle()
 
 CSceneTitle::~CSceneTitle()
 {
+	Release();
 }
 
 void CSceneTitle::Initialize()
@@ -19,33 +20,34 @@ void CSceneTitle::Initialize()
 	gameFinishButtonTexture.Load("ButtonFinish.png");
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
-
-
 }
 
 void CSceneTitle::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
-	{
-		endFlg = true;
-		nextScene = SCENENO_GAMEMENU;
-		CSceneTitle::Release();
-	}
-	//ƒQ[ƒ€I—¹‚ð‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
-	{
-		popUpFlg = true;
-	}
-	
 	if (popUpFlg)
 	{
 		nowPopUpTitle->Initialize();
 		nowPopUpTitle->Update();
 		if (nowPopUpTitle->IsEnd())
 		{
+			nowPopUpTitle->Release();
 			popUpFlg = false;
+		}
+	}
+	else
+	{
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
+		{
+			endFlg = true;
+			nextScene = SCENENO_GAMEMENU;
+			CSceneTitle::Release();
+		}
+		//ƒQ[ƒ€I—¹‚ð‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
+		else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
+		{
+			popUpFlg = true;
 		}
 	}
 }
@@ -67,7 +69,6 @@ void CSceneTitle::Release()
 	backGroundTex.Release();
 	titleLogoTex.Release();
 	gamePrayButtonTexture.Release();
-	nowPopUpTitle->Release();
 	if (nowPopUpTitle)
 	{
 		delete nowPopUpTitle;
@@ -79,6 +80,6 @@ CRectangle CSceneTitle::GetRect(int i)
 {
 	if(i == 0)
 		return CRectangle(gamePrayButtonPosX, gamePrayButtonPosY, gamePrayButtonPosX + gamePrayButtonTexture.GetWidth(), gamePrayButtonPosY + gamePrayButtonTexture.GetHeight());
-	else if(i == 1)
+	 if(i == 1)
 		return CRectangle(gameFinishButtonPosX, gameFinishButtonPosY, gameFinishButtonPosX + gameFinishButtonTexture.GetWidth(), gameFinishButtonPosY + gameFinishButtonTexture.GetHeight());
 }

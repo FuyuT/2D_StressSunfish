@@ -123,6 +123,8 @@ void CSceneGame::Update()
 	}
 	//áŠQ•¨
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+
+	ui.Update();
 }
 
 void CSceneGame::Render()
@@ -251,12 +253,12 @@ void CSceneGame::PopUpController()
 			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
-			//nowPopUpGame = new CBackToTitleWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
-			//nowPopUpGame = new CRetryWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
 			nowPopUpGame = NULL;

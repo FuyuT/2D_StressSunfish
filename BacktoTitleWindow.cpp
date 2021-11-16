@@ -6,15 +6,15 @@ CBackToTitleWindow::CBackToTitleWindow()
 }
 CBackToTitleWindow::~CBackToTitleWindow()
 {
-
+	Release();
 }
 
 void CBackToTitleWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upラフ2.png");
+	textTexture.Load("PopUpBackToTitle.png");
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
-	font.Create(32, "MS　明朝");
 	endFlg = false;
 }
 void CBackToTitleWindow::Update()
@@ -26,25 +26,26 @@ void CBackToTitleWindow::Update()
 		Release();
 		endFlg = true;
 		//タイトル画面に遷移
-
+		buttonResult = 3;
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
 		Release();
 		endFlg = true;
-		nextPopUp = NULL;
+		nextPopUp = POPUPNO_POSE;
 	}
 }
 void CBackToTitleWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 400, MOF_XRGB(0, 0, 0), "タイトルに戻りますか?");
+	textTexture.Render(textPosX,textPosY);
 	buttonYesTexture.Render(buttonYesPosX, buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
 }
 void CBackToTitleWindow::Release()
 {
+	textTexture.Release();
 	popUpTexture.Release();
 	buttonYesTexture.Release();
 	buttonNoTexture.Release();

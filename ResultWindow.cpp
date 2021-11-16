@@ -7,7 +7,7 @@ CResultWindow::CResultWindow()
 }
 CResultWindow::~CResultWindow()
 {
-
+	Release();
 }
 
 void CResultWindow::Initialize()

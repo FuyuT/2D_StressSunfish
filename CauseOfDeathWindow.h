@@ -9,8 +9,10 @@ private:
 	CTexture	buttonNextTexture;
 	CTexture	caseOfDethTexture;
 
-	const int			buttonNextPosX = 1500;
+	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
+	const int			causeOfDeathTexturePosX = 725;
+	const int			causeOfDeathTexturePosY = 350;
 public:
 	CCauseOfDeathWindow();
 	~CCauseOfDeathWindow();
