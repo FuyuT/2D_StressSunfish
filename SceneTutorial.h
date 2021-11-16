@@ -39,6 +39,8 @@ private:
 	char			 fLineBuffer[MESSAGE_ARRAY_BYTE] = "\0";
 	int				 mShowDelay;
 	bool			 messageEndFlg;
+	int				tutorialStep;
+
 public:
 	CSceneTutorial();
 	~CSceneTutorial();
