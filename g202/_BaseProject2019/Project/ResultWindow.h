@@ -13,7 +13,7 @@ private:
 	CTexture	trophyTexture2;
 	CTexture	trophyTexture3;
 
-	const int			buttonNextPosX = 1500;
+	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
 	const int			trophyTexturePosX = 1400;
 	const int			trophyTexturePosY = 220;

@@ -10,10 +10,10 @@ private:
 	CTexture	buttonBackTexture;
 	CTexture	causeOfDeathTexture;
 
-	const int			buttonBackPosX = 250;
-	const int			buttonBackPosY = 200;
-	const int			causeOfDeathTextureTexturePosX = 815;
-	const int			causeOfDeathTextureTexturePosY = 350;
+	const int			buttonBackPosX = 150;
+	const int			buttonBackPosY = 100;
+	const int			causeOfDeathTexturePosX = 725;
+	const int			causeOfDeathTexturePosY = 350;
 public:
 	CCheckCauseOfDeathWindow();
 	~CCheckCauseOfDeathWindow();

@@ -6,7 +6,7 @@ CGameQuitWindow::CGameQuitWindow()
 }
 CGameQuitWindow::~CGameQuitWindow()
 {
-
+	Release();
 }
 
 void CGameQuitWindow::Initialize()
@@ -21,11 +21,11 @@ void CGameQuitWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
+	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) && !endFlg)
 	{
 		PostQuitMessage(0);
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) && !endFlg)
 	{
 		Release();
 		endFlg = true;

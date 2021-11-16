@@ -20,6 +20,7 @@ void CSceneGameMenu::PlayBGM()
 void CSceneGameMenu::Initialize()
 {
 	backGroundTex.Load("Title.png");
+	textTexture.Load("MenuText.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
 	configButtonTexture.Load("ButtonConfig.png");
 	stressButtonTexture.Load("ButtonStressCollection.png");
@@ -95,6 +96,7 @@ void CSceneGameMenu::Render()
 	torophyButtonTexture.Render(buttonPosX, torophyButtonPosY);
 	tutorialButtonTexture.Render(buttonPosX, tutorialButtonPosY);
 	titleButtonTexture.Render(titleButtonPosX, titleButtonPosY);
+	textTexture.Render(textPosX, textPosY);
 }
 void CSceneGameMenu::Release()
 {
@@ -105,6 +107,7 @@ void CSceneGameMenu::Release()
 	torophyButtonTexture.Release();
 	tutorialButtonTexture.Release();
 	titleButtonTexture.Release();
+	textTexture.Release();
 }
 
 

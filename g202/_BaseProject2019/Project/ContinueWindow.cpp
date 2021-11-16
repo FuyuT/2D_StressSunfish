@@ -7,7 +7,7 @@ CContinueWindow::CContinueWindow()
 }
 CContinueWindow::~CContinueWindow()
 {
-
+	Release();
 }
 
 void CContinueWindow::Initialize()
@@ -16,8 +16,7 @@ void CContinueWindow::Initialize()
 	buttonContinueTexture.Load("ButtonContine.png");
 	buttonMenuTexture.Load("ButtonMenu.png");
 	buttonTitleTexture.Load("ButtonTitle.png");
-
-	font.Create(64, "MS　明朝");
+	textTexture.Load("PopUpCountinue.png");
 	endFlg = false;
 }
 void CContinueWindow::Update()
@@ -57,14 +56,15 @@ void CContinueWindow::Update()
 void CContinueWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "コンティニュー？");
-	buttonContinueTexture.Render(buttonContinuePosX, buttonContinuePosY);
-	buttonMenuTexture.Render(buttonMenuPosX, buttonMenuPosY);
-	buttonTitleTexture.Render(buttonTitlePosX, buttonTitlePosY);
+	textTexture.Render(textPosX,textPosY);
+	buttonContinueTexture.Render(buttonPosX, buttonContinuePosY);
+	buttonMenuTexture.Render(buttonPosX, buttonMenuPosY);
+	buttonTitleTexture.Render(buttonPosX, buttonTitlePosY);
 }
 void CContinueWindow::Release()
 {
 	popUpTexture.Release();
+	textTexture.Release();
 	buttonContinueTexture.Release();
 	buttonMenuTexture.Release();
 	buttonTitleTexture.Release();
@@ -81,9 +81,9 @@ void CContinueWindow::Release()
 CRectangle CContinueWindow::GetRect(int i)
 {
 	if (i == 0)
-		return CRectangle(buttonContinuePosX, buttonContinuePosY, buttonContinuePosX + buttonContinueTexture.GetWidth(), buttonContinuePosY + buttonContinueTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonContinuePosY, buttonPosX + buttonContinueTexture.GetWidth(), buttonContinuePosY + buttonContinueTexture.GetHeight());
 	else if (i == 1)
-		return CRectangle(buttonMenuPosX, buttonMenuPosY, buttonMenuPosX + buttonMenuTexture.GetWidth(), buttonMenuPosY + buttonMenuTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonMenuPosY, buttonPosX + buttonMenuTexture.GetWidth(), buttonMenuPosY + buttonMenuTexture.GetHeight());
 	else if (i == 2)
-		return CRectangle(buttonTitlePosX, buttonTitlePosY, buttonTitlePosX + buttonTitleTexture.GetWidth(), buttonTitlePosY + buttonTitleTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonTitlePosY, buttonPosX + buttonTitleTexture.GetWidth(), buttonTitlePosY + buttonTitleTexture.GetHeight());
 }

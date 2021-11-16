@@ -6,7 +6,7 @@ CCauseOfDeathWindow::CCauseOfDeathWindow()
 }
 CCauseOfDeathWindow::~CCauseOfDeathWindow()
 {
-
+	Release();
 }
 
 void CCauseOfDeathWindow::Initialize()
@@ -118,7 +118,7 @@ void CCauseOfDeathWindow::Render()
 	{
 		font.RenderString(350, 250, MOF_XRGB(0, 0, 0), "NEW");
 	}
-	caseOfDethTexture.Render(715,350);
+	caseOfDethTexture.Render(causeOfDeathTexturePosX,causeOfDeathTexturePosY);
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
 }
 void CCauseOfDeathWindow::Release()

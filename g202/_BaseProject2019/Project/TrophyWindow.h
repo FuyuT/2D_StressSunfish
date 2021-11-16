@@ -8,8 +8,8 @@ private:
 	CTexture	buttonBackTexture;
 	CTexture	trophyTexture;
 
-	const int			buttonBackPosX = 250;
-	const int			buttonBackPosY = 200;
+	const int			buttonBackPosX = 150;
+	const int			buttonBackPosY = 100;
 	const int			trophyTexturePosX = 815;
 	const int			trophyTexturePosY = 350;
 public:

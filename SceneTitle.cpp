@@ -49,12 +49,6 @@ void CSceneTitle::Update()
 			popUpFlg = false;
 		}
 	}
-
-	SoundUpdate();
-}
-
-void CSceneTitle::SoundUpdate()
-{
 	else
 	{
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
@@ -69,6 +63,12 @@ void CSceneTitle::SoundUpdate()
 			popUpFlg = true;
 		}
 	}
+
+	SoundUpdate();
+}
+
+void CSceneTitle::SoundUpdate()
+{
 }
 
 void CSceneTitle::Render()

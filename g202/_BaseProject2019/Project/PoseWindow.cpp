@@ -6,18 +6,18 @@ CPoseWindow::CPoseWindow()
 }
 CPoseWindow::~CPoseWindow()
 {
-
+	Release();
 }
 
 void CPoseWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upラフ2.png");
+	textTexture.Load("PopUpPose.png");
 	buttonConfigTexture.Load("ButtonConfig.png");
 	buttonRetryTexture.Load("ButtonRetry.png");
 	buttonTitleTexture.Load("ButtonTitle.png");
 	buttonReturnGameTexture.Load("ButtonReturnGame.png");
 
-	font.Create(64, "MS　明朝");
 	endFlg = false;
 }
 void CPoseWindow::Update()
@@ -40,7 +40,6 @@ void CPoseWindow::Update()
 		Release();
 		endFlg = true;
 		nextPopUp = POPUPNO_RETRY;
-		buttonResult = 1;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -48,8 +47,7 @@ void CPoseWindow::Update()
 		Release();
 		endFlg = true;
 		nextPopUp = NULL;
-		//nextPopUp = POPUPNO_BACKTOTITLE;
-		buttonResult = 3;
+		nextPopUp = POPUPNO_BACKTOTITLE;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY))
 	{
@@ -63,7 +61,7 @@ void CPoseWindow::Update()
 void CPoseWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "ポーズ");
+	textTexture.Render(textPosX,textPosY);
 	buttonConfigTexture.Render(buttonConfigPosX, buttonConfigPosY);
 	buttonRetryTexture.Render(buttonRetryPosX, buttonRetryPosY);
 	buttonTitleTexture.Render(buttonTitlePosX, buttonTitlePosY);
@@ -72,6 +70,7 @@ void CPoseWindow::Render()
 void CPoseWindow::Release()
 {
 	popUpTexture.Release();
+	textTexture.Release();
 	buttonConfigTexture.Release();
 	buttonRetryTexture.Release();
 	buttonTitleTexture.Release();

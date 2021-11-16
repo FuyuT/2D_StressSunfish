@@ -41,5 +41,9 @@ public:
 	{
 		pos.y = posy;
 	}
+	int GetPosx() 
+	{ 
+		return pos.x; 
+	}
 };
 

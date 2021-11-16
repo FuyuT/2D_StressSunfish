@@ -17,9 +17,12 @@ private:
 	bool fadeIn;
 	bool fadeOut;
 
+	bool start;
+
 public:
 	CBlinking();
 	~CBlinking();
+	void Initialize();
 	void Update();
 
 	//点滅する回数の指定(フェードイン、フェードアウトがセットで1回)
@@ -27,7 +30,7 @@ public:
 	//点滅する速さの指定(指定した数字の半分の速さでフェードインし、半分の速さでフェードアウトする)
 	void SetBlinkingSpeed(int blinkingSpeed) { speed = blinkingSpeed; }
 	//trueを入れると点滅しながら表示される
-	void SetInStart(bool startFlg) { fadeIn = startFlg; }
+	void SetInStart(bool startFlg) { start = startFlg; }
 	
 	float GetAlpha() { return alpha; }
 };

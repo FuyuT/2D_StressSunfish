@@ -6,15 +6,15 @@ CRetryWindow::CRetryWindow()
 }
 CRetryWindow::~CRetryWindow()
 {
-
+	Release();
 }
 
 void CRetryWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upラフ2.png");
+	textTexture.Load("PopUpRetry.png");
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
-	font.Create(32, "MS　明朝");
 	endFlg = false;
 }
 void CRetryWindow::Update()
@@ -26,26 +26,27 @@ void CRetryWindow::Update()
 		Release();
 		endFlg = true;
 		//ゲーム画面を初期化
-
+		buttonResult = 1;
 		nextPopUp = NULL;
 	}
 	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
 		Release();
 		endFlg = true;
-		nextPopUp = NULL;
+		nextPopUp = POPUPNO_POSE;
 	}
 }
 void CRetryWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 400, MOF_XRGB(0, 0, 0), "リトライしますか?");
+	textTexture.Render(textPosX,textPosY);
 	buttonYesTexture.Render(buttonYesPosX, buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
 }
 void CRetryWindow::Release()
 {
 	popUpTexture.Release();
+	textTexture.Release();
 	buttonYesTexture.Release();
 	buttonNoTexture.Release();
 }

@@ -79,7 +79,6 @@ void CSceneGame::Initialize()
 	{
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
-	
 	PlayBGM();
 }
 
@@ -124,11 +123,11 @@ void CSceneGame::Update()
 	stg.Update(pl);
 
 	//ÉvÉåÉCÉÑÅ[
-	pl.Update();
+	pl.Update(false,2);
 
 	for (int i = 0; i < 3; i++)
 	{
-		pl.Collision(cObstacle,i);
+		pl.Collision(cObstacle,i,false,2);
 	}
 	//è·äQï®
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
@@ -262,12 +261,12 @@ void CSceneGame::PopUpController()
 			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
-			//nowPopUpGame = new CBackToTitleWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
-			//nowPopUpGame = new CRetryWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
 			nowPopUpGame = NULL;
