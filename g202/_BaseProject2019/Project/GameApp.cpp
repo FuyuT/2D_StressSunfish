@@ -17,6 +17,8 @@
 #include	"SceneTrophyCollection.h"
 #include	"SceneTutorial.h"
 
+#include	"SoundManager.h"
+CSoundManager cSound;
 //シーンクラス
 CSceneBase* nowScene = NULL;
 
@@ -32,9 +34,10 @@ bool debugShowFlg = false;
 MofBool CGameApp::Initialize(void) {
 	//リソースディレクトリの設定
 	CUtilities::SetCurrentDirectory("Resource");
-
+	cSound.Load();
 	//シーンの初期化
 	nowScene = new CSceneTitle;
+	nowScene->SetSoundManager(cSound);
 	nowScene->Initialize();
 	return TRUE;
 }
@@ -90,6 +93,7 @@ MofBool CGameApp::Update(void) {
 			break;
 		}
 		if (!nowScene->Load())return false;
+		nowScene->SetSoundManager(cSound);
 		nowScene->Initialize();
 	}
 
@@ -133,5 +137,6 @@ MofBool CGameApp::Release(void) {
 		delete nowScene;
 		nowScene = NULL;
 	}
+	cSound.Release();
 	return TRUE;
 }

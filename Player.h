@@ -120,8 +120,10 @@ private:
 	float		moveY;
 	//速度の倍数
 	float		moveSpeed;
-	//ジャンプしているかを表すフラグ
+	//ジャンプ
 	bool		jumpFlg;
+	bool		jumpDangerFlg;
+	CTimer		jumpDangerTimer;
 	//生きているかを表すフラグ
 	bool		deadFlg;
 	//アクション可能であるか表すフラグ

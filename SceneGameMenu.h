@@ -24,8 +24,10 @@ private:
 public:
 	CSceneGameMenu();
 	~CSceneGameMenu();
+	void PlayBGM() override;
 	void Initialize() override;
 	void Update() override;
+	void SoundUpdate() override;
 	void Render() override;
 	void Release() override;
 

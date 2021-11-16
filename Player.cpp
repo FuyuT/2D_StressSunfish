@@ -9,6 +9,7 @@ CPlayer::CPlayer() :
 	moveY(0.0f),
 	moveSpeed(1.0f),
 	jumpFlg(false),
+	jumpDangerFlg(false),
 	deadFlg(false),
 	possibleToJumpFlg(false),
 	possibleToEatFlg(),
@@ -77,6 +78,10 @@ void CPlayer::Initialize()
 	//速度
 	moveX = 0.0f;
 	moveY = 0.0f;
+	//ジャンプ
+	jumpFlg = false;
+	jumpDangerFlg = false;
+	jumpDangerTimer.SetTotalTime(5);
 	//水流
 	moveSpeed = 1.0f;
 	waterFlowTimer.SetTotalTime(4);
@@ -88,7 +93,6 @@ void CPlayer::Initialize()
 	hitTimer.SetTotalTime(1);
 
 	//フラグ
-	jumpFlg = false;
 	deadFlg = false;
 	for (int i = 0; i < FEED_MAXCOUNT; i++)
 	{
@@ -346,15 +350,31 @@ void CPlayer::Jump()
 		//ジャンプ力
 		moveY = -JUMP_POWER_Y;
 		moveX = JUMP_POWER_X;
+
 	}
 	else if (jumpFlg)
 	{
 		moveY += PLAYER_SPEED;
-
 		//海面より下か(海に戻ったか)
 		//落下による勢いで少し潜るように
 		if (posY > SEA_LEVEL + WATER_LANDING_DEEP)
 		{
+			//jumpDangerTimerの時間内にジャンプを行うと死亡
+			if (jumpDangerFlg)
+			{
+				//死因が確定していない
+				if (causeOfDeath == CAUSE_None)
+				{
+					motion.ChangeMotion(MOTION_DEATH);
+					causeOfDeath = CAUSE_Jump;
+				}
+			}
+			else
+			{
+				jumpDangerFlg = true;
+				jumpDangerTimer.SetTotalTime(5);
+				jumpDangerTimer.StartTimer();
+			}
 			//寄生虫を振り落とす
 			parasiteTimer.SetTotalTime(15);
 			parasite = 0;
@@ -365,20 +385,10 @@ void CPlayer::Jump()
 
 			jumpFlg = false;
 
-			//死因が確定していない
-			if (causeOfDeath == CAUSE_None)
-			{
-				//死因：衝撃死
-				//10%で死ぬ
-				if (DieInPercentage(10))
-				{
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Jump;
-				}
-			}
 		}
-
 	}
+
+
 }
 
 //プレイヤーの状態を更新
@@ -583,6 +593,8 @@ void CPlayer::Update()
 	waterFlowTimer.Update();
 	hitTimer.Update();
 	brakeTimer.Update();
+	if (!jumpFlg) jumpDangerTimer.Update();
+	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
 
 	//ジャンプ中は操作が行えないように
 	if (jumpFlg)
@@ -755,6 +767,20 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 			causeOfDeath = CAUSE_SeaTurtle;
 		}
 	}
+	//todo:死因を障害物と衝突にしてるので、あとで変更
+	//魚群（イワシ）
+	else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
+		cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
+	{
+		if (causeOfDeath == CAUSE_None)
+		{
+			//衝突
+			hitFlg = true;
+			//死因：衝突死
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Obstacle;
+		}
+	}
 	//障害物
 	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
 		cObstacle.GetShow(Garbage, num) && !hitFlg)
@@ -763,36 +789,29 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		{
 			//衝突
 			hitFlg = true;
-			hitTimer.SetTotalTime(1);
-
 			//死因：衝突死
-			//20%で死ぬ
-			if (DieInPercentage(20))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_Obstacle;
-			}
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Obstacle;
 		}
 	}
 	//水流
 	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow, num)) &&
-		cObstacle.GetShow(WaterFlow, num))
+		cObstacle.GetShow(WaterFlow, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None && !waterFlowFlg)
+		if (!waterFlowFlg)
 		{
-			//死因：加速死
-			//5%で死ぬ
-			if (DieInPercentage(5))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_WaterFlow;
-			}
+			//水流に当たったことを確認
+			waterFlowFlg = true;
+			//持続時間の設定
+			waterFlowTimer.SetTotalTime(4);
+			hitFlg = true;
+			hitTimer.SetTotalTime(2);
 		}
-
-		//水流に当たったことを確認
-		waterFlowFlg = true;
-		//持続時間の設定
-		waterFlowTimer.SetTotalTime(4);
+		else
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_WaterFlow;
+		}
 		
 	}
 
@@ -806,15 +825,9 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		{
 			//衝突
 			hitFlg = true;
-			hitTimer.SetTotalTime(1);
-
 			//泡死
-			//5%で死ぬ
-			if (DieInPercentage(5))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_Bubble;
-			}
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Bubble;
 		}
 	}
 

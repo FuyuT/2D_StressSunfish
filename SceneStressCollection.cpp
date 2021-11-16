@@ -11,6 +11,13 @@ CSceneStressCollection::~CSceneStressCollection()
 {
 	Release();
 }
+
+void CSceneStressCollection::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_COLLECTION_BGM);
+}
+
 void CSceneStressCollection::Initialize()
 {
 	//背景読み込み
@@ -86,6 +93,7 @@ void CSceneStressCollection::Initialize()
 	popUpFlg = false;
 	nowPopUpStress = new CCheckCauseOfDeathWindow;
 	nowPopUpStress->Initialize();
+	PlayBGM();
 }
 void CSceneStressCollection::Update()
 {
@@ -195,6 +203,7 @@ void CSceneStressCollection::Update()
 			}
 		}
 	}
+
 
 	//F1でポップアップ表示
 	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)

@@ -80,6 +80,9 @@ public:
 		case Turtle:
 			return cTurtle.GetRect();
 			break;
+		case ShoalSardine:
+			return cShoalSardine.GetRect();
+			break;
 		case Garbage:
 			return cGarbage[num].GetRect();
 			break;
@@ -101,17 +104,13 @@ public:
 		case RottenFish:
 			return cRottenFish[num].GetRect();
 			break;
-		case RottenCrab :
+		case RottenCrab:
 			return cRottenCrab[num].GetRect();
 			break;
-		case RottenShrimp :
+		case RottenShrimp:
 			return cRottenShrimp[num].GetRect();
 			break;
-		case ShoalSardine:
-			return cShoalSardine.GetRect();
-			break;
 		}
-
 	}
 
 	//player‘¤‚©‚ç”ñ•\Ž¦‚É‚·‚é‚½‚ß’Ç‰Á
@@ -148,6 +147,9 @@ public:
 		case Turtle:
 			return cTurtle.GetShow();
 			break;
+		case ShoalSardine:
+			return cShoalSardine.GetShow();
+			break;
 		case Garbage:
 			return cGarbage[num].GetShow();
 			break;
@@ -174,9 +176,6 @@ public:
 			break;
 		case RottenShrimp:
 			return cRottenShrimp[num].GetShow();
-			break;
-		case ShoalSardine:
-			return cShoalSardine.GetShow();
 			break;
 		}
 	}

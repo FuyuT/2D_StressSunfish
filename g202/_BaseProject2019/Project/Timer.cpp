@@ -17,9 +17,9 @@ void CTimer::Update()
 	if (UpdateFlg)
 	{
 		NowTime -= CUtilities::GetFrameSecond();
-		if (NowTime < 0)
+		if (NowTime <= 0)
 		{
-
+			UpdateFlg = false;
 		}
 	}
 }

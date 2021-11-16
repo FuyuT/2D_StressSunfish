@@ -1,5 +1,6 @@
 #pragma once
 #include	"Mof.h"
+#include	"SoundManager.h"
 
 //シーンの列挙
 enum tag_SCENENO {
@@ -19,6 +20,7 @@ protected:
 	short		nextScene;
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
+	CSoundManager cSound;
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() :
@@ -30,13 +32,16 @@ public:
 	}
 	virtual ~CSceneBase() {}
 	virtual bool Load() { return true; }
+	virtual void PlayBGM(){}
 	virtual void Initialize() {}
 	virtual void Update() {}
+	virtual void SoundUpdate(){}
 	virtual void Render() {}
 	virtual void RenderDebug() {}
 	virtual void Release() {}
-	//ゲッター
+	//ゲッター、セッター
 	short GetNextScene() { return nextScene; }
 	bool IsEnd() { return endFlg; }
+	void SetSoundManager(CSoundManager& p) { cSound = p; }
 };
 

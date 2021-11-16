@@ -37,6 +37,13 @@ CSceneGame::~CSceneGame()
 	Release();
 }
 
+void CSceneGame::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_GAME_BGM);
+}
+
+
 bool CSceneGame::Load()
 {
 	if (!pl.Load())return false;
@@ -72,6 +79,8 @@ void CSceneGame::Initialize()
 	{
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
+	
+	PlayBGM();
 }
 
 void CSceneGame::Update()

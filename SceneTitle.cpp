@@ -11,16 +11,27 @@ CSceneTitle::~CSceneTitle()
 {
 }
 
+void CSceneTitle::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_TITLE_BGM);
+}
+
+bool CSceneTitle::Load()
+{
+	if(!backGroundTex.Load("Title.png"))return false;
+	if(!titleLogoTex.Load("TitleLogo.png"))return false;
+	if (!gamePrayButtonTexture.Load("ButtonStart.png"))return false;
+	if(!gameFinishButtonTexture.Load("ButtonFinish.png"))return false;
+	return true;
+}
+
 void CSceneTitle::Initialize()
 {
-	backGroundTex.Load("Title.png");
-	titleLogoTex.Load("TitleLogo.png");
-	gamePrayButtonTexture.Load("ButtonStart.png");
-	gameFinishButtonTexture.Load("ButtonFinish.png");
+	Load();
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
-
-
+	PlayBGM();
 }
 
 void CSceneTitle::Update()
@@ -48,6 +59,12 @@ void CSceneTitle::Update()
 			popUpFlg = false;
 		}
 	}
+
+	SoundUpdate();
+}
+
+void CSceneTitle::SoundUpdate()
+{
 }
 
 void CSceneTitle::Render()
