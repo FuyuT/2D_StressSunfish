@@ -81,6 +81,17 @@ bool CUi::Load()
 	{
 		return false;
 	}
+	//â∑ìxíçà”UI
+	//çÇâ∑
+	if (!cautionHot.Load("UI_CautionTempUp.png"))
+	{
+		return false;
+	}
+	//í·â∑
+	if (!cautionCold.Load("UI_CautionTempDown.png"))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -90,14 +101,25 @@ void CUi::Initialize()
 	font.Create(48, "MSÅ@ñæí©");
 	//ì_ñ≈ê›íË
 	//íçà”
-	cautionB.SetBlinkingCount(5);
-	cautionB.SetBlinkingSpeed(60);
+	cautionB.SetBlinkingCount(3);
+	cautionB.SetBlinkingSpeed(50);
+	cautionB.Initialize();
+	//çÇâ∑
+	cautionHotB.SetBlinkingCount(3);
+	cautionHotB.SetBlinkingSpeed(50);
+	cautionHotB.Initialize();
+	//í·â∑
+	cautionColdB.SetBlinkingCount(3);
+	cautionColdB.SetBlinkingSpeed(50);
+	cautionColdB.Initialize();
 }
 
 void CUi::Update()
 {
 	//ì_ñ≈ê›íË
 	cautionB.Update();
+	cautionHotB.Update();
+	cautionColdB.Update();
 }
 
 void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,bool jumpFlg,bool eatFlg)
@@ -106,7 +128,15 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
 	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
 
-	font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%d m", distanceNum);
+	if (distanceNum < 1000)
+	{
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%d m", distanceNum);
+	}
+	else if (distanceNum >= 1000)
+	{
+		distance = distanceNum / 1000;
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%3.1 km", distance);
+	}
 
 	stressMeter.Render(1600, 0);
 
@@ -114,14 +144,18 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
+		cautionHotB.SetInStart(true);
 	}
 	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
+		cautionColdB.SetInStart(true);
 	}
 	else
 	{
 		tempNormal.Render(1600, 0);
+		cautionHotB.SetInStart(false);
+		cautionColdB.SetInStart(false);
 	}
 
 	//â∑ìxåvUIï`âÊ
@@ -167,9 +201,24 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 		eatPoss.Render(1400, 100);
 	}
 
-	//íçà”UIÇÃï`âÊ(âº)
+	//íçà”UIÇÃï`âÊ
+	int w = g_pGraphics->GetTargetWidth();
+	if (turtle.GetShow())
+	{
+		if (w - w / 4 >= turtle.GetPosx())
+		{
+			cautionB.SetInStart(true);
+		}
+	}
+	else if (!turtle.GetShow())
+	{
+		cautionB.SetInStart(false);
+	}
 	cautionUi.Render(1000, 0, MOF_ARGB((int)(255 * cautionB.GetAlpha()), 255, 255, 255));
-	
+	//çÇâ∑íçà”UI
+	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
+	//í·â∑íçà”UI
+	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
 }
 
 void CUi::Release()
@@ -191,5 +240,10 @@ void CUi::Release()
 	parasite3.Release();
 	parasite4.Release();
 	parasite5.Release();
+
+	cautionUi.Release();
+	cautionHot.Release();
+	cautionCold.Release();
+
 	font.Release();
 }
