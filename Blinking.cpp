@@ -6,8 +6,9 @@ CBlinking::CBlinking() :
 	alpha(0),
 	effectCount(0),
 	countCheck(0),
-	fadeIn(false),
-	fadeOut(false)
+	fadeIn(true),
+	fadeOut(false),
+	start(false)
 {
 }
 
@@ -15,37 +16,53 @@ CBlinking::~CBlinking()
 {
 }
 
+void CBlinking::Initialize()
+{
+	start = false;
+	fadeIn = true;
+	fadeOut = false;
+}
+
 void CBlinking::Update()
 {
-	if (fadeIn)
+	if (start)
 	{
-		alpha = effectCount / (speed * 0.5f);
-		
-		effectCount++;
-		
-		
-		if (effectCount >= speed * 0.5)
+		if (fadeIn)
 		{
-			fadeIn = false;
-			fadeOut = true;
+			alpha = effectCount / (speed * 0.5f);
+			effectCount++;
+
+			if (effectCount >= speed * 0.5)
+			{
+				fadeIn = false;
+				fadeOut = true;
+			}
+		}
+		else if (fadeOut)
+		{
+			alpha = (1.0f - ((effectCount - (speed * 0.5f)) / (speed * 0.5f)));
+			effectCount++;
+
+			if (effectCount >= speed)
+			{
+				effectCount = 0;
+				fadeOut = false;
+				countCheck++;
+				if (countCheck >= count)
+				{
+					alpha = 0.0f;
+					countCheck = 0;
+					return;
+				}
+				fadeIn = true;
+			}
 		}
 	}
-	else if (fadeOut)
+	else if(!start)
 	{
-		alpha = (1.0f - ((effectCount - (speed * 0.5f)) / (speed * 0.5f)));
-		effectCount++;
-		
-		if (effectCount >= speed)
-		{
-			effectCount = 0;
-			fadeOut = false;
-			countCheck++;
-			if (countCheck >= count)
-			{
-				alpha = 0.0f;
-				return;
-			}
-			fadeIn = true;;
-		}
+		effectCount = 0;
+		alpha = 0.0f;
+		countCheck = 0;
+		fadeIn = true;
 	}
 }
