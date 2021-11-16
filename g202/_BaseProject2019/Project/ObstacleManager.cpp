@@ -100,6 +100,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 					if (!createFlg)
 						return;
 					cGarbage[n].SetShow(true);
+					//ゴミのランダム決定
+					int no = garbageNoRandom.Random(GARBAGE_SHOES,GARBAGE_BAG + 1);
+					cGarbage[n].SetGarbageNo(no);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
 					cGarbage[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
@@ -367,7 +370,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				cShoalSardine.SetShow(true);
 				//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
-				cShoalSardine.SetPosx(posx + g_pGraphics->GetTargetWidth());
+				cShoalSardine.SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
 				PosYRndom();
 				cShoalSardine.SetPosy(posY);
 				//重なった場合表示しない

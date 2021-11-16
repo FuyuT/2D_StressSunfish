@@ -12,19 +12,14 @@ private:
 	CTexture tutorialButtonTexture;
 	CTexture titleButtonTexture;
 
-
-	int gamePlayButtonPosX;
-	int gamePlayButtonPosY;
-	int configButtonPosX;
-	int configButtonPosY;
-	int torophyButtonPosX;
-	int torophyButtonPosY;
-	int stressButtonPosX;
-	int stressButtonPosY;
-	int tutorialButtonPosX;
-	int tutorialButtonPosY;
-	int titleButtonPosX;
-	int titleButtonPosY;
+	const int buttonPosX = 400;
+	const int gamePlayButtonPosY = 400;
+	const int configButtonPosY=500;
+	const int torophyButtonPosY=600;
+	const int stressButtonPosY=700;
+	const int tutorialButtonPosY=800;
+	const int titleButtonPosX=1200;
+	const int titleButtonPosY=800;
 
 public:
 	CSceneGameMenu();

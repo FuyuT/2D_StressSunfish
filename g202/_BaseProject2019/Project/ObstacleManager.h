@@ -44,7 +44,7 @@ private:
 	CRandom obstacleRandom;
 	CRandom createRandom;
 	CRandom posYRndom;
-
+	CRandom garbageNoRandom;
 	int obstacleNum;
 	int posY;
 	int posYNum;

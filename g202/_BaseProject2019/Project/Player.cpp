@@ -109,7 +109,7 @@ void CPlayer::Initialize()
 		{
 			"通常",
 			0,0,
-			165,165,
+			166,166,
 			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -119,7 +119,7 @@ void CPlayer::Initialize()
 		{
 			"食べる",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -129,7 +129,7 @@ void CPlayer::Initialize()
 		{
 			"ジャンプ",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -139,7 +139,7 @@ void CPlayer::Initialize()
 		{
 			"死ぬ",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -256,14 +256,14 @@ void CPlayer::UpdateMove()
 	//海底(スクリーン下部)　移動制限
 	if (GetRect().Bottom > UNDER_SEA)
 	{
-		posY = UNDER_SEA - TEXTURE_SIZE + COLLISION_ADJUSTMENT;
+		posY = UNDER_SEA - TEXTURE_SIZE + COLLISION_ADJUSTMENT_BOTTOM;
 		moveY = 0;
 	}
 	
 	//海面(スクリーン上部)　移動制限
 	if (GetRect().Top < SEA_LEVEL)
 	{
-		posY = SEA_LEVEL - COLLISION_ADJUSTMENT;
+		posY = SEA_LEVEL - COLLISION_ADJUSTMENT_TOP;
 		moveY = 0;
 	}	
 }
@@ -274,7 +274,8 @@ bool CPlayer::Eat(bool rottenFlg)
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A))
 	{
-		motion.ChangeMotion(MOTION_EAT);
+		if(motion.GetMotionNo() == MOTION_STAND)
+			motion.ChangeMotion(MOTION_EAT);
 
 		for (int i = 0; i < FEED_MAXCOUNT; i++)
 		{
@@ -285,7 +286,7 @@ bool CPlayer::Eat(bool rottenFlg)
 		if (causeOfDeath == CAUSE_None)
 		{
 			//死因：肥満
-			if (hungerRegion == FULL_STOMACH)
+			if (hungerRegion <= FULL_STOMACH)
 			{
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_Obesity;
@@ -296,12 +297,15 @@ bool CPlayer::Eat(bool rottenFlg)
 
 		//空腹を満たす
 		hungerTimer.SetTotalTime(3);
-		hungerRegion -= FEED_SATIETYLEVEL;
+		if(rottenFlg)
+			hungerRegion -= FEED_SATIETYLEVEL;
+		else
+			hungerRegion -= FEED_SATIETYLEVEL / 2;
 
 		//満腹値を超えたら
 		if (hungerRegion < FULL_STOMACH)
 		{
-			hungerRegion = FULL_STOMACH;
+			hungerRegion = FULL_STOMACH - 5.0f;
 		}
 
 		//死因が確定していない
@@ -413,85 +417,47 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 体温
 	 *********/
-	if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
+	if (!jumpFlg)
 	{
-		if (tempRegion > 0)
+		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
-			tempRegion -= 0.15f;
-		}		
-		//tempTimer.StartTimer();
-		//if (tempTimer.GetNowtime() <= 0)
-		//{
-		//	if (bodyTemp < HYPERTHERMIA_LIMIT)
-		//	{
-		//		bodyTemp += TEMPERATURE_LEVEL;
-		//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-		//		tempTimer.SetTotalTime(1);
-		//	}
-		//}
-		//死因：熱中症
-		if (tempRegion <= HYPERTHERMIA_LIMIT)
+			if (tempRegion > HYPERTHERMIA_LIMIT)
+			{
+				tempRegion -= TEMPERATURE_LEVEL;
+			}
+			//死因：熱中症
+			if (tempRegion <= HYPERTHERMIA_LIMIT)
+			{
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_Hyperthermia;
+			}
+		}
+		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Hyperthermia;
+			if (tempRegion < FROZEN_LIMIT)
+			{
+				tempRegion += TEMPERATURE_LEVEL;
+			}
+			//死因：凍死
+			if (tempRegion >= FROZEN_LIMIT)
+			{
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_Frozen;
+			}
+		}
+		else
+		{
+			if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			{
+				tempRegion += TEMPERATURE_LEVEL / 3.0f;
+			}
+			else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			{
+				tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+			}
 		}
 	}
-	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
-	{
-		if (tempRegion < 100)
-		{
-			tempRegion += 0.15f;
-		}		
-		//tempTimer.StartTimer();
-		//if (tempTimer.GetNowtime() <= 0)
-		//{
-		//	if (bodyTemp > -FROZEN_LIMIT)
-		//	{
-		//		bodyTemp -= TEMPERATURE_LEVEL;
-		//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
-		//		tempTimer.SetTotalTime(1);
-		//	}
-		//}
-		//死因：凍死
-		if (tempRegion >= FROZEN_LIMIT)
-		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Frozen;
-		}
-	}
-	else
-	{
-		if (tempRegion < 50)
-		{
-			tempRegion += 0.05f;
-		}
-		else if (tempRegion > 50)
-		{
-			tempRegion -= 0.05f;
-		}
-		//if (bodyTemp > STANDARD_TEMPERATURE)
-		//{
-		//	//タイマーセット
-		//	tempTimer.StartTimer();
-		//	if (tempTimer.GetNowtime() <= 0)
-		//	{
-		//		bodyTemp -= TEMPERATURE_LEVEL;
-		//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
-		//		tempTimer.SetTotalTime(2);
-		//	}
-		//}
-		//else if (bodyTemp < STANDARD_TEMPERATURE)
-		//{
-		//	//タイマーセット
-		//	tempTimer.StartTimer();
-		//	if (tempTimer.GetNowtime() <= 0)
-		//	{
-		//		bodyTemp += TEMPERATURE_LEVEL;
-		//		tempRegion -= 4.1 * TEMPERATURE_LEVEL;
-		//		tempTimer.SetTotalTime(2);
-		//	}
-		//}
-	}
+
 
 
 	/*********
@@ -520,16 +486,15 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 空腹
 	 *********/
-	if (hungerRegion < 100)
+	if (hungerRegion <= STARVATION)
 	{
-		hungerRegion += 0.05f;
+		hungerRegion += HUNGRYLEVEL;
 	}
-	if (hungerRegion >= 85)
+	else if (hungerRegion >= STARVATION)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//空腹度が増加する
-			hungerRegion += HUNGRYLEVEL;
 			if (hungerRegion >= STARVATION)
 			{
 				if (causeOfDeath == CAUSE_None)
@@ -539,29 +504,9 @@ void CPlayer::UpdateStatus()
 					causeOfDeath = CAUSE_Starvation;
 				}
 			}
-			hungerTimer.SetTotalTime(3);
 		}
 	}
 	
-	//hungerTimer.StartTimer();
-	//if (hungerTimer.GetNowtime() <= 0)
-	//{
-	//	if (hungerRegion < STARVATION)
-	//	{
-	//		//空腹度が増加する
-	//		hungerRegion += HUNGRYLEVEL;
-	//		if (hungerRegion >= STARVATION)
-	//		{
-	//			if (causeOfDeath == CAUSE_None)
-	//			{
-	//				//死因：餓死
-	//				deadFlg = true;
-	//				causeOfDeath = CAUSE_Starvation;
-	//			}
-	//		}
-	//		hungerTimer.SetTotalTime(3);
-	//	}
-	//}
 
 	/*********
 	*  水流
@@ -593,7 +538,7 @@ void CPlayer::UpdateStatus()
 		}
 	}
 
-	//無敵(デバッグ用)
+	//無敵
 	if (hitFlg)
 	{
 		hitTimer.StartTimer();
@@ -665,7 +610,7 @@ void CPlayer::Render(float wx, float wy)
 			eatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
 			break;
 		case MOTION_JUMP:
-			jumpTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			jumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
 			break;
 		case MOTION_DEATH:
 			deathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());

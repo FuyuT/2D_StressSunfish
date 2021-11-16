@@ -10,14 +10,14 @@ private:
 	CTexture	buttonTitleTexture;
 	CTexture	buttonReturnGameTexture;
 
-	int			buttonConfigPosX = 850;
-	int			buttonConfigPosY = 500;
-	int			buttonRetryPosX = 850;
-	int			buttonRetryPosY = 600;
-	int			buttonTitlePosX = 850;
-	int			buttonTitlePosY = 700;
-	int			buttonReturnGamePosX = 850;
-	int			buttonReturnGamePosY = 800;
+	const int			buttonConfigPosX = 850;
+	const int			buttonConfigPosY = 500;
+	const int			buttonRetryPosX = 850;
+	const int			buttonRetryPosY = 600;
+	const int			buttonTitlePosX = 850;
+	const int			buttonTitlePosY = 700;
+	const int			buttonReturnGamePosX = 850;
+	const int			buttonReturnGamePosY = 800;
 
 public:
 	CPoseWindow();

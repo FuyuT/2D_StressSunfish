@@ -5,8 +5,8 @@ class CSceneConfig :public CSceneBase
 {
 private:
 	CTexture	buttonTexture;
-	int			buttonPosX = 800;
-	int			buttonPosY = 800;
+	const int			buttonPosX = 800;
+	const int			buttonPosY = 800;
 	bool        gamePlayFlg = false;
 public:
 	CSceneConfig();

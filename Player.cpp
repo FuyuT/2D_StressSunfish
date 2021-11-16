@@ -421,9 +421,9 @@ void CPlayer::UpdateStatus()
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
-			if (tempRegion > 0)
+			if (tempRegion > HYPERTHERMIA_LIMIT)
 			{
-				tempRegion -= 0.15f;
+				tempRegion -= TEMPERATURE_LEVEL;
 			}
 			//éÄàˆÅFîMíÜè«
 			if (tempRegion <= HYPERTHERMIA_LIMIT)
@@ -432,35 +432,12 @@ void CPlayer::UpdateStatus()
 				causeOfDeath = CAUSE_Hyperthermia;
 			}
 		}
-	}
-	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
-	{
-		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
-		{
-			tempRegion += 0.15f;
-		}		
-		//éÄàˆÅFìÄéÄ
-		if (tempRegion >= FROZEN_LIMIT)
-		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Frozen;
-		}
 		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
 			if (tempRegion < FROZEN_LIMIT)
 			{
 				tempRegion += TEMPERATURE_LEVEL;
 			}
-			//tempTimer.StartTimer();
-			//if (tempTimer.GetNowtime() <= 0)
-			//{
-			//	if (bodyTemp > -FROZEN_LIMIT)
-			//	{
-			//		bodyTemp -= TEMPERATURE_LEVEL;
-			//		tempRegion += 4.1 * TEMPERATURE_LEVEL;
-			//		tempTimer.SetTotalTime(1);
-			//	}
-			//}
 			//éÄàˆÅFìÄéÄ
 			if (tempRegion >= FROZEN_LIMIT)
 			{
@@ -480,6 +457,7 @@ void CPlayer::UpdateStatus()
 			}
 		}
 	}
+
 
 
 	/*********

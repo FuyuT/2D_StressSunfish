@@ -7,10 +7,10 @@ private:
 	CTexture	titleLogoTex;
 	CTexture	gamePrayButtonTexture;
 	CTexture	gameFinishButtonTexture;
-	int			gamePrayButtonPosX;
-	int			gamePrayButtonPosY;
-	int			gameFinishButtonPosX;
-	int			gameFinishButtonPosY;
+	const int			gamePrayButtonPosX = 800;
+	const int			gamePrayButtonPosY = 700;
+	const int			gameFinishButtonPosX = 800;
+	const int			gameFinishButtonPosY = 800;
 public:
 	CSceneTitle();
 	~CSceneTitle();

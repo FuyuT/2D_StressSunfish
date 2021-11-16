@@ -88,19 +88,16 @@ bool CUi::Load()
 void CUi::Initialize()
 {
 	font.Create(48, "MS　明朝");
-	////タイマー
-	//tempTimer.SetTotalTime(2);
-	//hungerTimer.SetTotalTime(3);
-	//parasiteTimer.SetTotalTime(15);
+	//点滅設定
+	//注意
+	cautionB.SetBlinkingCount(5);
+	cautionB.SetBlinkingSpeed(60);
 }
 
 void CUi::Update()
 {
-	////タイマー
-	//tempTimer.Update();
-	//hungerTimer.Update();
-	//parasiteTimer.Update();
-
+	//点滅設定
+	cautionB.Update();
 }
 
 void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,bool jumpFlg,bool eatFlg)
@@ -171,7 +168,8 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 	}
 
 	//注意UIの描画(仮)
-	cautionUi.Render(1000, 0);
+	cautionUi.Render(1000, 0, MOF_ARGB((int)(255 * cautionB.GetAlpha()), 255, 255, 255));
+	
 }
 
 void CUi::Release()

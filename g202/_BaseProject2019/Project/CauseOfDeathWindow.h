@@ -1,6 +1,6 @@
 #pragma once
 #include "PopUpWindowBase.h"
-#include "SceneStressCollection.h"
+#include "Player.h"
 class CCauseOfDeathWindow : public CPopUpWindowBase
 {
 private:
@@ -9,8 +9,8 @@ private:
 	CTexture	buttonNextTexture;
 	CTexture	caseOfDethTexture;
 
-	int			buttonNextPosX = 1500;
-	int			buttonNextPosY = 850;
+	const int			buttonNextPosX = 1500;
+	const int			buttonNextPosY = 850;
 public:
 	CCauseOfDeathWindow();
 	~CCauseOfDeathWindow();

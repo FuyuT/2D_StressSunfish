@@ -1,4 +1,5 @@
 #include "ResultWindow.h"
+#include <stdio.h>
 
 CResultWindow::CResultWindow()
 {
@@ -11,7 +12,6 @@ CResultWindow::~CResultWindow()
 
 void CResultWindow::Initialize()
 {
-	distans = 
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonNextTexture.Load("ButtonNext.png");
 	if (numberOfTrophy[0] != TROPHY_NULL)
@@ -31,7 +31,7 @@ void CResultWindow::Initialize()
 			//説明文読み込み
 			break;
 		case TROPHY_DAM:
-			trophyTexture.Load("3_湖級.png");
+			trophyTexture.Load("4_ダム級.png");
 			//説明文読み込み
 			break;
 		case TROPHY_SEWER:
@@ -88,46 +88,6 @@ void CResultWindow::Initialize()
 	{
 		switch (numberOfTrophy[1])
 		{
-		case TROPHY_RIVER:
-			trophyTexture2.Load("1_川級.png");
-			//説明文読み込み
-			break;
-		case  TROPHY_WATERFALL:
-			trophyTexture2.Load("2_滝級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_LAKE:
-			trophyTexture2.Load("3_湖級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_DAM:
-			trophyTexture2.Load("3_湖級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_SEWER:
-			trophyTexture2.Load("5_下水道級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_INDIANOCEAN:
-			trophyTexture2.Load("6_インド洋級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_AMAZONROVER:
-			trophyTexture2.Load("7_アマゾン川級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_OCEAN:
-			trophyTexture2.Load("8_海級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_SEAOFJAPAN:
-			trophyTexture2.Load("9_日本海級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_AROUNDTHEGLOBE:
-			trophyTexture2.Load("10_地球一周級.png");
-			//説明文読み込み
-			break;
 		case TROPHY_ZEROMOTIVATION:
 			trophyTexture2.Load("S1_やる気ゼロ級.png");
 			//説明文読み込み
@@ -158,46 +118,6 @@ void CResultWindow::Initialize()
 	{
 		switch (numberOfTrophy[2])
 		{
-		case TROPHY_RIVER:
-			trophyTexture3.Load("1_川級.png");
-			//説明文読み込み
-			break;
-		case  TROPHY_WATERFALL:
-			trophyTexture3.Load("2_滝級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_LAKE:
-			trophyTexture3.Load("3_湖級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_DAM:
-			trophyTexture3.Load("3_湖級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_SEWER:
-			trophyTexture3.Load("5_下水道級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_INDIANOCEAN:
-			trophyTexture3.Load("6_インド洋級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_AMAZONROVER:
-			trophyTexture3.Load("7_アマゾン川級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_OCEAN:
-			trophyTexture3.Load("8_海級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_SEAOFJAPAN:
-			trophyTexture3.Load("9_日本海級.png");
-			//説明文読み込み
-			break;
-		case TROPHY_AROUNDTHEGLOBE:
-			trophyTexture3.Load("10_地球一周級.png");
-			//説明文読み込み
-			break;
 		case TROPHY_ZEROMOTIVATION:
 			trophyTexture3.Load("S1_やる気ゼロ級.png");
 			//説明文読み込み
@@ -225,7 +145,9 @@ void CResultWindow::Initialize()
 		}
 	}
 
+
 	font.Create(64, "MS　明朝");
+	distanceFont.Create(172, "MS　明朝");
 	endFlg = false;
 }
 void CResultWindow::Update()
@@ -249,68 +171,97 @@ void CResultWindow::Render()
 	{
 		if (numberOfTrophy[0] == TROPHY_RIVER)
 		{
-			trophyTexture.Render(0, 0);
-			font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "川級");
+			font.RenderString(850, 750, MOF_XRGB(0, 0, 0), "川級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_WATERFALL)
 		{
-			font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "滝級");
+			font.RenderString(850, 750, MOF_XRGB(0, 0, 0), "滝級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_LAKE)
 		{
-			font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "湖級");
+			font.RenderString(850, 750, MOF_XRGB(0, 0, 0), "湖級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_DAM)
 		{
-			font.RenderString(820, 250, MOF_XRGB(0, 0, 0), "ダム級");
+			font.RenderString(820, 750, MOF_XRGB(0, 0, 0), "ダム級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_SEWER)
 		{
-			font.RenderString(790, 250, MOF_XRGB(0, 0, 0), "下水道級");
+			font.RenderString(890, 750, MOF_XRGB(0, 0, 0), "下水道級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_INDIANOCEAN)
 		{
-			font.RenderString(780, 250, MOF_XRGB(0, 0, 0), "インド洋級");
+			font.RenderString(880, 750, MOF_XRGB(0, 0, 0), "インド洋級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_AMAZONROVER)
 		{
-			font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "アマゾン川級");
+			font.RenderString(850, 750, MOF_XRGB(0, 0, 0), "アマゾン川級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_OCEAN)
 		{
-			font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "海級");
+			font.RenderString(850, 750, MOF_XRGB(0, 0, 0), "海級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_SEAOFJAPAN)
 		{
-			font.RenderString(790, 250, MOF_XRGB(0, 0, 0), "日本海級");
+			font.RenderString(890, 750, MOF_XRGB(0, 0, 0), "日本海級");
 			//説明文描画
 		}
 		if (numberOfTrophy[0] == TROPHY_AROUNDTHEGLOBE)
 		{
-			font.RenderString(770, 250, MOF_XRGB(0, 0, 0), "地球一周級");
+			font.RenderString(870, 750, MOF_XRGB(0, 0, 0), "地球一周級");
 			//説明文描画
 		}
 	}
-	if (numberOfTrophy[1] != TROPHY_NULL)
-	{
-		trophyTexture2.Render(trophyTexturePosX + 5, trophyTexturePosY);
-	}
+	//トロフィー描画
 	if (numberOfTrophy[2] != TROPHY_NULL)
 	{
-		trophyTexture3.Render(trophyTexturePosX + 10, trophyTexturePosY);
+		trophyTexture3.Render(trophyTexturePosX - 150, trophyTexturePosY);
+	}
+	if (numberOfTrophy[1] != TROPHY_NULL)
+	{
+		trophyTexture2.Render(trophyTexturePosX - 100, trophyTexturePosY);
 	}
 	trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
+	//新規ゲットの場合newを描画
+	if (newGetTrophyFlg)
+	{
+		font.RenderString(trophyTexturePosX+10, trophyTexturePosY + trophyTexture.GetHeight()+ 10, MOF_XRGB(0, 0, 0), "NEW");
+	}
+
+	//m描画
+	if (distance < 1000000)
+	{
+		sprintf_s(meter,10, "%dm", distance);
+	}
+	else
+	{
+		sprintf_s(meter, 10 ,"%dm", 99999);
+	}
+	CRectangle rec;
+	CRectangle drec;
+	CGraphicsUtilities::CalculateStringRect(0, 0, meter, rec);
+	float cx = popUpTexture.GetWidth() * 0.5f;
+	float cy = popUpTexture.GetHeight() * 0.5f;
+	float w = rec.GetWidth();
+	float h = rec.GetHeight();
+	rec.Top = cy - h * 0.5f;
+	rec.Bottom = rec.Top + h;
+	rec.Left = cx - w * 0.5f;
+	rec.Right = rec.Left + w;
+	distanceFont.RenderString(cx - rec.GetWidth() * 0.5f, rec.Top -50, MOF_XRGB(0, 0, 0), meter);
 }
 void CResultWindow::Release()
 {
+	distanceFont.Release();
+	font.Release();
 	trophyTexture.Release();
 	trophyTexture2.Release();
 	trophyTexture3.Release();

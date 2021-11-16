@@ -2,6 +2,9 @@
 #include	"Mof.h"
 #include "SceneTrophyCollection.h"
 
+constexpr int popUpPosX = 200;
+constexpr int popUpPosY = 50;
+
 //シーンの列挙
 enum tag_POPUPNO {
 	POPUPNO_QUIT,
@@ -17,8 +20,6 @@ enum tag_POPUPNO {
 class CPopUpWindowBase
 {
 protected:
-	int popUpPosX = 200;
-	int popUpPosY = 50;
 	bool endFlg = false;
 	short	nextPopUp;
 	//メモ書き取れてません　申し訳ない
@@ -28,6 +29,7 @@ protected:
 	bool	newGetDethFlg;
 	bool	newGetTrophyFlg;
 	int		numberOfTrophy[3];
+	int		distance;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -50,6 +52,7 @@ public:
 			numberOfTrophy[i] =trophy[i];
 		}
 	}
+	void SetDistance(int i) { distance = i; };
 	bool IsEnd() { return endFlg; }
 
 };
