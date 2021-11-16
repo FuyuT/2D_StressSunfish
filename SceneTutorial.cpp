@@ -1,7 +1,10 @@
 #include "SceneTutorial.h"
-CFont FontPopRumCute;
-CFont f1;
-CSceneTutorial::CSceneTutorial()
+CSceneTutorial::CSceneTutorial():
+	fBuffer(NULL),
+	fBufferOffset(0),
+	mShowDelay(0),
+	messageEndFlg(false),
+	tutorialStep(0)
 {
 }
 
@@ -9,22 +12,11 @@ CSceneTutorial::~CSceneTutorial()
 {
 }
 
-bool CSceneTutorial::Load()
-{
-	if (!stg.Load())return false;
-	if (!ui.Load())return false;
-	if (!pl.Load())return false;
-	if (!obs.Load())return false;
-	if (!messageWindowImg.Load("MessageWindow.png"))return false;
-	if (!TextLoad())return false;
-	//fontの作成
-	FontPopRumCute.Create(64, "MS　ゴシック");
-	f1.Create(64, "MS　明朝");
-	//FontPopRumCute.Create(64, "	ポプらむ☆キュート");
-	
-	return true;
-}
+////////////////////////////
+// メソッド
+////////////////////////////
 
+//テキストの読込み
 bool CSceneTutorial::TextLoad()
 {
 	//テキストファイルを開く
@@ -47,39 +39,32 @@ bool CSceneTutorial::TextLoad()
 	return true;
 }
 
-void CSceneTutorial::Initialize()
+//フォントの読込み
+void CSceneTutorial::FontLoad()
 {
-	stg.Initialize();
-	pl.Initialize();
-	ui.Initialize();
-	fBufferOffset = 0;
-	mShowDelay = 0;
-	messegeEndFlg = false;
-	
+	//fontの作成
+	CFontCharaInputArray(fontAdd);
+	FontPopRumCute.Create(26, "PoPRumCute");
 }
 
-void CSceneTutorial::Update()
-{
-	stg.Update(pl);
-	pl.Update();
-	ui.Update();
-	MessageUpdate();
-}
-
+//メッセージの更新
 void CSceneTutorial::MessageUpdate()
 {
 	//文字列が終了(改行の次に改行がある)したら、ENTERで次の説明へ
 	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
 	{
-		messegeEndFlg = true;
-		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		messageEndFlg = true;
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE) &&
+			tutorialStep != pl.GetTaskCompleteStep())
 		{
 			for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
 			{
 				fLineBuffer[n]= NULL;
 			}
 			fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
-			messegeEndFlg = false;
+			messageEndFlg = false;
+			//チュートリアルの段階を一つ進める
+			tutorialStep += 1;
 		}
 	}
 	//文字列の終端まで文字を追加していく
@@ -119,22 +104,119 @@ void CSceneTutorial::MessageUpdate()
 	}
 }
 
-void CSceneTutorial::Render()
+//メッセ―ジの描画
+void CSceneTutorial::MessageRender()
 {
-	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetBodyTemp(), pl.GetTemperature(),pl.GetDistance());
-	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
-	CGraphicsUtilities::RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messegeEndFlg)
+	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
+	if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
 	{
 		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押して次へ→");
 	}
+	else if (messageEndFlg && tutorialStep == pl.GetTaskCompleteStep())
+	{
+		CGraphicsUtilities::RenderString(1200, 980, "タスクをこなそう！");
+	}
+}
+
+
+////////////////////////////
+// 制御機構
+////////////////////////////
+
+bool CSceneTutorial::Load()
+{
+	if (!stg.Load())return false;
+	if (!ui.Load())return false;
+	if (!pl.Load())return false;
+	if (!obs.Load())return false;
+	if (!messageWindowImg.Load("MessageWindow.png"))return false;
+	if (!TextLoad())return false;
+	//フォントの読込み
+	FontLoad();
+	return true;
+}
+
+void CSceneTutorial::Initialize()
+{
+	stg.Initialize();
+	pl.Initialize();
+	ui.Initialize();
+	obs.Initialize();
+	fBufferOffset = 0;
+	mShowDelay = 0;
+	messageEndFlg = false;
+	tutorialStep = 0;
+}
+
+void CSceneTutorial::Update()
+{
+	stg.Update(pl);
+	pl.Update(true,tutorialStep);
+	ui.Update();
+	for (int i = 0; i < 3; i++)
+	{
+		pl.Collision(obs, i, true, tutorialStep);
+	}
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	MessageUpdate();
+
+}
+
+void CSceneTutorial::Render()
+{
+	stg.Render();
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat());
+	obs.Render(stg.GetScrollX(), stg.GetScrollY());
+	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+	MessageRender();
+
+	//現在のタスク一覧表示
+	if (tutorialStep >= 0)
+	{
+		CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+
+		if (!pl.GetMoveUpTask())
+			CGraphicsUtilities::RenderString(40, 200, MOF_COLOR_BLACK, "□ [W]で上に移動");
+		else if (pl.GetMoveUpTask())
+			CGraphicsUtilities::RenderString(40, 200, MOF_COLOR_BLACK, "■ [W]で上に移動");
+
+		if (!pl.GetMoveDownTask())
+			CGraphicsUtilities::RenderString(40, 240, MOF_COLOR_BLACK, "□ [S]で下に移動");
+		else if (pl.GetMoveDownTask())
+			CGraphicsUtilities::RenderString(40, 240, MOF_COLOR_BLACK, "■ [S]で下に移動");
+	}
+	if(tutorialStep >= 1)
+	{
+		CGraphicsUtilities::RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃");
+
+		if (!pl.GetJumpTask())
+			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+		else if (pl.GetJumpTask())
+			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+
+		if (!pl.GetEatTask())
+			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+		else if (pl.GetEatTask())
+			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+	}
+
+	if (tutorialStep != 2)
+	{
+		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+	}
+	else
+	{
+		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+	}
+	
+
 }
 
 void CSceneTutorial::RenderDebug()
 {
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+	obs.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 }
 
 void CSceneTutorial::Release()
@@ -142,6 +224,7 @@ void CSceneTutorial::Release()
 	stg.Release();
 	ui.Release();
 	pl.Release();
+	obs.Release();
 	messageWindowImg.Release();
 	free(fBuffer);
 }

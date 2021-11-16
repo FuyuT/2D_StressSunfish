@@ -156,11 +156,11 @@ private:
 	CTimer parasiteTimer;
 
 	//チュートリアル用
-	int		tutorialStep;
-	bool	upTaskFlg;
-	bool	downTaskFlg;
+	bool	moveUpTaskFlg;
+	bool	moveDownTaskFlg;
 	bool	jumpTaskFlg;
 	bool	eatTaskFlg;
+	int		taskCompleteStep;
 
 public:
 	CPlayer();
@@ -180,11 +180,22 @@ public:
 	}
 	//食べる
 	//腐っていればtrueを、そうでなければfalseを入れる 喉つまりを起こすかどうかの判断に使う
-	bool Eat(bool rottenFlg);
+	bool Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep);
 	//ジャンプ
-	void Jump();
-	void UpdateStatus();
-	void Update();
+	void Jump(bool unDeadFlg, int tutorialStep);
+	void UpdateStatus(bool unDeadFlg);
+
+	//Updateの引数について
+	// 
+	//unDeadFlg
+	//true : 死ななくなる(チュートリアル用)
+	//false: 死ぬようになる(通常プレイ用)
+	// 
+	//tutorialStep
+	//0 : 上下移動のみ可能
+	//1 : 上下移動に加え、「ジャンプ」、「食べる」が可能
+	//2 : チュートリアルの終了、制限なくプレイ可能
+	void Update(bool unDeadFlg,int tutorialStep);
 	void Render(float wx,float wy);
 	void RenderDebug(float wx,float wy);
 	void Release();
@@ -230,7 +241,7 @@ public:
 		);
 	}
 
-	void Collision(CObstacleManager& cObstacle,int num);
+	void Collision(CObstacleManager& cObstacle,int num,bool unDeadFlg, int tutorialStep);
 
 	//死んでいればtrueを返す
 	bool GetDead()
@@ -265,7 +276,7 @@ public:
 	int GetDistance()
 	{
 		//X座標の20分の1(適当)を進んだ距離とする
-		return (posX - STARTPOS_X) / TRANSLATE_DISTANCE;
+		return ((posX - STARTPOS_X) / TRANSLATE_DISTANCE);
 	}
 	//「ジャンプ」が可能かを返す
 	bool GetJump()
@@ -285,7 +296,27 @@ public:
 		}
 		return false;
 	}
-	//bool Get
 
+	//チュートリアル用関数
+	bool GetMoveUpTask()
+	{
+		return moveUpTaskFlg;
+	}
+	bool GetMoveDownTask()
+	{
+		return moveDownTaskFlg;
+	}
+	bool GetJumpTask()
+	{
+		return jumpTaskFlg;
+	}
+	bool GetEatTask()
+	{
+		return eatTaskFlg;
+	}
+	int GetTaskCompleteStep()
+	{
+		return taskCompleteStep;
+	}
 };
 
