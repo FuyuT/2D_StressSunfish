@@ -3,21 +3,23 @@
 class CPoseWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
+	CTexture	textTexture;
 	CTexture	popUpTexture;
 	CTexture	buttonConfigTexture;
 	CTexture	buttonRetryTexture;
 	CTexture	buttonTitleTexture;
 	CTexture	buttonReturnGameTexture;
 
-	const int			buttonConfigPosX = 850;
-	const int			buttonConfigPosY = 500;
-	const int			buttonRetryPosX = 850;
-	const int			buttonRetryPosY = 600;
-	const int			buttonTitlePosX = 850;
-	const int			buttonTitlePosY = 700;
-	const int			buttonReturnGamePosX = 850;
-	const int			buttonReturnGamePosY = 800;
+	const int			textPosX = 790;
+	const int			textPosY = 215;
+	const int			buttonConfigPosX = 650;
+	const int			buttonConfigPosY = 350;
+	const int			buttonRetryPosX = 650;
+	const int			buttonRetryPosY = 485;
+	const int			buttonTitlePosX = 650;
+	const int			buttonTitlePosY = 620;
+	const int			buttonReturnGamePosX = 650;
+	const int			buttonReturnGamePosY = 755;
 
 public:
 	CPoseWindow();

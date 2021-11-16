@@ -5,7 +5,7 @@ CCheckCauseOfDeathWindow::CCheckCauseOfDeathWindow()
 }
 CCheckCauseOfDeathWindow::~CCheckCauseOfDeathWindow()
 {
-
+	Release();
 }
 
 void CCheckCauseOfDeathWindow::Initialize()
@@ -64,7 +64,7 @@ void CCheckCauseOfDeathWindow::Update()
 void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	causeOfDeathTexture.Render(causeOfDeathTextureTexturePosX, causeOfDeathTextureTexturePosY);
+	causeOfDeathTexture.Render(causeOfDeathTexturePosX, causeOfDeathTexturePosY);
 	if (buttonResult == CAUSE_Hyperthermia)
 		font.RenderString(450, 250, MOF_XRGB(0, 0, 0), "ëÃâ∑è„è∏ÇµÇ∑Ç¨ÇƒîMíÜè«Ç…Ç»ÇËéÄñS");
 	

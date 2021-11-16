@@ -262,12 +262,12 @@ void CSceneGame::PopUpController()
 			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
-			//nowPopUpGame = new CBackToTitleWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
-			//nowPopUpGame = new CRetryWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
 			nowPopUpGame = NULL;

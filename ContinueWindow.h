@@ -3,18 +3,18 @@
 class CContinueWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
 	CTexture	popUpTexture;
 	CTexture	buttonContinueTexture;
 	CTexture	buttonMenuTexture;
 	CTexture	buttonTitleTexture;
+	CTexture	textTexture;
 
-	const int			buttonContinuePosX = 850;
-	const int			buttonContinuePosY = 500;
-	const int			buttonMenuPosX = 850;
-	const int			buttonMenuPosY = 600;
-	const int			buttonTitlePosX = 850;
-	const int			buttonTitlePosY = 700;
+	const int			textPosX = 570;
+	const int			textPosY = 250;
+	const int			buttonPosX = 660;
+	const int			buttonContinuePosY = 425;
+	const int			buttonMenuPosY = 575;
+	const int			buttonTitlePosY = 725;
 
 public:
 	CContinueWindow();

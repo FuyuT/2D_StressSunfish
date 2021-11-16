@@ -80,8 +80,8 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
-	const int			menuButtonPosX = 1500;
-	const int			menuButtonPosY = 900;
+	const int			menuButtonPosX = 1150;
+	const int			menuButtonPosY = 875;
 	const int			rightButtonPosX = 950;
 	const int			leftButtonPosX = 850;
 	const int			leftAndRightButtonPosY = 900;
