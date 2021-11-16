@@ -32,7 +32,9 @@ void CFoodCrab::Update(float wx, float wy)
 void CFoodCrab::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx, pos.y - wy);
+	for (int i = 0; i <= 30; i++) {
+		Texture.RenderRotate(pos.x - wx, pos.y - wy, MOF_ToRadian(i));
+	}
 }
 
 void CFoodCrab::RenderDebug(float wx, float wy)
