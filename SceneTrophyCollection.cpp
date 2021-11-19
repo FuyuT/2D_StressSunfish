@@ -12,6 +12,13 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 {
 	Release();
 }
+
+void CSceneTrophyCollection::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_COLLECTION_BGM);
+}
+
 void CSceneTrophyCollection::Initialize()
 {
 	//背景読み込み
@@ -113,6 +120,7 @@ void CSceneTrophyCollection::Initialize()
 	popUpFlg = false;
 	nowPopUpTrophy = new CTrophyWindow;
 	nowPopUpTrophy->Initialize();
+	PlayBGM();
 }
 void CSceneTrophyCollection::Update()
 {

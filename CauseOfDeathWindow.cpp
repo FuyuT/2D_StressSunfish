@@ -13,8 +13,10 @@ void CCauseOfDeathWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonNextTexture.Load("ButtonNext.png");
+	deathTextTexture.Load("PopUpCaseOfDeath.png");
+	newGetTexture.Load("NEW.png");
 	//死因テクスチャ読み込み
-	switch (dethResult)
+	switch (deathResult)
 	{
 	case CAUSE_Hyperthermia:
 		//死因：体温上昇画像を読み込む
@@ -78,7 +80,7 @@ void CCauseOfDeathWindow::Update()
 void CCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	switch (dethResult)
+	/*switch (deathResult)
 	{
 	case CAUSE_Hyperthermia:
 		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:熱中症");
@@ -113,16 +115,19 @@ void CCauseOfDeathWindow::Render()
 	case CAUSE_WaterFlow:
 		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:水流");
 		break;
-	}
-	if (newGetDethFlg)
+	}*/
+	if (newGetDeathFlg)
 	{
-		font.RenderString(350, 250, MOF_XRGB(0, 0, 0), "NEW");
+		newGetTexture.Render(350, 250);
 	}
 	caseOfDethTexture.Render(causeOfDeathTexturePosX,causeOfDeathTexturePosY);
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
+	deathTextTexture.Render(deathTextPosX, deathTextPosY);
 }
 void CCauseOfDeathWindow::Release()
 {
+	newGetTexture.Release();
+	deathTextTexture.Release();
 	caseOfDethTexture.Release();
 	popUpTexture.Release();
 	buttonNextTexture.Release();

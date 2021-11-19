@@ -93,6 +93,7 @@ public:
 	CSceneTrophyCollection();
 	~CSceneTrophyCollection();
 
+	void PlayBGM() override;
 	void Initialize() override;
 	void Update() override;
 	void Render() override;

@@ -9,6 +9,14 @@ CSceneGameMenu::~CSceneGameMenu()
 {
 	Release();
 }
+
+void CSceneGameMenu::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_MENU_BGM);
+}
+
+
 void CSceneGameMenu::Initialize()
 {
 	backGroundTex.Load("Title.png");
@@ -18,11 +26,11 @@ void CSceneGameMenu::Initialize()
 	stressButtonTexture.Load("ButtonStressCollection.png");
 	torophyButtonTexture.Load("ButtonTrophy.png");
 	tutorialButtonTexture.Load("ButtonTutorial.png");
-	titleButtonTexture.Load("ButtonTitle.png");
-
+	titleButtonTexture.Load("ButtonTitle.png");	
 	
-	
+	PlayBGM();
 }
+
 void CSceneGameMenu::Update()
 {
 	float mousePosX, mousePosY;
@@ -75,6 +83,11 @@ void CSceneGameMenu::Update()
 		}
 	}
 }
+void CSceneGameMenu::SoundUpdate()
+{
+
+}
+
 void CSceneGameMenu::Render()
 {
 	backGroundTex.Render(0,0);

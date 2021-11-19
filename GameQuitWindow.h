@@ -7,11 +7,14 @@ private:
 	CTexture	popUpTexture;
 	CTexture	buttonYesTexture;
 	CTexture	buttonNoTexture;
+	CTexture	finishTextTexture;
 
 	const int			buttonYesPosX = 500;
 	const int			buttonYesPosY = 700;
 	const int			buttonNoPosX = 1025;
 	const int			buttonNoPosY = 700;
+	const int			finishTextPosX = 500;
+	const int			finishTextPosY = 350;
 public:
 	CGameQuitWindow();
 	~CGameQuitWindow();

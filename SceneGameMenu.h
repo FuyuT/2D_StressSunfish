@@ -20,15 +20,17 @@ private:
 	const int stressButtonPosY= 700;
 	const int tutorialButtonPosY= 850;
 	const int titleButtonPosX=1200;
-	const int titleButtonPosY=800;
+	const int titleButtonPosY=850;
 	const int textPosX = 100;
 	const int textPosY = 40;
 
 public:
 	CSceneGameMenu();
 	~CSceneGameMenu();
+	void PlayBGM() override;
 	void Initialize() override;
 	void Update() override;
+	void SoundUpdate() override;
 	void Render() override;
 	void Release() override;
 

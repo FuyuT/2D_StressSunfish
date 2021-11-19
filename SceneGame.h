@@ -44,6 +44,7 @@ private:
 public:
 	CSceneGame();
 	~CSceneGame();
+	void PlayBGM() override;
 	bool Load()override;
 	void Initialize() override;
 	void Update() override;
