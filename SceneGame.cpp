@@ -37,6 +37,13 @@ CSceneGame::~CSceneGame()
 	Release();
 }
 
+void CSceneGame::PlayBGM()
+{
+	cSound.AllStop();
+	cSound.Play(SOUND_GAME_BGM);
+}
+
+
 bool CSceneGame::Load()
 {
 	if (!pl.Load())return false;
@@ -72,6 +79,7 @@ void CSceneGame::Initialize()
 	{
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
+	PlayBGM();
 }
 
 void CSceneGame::Update()
@@ -115,14 +123,14 @@ void CSceneGame::Update()
 	stg.Update(pl);
 
 	//ÉvÉåÉCÉÑÅ[
-	pl.Update(false,2);
+	pl.Update(false,3);
 
 	for (int i = 0; i < 3; i++)
 	{
-		pl.Collision(cObstacle,i,false,2);
+		pl.Collision(cObstacle,i,false,3);
 	}
 	//è·äQï®
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
 
 	ui.Update();
 }
@@ -253,12 +261,12 @@ void CSceneGame::PopUpController()
 			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_BACKTOTITLE:
-			//nowPopUpGame = new CBackToTitleWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CBackToTitleWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RETRY:
-			//nowPopUpGame = new CRetryWindow;
-			//nowPopUpGame->Initialize();
+			nowPopUpGame = new CRetryWindow;
+			nowPopUpGame->Initialize();
 			break;
 		case NULL:
 			nowPopUpGame = NULL;

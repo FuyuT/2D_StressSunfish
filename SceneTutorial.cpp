@@ -158,7 +158,7 @@ void CSceneTutorial::Update()
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep);
 	MessageUpdate();
 
 }

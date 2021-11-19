@@ -9,6 +9,7 @@
 #include "RottenFish.h"
 #include "RottenCrab.h"
 #include "RottenShrimp.h"
+#include "ShoalSardine.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -22,6 +23,7 @@ enum obstacle {
 	RottenFish,
 	RottenCrab,
 	RottenShrimp,
+	ShoalSardine,
 };
 
 class CObstacleManager
@@ -37,11 +39,12 @@ private:
 	CRottenShrimp cRottenShrimp[3];
 	CTurtle     cTurtle;
 	CWaterFlow  cWaterFlow;
+	CShoalSardine cShoalSardine;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
 	CRandom posYRndom;
-
+	CRandom garbageNoRandom;
 	int obstacleNum;
 	int posY;
 	int posYNum;
@@ -53,7 +56,7 @@ public:
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance, int posx, float wx, float wy);
+	void Update(int distance, int posx, float wx, float wy, int tutorialStep);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
@@ -77,6 +80,9 @@ public:
 		case Turtle:
 			return cTurtle.GetRect();
 			break;
+		case ShoalSardine:
+			return cShoalSardine.GetRect();
+			break;
 		case Garbage:
 			return cGarbage[num].GetRect();
 			break;
@@ -98,14 +104,13 @@ public:
 		case RottenFish:
 			return cRottenFish[num].GetRect();
 			break;
-		case RottenCrab :
+		case RottenCrab:
 			return cRottenCrab[num].GetRect();
 			break;
-		case RottenShrimp :
+		case RottenShrimp:
 			return cRottenShrimp[num].GetRect();
 			break;
 		}
-
 	}
 
 	//player‘¤‚©‚ç”ñ•\Ž¦‚É‚·‚é‚½‚ß’Ç‰Á
@@ -141,6 +146,9 @@ public:
 		{
 		case Turtle:
 			return cTurtle.GetShow();
+			break;
+		case ShoalSardine:
+			return cShoalSardine.GetShow();
 			break;
 		case Garbage:
 			return cGarbage[num].GetShow();
