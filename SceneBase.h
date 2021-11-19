@@ -1,6 +1,7 @@
 #pragma once
 #include	"Mof.h"
 #include	"SoundManager.h"
+#include	"ScaleController.h"
 
 //シーンの列挙
 enum tag_SCENENO {
@@ -13,17 +14,20 @@ enum tag_SCENENO {
 	SCENENO_TUTORIAL,
 };
 
+
 class CSceneBase
 {
 protected:
+	ScaleController scaleController;
 	bool		endFlg = false;
 	short		nextScene;
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
 	CSoundManager cSound;
-	float			scale = 1.0f;
 	bool			scaleFlg;
 	const float		scaleSpeed = 0.002f;
+	const float		scaleMax = 1.05f;
+	const float		scaleMini = 1.0f;
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() :

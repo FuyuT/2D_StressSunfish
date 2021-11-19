@@ -1,8 +1,8 @@
 #include "SceneTitle.h"
 #include "GameQuitWindow.h"
 
-CPopUpWindowBase* nowPopUpTitle = NULL;
 
+CPopUpWindowBase* nowPopUpTitle = NULL;
 CSceneTitle::CSceneTitle()
 {
 }
@@ -54,7 +54,8 @@ void CSceneTitle::Update()
 	{
 		if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 		{
-			if (gamePlayButtonScale <= 1.05f && scaleFlg)
+			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
+			/*if (gamePlayButtonScale <= 1.05f && scaleFlg)
 				gamePlayButtonScale += scaleSpeed;
 			else
 				scaleFlg = false;
@@ -63,6 +64,7 @@ void CSceneTitle::Update()
 				gamePlayButtonScale -= scaleSpeed;
 			else
 				scaleFlg = true;
+				*/
 			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 			{
 				endFlg = true;
@@ -77,7 +79,8 @@ void CSceneTitle::Update()
 		//ÉQÅ[ÉÄèIóπÇâüÇµÇΩÇ∆Ç´ÇÃèàóù
 		if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 		{
-			if (gameFinishButtonScale <= 1.05f && gameFinishButtonFlg)
+			gameFinishButtonScale =  scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
+			/*if (gameFinishButtonScale <= 1.05f && gameFinishButtonFlg)
 				gameFinishButtonScale += scaleSpeed;
 			else
 				gameFinishButtonFlg = false;
@@ -86,7 +89,7 @@ void CSceneTitle::Update()
 				gameFinishButtonScale -= scaleSpeed;
 			else
 				gameFinishButtonFlg = true;
-
+				*/
 			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 			{
 				popUpFlg = true;
