@@ -1,14 +1,14 @@
-#include "Ui.h"
+ï»¿#include "Ui.h"
 
 bool CUi::Load()
 {
-	//‘Ì‰·ƒAƒCƒRƒ“‚Ì”wŒi
+	//ä½“æ¸©ã‚¢ã‚¤ã‚³ãƒ³ã®èƒŒæ™¯
 	if (!stressMeter.Load("sutoresume--ta-.png"))
 	{
 		return false;
 	}
 
-	//‘Ì‰·ƒAƒCƒRƒ“
+	//ä½“æ¸©ã‚¢ã‚¤ã‚³ãƒ³
 	if (!tempNormal.Load("nicochyan5.png"))
 	{
 		return false;
@@ -22,7 +22,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//‘Ì‰·Œv
+	//ä½“æ¸©è¨ˆ
 	if (!tempMeter.Load("temperatureMeter.png"))
 	{
 		return false;
@@ -32,7 +32,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//‹ó• ƒQ[ƒW
+	//ç©ºè…¹ã‚²ãƒ¼ã‚¸
 	if (!hungerGauge.Load("stomach2.png"))
 	{
 		return false;
@@ -42,7 +42,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//Šñ¶’
+	//å¯„ç”Ÿè™«
 	if (!parasite1.Load("kiseitilyuu.png"))
 	{
 		return false;
@@ -64,31 +64,69 @@ bool CUi::Load()
 		return false;
 	}
 
-	//s“®‰Â”\UI
-	//ƒWƒƒƒ“ƒv
+	//è¡Œå‹•å¯èƒ½UI
+	//ã‚¸ãƒ£ãƒ³ãƒ—
 	if (!jumpPoss.Load("UI_Jump.png"))
 	{
 		return false;
 	}
-	//H–
+	//é£Ÿäº‹
 	if (!eatPoss.Load("UI_Eat.png"))
 	{
 		return false;
 	}
 
-	//’ˆÓUI
+	//æ³¨æ„UI
 	if (!cautionUi.Load("UI_Caution.png"))
 	{
 		return false;
 	}
-	//‰·“x’ˆÓUI
-	//‚‰·
+	//æ¸©åº¦æ³¨æ„UI
+	//é«˜æ¸©
 	if (!cautionHot.Load("UI_CautionTempUp.png"))
 	{
 		return false;
 	}
-	//’á‰·
+	//ä½æ¸©
 	if (!cautionCold.Load("UI_CautionTempDown.png"))
+	{
+		return false;
+	}
+
+	//ãƒˆãƒ­ãƒ•ã‚£ãƒ¼ç”»åƒ
+	if (!waterFallIconTexture.Load("2_æ»ç´š.png"))
+	{
+		return false;
+	}
+	if (!lakeIconTexture.Load("3_æ¹–ç´š.png"))
+	{
+		return false;
+	}
+	if (!damIconTexture.Load("4_ãƒ€ãƒ ç´š.png"))
+	{
+		return false;
+	}
+	if (!sewerIconTexture.Load("5_ä¸‹æ°´é“ç´š.png"))
+	{
+		return false;
+	}
+	if (!indianOceanIconTexture.Load("6_ã‚¤ãƒ³ãƒ‰æ´‹ç´š.png"))
+	{
+		return false;
+	}
+	if (!amazonRiverIconTexture.Load("7_ã‚¢ãƒã‚¾ãƒ³å·ç´š.png"))
+	{
+		return false;
+	}
+	if (!oceanIconTexture.Load("8_æµ·ç´š.png"))
+	{
+		return false;
+	}
+	if (!seaOfâ€‹â€‹JapanIconTexture.Load("9_æ—¥æœ¬æµ·ç´š.png"))
+	{
+		return false;
+	}
+	if (!aroundTheGlobeIconTexture.Load("10_åœ°çƒä¸€å‘¨ç´š.png"))
 	{
 		return false;
 	}
@@ -98,17 +136,18 @@ bool CUi::Load()
 
 void CUi::Initialize()
 {
-	font.Create(48, "MS@–¾’©");
-	//“_–Åİ’è
-	//’ˆÓ
-	cautionB.SetBlinkingCount(3);
+	font.Create(48, "MSã€€æ˜æœ");
+	trophyFont.Create(24, "MSã€€æ˜æœ");
+	//ç‚¹æ»…è¨­å®š
+	//äº€æ³¨æ„
+	cautionB.SetBlinkingCount(5);
 	cautionB.SetBlinkingSpeed(50);
 	cautionB.Initialize();
-	//‚‰·
+	//é«˜æ¸©
 	cautionHotB.SetBlinkingCount(3);
 	cautionHotB.SetBlinkingSpeed(50);
 	cautionHotB.Initialize();
-	//’á‰·
+	//ä½æ¸©
 	cautionColdB.SetBlinkingCount(3);
 	cautionColdB.SetBlinkingSpeed(50);
 	cautionColdB.Initialize();
@@ -116,39 +155,57 @@ void CUi::Initialize()
 
 void CUi::Update()
 {
-	//“_–Åİ’è
+	//ç‚¹æ»…è¨­å®š
 	cautionB.Update();
 	cautionHotB.Update();
 	cautionColdB.Update();
 }
 
-void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,bool jumpFlg,bool eatFlg)
+void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,double distanceNum,bool jumpFlg,bool eatFlg, bool turtleFlg)
 {
-	//m”•\¦ ˜g‘g‚İ
+	//mæ•°è¡¨ç¤º æ çµ„ã¿
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
 	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
 
 	if (distanceNum < 1000)
 	{
-		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%d m", distanceNum);
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
 	}
 	else if (distanceNum >= 1000)
 	{
-		distance = distanceNum / 1000;
-		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%3.1 km", distance);
+		distance = distanceNum / 100;
+		int dis = distance;
+		double trueDis = (double)dis / 10;
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.1f km", trueDis);
 	}
+
+
+	//æ¬¡ã®ãƒˆãƒ­ãƒ•ã‚£ãƒ¼ã¨è·é›¢(ä»®)
+	if (distanceNum <= 1099)
+	{
+		waterFallIconTexture.RenderScale(220, 0, 0.5f);
+		trophyFont.RenderFormatString(330, 100, MOF_COLOR_BLACK, "ã¾ã§ã‚ã¨%6.0f m",1100 - distanceNum);
+	}
+	else if (distanceNum >= 1100 && distanceNum <= 2599)
+	{
+		lakeIconTexture.RenderScale(220, 0, 0.5f);
+		trophyFont.RenderFormatString(330, 100, MOF_COLOR_BLACK, "ã¾ã§ã‚ã¨%6.0f m", 2600 - distanceNum);
+	}
+
 
 	stressMeter.Render(1600, 0);
 
-	//‘Ì‰·UI•`‰æ
+	//ä½“æ¸©UIæç”»
 	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
+		//é«˜æ¸©æ³¨æ„UIã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚¹ã‚¿ãƒ¼ãƒˆ
 		cautionHotB.SetInStart(true);
 	}
 	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
+		//ä½æ¸©æ³¨æ„UIã®ãƒ•ã‚§ãƒ¼ãƒ‰ã‚¤ãƒ³ã‚¹ã‚¿ãƒ¼ãƒˆ
 		cautionColdB.SetInStart(true);
 	}
 	else
@@ -158,12 +215,14 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 		cautionColdB.SetInStart(false);
 	}
 
-	//‰·“xŒvUI•`‰æ
+
+	//æ¸©åº¦è¨ˆUIæç”»
 	tempMeterFrame.Render(1550, 200);
 	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
 	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
-	//Šñ¶’UI‚Ì•`‰æ
+
+	//å¯„ç”Ÿè™«UIã®æç”»
 	switch (parasiteNum)
 	{
 	case 1:
@@ -183,41 +242,40 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,int distanceNum,
 		break;
 	}
 
-	//‹ó• ƒQ[ƒWUI•`‰æ
+	//ç©ºè…¹ã‚²ãƒ¼ã‚¸UIæç”»
 	CRectangle rec2(0, 0, 330, 200);
 	hungerGaugeFrame.Render(1400, 0, rec2);
 	CRectangle rec3(0, 200 * (hungry * 0.01f), 330, 200);
 	hungerGauge.Render(1400, 200 * (hungry * 0.01f), rec3);
 	
-	//s“®‰Â”\UI‚Ì•`‰æ
-	//ƒWƒƒƒ“ƒv
+	//è¡Œå‹•å¯èƒ½UIã®æç”»
+	//ã‚¸ãƒ£ãƒ³ãƒ—
 	if (jumpFlg)
 	{
 		jumpPoss.Render(1400, 0);
 	}
-	//H–
+	//é£Ÿäº‹
 	if (eatFlg)
 	{
 		eatPoss.Render(1400, 100);
 	}
 
-	//’ˆÓUI‚Ì•`‰æ
+	//äº€æ³¨æ„UIã®æç”»
 	int w = g_pGraphics->GetTargetWidth();
-	if (turtle.GetShow())
+	int h = g_pGraphics->GetTargetHeight();
+	CRectangle cautionRec(0, 0, w , h);
+	if (obs.GetRect(0,0).CollisionRect(cautionRec) && turtleFlg)
 	{
-		if (w - w / 4 >= turtle.GetPosx())
-		{
-			cautionB.SetInStart(true);
-		}
+		cautionB.SetInStart(true);
 	}
-	else if (!turtle.GetShow())
+	else
 	{
 		cautionB.SetInStart(false);
 	}
 	cautionUi.Render(1000, 0, MOF_ARGB((int)(255 * cautionB.GetAlpha()), 255, 255, 255));
-	//‚‰·’ˆÓUI
+	//é«˜æ¸©æ³¨æ„UI
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
-	//’á‰·’ˆÓUI
+	//ä½æ¸©æ³¨æ„UI
 	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
 }
 
