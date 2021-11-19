@@ -1,30 +1,29 @@
-#include "FoodCrab.h"
+#include "RottenFish.h"
 
-CFoodCrab::CFoodCrab()
+CRottenFish::CRottenFish()
 {
 }
 
-CFoodCrab::~CFoodCrab()
+CRottenFish::~CRottenFish()
 {
 }
 
-bool CFoodCrab::Load()
+bool CRottenFish::Load()
 {
-	if (!Texture.Load("Obstacle\\Crab.png"))return false;
+	if (!Texture.Load("Obstacle\\staleFish.png"))return false;
 
 	return true;
 }
 
-void CFoodCrab::Initialize()
+void CRottenFish::Initialize()
 {
 	//pos.x = 1000;
 	//pos.y = 1500;
 	//showFlg = true;
 	rotateNum = 0;
-	reverseFlg = false;
 }
 
-void CFoodCrab::Update(float wx, float wy)
+void CRottenFish::Update(float wx, float wy)
 {
 	if (!showFlg)return;
 	DegreeUpdate();
@@ -32,21 +31,20 @@ void CFoodCrab::Update(float wx, float wy)
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }
 
-void CFoodCrab::Render(float wx, float wy)
+void CRottenFish::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-		Texture.RenderRotate(pos.x - wx, pos.y - wy, MOF_ToRadian(rotateNum),TEXALIGN_CENTERCENTER);
-	
+	Texture.RenderRotate(pos.x - wx, pos.y - wy,MOF_ToRadian(rotateNum),TEXALIGN_CENTERCENTER);
 }
 
-void CFoodCrab::RenderDebug(float wx, float wy)
+void CRottenFish::RenderDebug(float wx, float wy)
 {
 	if (!showFlg)return;
 	CRectangle rect = GetRect();
 	CGraphicsUtilities::RenderRect(rect.Left - wx, rect.Top - wy, rect.Right - wx, rect.Bottom - wy, MOF_COLOR_RED);
 }
 
-void CFoodCrab::Release()
+void CRottenFish::Release()
 {
 	Texture.Release();
 }

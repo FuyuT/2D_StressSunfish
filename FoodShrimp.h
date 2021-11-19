@@ -1,9 +1,9 @@
 #pragma once
 #include "ObstacleBase.h"
-#define  SHRIMP_RECT_TOP_ADJ 20
-#define  SHRIMP_RECT_LEFT_ADJ 5
-#define  SHRIMP_RECT_RIGHT_ADJ -20
-#define  SHRIMP_RECT_BUTTOM_ADJ -40
+#define  SHRIMP_RECT_TOP_ADJ -50
+#define  SHRIMP_RECT_LEFT_ADJ -65
+#define  SHRIMP_RECT_RIGHT_ADJ -90
+#define  SHRIMP_RECT_BUTTOM_ADJ -110
 class CFoodShrimp : public CObstacleBase
 {
 private:
