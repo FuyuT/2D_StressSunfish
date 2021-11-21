@@ -1,7 +1,7 @@
 #include "Stage.h"
 
 Stage::Stage() :
-	texture(),
+	BackGroundTex1(),
 	scrollValueX(0.0f),
 	scrollValueY(0.0f),
 	enemyCount(0),
@@ -14,7 +14,27 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//追加
-	if (!texture.Load("SeaTexture.png")) 
+	if (!BackGroundTex1.Load("BackGround\\BackGround_1.png")) 
+	{
+		return false;
+	}
+	if (!BackGroundTex2.Load("BackGround\\BackGround_2.png"))
+	{
+		return false;
+	}
+	if (!BackGroundTex3.Load("BackGround\\BackGround_3.png"))
+	{
+		return false;
+	}
+	if (!BackGroundTex4.Load("BackGround\\BackGround_4.png"))
+	{
+		return false;
+	}
+	if (!BackGroundTex5.Load("BackGround\\BackGround_5.png"))
+	{
+		return false;
+	}
+	if (!BackGroundTex6.Load("BackGround\\BackGround_6.png"))
 	{
 		return false;
 	}
@@ -30,6 +50,9 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	enemyStart = pSt;
 	enemyCount = cnt;
 	*/
+	WavePos.x = 0; WavePos.y = 0;
+	WaveSpeed = 0;
+	turnFlg = false;
 }
 
 void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
@@ -44,8 +67,7 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	float hsw = sw * 0.7f;
 	float hsh = sh * 0.4f;
 	//ステージ全体の幅 とりあえず画像の幅で
-	//float stgw = texture.GetWidth();
-	float stgh = texture.GetHeight();
+	float stgh = BackGroundTex1.GetHeight();
 
 	//左
 	if (prec.Left - scrollValueX < hsw)
@@ -104,6 +126,28 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	//	}
 	//	enemyNo++;
 	//}
+
+	//波を動かす
+	if (!turnFlg && WavePos.x > -500)
+	{
+		WaveSpeed = -5;
+	}
+	else if (WavePos.x < -500)
+	{
+		WaveSpeed = 0;
+		turnFlg = true;
+	}
+
+	if (turnFlg && WavePos.x < 0)
+	{
+		WaveSpeed = 5;
+	}
+	else if (WavePos.x > -50)
+	{
+		turnFlg = false;
+	}
+	WavePos.x += WaveSpeed;
+
 }
 
 void Stage::Render() {
@@ -111,26 +155,38 @@ void Stage::Render() {
 	//追加
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
-	//texture.Render(-scrollValueX, -scrollValueY);
 
-	int w = texture.GetWidth();
-	int h = texture.GetHeight();
+	int w = BackGroundTex1.GetWidth();
+	int h = BackGroundTex1.GetHeight();
 	for (float y = ((int)-scrollValueY % h) - h; y < sch; y += h)
 	{
 		for (float x = ((int)-scrollValueX % w) - w; x < scw; x += w)
 		{
-			texture.Render(x, y);
+			BackGroundTex1.Render(x, y);
 		}
 	}
+	//動く波
+	BackGroundTex2.Render(WavePos.x, WavePos.y - scrollValueY);
 
-	/*
-	for (float x = ((int)scrollValueX % w) + w; x > sch; x -= w) {
-		texture.Render(-scrollValueX - x, -scrollValueY);
+	for (float y = ((int)-scrollValueY % h) - h; y < sch; y += h)
+	{
+		for (float x = ((int)-scrollValueX % w) - w; x < scw; x += w)
+		{
+			BackGroundTex3.Render(x, y);
+			BackGroundTex4.Render(x, y);
+			BackGroundTex5.Render(x, y);
+			BackGroundTex6.Render(x, y);
+		}
 	}
-	*/
 }
 
 void Stage::Release() {
-	texture.Release();
+	BackGroundTex1.Release();
+	BackGroundTex2.Release();
+	BackGroundTex3.Release();
+	BackGroundTex4.Release();
+	BackGroundTex5.Release();
+	BackGroundTex6.Release();
+
 	enemyTexture.Release();
 }

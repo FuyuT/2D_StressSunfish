@@ -8,7 +8,16 @@
 class Stage
 {
 private:
-	CTexture	texture;
+	CTexture	BackGroundTex1;
+	CTexture	BackGroundTex2;
+	Vector2		WavePos;
+	int			WaveSpeed;
+	bool		turnFlg;
+	CTexture	BackGroundTex3;
+	CTexture	BackGroundTex4;
+	CTexture	BackGroundTex5;
+	CTexture	BackGroundTex6;
+
 	int			enemyCount;
 	CTexture	enemyTexture;
 	int			enemyNo;
@@ -38,11 +47,11 @@ public:
 
 	float GetBackTextureWidth()
 	{
-		return texture.GetWidth();
+		return BackGroundTex1.GetWidth();
 	}
 	float GetBackTextureHeight()
 	{
-		return texture.GetHeight();
+		return BackGroundTex1.GetHeight();
 	}
 };
 
