@@ -339,7 +339,7 @@ void CSceneGame::CaseOfDethController()
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
 			break;
 		}
-		nowPopUpGame->SetNewGetDeth(newGetDeth);
+		nowPopUpGame->SetNewGetDeath(newGetDeth);
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}

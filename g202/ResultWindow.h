@@ -8,6 +8,8 @@ private:
 	CFont		distanceFont;
 	CTexture	popUpTexture;
 	CTexture	buttonNextTexture;
+	CTexture	resultTexture;
+	CTexture	newGetTexture;
 
 	CTexture	trophyTexture;
 	CTexture	trophyTexture2;
@@ -17,6 +19,8 @@ private:
 	const int			buttonNextPosY = 850;
 	const int			trophyTexturePosX = 1400;
 	const int			trophyTexturePosY = 220;
+	const int			resultTextPosX = 800;
+	const int			resultTextPosY = 250;
 
 	char		meter[10];
 public:

@@ -21,6 +21,9 @@ protected:
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
 	CSoundManager cSound;
+	float			scale = 1.0f;
+	bool			scaleFlg;
+	const float		scaleSpeed = 0.002f;
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() :

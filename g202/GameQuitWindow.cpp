@@ -14,6 +14,7 @@ void CGameQuitWindow::Initialize()
 	popUpTexture.Load("Pop_upラフ2.png");
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
+	finishTextTexture.Load("PopUpFinishGame.png");
 	font.Create(32, "MS　明朝");
 	endFlg = false;
 }
@@ -34,15 +35,16 @@ void CGameQuitWindow::Update()
 void CGameQuitWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(750, 400,MOF_XRGB(0,0,0), "ゲームを終了しますか?");
 	buttonYesTexture.Render(buttonYesPosX,buttonYesPosY);
 	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
+	finishTextTexture.Render(finishTextPosX,finishTextPosY);
 }
 void CGameQuitWindow::Release()
 {
 	popUpTexture.Release();
 	buttonYesTexture.Release();
 	buttonNoTexture.Release();
+	finishTextTexture.Release();
 }
 /*************************************************************************//*!
 		@brief			各ボタンの矩形の取得

@@ -11,6 +11,7 @@ CPoseWindow::~CPoseWindow()
 
 void CPoseWindow::Initialize()
 {
+	buttonScale = 0.9f;
 	popUpTexture.Load("Pop_upƒ‰ƒt2.png");
 	textTexture.Load("PopUpPose.png");
 	buttonConfigTexture.Load("ButtonConfig.png");
@@ -62,10 +63,10 @@ void CPoseWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	textTexture.Render(textPosX,textPosY);
-	buttonConfigTexture.Render(buttonConfigPosX, buttonConfigPosY);
-	buttonRetryTexture.Render(buttonRetryPosX, buttonRetryPosY);
-	buttonTitleTexture.Render(buttonTitlePosX, buttonTitlePosY);
-	buttonReturnGameTexture.Render(buttonReturnGamePosX, buttonReturnGamePosY);
+	buttonConfigTexture.RenderScale(buttonPosX, buttonConfigPosY,buttonScale);
+	buttonRetryTexture.RenderScale(buttonPosX, buttonRetryPosY,buttonScale);
+	buttonTitleTexture.RenderScale(buttonPosX, buttonTitlePosY,buttonScale);
+	buttonReturnGameTexture.RenderScale(buttonPosX, buttonReturnGamePosY,buttonScale);
 }
 void CPoseWindow::Release()
 {
@@ -88,11 +89,11 @@ void CPoseWindow::Release()
 CRectangle CPoseWindow::GetRect(int i)
 {
 	if (i == 0)
-		return CRectangle(buttonConfigPosX, buttonConfigPosY, buttonConfigPosX + buttonConfigTexture.GetWidth(), buttonConfigPosY + buttonConfigTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonConfigPosY, buttonPosX + buttonConfigTexture.GetWidth(), buttonConfigPosY + buttonConfigTexture.GetHeight());
 	else if (i == 1)
-		return CRectangle(buttonRetryPosX, buttonRetryPosY, buttonRetryPosX + buttonRetryTexture.GetWidth(), buttonRetryPosY + buttonRetryTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonRetryPosY, buttonPosX + buttonRetryTexture.GetWidth(), buttonRetryPosY + buttonRetryTexture.GetHeight());
 	else if (i == 2)
-		return CRectangle(buttonTitlePosX, buttonTitlePosY, buttonTitlePosX + buttonTitleTexture.GetWidth(), buttonTitlePosY + buttonTitleTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonTitlePosY, buttonPosX + buttonTitleTexture.GetWidth(), buttonTitlePosY + buttonTitleTexture.GetHeight());
 	else if (i == 3)
-		return CRectangle(buttonReturnGamePosX, buttonReturnGamePosY, buttonReturnGamePosX + buttonReturnGameTexture.GetWidth(), buttonReturnGamePosY + buttonReturnGameTexture.GetHeight());
+		return CRectangle(buttonPosX, buttonReturnGamePosY, buttonPosX + buttonReturnGameTexture.GetWidth(), buttonReturnGamePosY + buttonReturnGameTexture.GetHeight());
 }

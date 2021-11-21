@@ -24,12 +24,14 @@ protected:
 	short	nextPopUp;
 	//メモ書き取れてません　申し訳ない
 	int     buttonResult;
-	int		dethResult;
+	int		deathResult;
 	//新規入手フラグ
-	bool	newGetDethFlg;
+	bool	newGetDeathFlg;
 	bool	newGetTrophyFlg;
 	int		numberOfTrophy[3];
 	int		distance;
+
+	float		buttonScale;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
@@ -42,8 +44,8 @@ public:
 	short GetNextPopUp() { return nextPopUp; }
 	//
 	void  SetButtonResult(int setButtonResult) { buttonResult = setButtonResult; }
-	void  SetDethResult(int setDethResult) { dethResult = setDethResult; }
-	void  SetNewGetDeth(bool setNewGetDethFlg) { newGetDethFlg = setNewGetDethFlg; }
+	void  SetDethResult(int setDeathResult) { deathResult = setDeathResult; }
+	void  SetNewGetDeath(bool setNewGetDeathFlg) { newGetDeathFlg = setNewGetDeathFlg; }
 	void  SetNewGetTrophy(bool setNewGetTrophyFlg) {newGetTrophyFlg = setNewGetTrophyFlg ; }
 	//トロフィーポップアップ用　3個まで保存して取得できるようにする。
 	void SetNumberOfTrophy(int *trophy) {

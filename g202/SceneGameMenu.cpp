@@ -27,6 +27,7 @@ void CSceneGameMenu::Initialize()
 	torophyButtonTexture.Load("ButtonTrophy.png");
 	tutorialButtonTexture.Load("ButtonTutorial.png");
 	titleButtonTexture.Load("ButtonTitle.png");	
+
 	PlayBGM();
 }
 
