@@ -27,6 +27,7 @@ void CSceneGameMenu::Initialize()
 	torophyButtonTexture.Load("ButtonTrophy.png");
 	tutorialButtonTexture.Load("ButtonTutorial.png");
 	titleButtonTexture.Load("ButtonTitle.png");	
+	scaleFlg = true;
 
 	PlayBGM();
 }
@@ -36,37 +37,115 @@ void CSceneGameMenu::Update()
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+	if (GetRect(0).CollisionPoint(mousePosX,mousePosY))
 	{
-		if (GetRect(0).CollisionPoint(mousePosX,mousePosY))
+		if (gamePlayButtonScale <= 1.05f && scaleFlg)
+			gamePlayButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (gamePlayButtonScale >= 1.0 && !scaleFlg)
+			gamePlayButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//ゲームプレイ画面
 			endFlg = true;
 			nextScene = SCENENO_GAME;
 			Release();
 		}
-		else if (GetRect(1).CollisionPoint(mousePosX,mousePosY))
+	}
+	else
+	{
+		gamePlayButtonScale = 1.0f;
+	}
+	if (GetRect(1).CollisionPoint(mousePosX,mousePosY))
+	{
+		if (configButtonScale <= 1.05f && scaleFlg)
+			configButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (configButtonScale >= 1.0 && !scaleFlg)
+			configButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//設定画面
 			endFlg = true;
 			nextScene = SCENENO_CONFIG;
 			Release();
 		}
-		else if (GetRect(2).CollisionPoint(mousePosX,mousePosY))
+	}
+	else
+	{
+		configButtonScale = 1.0f;
+	}
+	if (GetRect(2).CollisionPoint(mousePosX,mousePosY))
+	{
+		if (stressButtonScale <= 1.05f && scaleFlg)
+			stressButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (stressButtonScale >= 1.0 && !scaleFlg)
+			stressButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//ストレス集画面
 			endFlg = true;
 			nextScene = SCENENO_STRESSCOLLECTION;
 			Release();
 		}
-		else if (GetRect(3).CollisionPoint(mousePosX,mousePosY))
+	}
+	else
+	{
+		stressButtonScale = 1.0f;
+	}
+	if (GetRect(3).CollisionPoint(mousePosX,mousePosY))
+	{
+		if (trophyButtonScale <= 1.05f && scaleFlg)
+			trophyButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (trophyButtonScale >= 1.0 && !scaleFlg)
+			trophyButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//トロフィー集
 			endFlg = true;
 			nextScene = SCENENO_TROPHY;
 			Release();
 		}
-		else if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
+	}
+	else
+	{
+		trophyButtonScale = 1.0f;
+	}
+	if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
+	{
+		if (tutorialButtonScale <= 1.05f && scaleFlg)
+			tutorialButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (tutorialButtonScale >= 1.0 && !scaleFlg)
+			tutorialButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//チュートリアルモード
 			flgTutorial = true;
@@ -74,13 +153,33 @@ void CSceneGameMenu::Update()
 			nextScene = SCENENO_TUTORIAL;
 			Release();
 		}
-		else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
+	}
+	else
+	{
+		tutorialButtonScale = 1.0f;
+	}
+	if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
+	{
+		if (titleButtonScale <= 1.05f && scaleFlg)
+			titleButtonScale += scaleSpeed;
+		else
+			scaleFlg = false;
+
+		if (titleButtonScale >= 1.0 && !scaleFlg)
+			titleButtonScale -= scaleSpeed;
+		else
+			scaleFlg = true;
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//タイトル画面
 			endFlg = true;
 			nextScene = SCENENO_TITLE;
 			Release();
 		}
+	}
+	else
+	{
+		titleButtonScale = 1.0f;
 	}
 }
 void CSceneGameMenu::SoundUpdate()
@@ -91,12 +190,12 @@ void CSceneGameMenu::SoundUpdate()
 void CSceneGameMenu::Render()
 {
 	backGroundTex.Render(0,0);
-	gamePlayButtonTexture.Render(buttonPosX, gamePlayButtonPosY);
-	configButtonTexture.Render(buttonPosX, configButtonPosY);
-	stressButtonTexture.Render(buttonPosX, stressButtonPosY);
-	torophyButtonTexture.Render(buttonPosX, torophyButtonPosY);
-	tutorialButtonTexture.Render(buttonPosX, tutorialButtonPosY);
-	titleButtonTexture.Render(titleButtonPosX, titleButtonPosY);
+	gamePlayButtonTexture.RenderScale(buttonPosX + gamePlayButtonTexture.GetWidth()/2, gamePlayButtonPosY + gamePlayButtonTexture.GetHeight()/2,gamePlayButtonScale, TEXALIGN_CENTERCENTER);
+	configButtonTexture.RenderScale(buttonPosX + configButtonTexture.GetWidth() / 2, configButtonPosY + configButtonTexture.GetHeight() / 2, configButtonScale, TEXALIGN_CENTERCENTER);
+	stressButtonTexture.RenderScale(buttonPosX + stressButtonTexture.GetWidth() / 2, stressButtonPosY + stressButtonTexture.GetHeight() / 2, stressButtonScale, TEXALIGN_CENTERCENTER);
+	torophyButtonTexture.RenderScale(buttonPosX + torophyButtonTexture.GetWidth() / 2, torophyButtonPosY + torophyButtonTexture.GetHeight() / 2, trophyButtonScale, TEXALIGN_CENTERCENTER);
+	tutorialButtonTexture.RenderScale(buttonPosX + tutorialButtonTexture.GetWidth() / 2, tutorialButtonPosY + tutorialButtonTexture.GetHeight() / 2, tutorialButtonScale, TEXALIGN_CENTERCENTER);
+	titleButtonTexture.RenderScale(titleButtonPosX + titleButtonTexture.GetWidth() / 2, titleButtonPosY + titleButtonTexture.GetHeight() / 2, titleButtonScale, TEXALIGN_CENTERCENTER);
 	textTexture.Render(textPosX, textPosY);
 }
 void CSceneGameMenu::Release()
