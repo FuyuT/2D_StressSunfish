@@ -275,7 +275,7 @@ public:
 		return causeOfDeath;
 	}
 	//進んだ距離(m数)を返す
-	int GetDistance()
+	double GetDistance()
 	{
 		//X座標の20分の1(適当)を進んだ距離とする
 		return ((posX - STARTPOS_X) / TRANSLATE_DISTANCE);

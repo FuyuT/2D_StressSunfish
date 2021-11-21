@@ -478,7 +478,7 @@ void CObstacleManager::Release()
 
 void CObstacleManager::PosYRndom()
 {	
-	if (obstacleNum == 1 || obstacleNum == 2)
+	if (obstacleNum == 0 || obstacleNum == 1 || obstacleNum == 2)
 		posYNum = posYRndom.Random(1, 4);
 	else if (obstacleNum == 3)
 		posYNum = posYRndom.Random(2, 6);
