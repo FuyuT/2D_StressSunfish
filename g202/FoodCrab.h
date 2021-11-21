@@ -1,14 +1,14 @@
 #pragma once
 #include "ObstacleBase.h"
-#define  CRAB_RECT_TOP_ADJ 20
-#define  CRAB_RECT_LEFT_ADJ 20
-#define  CRAB_RECT_RIGHT_ADJ -20
-#define  CRAB_RECT_BUTTOM_ADJ -20
+#define  CRAB_RECT_TOP_ADJ -50
+#define  CRAB_RECT_LEFT_ADJ -50
+#define  CRAB_RECT_RIGHT_ADJ -90
+#define  CRAB_RECT_BUTTOM_ADJ -90
 
 class CFoodCrab : public CObstacleBase
 {
 private:
-
+	
 public:
 	CFoodCrab();
 	~CFoodCrab();
