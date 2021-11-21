@@ -123,14 +123,14 @@ void CSceneGame::Update()
 	stg.Update(pl);
 
 	//ƒvƒŒƒCƒ„[
-	pl.Update(false,2);
+	pl.Update(false,3);
 
 	for (int i = 0; i < 3; i++)
 	{
-		pl.Collision(cObstacle,i,false,2);
+		pl.Collision(cObstacle,i,false,3);
 	}
 	//áŠQ•¨
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
 
 	ui.Update();
 }

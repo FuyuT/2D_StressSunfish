@@ -56,7 +56,7 @@ public:
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance, int posx, float wx, float wy);
+	void Update(int distance, int posx, float wx, float wy, int tutorialStep);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();

@@ -106,8 +106,8 @@ void CPlayer::Initialize()
 	parasiteTimer.SetTotalTime(15);
 
 	//チュートリアル
-	moveUpTaskFlg = false;
-	moveDownTaskFlg = false;
+	moveUpTaskCnt = 0;
+	moveDownTaskCnt = 0;
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
 	taskCompleteStep = 0;
@@ -219,12 +219,21 @@ void CPlayer::UpdateMove()
 		moveX += PLAYER_SPEED;
 	}
 
+	//チュートリアル用入力検知
+	//[W][S]をそれぞれ一回押すだけでタスクが終わってしまうとあっけなかったため、
+	//それぞれ三回ずつ押さないといけないようにする
+	if (g_pInput->IsKeyPush(MOFKEY_W))
+	{
+		moveUpTaskCnt++;
+	}
+	if (g_pInput->IsKeyPush(MOFKEY_S))
+	{
+		moveDownTaskCnt++;
+	}
+
 	//上に移動
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
-		//チュートリアルタスク
-		moveUpTaskFlg = true;
-
 		moveY -= PLAYER_SPEED;
 		if (moveY < -PLAYER_MAXSPEED)
 		{
@@ -234,9 +243,6 @@ void CPlayer::UpdateMove()
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
-		//チュートリアルタスク
-		moveDownTaskFlg = true;
-
 		moveY += PLAYER_SPEED;
 		if (moveY > PLAYER_MAXSPEED)
 		{
@@ -382,7 +388,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 			if (jumpDangerFlg)
 			{
 				//死因が確定していない
-				if (causeOfDeath == CAUSE_None)
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
 					motion.ChangeMotion(MOTION_DEATH);
 					causeOfDeath = CAUSE_Jump;
@@ -411,7 +417,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 }
 
 //プレイヤーの状態を更新
-void CPlayer::UpdateStatus(bool unDeadFlg)
+void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 {
 
 	if (motion.GetMotionNo() != MOTION_STAND &&
@@ -446,7 +452,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg)
 	/*********
 	 * 体温
 	 *********/
-	if (!jumpFlg)
+	if (!jumpFlg && tutorialStep >= 3)
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
@@ -499,45 +505,51 @@ void CPlayer::UpdateStatus(bool unDeadFlg)
 	/*********
 	 * 寄生虫
 	 *********/
-	if (parasite < PARASITE_LIMIT)
+	if (tutorialStep >= 1)
 	{
-		//タイマーセット
-		parasiteTimer.StartTimer();
-		if (parasiteTimer.GetNowtime() <= 0)
+		if (parasite < PARASITE_LIMIT)
 		{
-			parasite += 1;
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			//タイマーセット
+			parasiteTimer.StartTimer();
+			if (parasiteTimer.GetNowtime() <= 0)
 			{
-				if (parasite == PARASITE_LIMIT)
+				parasite += 1;
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
-					//死因：寄生死
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Parasite;
+					if (parasite == PARASITE_LIMIT)
+					{
+						//死因：寄生死
+						motion.ChangeMotion(MOTION_DEATH);
+						causeOfDeath = CAUSE_Parasite;
+					}
 				}
+				parasiteTimer.SetTotalTime(15);
 			}
-			parasiteTimer.SetTotalTime(15);
 		}
 	}
 
 	/*********
 	 * 空腹
 	 *********/
-	if (hungerRegion <= STARVATION)
+	if (tutorialStep >= 1)
 	{
-		hungerRegion += HUNGRYLEVEL;
-	}
-	else if (hungerRegion >= STARVATION)
-	{
-		if (causeOfDeath == CAUSE_None)
+		if (hungerRegion <= STARVATION)
 		{
-			//空腹度が増加する
-			if (hungerRegion >= STARVATION)
+			hungerRegion += HUNGRYLEVEL;
+		}
+		else if (hungerRegion >= STARVATION)
+		{
+			if (causeOfDeath == CAUSE_None)
 			{
-				if (causeOfDeath == CAUSE_None && !unDeadFlg)
+				//空腹度が増加する
+				if (hungerRegion >= STARVATION)
 				{
-					//死因：餓死
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Starvation;
+					if (causeOfDeath == CAUSE_None && !unDeadFlg)
+					{
+						//死因：餓死
+						motion.ChangeMotion(MOTION_DEATH);
+						causeOfDeath = CAUSE_Starvation;
+					}
 				}
 			}
 		}
@@ -607,7 +619,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 		return;
 
 	//ステータス(状態)の更新
-	UpdateStatus(unDeadFlg);
+	UpdateStatus(unDeadFlg,tutorialStep);
 
 	//ジャンプ
 	Jump(unDeadFlg,tutorialStep);
@@ -623,7 +635,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
 
 	//チュートリアル
-	if (moveUpTaskFlg && moveDownTaskFlg && taskCompleteStep == 0)
+	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 0)
 	{
 		taskCompleteStep += 1;
 	}
@@ -808,7 +820,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int
 	else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
 		cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			//衝突
 			hitFlg = true;
@@ -834,19 +846,22 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int
 	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow, num)) &&
 		cObstacle.GetShow(WaterFlow, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None && !waterFlowFlg && !unDeadFlg)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
-			//水流に当たったことを確認
-			waterFlowFlg = true;
-			//持続時間の設定
-			waterFlowTimer.SetTotalTime(4);
-			hitFlg = true;
-			hitTimer.SetTotalTime(2);
-		}
-		else
-		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_WaterFlow;
+			if (!waterFlowFlg)
+			{
+				//水流に当たったことを確認
+				waterFlowFlg = true;
+				//持続時間の設定
+				waterFlowTimer.SetTotalTime(4);
+				hitFlg = true;
+				hitTimer.SetTotalTime(2);
+			}
+			else
+			{
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_WaterFlow;
+			}
 		}
 		
 	}

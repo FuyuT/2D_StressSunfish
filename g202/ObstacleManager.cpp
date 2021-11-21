@@ -51,12 +51,19 @@ void CObstacleManager::Initialize()
 	posYRndom.SetSeed((MofU32)time(NULL));
 }
 
-void CObstacleManager::Update(int distance,int posx,float wx,float wy)
+void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutorialStep)
 {
+	if (tutorialStep == 0)
+		return;
+
 	if (distance % 35 == 0 && distance != 0)
 	{
 		//showFlgがfalseの食べ物,障害物を一つランダムで選んで、
-		obstacleNum = obstacleRandom.Random(0, 11);
+		if(tutorialStep <= 2)
+			obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
+		else
+			obstacleNum = obstacleRandom.Random(0, 11);
+
 		//障害物の位置指定とshowflgをtrue
 		switch (obstacleNum)
 		{
@@ -431,9 +438,10 @@ void CObstacleManager::Render(float wx, float wy)
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
 	}
-		cTurtle.Render(wx, wy);
-		cWaterFlow.Render(wx, wy);
-		cShoalSardine.Render(wx, wy);
+
+	cTurtle.Render(wx, wy);
+	cWaterFlow.Render(wx, wy);
+	cShoalSardine.Render(wx, wy);
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)

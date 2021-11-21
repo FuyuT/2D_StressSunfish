@@ -158,8 +158,8 @@ private:
 	CTimer parasiteTimer;
 
 	//チュートリアル用
-	bool	moveUpTaskFlg;
-	bool	moveDownTaskFlg;
+	int		moveUpTaskCnt;
+	int		moveDownTaskCnt;
 	bool	jumpTaskFlg;
 	bool	eatTaskFlg;
 	int		taskCompleteStep;
@@ -185,7 +185,7 @@ public:
 	bool Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep);
 	//ジャンプ
 	void Jump(bool unDeadFlg, int tutorialStep);
-	void UpdateStatus(bool unDeadFlg);
+	void UpdateStatus(bool unDeadFlg,int tutorialStep);
 
 	//Updateの引数について
 	// 
@@ -302,11 +302,15 @@ public:
 	//チュートリアル用関数
 	bool GetMoveUpTask()
 	{
-		return moveUpTaskFlg;
+		if(moveUpTaskCnt >= 3)
+			return true;
+		return false;
 	}
 	bool GetMoveDownTask()
 	{
-		return moveDownTaskFlg;
+		if(moveDownTaskCnt >= 3)
+			return true;
+		return false;
 	}
 	bool GetJumpTask()
 	{
