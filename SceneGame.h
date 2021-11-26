@@ -58,6 +58,8 @@ private:
 	CRandom eventRandom;
 	int		eventNum;
 	CTimer	eventTimer;
+	//開始フラグ
+	bool startFlg;
 
 public:
 	CSceneGame();

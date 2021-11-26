@@ -17,6 +17,17 @@ private:
 
 	double distance = 0;
 
+	int jumpAlpha = 0;
+	int eatAlpha = 0;
+
+	float radyScale = 1.5f;
+	float radyPosx = 550;
+	float radyPosy = 350;
+
+	float goScale = 0.3f;
+	float goPosx = 850;
+	float goPosy = 450;
+
 	//マンボウの顔の枠
 	CTexture stressMeter;
 
@@ -49,6 +60,7 @@ private:
 	CTexture cautionCold;
 
 	//トロフィー
+	CTexture	riverIconTexture;		//川級
 	CTexture	waterFallIconTexture;	//滝級
 	CTexture	lakeIconTexture;		//湖級
 	CTexture	damIconTexture;			//ダム級
@@ -59,14 +71,21 @@ private:
 	CTexture	seaOf​​JapanIconTexture;	//日本海級
 	CTexture	aroundTheGlobeIconTexture;	//地球一周級
 
+	//スタート開始合図
+	CTexture rady;
+	CTexture go;
 
 	//点滅
 	CBlinking cautionB;
 	CBlinking cautionHotB;
 	CBlinking cautionColdB;
 
+	CBlinking radyGoB;
+
+	//フォント
 	CFont font;
 	CFont trophyFont;
+
 
 	CObstacleManager obs;
 	CTurtle turtle;
@@ -77,5 +96,7 @@ public:
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
 	int distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
 	void Release();
+
+	bool StartSign();
 };
 

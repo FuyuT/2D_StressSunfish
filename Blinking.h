@@ -31,7 +31,12 @@ public:
 	void SetBlinkingSpeed(int blinkingSpeed) { speed = blinkingSpeed; }
 	//trueを入れると点滅しながら表示される
 	void SetInStart(bool startFlg) { start = startFlg; }
-	
+	//点滅した回数を返す(0からカウント)
+	int GetCount() { return countCheck; }
+	//現在の状態を返す
+	bool GetFadeIn() { return fadeIn; }
+	bool GetFadeOut() { return fadeIn; }
+
 	float GetAlpha() { return alpha; }
 };
 
