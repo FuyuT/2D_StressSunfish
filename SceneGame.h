@@ -1,18 +1,28 @@
 #pragma once
 #include "SceneBase.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "ObstacleManager.h"
 #include "Ui.h"
 #include "Stage.h"
 
+//イベント
+enum Event
+{
+	Event_None,
+	Event_Summer,
+	Event_Winter,
+	Event_Turtle,
+	Event_ShoalSardine,
+	Event_Garbage,
+
+	Event_Count,
+};
 
 class CSceneGame : public CSceneBase
 {
 private:
 	CPlayer pl;
 	Stage stg;
-	Enemy ene;
 	CObstacleManager cObstacle;
 	CUi ui;
 
@@ -36,12 +46,26 @@ private:
 
 	//設定画面フラグ
 	bool configFlg = false;
+	//ポーズ画面フラグ
+	bool poseFlg;
+	//新規入手フラグ
+	bool newGetTrophy;
+	bool newGetDeth;
+	//トロフィー用配列
+	int	numberOfTrophy[3];
+	
+	//イベント
+	CRandom eventRandom;
+	int		eventNum;
+	CTimer	eventTimer;
 
 public:
 	CSceneGame();
 	~CSceneGame();
+	void PlayBGM() override;
 	bool Load()override;
 	void Initialize() override;
+	void EventUpdate();
 	void Update() override;
 	void Render() override;
 	void RenderDebug() override;
@@ -81,5 +105,7 @@ public:
 
 
 	void PopUpController();
+	void CaseOfDethController();
+	void TrophyController();
 };
 

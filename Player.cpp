@@ -106,11 +106,11 @@ void CPlayer::Initialize()
 	parasiteTimer.SetTotalTime(15);
 
 	//チュートリアル
-	moveUpTaskCnt = 0;
-	moveDownTaskCnt = 0;
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
 	taskCompleteStep = 0;
+	moveUpTaskTimer.SetTotalTime(3);
+	moveDownTaskTimer.SetTotalTime(3);
 
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
@@ -220,15 +220,21 @@ void CPlayer::UpdateMove()
 	}
 
 	//チュートリアル用入力検知
-	//[W][S]をそれぞれ一回押すだけでタスクが終わってしまうとあっけなかったため、
-	//それぞれ三回ずつ押さないといけないようにする
 	if (g_pInput->IsKeyPush(MOFKEY_W))
 	{
-		moveUpTaskCnt++;
+		moveUpTaskTimer.StartTimer();
+	}
+	else if (g_pInput->IsKeyPull(MOFKEY_W))
+	{
+		moveUpTaskTimer.StopTimer();
 	}
 	if (g_pInput->IsKeyPush(MOFKEY_S))
 	{
-		moveDownTaskCnt++;
+		moveDownTaskTimer.StartTimer();
+	}
+	else if (g_pInput->IsKeyPull(MOFKEY_S))
+	{
+		moveDownTaskTimer.StopTimer();
 	}
 
 	//上に移動
@@ -505,7 +511,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 	/*********
 	 * 寄生虫
 	 *********/
-	if (tutorialStep >= 1)
+	if (!jumpFlg && tutorialStep >= 1)
 	{
 		if (parasite < PARASITE_LIMIT)
 		{
@@ -633,6 +639,9 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 	brakeTimer.Update();
 	if (!jumpFlg) jumpDangerTimer.Update();
 	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
+
+	moveUpTaskTimer.Update();
+	moveDownTaskTimer.Update();
 
 	//チュートリアル
 	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 0)
