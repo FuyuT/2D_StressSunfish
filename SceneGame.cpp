@@ -60,7 +60,10 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 
-
+	//イベント
+	eventRandom.SetSeed((MofU32)time(NULL));
+	eventTimer.SetTotalTime(140);
+	eventNum = Event::Event_None;
 
 	//タイマー
 	tempTimer.SetTotalTime(2);
@@ -80,6 +83,21 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
+}
+
+void CSceneGame::EventUpdate()
+{
+	eventTimer.StartTimer();
+	if (eventTimer.GetNowtime() < 0)
+	{
+		eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+		eventTimer.SetTotalTime(140);
+	}
+	else if (eventTimer.GetNowtime() < 120)
+	{
+		eventNum = Event::Event_None;
+	}
+	eventTimer.Update();
 }
 
 void CSceneGame::Update()
@@ -122,13 +140,16 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
-	//プレイヤー
-	pl.Update(false,2);
+	//イベント
+	EventUpdate();	
 
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(cObstacle,i,false,2);
 	}
+
+	//プレイヤー
+	pl.Update(false, 3);
 	//障害物
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
 
@@ -145,7 +166,7 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),cObstacle.GetShow(0,0));
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false);
 
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 

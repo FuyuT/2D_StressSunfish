@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "Blinking.h"
 #include "ObstacleManager.h"
+#include "Turtle.h"
 
 class CUi
 {
@@ -19,7 +20,6 @@ private:
 	//マンボウの顔の枠
 	CTexture stressMeter;
 
-	//マンボウの顔
 	CTexture tempNormal;
 	CTexture tempHot;
 	CTexture tempCold;
@@ -69,12 +69,13 @@ private:
 	CFont trophyFont;
 
 	CObstacleManager obs;
+	CTurtle turtle;
 public:
 	bool Load();
 	void Initialize();
 	void Update();
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	double distanceNum,bool jumpFlg,bool eatFlg,bool turtleFlg);
+	int distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
 	void Release();
 };
 

@@ -158,11 +158,11 @@ private:
 	CTimer parasiteTimer;
 
 	//チュートリアル用
-	int		moveUpTaskCnt;
-	int		moveDownTaskCnt;
 	bool	jumpTaskFlg;
 	bool	eatTaskFlg;
 	int		taskCompleteStep;
+	CTimer	moveUpTaskTimer;
+	CTimer	moveDownTaskTimer;
 
 public:
 	CPlayer();
@@ -194,9 +194,9 @@ public:
 	//false: 死ぬようになる(通常プレイ用)
 	// 
 	//tutorialStep
-	//0 : 上下移動のみ可能
-	//1 : 上下移動に加え、「ジャンプ」、「食べる」が可能
-	//2 : チュートリアルの終了、制限なくプレイ可能
+	//0     : 上下移動のみ可能
+	//1     : 上下移動に加え、「ジャンプ」、「食べる」が可能
+	//3以上 : チュートリアルの終了、制限なくプレイ可能
 	void Update(bool unDeadFlg,int tutorialStep);
 	void Render(float wx,float wy);
 	void RenderDebug(float wx,float wy);
@@ -302,13 +302,13 @@ public:
 	//チュートリアル用関数
 	bool GetMoveUpTask()
 	{
-		if(moveUpTaskCnt >= 3)
+		if(moveUpTaskTimer.GetNowtime() < 0)
 			return true;
 		return false;
 	}
 	bool GetMoveDownTask()
 	{
-		if(moveDownTaskCnt >= 3)
+		if(moveDownTaskTimer.GetNowtime() < 0)
 			return true;
 		return false;
 	}

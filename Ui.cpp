@@ -160,8 +160,7 @@ void CUi::Update()
 	cautionHotB.Update();
 	cautionColdB.Update();
 }
-
-void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,double distanceNum,bool jumpFlg,bool eatFlg, bool turtleFlg)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -262,13 +261,14 @@ void CUi::Render(int parasiteNum,int hungry,float tempRegionNum,double distanceN
 
 	//亀注意UIの描画
 	int w = g_pGraphics->GetTargetWidth();
-	int h = g_pGraphics->GetTargetHeight();
-	CRectangle cautionRec(0, 0, w , h);
-	if (obs.GetRect(0,0).CollisionRect(cautionRec) && turtleFlg)
+	if (turtle.GetShow())
 	{
-		cautionB.SetInStart(true);
+		if (w - w / 4 >= turtle.GetPosx())
+		{
+			cautionB.SetInStart(true);
+		}
 	}
-	else
+	else if (!turtle.GetShow())
 	{
 		cautionB.SetInStart(false);
 	}

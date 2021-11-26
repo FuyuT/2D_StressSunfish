@@ -54,17 +54,25 @@ void CSceneTutorial::MessageUpdate()
 	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
 	{
 		messageEndFlg = true;
-		if (g_pInput->IsKeyPush(MOFKEY_SPACE) &&
-			tutorialStep != pl.GetTaskCompleteStep())
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
-			for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
+			if (tutorialStep == 2)
 			{
-				fLineBuffer[n]= NULL;
+				//todo:シーンの遷移
+				nextScene = SCENENO_GAME;
+				endFlg = true;
 			}
-			fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
-			messageEndFlg = false;
-			//チュートリアルの段階を一つ進める
-			tutorialStep += 1;
+			if (tutorialStep != pl.GetTaskCompleteStep())
+			{
+				for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
+				{
+					fLineBuffer[n] = NULL;
+				}
+				fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
+				messageEndFlg = false;
+				//チュートリアルの段階を一つ進める
+				tutorialStep += 1;
+			}
 		}
 	}
 	//文字列の終端まで文字を追加していく
@@ -109,7 +117,11 @@ void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
 	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
+	if (messageEndFlg && tutorialStep == 2)
+	{
+		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押してゲームを開始する");
+	}
+	else if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
 	{
 		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押して次へ→");
 	}
@@ -152,12 +164,12 @@ void CSceneTutorial::Initialize()
 void CSceneTutorial::Update()
 {
 	stg.Update(pl);
-	pl.Update(true,tutorialStep);
 	ui.Update();
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
+	pl.Update(true, tutorialStep);
 	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep);
 	MessageUpdate();
 
@@ -166,7 +178,7 @@ void CSceneTutorial::Update()
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),obs.GetShow(0, 0));
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),true);
 	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	MessageRender();
