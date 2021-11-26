@@ -378,9 +378,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy)
 				{
 					for (int m = 0; m < 3; m++)
 					{
-						if (GetRect(Turtle, m).CollisionRect(GetRect(i, m)))
+						if (GetRect(ShoalSardine, m).CollisionRect(GetRect(i, m)))
 						{
-							if (i == Turtle)
+							if (i == ShoalSardine)
 							{
 								return;
 							}

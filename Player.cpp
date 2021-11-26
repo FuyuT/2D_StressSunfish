@@ -9,6 +9,7 @@ CPlayer::CPlayer() :
 	moveY(0.0f),
 	moveSpeed(1.0f),
 	jumpFlg(false),
+	jumpDangerFlg(false),
 	deadFlg(false),
 	possibleToJumpFlg(false),
 	possibleToEatFlg(),
@@ -66,7 +67,7 @@ void CPlayer::Initialize()
 	random.SetSeed(time(NULL));
 	//座標
 	posX = STARTPOS_X;
-	posY = g_pGraphics->GetTargetHeight() * 0.5 - standTexture.GetHeight() * 0.5;
+	posY = STARTPOS_Y;
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
 	tempRegion = 50;
@@ -77,6 +78,10 @@ void CPlayer::Initialize()
 	//速度
 	moveX = 0.0f;
 	moveY = 0.0f;
+	//ジャンプ
+	jumpFlg = false;
+	jumpDangerFlg = false;
+	jumpDangerTimer.SetTotalTime(5);
 	//水流
 	moveSpeed = 1.0f;
 	waterFlowTimer.SetTotalTime(4);
@@ -88,7 +93,6 @@ void CPlayer::Initialize()
 	hitTimer.SetTotalTime(1);
 
 	//フラグ
-	jumpFlg = false;
 	deadFlg = false;
 	for (int i = 0; i < FEED_MAXCOUNT; i++)
 	{
@@ -101,6 +105,13 @@ void CPlayer::Initialize()
 	hungerTimer.SetTotalTime(3);
 	parasiteTimer.SetTotalTime(15);
 
+	//チュートリアル
+	moveUpTaskFlg = false;
+	moveDownTaskFlg = false;
+	eatTaskFlg = false;
+	jumpTaskFlg = false;
+	taskCompleteStep = 0;
+
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
 
@@ -109,7 +120,7 @@ void CPlayer::Initialize()
 		{
 			"通常",
 			0,0,
-			165,165,
+			166,166,
 			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -119,7 +130,7 @@ void CPlayer::Initialize()
 		{
 			"食べる",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -129,7 +140,7 @@ void CPlayer::Initialize()
 		{
 			"ジャンプ",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -139,7 +150,7 @@ void CPlayer::Initialize()
 		{
 			"死ぬ",
 			0,0,
-			165,165,
+			166,166,
 			FALSE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 				  {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},{4,5,1},
 				  {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2},{4,5,2},
@@ -211,6 +222,9 @@ void CPlayer::UpdateMove()
 	//上に移動
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
+		//チュートリアルタスク
+		moveUpTaskFlg = true;
+
 		moveY -= PLAYER_SPEED;
 		if (moveY < -PLAYER_MAXSPEED)
 		{
@@ -220,6 +234,9 @@ void CPlayer::UpdateMove()
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
+		//チュートリアルタスク
+		moveDownTaskFlg = true;
+
 		moveY += PLAYER_SPEED;
 		if (moveY > PLAYER_MAXSPEED)
 		{
@@ -256,25 +273,29 @@ void CPlayer::UpdateMove()
 	//海底(スクリーン下部)　移動制限
 	if (GetRect().Bottom > UNDER_SEA)
 	{
-		posY = UNDER_SEA - TEXTURE_SIZE + COLLISION_ADJUSTMENT;
+		posY = UNDER_SEA - TEXTURE_SIZE + COLLISION_ADJUSTMENT_BOTTOM;
 		moveY = 0;
 	}
 	
 	//海面(スクリーン上部)　移動制限
 	if (GetRect().Top < SEA_LEVEL)
 	{
-		posY = SEA_LEVEL - COLLISION_ADJUSTMENT;
+		posY = SEA_LEVEL - COLLISION_ADJUSTMENT_TOP;
 		moveY = 0;
 	}	
 }
 
 //エサを食べる
-bool CPlayer::Eat(bool rottenFlg)
+bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A))
+	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 1)
 	{
-		motion.ChangeMotion(MOTION_EAT);
+		//チュートリアルタスク
+		eatTaskFlg = true;
+
+		if(motion.GetMotionNo() == MOTION_STAND)
+			motion.ChangeMotion(MOTION_EAT);
 
 		for (int i = 0; i < FEED_MAXCOUNT; i++)
 		{
@@ -282,10 +303,10 @@ bool CPlayer::Eat(bool rottenFlg)
 		}
 
 		//死因が確定していない
-		if (causeOfDeath == CAUSE_None)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			//死因：肥満
-			if (hungerRegion == FULL_STOMACH)
+			if (hungerRegion <= FULL_STOMACH)
 			{
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_Obesity;
@@ -296,16 +317,19 @@ bool CPlayer::Eat(bool rottenFlg)
 
 		//空腹を満たす
 		hungerTimer.SetTotalTime(3);
-		hungerRegion -= FEED_SATIETYLEVEL;
+		if(rottenFlg)
+			hungerRegion -= FEED_SATIETYLEVEL;
+		else
+			hungerRegion -= FEED_SATIETYLEVEL / 2;
 
 		//満腹値を超えたら
 		if (hungerRegion < FULL_STOMACH)
 		{
-			hungerRegion = FULL_STOMACH;
+			hungerRegion = FULL_STOMACH - 5.0f;
 		}
 
 		//死因が確定していない
-		if (causeOfDeath == CAUSE_None)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			//腐っていれば確率で死ぬ
 			if (rottenFlg)
@@ -328,12 +352,15 @@ bool CPlayer::Eat(bool rottenFlg)
 }
 
 //ジャンプ
-void CPlayer::Jump()
+void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
-		possibleToJumpFlg )
+		possibleToJumpFlg && tutorialStep >= 1)
 	{
+		//チュートリアルタスク
+		jumpTaskFlg = true;
+
 		jumpFlg = true;	
 		possibleToJumpFlg = false;
 
@@ -342,15 +369,31 @@ void CPlayer::Jump()
 		//ジャンプ力
 		moveY = -JUMP_POWER_Y;
 		moveX = JUMP_POWER_X;
+
 	}
 	else if (jumpFlg)
 	{
 		moveY += PLAYER_SPEED;
-
 		//海面より下か(海に戻ったか)
 		//落下による勢いで少し潜るように
 		if (posY > SEA_LEVEL + WATER_LANDING_DEEP)
 		{
+			//jumpDangerTimerの時間内にジャンプを行うと死亡
+			if (jumpDangerFlg)
+			{
+				//死因が確定していない
+				if (causeOfDeath == CAUSE_None)
+				{
+					motion.ChangeMotion(MOTION_DEATH);
+					causeOfDeath = CAUSE_Jump;
+				}
+			}
+			else
+			{
+				jumpDangerFlg = true;
+				jumpDangerTimer.SetTotalTime(5);
+				jumpDangerTimer.StartTimer();
+			}
 			//寄生虫を振り落とす
 			parasiteTimer.SetTotalTime(15);
 			parasite = 0;
@@ -361,24 +404,14 @@ void CPlayer::Jump()
 
 			jumpFlg = false;
 
-			//死因が確定していない
-			if (causeOfDeath == CAUSE_None)
-			{
-				//死因：衝撃死
-				//10%で死ぬ
-				if (DieInPercentage(10))
-				{
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Jump;
-				}
-			}
 		}
-
 	}
+
+
 }
 
 //プレイヤーの状態を更新
-void CPlayer::UpdateStatus()
+void CPlayer::UpdateStatus(bool unDeadFlg)
 {
 
 	if (motion.GetMotionNo() != MOTION_STAND &&
@@ -413,43 +446,54 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 体温
 	 *********/
-	if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
+	if (!jumpFlg)
 	{
-		if (tempRegion > 0)
+		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
-			tempRegion -= 0.15f;
-		}		
-		//死因：熱中症
-		if (tempRegion <= HYPERTHERMIA_LIMIT)
+			if (tempRegion > HYPERTHERMIA_LIMIT)
+			{
+				tempRegion -= TEMPERATURE_LEVEL;
+			}
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//死因：熱中症
+				if (tempRegion <= HYPERTHERMIA_LIMIT)
+				{
+
+					motion.ChangeMotion(MOTION_DEATH);
+					causeOfDeath = CAUSE_Hyperthermia;
+				}
+			}
+		}
+		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Hyperthermia;
+			if (tempRegion < FROZEN_LIMIT)
+			{
+				tempRegion += TEMPERATURE_LEVEL;
+			}
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//死因：凍死
+				if (tempRegion >= FROZEN_LIMIT)
+				{
+					motion.ChangeMotion(MOTION_DEATH);
+					causeOfDeath = CAUSE_Frozen;
+				}
+			}
+		}
+		else
+		{
+			if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			{
+				tempRegion += TEMPERATURE_LEVEL / 3.0f;
+			}
+			else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			{
+				tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+			}
 		}
 	}
-	else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
-	{
-		if (tempRegion < 100)
-		{
-			tempRegion += 0.15f;
-		}		
-		//死因：凍死
-		if (tempRegion >= FROZEN_LIMIT)
-		{
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Frozen;
-		}
-	}
-	else
-	{
-		if (tempRegion < 50)
-		{
-			tempRegion += 0.05f;
-		}
-		else if (tempRegion > 50)
-		{
-			tempRegion -= 0.05f;
-		}
-	}
+
 
 
 	/*********
@@ -462,9 +506,9 @@ void CPlayer::UpdateStatus()
 		if (parasiteTimer.GetNowtime() <= 0)
 		{
 			parasite += 1;
-			if (parasite == PARASITE_LIMIT)
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
-				if (causeOfDeath == CAUSE_None)
+				if (parasite == PARASITE_LIMIT)
 				{
 					//死因：寄生死
 					motion.ChangeMotion(MOTION_DEATH);
@@ -478,18 +522,18 @@ void CPlayer::UpdateStatus()
 	/*********
 	 * 空腹
 	 *********/
-	if (hungerRegion < 85)
+	if (hungerRegion <= STARVATION)
 	{
-		hungerRegion += 0.05f;
+		hungerRegion += HUNGRYLEVEL;
 	}
-	if (hungerRegion >= 85)
+	else if (hungerRegion >= STARVATION)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//空腹度が増加する
 			if (hungerRegion >= STARVATION)
 			{
-				if (causeOfDeath == CAUSE_None)
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
 					//死因：餓死
 					motion.ChangeMotion(MOTION_DEATH);
@@ -530,7 +574,7 @@ void CPlayer::UpdateStatus()
 		}
 	}
 
-	//無敵(デバッグ用)
+	//無敵
 	if (hitFlg)
 	{
 		hitTimer.StartTimer();
@@ -544,7 +588,7 @@ void CPlayer::UpdateStatus()
 }
 
 //更新
-void CPlayer::Update()
+void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 {
 	//アニメーションの更新
 	motion.AddTimer(CUtilities::GetFrameSecond());
@@ -558,15 +602,15 @@ void CPlayer::Update()
 		}
 	}
 
-	//プレイヤーが死んでいる場合
+	//プレイヤーが死んでいる場合、操作が行えないように
 	if ((deadFlg || motion.GetMotionNo() == MOTION_DEATH) && !jumpFlg)
 		return;
 
 	//ステータス(状態)の更新
-	UpdateStatus();
+	UpdateStatus(unDeadFlg);
 
 	//ジャンプ
-	Jump();
+	Jump(unDeadFlg,tutorialStep);
 
 	//タイマー
 	tempTimer.Update();
@@ -575,6 +619,18 @@ void CPlayer::Update()
 	waterFlowTimer.Update();
 	hitTimer.Update();
 	brakeTimer.Update();
+	if (!jumpFlg) jumpDangerTimer.Update();
+	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
+
+	//チュートリアル
+	if (moveUpTaskFlg && moveDownTaskFlg && taskCompleteStep == 0)
+	{
+		taskCompleteStep += 1;
+	}
+	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 1)
+	{
+		taskCompleteStep += 1;
+	}
 
 	//ジャンプ中は操作が行えないように
 	if (jumpFlg)
@@ -602,7 +658,7 @@ void CPlayer::Render(float wx, float wy)
 			eatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
 			break;
 		case MOTION_JUMP:
-			jumpTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			jumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
 			break;
 		case MOTION_DEATH:
 			deathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
@@ -721,7 +777,7 @@ void CPlayer::Release()
 
 
 //敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(CObstacleManager& cObstacle, int num)
+void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int tutorialStep)
 {
 
 	if ((deadFlg || motion.GetMotionNo() == MOTION_DEATH) && !jumpFlg)
@@ -736,7 +792,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 	if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
 		cObstacle.GetShow(Turtle, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			//衝突
 			hitFlg = true;
@@ -747,44 +803,51 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 			causeOfDeath = CAUSE_SeaTurtle;
 		}
 	}
-	//障害物
-	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
-		cObstacle.GetShow(Garbage, num) && !hitFlg)
+	//todo:死因を障害物と衝突にしてるので、あとで変更
+	//魚群（イワシ）
+	else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
+		cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None)
 		{
 			//衝突
 			hitFlg = true;
-			hitTimer.SetTotalTime(1);
-
 			//死因：衝突死
-			//20%で死ぬ
-			if (DieInPercentage(20))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_Obstacle;
-			}
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Obstacle;
+		}
+	}
+	//障害物
+	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
+		cObstacle.GetShow(Garbage, num) && !hitFlg)
+	{
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
+		{
+			//衝突
+			hitFlg = true;
+			//死因：衝突死
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Obstacle;
 		}
 	}
 	//水流
 	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow, num)) &&
-		cObstacle.GetShow(WaterFlow, num))
+		cObstacle.GetShow(WaterFlow, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None && !waterFlowFlg)
+		if (causeOfDeath == CAUSE_None && !waterFlowFlg && !unDeadFlg)
 		{
-			//死因：加速死
-			//5%で死ぬ
-			if (DieInPercentage(5))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_WaterFlow;
-			}
+			//水流に当たったことを確認
+			waterFlowFlg = true;
+			//持続時間の設定
+			waterFlowTimer.SetTotalTime(4);
+			hitFlg = true;
+			hitTimer.SetTotalTime(2);
 		}
-
-		//水流に当たったことを確認
-		waterFlowFlg = true;
-		//持続時間の設定
-		waterFlowTimer.SetTotalTime(4);
+		else
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_WaterFlow;
+		}
 		
 	}
 
@@ -794,19 +857,13 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 	if (prec.CollisionRect(cObstacle.GetRect(Bubble, num)) &&
 		cObstacle.GetShow(Bubble, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None)
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			//衝突
 			hitFlg = true;
-			hitTimer.SetTotalTime(1);
-
 			//泡死
-			//5%で死ぬ
-			if (DieInPercentage(5))
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_Bubble;
-			}
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Bubble;
 		}
 	}
 
@@ -820,7 +877,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(false))
+		if (Eat(false,unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, FoodFish, num);
 		}
@@ -831,7 +888,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(false))
+		if (Eat(false, unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, FoodShrimp, num);
 		}
@@ -842,7 +899,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(false))
+		if (Eat(false, unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, FoodCrab, num);
 		}
@@ -854,7 +911,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(true))
+		if (Eat(true, unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, RottenFish, num);
 		}
@@ -865,7 +922,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(true))
+		if (Eat(true, unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, RottenShrimp, num);
 		}
@@ -876,7 +933,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num)
 		//探知範囲内にエサがある場合true
 		possibleToEatFlg[num] = true;
 		//エサを食べる
-		if (Eat(true))
+		if (Eat(true, unDeadFlg, tutorialStep))
 		{
 			cObstacle.SetShow(false, RottenCrab, num);
 		}

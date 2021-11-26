@@ -7,6 +7,7 @@
 
 //‰ŠúˆÊ’u X
 #define		STARTPOS_X				200
+#define		STARTPOS_Y				900
 
 //À•W‚ði‚ñ‚¾‹——£‚É•ÏŠ·‚·‚éŠ„‡
 #define		TRANSLATE_DISTANCE		10
