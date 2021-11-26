@@ -166,7 +166,7 @@ void CSceneTutorial::Update()
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat());
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),obs.GetShow(0, 0));
 	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	MessageRender();

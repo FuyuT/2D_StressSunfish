@@ -111,6 +111,7 @@
     <ClCompile Include="RottenCrab.cpp" />
     <ClCompile Include="RottenFish.cpp" />
     <ClCompile Include="RottenShrimp.cpp" />
+    <ClCompile Include="ScaleController.cpp" />
     <ClCompile Include="ShoalSardine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="WaterFlow.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="RottenCrab.h" />
     <ClInclude Include="RottenFish.h" />
     <ClInclude Include="RottenShrimp.h" />
+    <ClInclude Include="ScaleController.h" />
     <ClInclude Include="ShoalSardine.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="WaterFlow.h" />

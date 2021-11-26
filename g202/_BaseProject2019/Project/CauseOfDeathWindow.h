@@ -6,13 +6,18 @@ class CCauseOfDeathWindow : public CPopUpWindowBase
 private:
 	CFont		font;
 	CTexture	popUpTexture;
+	CTexture	deathTextTexture;
 	CTexture	buttonNextTexture;
 	CTexture	caseOfDethTexture;
+	CTexture	newGetTexture;
 
 	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
 	const int			causeOfDeathTexturePosX = 725;
 	const int			causeOfDeathTexturePosY = 350;
+	const int			deathTextPosX = 830;
+	const int			deathTextPosY = 230;
+
 public:
 	CCauseOfDeathWindow();
 	~CCauseOfDeathWindow();

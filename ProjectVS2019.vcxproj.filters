@@ -183,6 +183,9 @@
     <ClCompile Include="SoundManager.cpp">
       <Filter>ソース ファイル\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="ScaleController.cpp">
+      <Filter>ソース ファイル\Utilitys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ScaleController.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

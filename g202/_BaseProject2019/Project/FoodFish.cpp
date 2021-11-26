@@ -21,19 +21,22 @@ void CFoodFish::Initialize()
 	//pos.x = 1500;
 	//pos.y = 1500;
 	//showFlg = true;
+	rotateNum = 0;
 }
 
 void CFoodFish::Update(float wx, float wy)
 {
 	if (!showFlg)return;
+	DegreeUpdate();
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	
 }
 
 void CFoodFish::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx,pos.y - wy);
+	Texture.RenderRotate(pos.x - wx,pos.y - wy,MOF_ToRadian(rotateNum),TEXALIGN_CENTERCENTER);
 }
 
 void CFoodFish::RenderDebug(float wx, float wy)

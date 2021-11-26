@@ -130,7 +130,7 @@ void CSceneGame::Update()
 		pl.Collision(cObstacle,i,false,2);
 	}
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
 
 	ui.Update();
 }
@@ -145,7 +145,7 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat());
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),cObstacle.GetShow(0,0));
 
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 
@@ -221,6 +221,7 @@ void CSceneGame::PopUpController()
 		nextScene = SCENENO_CONFIG;
 		configFlg = true;
 		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Load();
 		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
@@ -339,7 +340,7 @@ void CSceneGame::CaseOfDethController()
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
 			break;
 		}
-		nowPopUpGame->SetNewGetDeth(newGetDeth);
+		nowPopUpGame->SetNewGetDeath(newGetDeth);
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 	}

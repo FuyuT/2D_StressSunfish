@@ -128,57 +128,76 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	//}
 
 	//”g‚ð“®‚©‚·
-	if (!turnFlg && WavePos.x > -500)
+	if (!turnFlg && WavePos.y > -100)
 	{
-		WaveSpeed = -5;
+		WaveSpeed = -3;
 	}
-	else if (WavePos.x < -500)
+	else if (WavePos.y < 0)
 	{
 		WaveSpeed = 0;
 		turnFlg = true;
 	}
 
-	if (turnFlg && WavePos.x < 0)
+	if (turnFlg && WavePos.y < 0)
 	{
-		WaveSpeed = 5;
+		WaveSpeed = 3;
 	}
-	else if (WavePos.x > -50)
+	else if (WavePos.y > 100)
 	{
 		turnFlg = false;
 	}
-	WavePos.x += WaveSpeed;
-
+	WavePos.y += WaveSpeed;
 }
 
-void Stage::Render() {
+void Stage::Scroll(CTexture tex, int scrollSpeedX, int scrollSpeedY)
+{
+	//ScrollSpeed‚Í‘å‚«‚¢‚Ù‚ÇƒXƒNƒ[ƒ‹‚ª’x‚­‚È‚é
+	int scw = g_pGraphics->GetTargetWidth();
+	int sch = g_pGraphics->GetTargetHeight();
+	int w = tex.GetWidth();
+	int h = tex.GetHeight();
+	for (float y = ((int)-scrollValueY / scrollSpeedY % h) - h; y < sch; y += h)
+	{
+		for (float x = ((int)-scrollValueX / scrollSpeedX % w) - w; x < scw; x += w)
+		{
+			tex.Render(x, y);
+		}
+	}
+}
 
-	//’Ç‰Á
+void Stage::WaveRender()
+{
+	int scw = g_pGraphics->GetTargetWidth();
+	int sch = g_pGraphics->GetTargetHeight();
+	int w = BackGroundTex2.GetWidth();
+	int h = BackGroundTex2.GetHeight();
+	for (float x = ((int)-scrollValueX / 2 % w) - w; x < scw; x += w)
+	{
+		BackGroundTex2.Render(x, WavePos.y - scrollValueY);
+	}
+}
+
+void Stage::BackGroundRender() {
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 
 	int w = BackGroundTex1.GetWidth();
 	int h = BackGroundTex1.GetHeight();
-	for (float y = ((int)-scrollValueY % h) - h; y < sch; y += h)
-	{
-		for (float x = ((int)-scrollValueX % w) - w; x < scw; x += w)
-		{
-			BackGroundTex1.Render(x, y);
-		}
-	}
-	//“®‚­”g
-	BackGroundTex2.Render(WavePos.x, WavePos.y - scrollValueY);
+	Scroll(BackGroundTex1, 1, 1);
+	////“®‚­”g
+	WaveRender();
+	Scroll(BackGroundTex3, 1, 1);
+	Scroll(BackGroundTex4, 4, 1);
+	Scroll(BackGroundTex5, 3, 1);
+	Scroll(BackGroundTex6, 2, 1);
 
-	for (float y = ((int)-scrollValueY % h) - h; y < sch; y += h)
-	{
-		for (float x = ((int)-scrollValueX % w) - w; x < scw; x += w)
-		{
-			BackGroundTex3.Render(x, y);
-			BackGroundTex4.Render(x, y);
-			BackGroundTex5.Render(x, y);
-			BackGroundTex6.Render(x, y);
-		}
-	}
+
 }
+
+void Stage::Render() {
+	BackGroundRender();
+}
+
 
 void Stage::Release() {
 	BackGroundTex1.Release();

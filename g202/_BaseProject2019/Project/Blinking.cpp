@@ -6,9 +6,9 @@ CBlinking::CBlinking() :
 	alpha(0),
 	effectCount(0),
 	countCheck(0),
+	start(false),
 	fadeIn(true),
-	fadeOut(false),
-	start(false)
+	fadeOut(false)
 {
 }
 
@@ -63,6 +63,6 @@ void CBlinking::Update()
 		effectCount = 0;
 		alpha = 0.0f;
 		countCheck = 0;
-		fadeIn = true;
+		Initialize();
 	}
 }

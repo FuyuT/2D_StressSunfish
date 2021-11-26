@@ -158,7 +158,7 @@ void CSceneTutorial::Update()
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep);
 	MessageUpdate();
 
 }
@@ -166,7 +166,7 @@ void CSceneTutorial::Update()
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),obs.GetShow(0,0));
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),obs.GetShow(0, 0));
 	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	MessageRender();

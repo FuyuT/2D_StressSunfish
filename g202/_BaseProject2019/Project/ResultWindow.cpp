@@ -14,6 +14,8 @@ void CResultWindow::Initialize()
 {
 	popUpTexture.Load("Pop_upÉâÉt2.png");
 	buttonNextTexture.Load("ButtonNext.png");
+	resultTexture.Load("PopUpResult.png");
+	newGetTexture.Load("NEW.png");
 	if (numberOfTrophy[0] != TROPHY_NULL)
 	{
 		switch (numberOfTrophy[0])
@@ -164,7 +166,7 @@ void CResultWindow::Update()
 void CResultWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	font.RenderString(850, 250, MOF_XRGB(0, 0, 0), "åãâ ");
+	resultTexture.Render(resultTextPosX, resultTextPosY);
 	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
 
 	if (numberOfTrophy[0] != TROPHY_NULL)
@@ -233,7 +235,7 @@ void CResultWindow::Render()
 	//êVãKÉQÉbÉgÇÃèÍçánewÇï`âÊ
 	if (newGetTrophyFlg)
 	{
-		font.RenderString(trophyTexturePosX+10, trophyTexturePosY + trophyTexture.GetHeight()+ 10, MOF_XRGB(0, 0, 0), "NEW");
+		newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 10);
 	}
 
 	//mï`âÊ
@@ -260,7 +262,9 @@ void CResultWindow::Render()
 }
 void CResultWindow::Release()
 {
+	newGetTexture.Release();
 	distanceFont.Release();
+	resultTexture.Release();
 	font.Release();
 	trophyTexture.Release();
 	trophyTexture2.Release();

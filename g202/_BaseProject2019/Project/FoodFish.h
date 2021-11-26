@@ -1,9 +1,9 @@
 #pragma once
 #include "ObstacleBase.h"
-#define  FISH_RECT_TOP_ADJ 30
-#define  FISH_RECT_LEFT_ADJ 10
-#define  FISH_RECT_RIGHT_ADJ -15
-#define  FISH_RECT_BUTTOM_ADJ -30
+#define  FISH_RECT_TOP_ADJ -40
+#define  FISH_RECT_LEFT_ADJ -60
+#define  FISH_RECT_RIGHT_ADJ -85
+#define  FISH_RECT_BUTTOM_ADJ -100
 class CFoodFish : public CObstacleBase
 {
 private:

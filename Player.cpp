@@ -452,7 +452,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 	/*********
 	 * ‘Ì‰·
 	 *********/
-	if (!jumpFlg && tutorialStep >= 3)
+	if (!jumpFlg && tutorialStep >= 2)
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{

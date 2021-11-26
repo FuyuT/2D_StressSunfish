@@ -221,6 +221,7 @@ void CSceneGame::PopUpController()
 		nextScene = SCENENO_CONFIG;
 		configFlg = true;
 		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Load();
 		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);

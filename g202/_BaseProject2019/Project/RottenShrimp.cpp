@@ -17,11 +17,13 @@ bool CRottenShrimp::Load()
 
 void CRottenShrimp::Initialize()
 {
+	rotateNum = 0;
 }
 
 void CRottenShrimp::Update(float wx, float wy)
 {
 	if (!showFlg)return;
+	DegreeUpdate();
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }
@@ -29,7 +31,7 @@ void CRottenShrimp::Update(float wx, float wy)
 void CRottenShrimp::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx, pos.y - wy);
+	Texture.RenderRotate(pos.x - wx, pos.y - wy,MOF_ToRadian(rotateNum),TEXALIGN_CENTERCENTER);
 }
 
 void CRottenShrimp::RenderDebug(float wx, float wy)

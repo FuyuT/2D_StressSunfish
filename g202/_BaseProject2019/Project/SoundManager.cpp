@@ -6,7 +6,7 @@ bool CSoundManager::Load()
 	if (!menuBGM.Load("Sound\\BGM_Menu.mp3"))return false;
 	if (!collectionBGM.Load("Sound\\BGM_Collection.mp3"))return false;
 	if (!gameBGM.Load("Sound\\BGM_Game.mp3"))return false;
-	
+
 	if (!sceneChangeSE.Load("Sound\\SE_SceneChange.mp3"))return false;
 	if (!buttonSE.Load("Sound\\SE_Button.mp3"))return false;
 	if (!alertSE.Load("Sound\\SE_Alert.mp3"))return false;
@@ -20,6 +20,15 @@ bool CSoundManager::Load()
 	SetLoop();
 
 	return true;
+}
+
+
+void CSoundManager::SetLoop()
+{
+	titleBGM.SetLoop(true);
+	menuBGM.SetLoop(true);
+	collectionBGM.SetLoop(true);
+	gameBGM.SetLoop(true);
 }
 
 void CSoundManager::Play(SOUNDTYPE sound)
@@ -74,32 +83,6 @@ void CSoundManager::Play(SOUNDTYPE sound)
 	default:
 		break;
 	}
-}
-
-void CSoundManager::SetLoop()
-{
-	menuBGM.SetLoop(true);
-	collectionBGM.SetLoop(true);
-	gameBGM.SetLoop(true);
-
-	//switch (sound)
-	//{
-	//	case SOUND_TITLE_BGM:
-	//		titleBGM.SetLoop(true);
-	//		break;
-	//	case SOUND_MENU_BGM:
-	//		menuBGM.SetLoop(true);
-	//		break;
-	//	case SOUND_COLLECTION_BGM:
-	//		collectionBGM.SetLoop(true);
-	//		break;
-	//	case SOUND_GAME_BGM:
-	//		gameBGM.SetLoop(true);
-	//		break;
-	//default:
-	//	break;
-	//}
-
 }
 
 void CSoundManager::Stop(SOUNDTYPE sound)
@@ -174,6 +157,29 @@ void CSoundManager::AllStop()
 	parasiteStickSE.Stop();
 	collisionSE.Stop();
 	bubbleCollisionSE.Stop();
+}
+
+void CSoundManager::SetVolumeBGM(float volume)
+{
+	titleBGM.SetVolume(volume);
+	menuBGM.SetVolume(volume);
+	collectionBGM.SetVolume(volume);
+	gameBGM.SetVolume(volume);
+}
+
+void CSoundManager::SetVolumeSE(float volume)
+{
+	sceneChangeSE.SetVolume(volume);
+	buttonSE.SetVolume(volume);
+	alertSE.SetVolume(volume);
+	jumpStartSE.SetVolume(volume);
+	jumpingSE.SetVolume(volume);
+	waterLandingSE.SetVolume(volume);
+	eatSE.SetVolume(volume);
+	waterFlowSE.SetVolume(volume);
+	parasiteStickSE.SetVolume(volume);
+	collisionSE.SetVolume(volume);
+	bubbleCollisionSE.SetVolume(volume);
 }
 
 void CSoundManager::Release()

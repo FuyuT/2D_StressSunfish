@@ -17,11 +17,13 @@ bool CRottenCrab::Load()
 
 void CRottenCrab::Initialize()
 {
+	rotateNum = 0;
 }
 
 void CRottenCrab::Update(float wx, float wy)
 {
 	if (!showFlg)return;
+	DegreeUpdate();
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
 }
@@ -29,7 +31,7 @@ void CRottenCrab::Update(float wx, float wy)
 void CRottenCrab::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx, pos.y - wy);
+	Texture.RenderRotate(pos.x - wx, pos.y - wy,MOF_ToRadian(rotateNum),TEXALIGN_CENTERCENTER);
 }
 
 void CRottenCrab::RenderDebug(float wx, float wy)

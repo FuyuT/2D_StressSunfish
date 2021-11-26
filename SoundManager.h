@@ -1,7 +1,7 @@
 #pragma once
 #include "Mof.h"
 //サウンド列挙
-typedef enum tag_SOUNDTYPE{
+typedef enum tag_SOUNDTYPE {
 	SOUND_TITLE_BGM,
 	SOUND_MENU_BGM,
 	SOUND_COLLECTION_BGM,
@@ -46,9 +46,15 @@ private:
 
 public:
 	bool Load();
-	void Play(SOUNDTYPE sound);
+
 	void SetLoop();	//BGMのみLoopに設定可
+	void Play(SOUNDTYPE sound);
 	void Stop(SOUNDTYPE sound); //todo:音の停止
 	void AllStop();
+
+	//音量は0.0～1.0で変更
+	void SetVolumeBGM(float volume);
+	void SetVolumeSE(float volume);
+
 	void Release();
-	};
+};

@@ -31,9 +31,18 @@ public:
 	~Stage();
 	bool Load();
 	void Initialize();
-	void Update(CPlayer & pl);
+
+	void Update(CPlayer& pl);
+
+
+	//ScrollSpeed‚Í‘å‚«‚¢‚Ù‚ÇƒXƒNƒ[ƒ‹‚ª’x‚­‚È‚é
+	void Scroll(CTexture tex, int scrollSpeedX, int scrollSpeedY);
+	void WaveRender();
+	void BackGroundRender();
 	void Render();
+
 	void Release();
+
 
 	//’Ç‰Á
 	float GetScrollX()
