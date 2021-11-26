@@ -13,8 +13,11 @@ private:
 	const int			textPosY = 250;
 	const int			buttonPosX = 660;
 	const int			buttonContinuePosY = 425;
+	float				buttonContinueScale = 1.0f;
 	const int			buttonMenuPosY = 575;
+	float				buttonMenuScale = 1.0f;
 	const int			buttonTitlePosY = 725;
+	float				buttonTitleScale = 1.0f;
 
 public:
 	CContinueWindow();

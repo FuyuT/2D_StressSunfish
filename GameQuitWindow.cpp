@@ -22,21 +22,37 @@ void CGameQuitWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) && !endFlg)
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY) && !endFlg)
 	{
-		PostQuitMessage(0);
+		buttonYesScale = scaleController.ScaleControll(buttonYesScale,scaleMax,scaleMini,scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			PostQuitMessage(0);
+		}
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) && !endFlg)
+	else
 	{
-		Release();
-		endFlg = true;
+		buttonYesScale = scaleMini;
+	}
+	if (GetRect(1).CollisionPoint(mousePosX, mousePosY) && !endFlg)
+	{
+		buttonNoScale = scaleController.ScaleControll(buttonNoScale, scaleMax, scaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			endFlg = true;
+		}
+	}
+	else
+	{
+		buttonNoScale = scaleMini;
 	}
 }
 void CGameQuitWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	buttonYesTexture.Render(buttonYesPosX,buttonYesPosY);
-	buttonNoTexture.Render(buttonNoPosX, buttonNoPosY);
+	scaleController.ScaleRender(&buttonYesTexture, buttonYesPosX, buttonPosY, buttonYesScale);
+	scaleController.ScaleRender(&buttonNoTexture, buttonNoPosX, buttonPosY, buttonNoScale);
 	finishTextTexture.Render(finishTextPosX,finishTextPosY);
 }
 void CGameQuitWindow::Release()
@@ -57,7 +73,7 @@ void CGameQuitWindow::Release()
 CRectangle CGameQuitWindow::GetRect(int i)
 {
 	if (i == 0)
-		return CRectangle(buttonYesPosX, buttonYesPosY, buttonYesPosX + buttonYesTexture.GetWidth(), buttonYesPosY + buttonYesTexture.GetHeight());
+		return CRectangle(buttonYesPosX, buttonPosY, buttonYesPosX + buttonYesTexture.GetWidth(), buttonPosY + buttonYesTexture.GetHeight());
 	else if (i == 1)
-		return CRectangle(buttonNoPosX, buttonNoPosY, buttonNoPosX + buttonNoTexture.GetWidth(), buttonNoPosY + buttonNoTexture.GetHeight());
+		return CRectangle(buttonNoPosX, buttonPosY, buttonNoPosX + buttonNoTexture.GetWidth(), buttonPosY + buttonNoTexture.GetHeight());
 }

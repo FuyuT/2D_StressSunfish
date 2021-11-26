@@ -31,36 +31,52 @@ private:
 	//トロフィーテクスチャと表示フラグ宣言
 	CTexture	riverIconTexture;		//川級
 	bool		riverFlg = false;
+	float		riverScale = 1.0f;
 	CTexture	waterFallIconTexture;	//滝級
 	bool		waterFallFlg = false;
+	float		waterFallScale = 1.0f;
 	CTexture	lakeIconTexture;		//湖級
 	bool		lakeFlg = false;
+	float		lakeScale = 1.0f;
 	CTexture	damIconTexture;			//ダム級
 	bool		damFlg = false;
+	float		damScale = 1.0f;
 	CTexture	sewerIconTexture;		//下水道級
 	bool		sewerFlg = false;
+	float		sewerScale = 1.0f;
 	CTexture	indianOceanIconTexture;	//インド洋級
 	bool		indianOceanFlg = false;
+	float		indianOceanScale = 1.0f;
 	CTexture	amazonRiverIconTexture;	//アマゾン川級
 	bool		amazonRiverFlg = false;
+	float		amazonRiverScale = 1.0f;
 	CTexture	oceanIconTexture;		//海級
 	bool		oceanFlg = false;
+	float		oceanScale = 1.0f;
 	CTexture	seaOf​​JapanIconTexture;	//日本海級
 	bool		seaOf​​JapanFlg = false;
+	float		seaOf​​JapanScale = 1.0f;
 	CTexture	aroundTheGlobeIconTexture;	//地球一周級
 	bool		aroundTheGlobeFlg = false;
+	float		aroundTheGlobeScale = 1.0f;
 	CTexture	zeroMotivationIconTexture;	//やる気ゼロ級
 	bool		zeroMotivationFlg = false;
+	float		zeroMotivationScale = 1.0f;
 	CTexture	mountFujiIconTexture;	//富士山級
 	bool		mountFujiFlg = false;
+	float		mountFujiScale = 1.0f;
 	CTexture	osakaMarathonIconTexture;	//大阪マラソン級
 	bool		osakaMarathonFlg = false;
+	float		osakaMarathonScale = 1.0f;
 	CTexture	biwaLakeIconTexture;	//琵琶湖級
 	bool		biwaLakeFlg = false;
+	float		biwaLakeScale = 1.0f;
 	CTexture	jackPodIconTexture;		//ジャックポット級
 	bool		jackPodFlg = false;
+	float		jackPodScale = 1.0f;
 	CTexture	talentedDemonIconTexture;	//才能魔級
 	bool		talentedDemonFlg = false;
+	float		talentedDemonScale = 1.0f;
 
 	//上段のX座標
 	const int			iconFirstRowPosX = 350;
@@ -82,6 +98,7 @@ private:
 	CTexture	rightButtonTexture;
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 875;
+	float				menuButtonScale = 1.0f;
 	const int			rightButtonPosX = 950;
 	const int			leftButtonPosX = 850;
 	const int			leftAndRightButtonPosY = 900;

@@ -1,6 +1,7 @@
 #pragma once
 #include	"Mof.h"
 #include "SceneTrophyCollection.h"
+#include "ScaleController.h"
 
 constexpr int popUpPosX = 200;
 constexpr int popUpPosY = 50;
@@ -20,6 +21,7 @@ enum tag_POPUPNO {
 class CPopUpWindowBase
 {
 protected:
+	ScaleController	scaleController;
 	bool endFlg = false;
 	short	nextPopUp;
 	//ÉÅÉÇèëÇ´éÊÇÍÇƒÇ‹ÇπÇÒÅ@ê\ÇµñÛÇ»Ç¢
@@ -31,7 +33,9 @@ protected:
 	int		numberOfTrophy[3];
 	int		distance;
 
-	float		buttonScale;
+	const float		scaleSpeed = 0.002f;
+	const float		scaleMax = 1.05f;
+	const float		scaleMini = 1.0f;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
