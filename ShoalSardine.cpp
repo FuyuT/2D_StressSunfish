@@ -11,7 +11,7 @@ CShoalSardine::~CShoalSardine()
 
 bool CShoalSardine::Load()
 {
-	if (!Texture.Load("Obstacle\\mure.png"))return false;
+	if (!Texture.Load("Obstacle\\mureanim.png"))return false;
 
 	return true;
 }
@@ -22,6 +22,23 @@ void CShoalSardine::Initialize()
 	pos.y = 1500;
 	moveSpeed.x = 20.0f;
 	warningLineShow = true;
+
+
+	SpriteAnimationCreate anim = {
+		"âjÇÆ",
+		0,0,
+		446,286,
+		TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
+			  {4,0,1},{4,1,1},{4,2,1},{4,3,1},
+			  {4,0,2},{4,1,2},{4,2,2},{4,3,2},
+			  {4,0,3},{4,1,3},{4,2,3},{4,3,3},
+			  {4,0,4},{4,1,4},{4,2,4},{4,3,4},
+			  {4,0,5},{4,1,5},{4,2,5},{4,3,5},
+			  {4,0,6},{4,1,6},{4,2,6},{4,3,6},
+			  {4,0,7},{4,1,7}}
+
+	};
+	motion.Create(anim);
 }
 
 void CShoalSardine::Update(float wx, float wy)
@@ -43,12 +60,14 @@ void CShoalSardine::Update(float wx, float wy)
 	{
 		warningLineShow = false;
 	}
+
+	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
 void CShoalSardine::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.Render(pos.x - wx, pos.y - wy);
+	Texture.RenderScale(pos.x - wx, pos.y - wy,1.0f,motion.GetSrcRect());
 	
 	//åxçêê¸ÇÃï\é¶
 	CRectangle rect = GetRect();
@@ -70,4 +89,5 @@ void CShoalSardine::RenderDebug(float wx, float wy)
 void CShoalSardine::Release()
 {
 	Texture.Release();
+	motion.Release();
 }
