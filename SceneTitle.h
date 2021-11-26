@@ -7,7 +7,7 @@ private:
 	CTexture	titleLogoTex;
 	CTexture	gamePrayButtonTexture;
 	CTexture	gameFinishButtonTexture;
-	const int			glmePrayButtonPosX = 950;
+	const int			gamePrayButtonPosX = 950;
 	const int			gamePlayButtonPosY = 600;
 	float				gamePlayButtonScale = 1.0f;
 	bool				gamePlayButtonFlg;

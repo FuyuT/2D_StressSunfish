@@ -24,7 +24,6 @@ protected:
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
 	CSoundManager cSound;
-	bool			scaleFlg;
 	const float		scaleSpeed = 0.002f;
 	const float		scaleMax = 1.05f;
 	const float		scaleMini = 1.0f;

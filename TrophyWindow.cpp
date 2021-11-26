@@ -104,10 +104,18 @@ void CTrophyWindow::Update()
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
+	if ( GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		endFlg = true;
+		buttonBackScale = scaleController.ScaleControll(buttonBackScale,scaleMax,scaleMini,scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			endFlg = true;
+		}
+	}
+	else
+	{
+		buttonBackScale = scaleMini;
 	}
 }
 void CTrophyWindow::Render()
@@ -195,7 +203,7 @@ void CTrophyWindow::Render()
 		//ê‡ñæï∂ï`âÊ
 	}
 
-	buttonBackTexture.Render(buttonBackPosX, buttonBackPosY);
+	scaleController.ScaleRender(&buttonBackTexture,buttonBackPosX,buttonBackPosY,buttonBackScale);
 }
 void CTrophyWindow::Release()
 {

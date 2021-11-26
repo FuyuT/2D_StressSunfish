@@ -126,11 +126,19 @@ void CSceneTrophyCollection::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
+	if ( ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
 	{
-		endFlg = true;
-		nextScene = SCENENO_GAMEMENU;
-		CSceneTrophyCollection::Release();
+		menuButtonScale = scaleController.ScaleControll(menuButtonScale,scaleMax,scaleMini,scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			endFlg = true;
+			nextScene = SCENENO_GAMEMENU;
+			CSceneTrophyCollection::Release();
+		}
+	}
+	else
+	{
+		menuButtonScale = scaleMini;
 	}
 
 	//ポップアップ処理
@@ -149,41 +157,89 @@ void CSceneTrophyCollection::Update()
 	{
 		if (page == 1)
 		{
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_RIVER).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_RIVER).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:川級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_RIVER);
+				riverScale = scaleController.ScaleControll(riverScale,scaleMax,scaleMini,scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:川級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_RIVER);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_WATERFALL).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:滝級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_WATERFALL);
+				riverScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_LAKE).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_WATERFALL).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:湖級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_LAKE);
+				waterFallScale = scaleController.ScaleControll(waterFallScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:滝級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_WATERFALL);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_DAM).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:ダム級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_DAM);
+				waterFallScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_SEWER).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_LAKE).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:下水道級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_SEWER);
+				lakeScale = scaleController.ScaleControll(lakeScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:湖級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_LAKE);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_INDIANOCEAN).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:インド洋級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_INDIANOCEAN);
+				lakeScale = scaleMini;
+			}
+			if (GetRect(TROPHY_DAM).CollisionPoint(mousePosX, mousePosY))
+			{
+				damScale = scaleController.ScaleControll(damScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:ダム級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_DAM);
+				}
+			}
+			else
+			{
+				damScale = scaleMini;
+			}
+			if (GetRect(TROPHY_SEWER).CollisionPoint(mousePosX, mousePosY))
+			{
+				sewerScale = scaleController.ScaleControll(sewerScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:下水道級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_SEWER);
+				}
+			}
+			else
+			{
+				sewerScale = scaleMini;
+			}
+			if (GetRect(TROPHY_INDIANOCEAN).CollisionPoint(mousePosX, mousePosY))
+			{
+				indianOceanScale = scaleController.ScaleControll(indianOceanScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:インド洋級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_INDIANOCEAN);
+				}
+			}
+			else
+			{
+				indianOceanScale = scaleMini;
 			}
 
 			if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
@@ -193,35 +249,75 @@ void CSceneTrophyCollection::Update()
 		}
 		else if (page == 2)
 		{
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_AMAZONROVER).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_AMAZONROVER).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:アマゾン川級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_AMAZONROVER);
+				amazonRiverScale = scaleController.ScaleControll(amazonRiverScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:アマゾン川級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_AMAZONROVER);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OCEAN).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:海級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_OCEAN);
+				amazonRiverScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_SEAOFJAPAN).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_OCEAN).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:日本海級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_SEAOFJAPAN);
+				oceanScale = scaleController.ScaleControll(oceanScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:海級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_OCEAN);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_AROUNDTHEGLOBE).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:地球一周級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_AROUNDTHEGLOBE);
+				oceanScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_ZEROMOTIVATION).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_SEAOFJAPAN).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:やる気ゼロ級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_ZEROMOTIVATION);
+				seaOf​​JapanScale = scaleController.ScaleControll(seaOf​​JapanScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:日本海級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_SEAOFJAPAN);
+				}
+			}
+			else
+			{
+				seaOf​​JapanScale = scaleMini;
+			}
+			if (GetRect(TROPHY_AROUNDTHEGLOBE).CollisionPoint(mousePosX, mousePosY))
+			{
+				aroundTheGlobeScale = scaleController.ScaleControll(aroundTheGlobeScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:地球一周級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_AROUNDTHEGLOBE);
+				}
+			}
+			else
+			{
+				aroundTheGlobeScale = scaleMini;
+			}
+			if (GetRect(TROPHY_ZEROMOTIVATION).CollisionPoint(mousePosX, mousePosY))
+			{
+				zeroMotivationScale = scaleController.ScaleControll(zeroMotivationScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:やる気ゼロ級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_ZEROMOTIVATION);
+				}
+			}
+			else
+			{
+				zeroMotivationScale = scaleMini;
 			}
 
 			if (g_pInput->IsKeyPush(MOFKEY_LEFT) || (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
@@ -235,35 +331,71 @@ void CSceneTrophyCollection::Update()
 		}
 		else if (page == 3)
 		{
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:富士山級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_MOUNTFJI);
+				mountFujiScale = scaleController.ScaleControll(mountFujiScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:富士山級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_MOUNTFJI);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:大阪マラソンの画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_OSAKAMARATHON);
+				mountFujiScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:琵琶湖級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_BIWALAKE);
+				osakaMarathonScale = scaleController.ScaleControll(osakaMarathonScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:大阪マラソンの画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_OSAKAMARATHON);
+				}
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY))
+			else
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:ジャックポット級の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_JACKPOD);
+				osakaMarathonScale = scaleMini;
 			}
-			else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY))
+			if (GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY))
 			{
-				popUpFlg = true;
-				//ポップアップにトロフィー:才能魔の画像を表示させる
-				nowPopUpTrophy->SetButtonResult(TROPHY_TALENTEDDEMON);
+				biwaLakeScale = scaleController.ScaleControll(biwaLakeScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:琵琶湖級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_BIWALAKE);
+				}
+			}
+			if (GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY))
+			{
+				jackPodScale = scaleController.ScaleControll(jackPodScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:ジャックポット級の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_JACKPOD);
+				}
+			}
+			else
+			{
+				jackPodScale = scaleMini;
+			}
+			if (GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY))
+			{
+				talentedDemonScale = scaleController.ScaleControll(talentedDemonScale, scaleMax, scaleMini, scaleSpeed);
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+				{
+					popUpFlg = true;
+					//ポップアップにトロフィー:才能魔の画像を表示させる
+					nowPopUpTrophy->SetButtonResult(TROPHY_TALENTEDDEMON);
+				}
+			}
+			else
+			{
+				talentedDemonScale = scaleMini;
 			}
 
 			if (g_pInput->IsKeyPush(MOFKEY_LEFT) || (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
@@ -281,53 +413,52 @@ void CSceneTrophyCollection::Update()
 void CSceneTrophyCollection::Render()
 {
 	backGroundTex.Render(0, 0);
-	CGraphicsUtilities::RenderString(100, 300, "トロフィー画面");
 	if (page == 1)
 	{
 		//1ページ目
-		riverIconTexture.Render(iconFirstRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&riverIconTexture, iconFirstRowPosX, iconOneLinePosY,riverScale);
 		CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + riverIconTexture.GetHeight() +10, "川級");
-		waterFallIconTexture.Render(iconSecondRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&waterFallIconTexture, iconSecondRowPosX, iconOneLinePosY, waterFallScale);
 		CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + waterFallIconTexture.GetHeight() + 10, "滝級");
-		lakeIconTexture.Render(iconThirdRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&lakeIconTexture, iconThirdRowPosX, iconOneLinePosY, lakeScale);
 		CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + lakeIconTexture.GetHeight() + 10, "湖級");
-		damIconTexture.Render(iconFirstRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&damIconTexture, iconFirstRowPosX, iconTwoLinePosY, damScale);
 		CGraphicsUtilities::RenderString(iconFirstRowPosX, iconTwoLinePosY + damIconTexture.GetHeight() + 10 , "ダム級");
-		sewerIconTexture.Render(iconSecondRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&sewerIconTexture, iconSecondRowPosX, iconTwoLinePosY, sewerScale);
 		CGraphicsUtilities::RenderString(iconSecondRowPosX, iconTwoLinePosY + sewerIconTexture.GetHeight() + 10, "下水道級");
-		indianOceanIconTexture.Render(iconThirdRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&indianOceanIconTexture, iconThirdRowPosX, iconTwoLinePosY, indianOceanScale);
 		CGraphicsUtilities::RenderString(iconThirdRowPosX, iconTwoLinePosY + indianOceanIconTexture.GetHeight() + 10, "インド洋級");
 	}
 	if (page == 2)
 	{
 		//2ページ目
-		amazonRiverIconTexture.Render(iconFirstRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX, iconOneLinePosY, amazonRiverScale);
 		CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + amazonRiverIconTexture.GetHeight() + 10, "アマゾン川級");
-		oceanIconTexture.Render(iconSecondRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&oceanIconTexture, iconSecondRowPosX, iconOneLinePosY, oceanScale);
 		CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + oceanIconTexture.GetHeight() + 10, "海級");
-		seaOf​​JapanIconTexture.Render(iconThirdRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&seaOf​​JapanIconTexture, iconThirdRowPosX, iconOneLinePosY, seaOf​​JapanScale);
 		CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + seaOf​​JapanIconTexture.GetHeight() + 10, "日本海級");
-		aroundTheGlobeIconTexture.Render(icon2PageFirstRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&aroundTheGlobeIconTexture, icon2PageFirstRowPosX, iconTwoLinePosY, aroundTheGlobeScale);
 		CGraphicsUtilities::RenderString(icon2PageFirstRowPosX, iconTwoLinePosY + aroundTheGlobeIconTexture.GetHeight() + 10, "地球一周級");
-		zeroMotivationIconTexture.Render(icon2pageSecondRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&zeroMotivationIconTexture, icon2pageSecondRowPosX, iconTwoLinePosY, zeroMotivationScale);
 		CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + zeroMotivationIconTexture.GetHeight() + 10, "やる気ゼロ級");
 	}
 	if (page == 3)
 	{
 		//3ページ目
-		mountFujiIconTexture.Render(iconFirstRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX, iconOneLinePosY, mountFujiScale);
 		CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + mountFujiIconTexture.GetHeight() + 10, "富士山級");
-		osakaMarathonIconTexture.Render(iconSecondRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&osakaMarathonIconTexture, iconSecondRowPosX, iconOneLinePosY, osakaMarathonScale);
 		CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + osakaMarathonIconTexture.GetHeight() + 10, "大阪マラソン級");
-		biwaLakeIconTexture.Render(iconThirdRowPosX, iconOneLinePosY);
+		scaleController.ScaleRender(&biwaLakeIconTexture, iconThirdRowPosX, iconOneLinePosY, biwaLakeScale);
 		CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + biwaLakeIconTexture.GetHeight() + 10, "琵琶湖級");
-		jackPodIconTexture.Render(icon2PageFirstRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&jackPodIconTexture, icon2PageFirstRowPosX, iconTwoLinePosY, jackPodScale);
 		CGraphicsUtilities::RenderString(icon2PageFirstRowPosX, iconTwoLinePosY + jackPodIconTexture.GetHeight() + 10, "ジャックポット級");
-		talentedDemonIconTexture.Render(icon2pageSecondRowPosX, iconTwoLinePosY);
+		scaleController.ScaleRender(&talentedDemonIconTexture, icon2pageSecondRowPosX, iconTwoLinePosY, talentedDemonScale);
 		CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + talentedDemonIconTexture.GetHeight() + 10, "才能魔級");
 	}
 
-	menuButtonTexture.Render(menuButtonPosX, menuButtonPosY);
+	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
 	CGraphicsUtilities::RenderString(900, 900, "%d/3", page);
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);

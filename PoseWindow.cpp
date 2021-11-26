@@ -11,7 +11,6 @@ CPoseWindow::~CPoseWindow()
 
 void CPoseWindow::Initialize()
 {
-	buttonScale = 0.9f;
 	popUpTexture.Load("Pop_upラフ2.png");
 	textTexture.Load("PopUpPose.png");
 	buttonConfigTexture.Load("ButtonConfig.png");
@@ -20,53 +19,94 @@ void CPoseWindow::Initialize()
 	buttonReturnGameTexture.Load("ButtonReturnGame.png");
 
 	endFlg = false;
+	buttonFlg = false;
 }
 void CPoseWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
 	{
-		//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
-		//Release();
-		//設定の処理
-		//endFlg = true;
-		//nextPopUp = NULL;
-		//設定画面への遷移
-		buttonResult = 4;
+		buttonFlg = true;
+		buttonConfigScale = scaleController.ScaleControll(buttonConfigScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
+			//Release();
+			//設定の処理
+			//endFlg = true;
+			//nextPopUp = NULL;
+			//設定画面への遷移
+			buttonResult = 4;
+		}
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	else
 	{
-		//リトライボタンが押されたときの処理
-		Release();
-		endFlg = true;
-		nextPopUp = POPUPNO_RETRY;
+		buttonFlg = false;
+		buttonConfigScale = buttonScaleMini;
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(1).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
 	{
-		//タイトル画面ボタンが押された際の処理
-		Release();
-		endFlg = true;
-		nextPopUp = NULL;
-		nextPopUp = POPUPNO_BACKTOTITLE;
+		buttonFlg = true;
+		buttonRetryScale = scaleController.ScaleControll(buttonRetryScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			//リトライボタンが押されたときの処理
+			Release();
+			endFlg = true;
+			nextPopUp = POPUPNO_RETRY;
+		}
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY))
+	else
 	{
-		//ゲームに戻るボタンが押された際の処理
-		Release();
-		endFlg = true;
-		nextPopUp = NULL;
-		buttonResult = 5;
+		buttonFlg = false;
+		buttonRetryScale = buttonScaleMini;
+	}
+	if (GetRect(2).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
+	{
+		buttonFlg = true;
+		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			//タイトル画面ボタンが押された際の処理
+			Release();
+			endFlg = true;
+			nextPopUp = NULL;
+			nextPopUp = POPUPNO_BACKTOTITLE;
+		}
+	}
+	else
+	{
+		buttonFlg = false;
+		buttonTitleScale = buttonScaleMini;
+	}
+	if (GetRect(3).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
+	{
+		buttonFlg = true;
+		buttonReturnGameScale = scaleController.ScaleControll(buttonReturnGameScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			//ゲームに戻るボタンが押された際の処理
+			Release();
+			endFlg = true;
+			nextPopUp = NULL;
+			buttonResult = 5;
+		}
+	}
+	else
+	{
+		buttonFlg = false;
+		buttonReturnGameScale = buttonScaleMini;
 	}
 }
 void CPoseWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	textTexture.Render(textPosX,textPosY);
-	buttonConfigTexture.RenderScale(buttonPosX, buttonConfigPosY,buttonScale);
-	buttonRetryTexture.RenderScale(buttonPosX, buttonRetryPosY,buttonScale);
-	buttonTitleTexture.RenderScale(buttonPosX, buttonTitlePosY,buttonScale);
-	buttonReturnGameTexture.RenderScale(buttonPosX, buttonReturnGamePosY,buttonScale);
+	scaleController.ScaleRender(&buttonConfigTexture,buttonPosX,buttonConfigPosY,buttonConfigScale);
+	scaleController.ScaleRender(&buttonRetryTexture,buttonPosX,buttonRetryPosY,buttonRetryScale);
+	scaleController.ScaleRender(&buttonTitleTexture,buttonPosX,buttonTitlePosY,buttonTitleScale);
+	scaleController.ScaleRender(&buttonReturnGameTexture,buttonPosX,buttonReturnGamePosY,buttonReturnGameScale);
 }
 void CPoseWindow::Release()
 {

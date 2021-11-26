@@ -10,6 +10,7 @@ private:
 
 	const int			buttonBackPosX = 150;
 	const int			buttonBackPosY = 100;
+	float				buttonBackScale = 1.0f;
 	const int			trophyTexturePosX = 815;
 	const int			trophyTexturePosY = 350;
 public:
