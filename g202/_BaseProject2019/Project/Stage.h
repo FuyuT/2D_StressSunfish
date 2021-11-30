@@ -39,6 +39,7 @@ public:
 	void Scroll(CTexture tex, int scrollSpeedX, int scrollSpeedY);
 	void WaveRender();
 	void BackGroundRender();
+	void ForGroundRender();
 	void Render();
 
 	void Release();

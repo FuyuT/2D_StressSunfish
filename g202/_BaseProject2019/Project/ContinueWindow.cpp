@@ -23,43 +23,67 @@ void CContinueWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		//コンティニューボタンが押された際の処理
-		endFlg = true;
-		//ゲーム画面をInitialise
-		buttonResult = 1;
-		nextPopUp = NULL;
+		buttonContinueScale = scaleController.ScaleControll(buttonContinueScale,scaleMax,scaleMini,scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			//コンティニューボタンが押された際の処理
+			endFlg = true;
+			//ゲーム画面をInitialise
+			buttonResult = 1;
+			nextPopUp = NULL;
+		}
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	else
 	{
-		Release();
-		//メニュー画面ボタンが押されたときの処理
-		endFlg = true;
-		//メニュー画面へ遷移
-		buttonResult = 2;
-
-		nextPopUp = NULL;
+		buttonContinueScale = scaleMini;
 	}
-	else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		//タイトル画面ボタンが押された際の処理
-		endFlg = true;
-		//タイトル画面へ遷移
-		buttonResult = 3;
+		buttonMenuScale = scaleController.ScaleControll(buttonMenuScale, scaleMax, scaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			//メニュー画面ボタンが押されたときの処理
+			endFlg = true;
+			//メニュー画面へ遷移
+			buttonResult = 2;
 
-		nextPopUp = NULL;
+			nextPopUp = NULL;
+		}
+	}
+	else
+	{
+		buttonMenuScale = scaleMini;
+	}
+	if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	{
+		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, scaleMax, scaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			//タイトル画面ボタンが押された際の処理
+			endFlg = true;
+			//タイトル画面へ遷移
+			buttonResult = 3;
+
+			nextPopUp = NULL;
+		}
+	}
+	else
+	{
+		buttonTitleScale = scaleMini;
 	}
 }
 void CContinueWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	textTexture.Render(textPosX,textPosY);
-	buttonContinueTexture.Render(buttonPosX, buttonContinuePosY);
-	buttonMenuTexture.Render(buttonPosX, buttonMenuPosY);
-	buttonTitleTexture.Render(buttonPosX, buttonTitlePosY);
+	scaleController.ScaleRender(&buttonContinueTexture,buttonPosX,buttonContinuePosY,buttonContinueScale);
+	scaleController.ScaleRender(&buttonMenuTexture,buttonPosX,buttonMenuPosY,buttonMenuScale);
+	scaleController.ScaleRender(&buttonTitleTexture,buttonPosX,buttonTitlePosY,buttonTitleScale);
 }
 void CContinueWindow::Release()
 {

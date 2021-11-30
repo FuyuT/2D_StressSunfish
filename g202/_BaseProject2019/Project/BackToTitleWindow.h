@@ -12,9 +12,10 @@ private:
 	const int			textPosX = 510;
 	const int			textPosY = 325;
 	const int			buttonYesPosX = 500;
-	const int			buttonYesPosY = 600;
+	float				buttonYesScale = 1.0;
 	const int			buttonNoPosX = 1025;
-	const int			buttonNoPosY = 600;
+	float				buttonNoScale = 1.0f;
+	const int			buttonPosY = 600;
 public:
 	CBackToTitleWindow();
 	~CBackToTitleWindow();

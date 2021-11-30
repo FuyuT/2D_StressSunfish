@@ -35,7 +35,7 @@ void CSceneConfig::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	//SceneGameMenu
 	//if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
-	if (GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
 	{
 		buttonScale = scaleController.ScaleControll(buttonScale,scaleMax,scaleMini,scaleSpeed);
 		//SceneGameMenu

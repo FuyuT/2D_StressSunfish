@@ -24,10 +24,9 @@ void CSceneGameMenu::Initialize()
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
 	configButtonTexture.Load("ButtonConfig.png");
 	stressButtonTexture.Load("ButtonStressCollection.png");
-	torophyButtonTexture.Load("ButtonTrophy.png");
+	trophyButtonTexture.Load("ButtonTrophy.png");
 	tutorialButtonTexture.Load("ButtonTutorial.png");
 	titleButtonTexture.Load("ButtonTitle.png");	
-	scaleFlg = true;
 
 	PlayBGM();
 }
@@ -39,15 +38,7 @@ void CSceneGameMenu::Update()
 
 	if (GetRect(0).CollisionPoint(mousePosX,mousePosY))
 	{
-		if (gamePlayButtonScale <= 1.05f && scaleFlg)
-			gamePlayButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (gamePlayButtonScale >= 1.0 && !scaleFlg)
-			gamePlayButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
+		gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
@@ -63,17 +54,8 @@ void CSceneGameMenu::Update()
 	}
 	if (GetRect(1).CollisionPoint(mousePosX,mousePosY))
 	{
-		if (configButtonScale <= 1.05f && scaleFlg)
-			configButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (configButtonScale >= 1.0 && !scaleFlg)
-			configButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
-
-
+		configButtonScale = scaleController.ScaleControll(configButtonScale, scaleMax, scaleMini, scaleSpeed);
+		
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//設定画面
@@ -88,15 +70,8 @@ void CSceneGameMenu::Update()
 	}
 	if (GetRect(2).CollisionPoint(mousePosX,mousePosY))
 	{
-		if (stressButtonScale <= 1.05f && scaleFlg)
-			stressButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (stressButtonScale >= 1.0 && !scaleFlg)
-			stressButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
+		stressButtonScale = scaleController.ScaleControll(stressButtonScale, scaleMax, scaleMini, scaleSpeed);
+			
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//ストレス集画面
@@ -111,16 +86,8 @@ void CSceneGameMenu::Update()
 	}
 	if (GetRect(3).CollisionPoint(mousePosX,mousePosY))
 	{
-		if (trophyButtonScale <= 1.05f && scaleFlg)
-			trophyButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (trophyButtonScale >= 1.0 && !scaleFlg)
-			trophyButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
-
+		trophyButtonScale = scaleController.ScaleControll(trophyButtonScale, scaleMax, scaleMini, scaleSpeed);
+		
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//トロフィー集
@@ -135,16 +102,8 @@ void CSceneGameMenu::Update()
 	}
 	if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
 	{
-		if (tutorialButtonScale <= 1.05f && scaleFlg)
-			tutorialButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (tutorialButtonScale >= 1.0 && !scaleFlg)
-			tutorialButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
-
+		tutorialButtonScale = scaleController.ScaleControll(tutorialButtonScale, scaleMax, scaleMini, scaleSpeed);
+			
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//チュートリアルモード
@@ -160,15 +119,8 @@ void CSceneGameMenu::Update()
 	}
 	if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
 	{
-		if (titleButtonScale <= 1.05f && scaleFlg)
-			titleButtonScale += scaleSpeed;
-		else
-			scaleFlg = false;
-
-		if (titleButtonScale >= 1.0 && !scaleFlg)
-			titleButtonScale -= scaleSpeed;
-		else
-			scaleFlg = true;
+		titleButtonScale = scaleController.ScaleControll(titleButtonScale, scaleMax, scaleMini, scaleSpeed);
+		
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 		{
 			//タイトル画面
@@ -190,12 +142,12 @@ void CSceneGameMenu::SoundUpdate()
 void CSceneGameMenu::Render()
 {
 	backGroundTex.Render(0,0);
-	gamePlayButtonTexture.RenderScale(buttonPosX + gamePlayButtonTexture.GetWidth()/2, gamePlayButtonPosY + gamePlayButtonTexture.GetHeight()/2,gamePlayButtonScale, TEXALIGN_CENTERCENTER);
-	configButtonTexture.RenderScale(buttonPosX + configButtonTexture.GetWidth() / 2, configButtonPosY + configButtonTexture.GetHeight() / 2, configButtonScale, TEXALIGN_CENTERCENTER);
-	stressButtonTexture.RenderScale(buttonPosX + stressButtonTexture.GetWidth() / 2, stressButtonPosY + stressButtonTexture.GetHeight() / 2, stressButtonScale, TEXALIGN_CENTERCENTER);
-	torophyButtonTexture.RenderScale(buttonPosX + torophyButtonTexture.GetWidth() / 2, torophyButtonPosY + torophyButtonTexture.GetHeight() / 2, trophyButtonScale, TEXALIGN_CENTERCENTER);
-	tutorialButtonTexture.RenderScale(buttonPosX + tutorialButtonTexture.GetWidth() / 2, tutorialButtonPosY + tutorialButtonTexture.GetHeight() / 2, tutorialButtonScale, TEXALIGN_CENTERCENTER);
-	titleButtonTexture.RenderScale(titleButtonPosX + titleButtonTexture.GetWidth() / 2, titleButtonPosY + titleButtonTexture.GetHeight() / 2, titleButtonScale, TEXALIGN_CENTERCENTER);
+	scaleController.ScaleRender(&gamePlayButtonTexture,buttonPosX,gamePlayButtonPosY,gamePlayButtonScale);
+	scaleController.ScaleRender(&configButtonTexture,buttonPosX,configButtonPosY,configButtonScale);
+	scaleController.ScaleRender(&stressButtonTexture,buttonPosX,stressButtonPosY,stressButtonScale);
+	scaleController.ScaleRender(&trophyButtonTexture,buttonPosX,trophyButtonPosY,trophyButtonScale);
+	scaleController.ScaleRender(&tutorialButtonTexture,buttonPosX,tutorialButtonPosY,tutorialButtonScale);
+	scaleController.ScaleRender(&titleButtonTexture,titleButtonPosX,titleButtonPosY,titleButtonScale);
 	textTexture.Render(textPosX, textPosY);
 }
 void CSceneGameMenu::Release()
@@ -204,7 +156,7 @@ void CSceneGameMenu::Release()
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();
-	torophyButtonTexture.Release();
+	trophyButtonTexture.Release();
 	tutorialButtonTexture.Release();
 	titleButtonTexture.Release();
 	textTexture.Release();
@@ -231,7 +183,7 @@ CRectangle CSceneGameMenu::GetRect(int i)
 	else if (i == 2)
 		return CRectangle(buttonPosX, stressButtonPosY, buttonPosX + stressButtonTexture.GetWidth(), stressButtonPosY + stressButtonTexture.GetHeight());
 	else if (i == 3)
-		return CRectangle(buttonPosX, torophyButtonPosY,buttonPosX + torophyButtonTexture.GetWidth(), torophyButtonPosY + torophyButtonTexture.GetHeight());
+		return CRectangle(buttonPosX, trophyButtonPosY,buttonPosX + trophyButtonTexture.GetWidth(), trophyButtonPosY + trophyButtonTexture.GetHeight());
 	else if (i == 4)
 		return CRectangle(buttonPosX, tutorialButtonPosY,buttonPosX + tutorialButtonTexture.GetWidth(), tutorialButtonPosY + tutorialButtonTexture.GetHeight());
 	else if (i == 5)

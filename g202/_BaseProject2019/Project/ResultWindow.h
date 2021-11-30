@@ -17,6 +17,7 @@ private:
 
 	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
+	float				buttonNextScale = 1.0f;
 	const int			trophyTexturePosX = 1400;
 	const int			trophyTexturePosY = 220;
 	const int			resultTextPosX = 800;

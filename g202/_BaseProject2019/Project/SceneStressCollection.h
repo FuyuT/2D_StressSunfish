@@ -6,28 +6,39 @@ class CSceneStressCollection : public CSceneBase
 {
 private:
 	//死因用アイコンテクスチャと表示フラグ宣言
-	CTexture	increasedBodyTemperatureIconTexture;	//体温上昇
-	bool		increasedBodyTemperatureFlg = false;
-	CTexture	lowerBodyTemperatureIconTexture;		//体温低下
+	CTexture	hyperthermiaTexture;	//体温上昇
+	bool		hyperthermiaFlg = false;
+	float		hyperthermiaScale = 1.0f;
+	CTexture	lowerBodyTemperatureTexture;		//体温低下
 	bool		lowerBodyTemperatureFlg = false;
-	CTexture	starvationIconTexture;					//餓死
+	float		lowerBodyTemperatureScale = 1.0f;
+	CTexture	starvationTexture;					//餓死
 	bool		starvationFlg = false;
-	CTexture	cloggedThroatIconTexture;				//餌が喉に刺さる
+	float		starvationScale = 1.0f;
+	CTexture	cloggedThroatexture;				//餌が喉に刺さる
 	bool		cloggedThroatFlg = false;
-	CTexture	obesityIconTexture;						//肥満
+	float		cloggedThroatScale = 1.0f;
+	CTexture	obesityTexture;						//肥満
 	bool		obesityFlg = false;
-	CTexture	impactIconTexture;						//障害物と衝突
+	float		obesityScale = 1.0f;
+	CTexture	impactTexture;						//障害物と衝突
 	bool		impactFlg = false;
+	float		impactScale = 1.0f;
 	CTexture	parasiteIconTexture;					//寄生虫
 	bool		parasiteFlg = false;
-	CTexture	jumpIconTexture;						//ジャンプ
+	float		parasiteScale = 1.0f;
+	CTexture	jumpTexture;						//ジャンプ
 	bool		jumpFlg = false;
-	CTexture	bubbleIconTexture;						//泡
+	float		jumpScale = 1.0f;
+	CTexture	bubbleTexture;						//泡
 	bool		bubbleFlg = false;
-	CTexture	turtleIconTexture;						//ウミガメ
+	float		bubbleScale = 1.0f;
+	CTexture	turtleTexture;						//ウミガメ
 	bool		turtleFlg = false;
-	CTexture	waterFlowIconTexture;					//水流
+	float		turtleScalse = 1.0;
+	CTexture	waterFlowTexture;					//水流
 	bool		waterFlowFlg = false;
+	float		waterFlowScale = 1.0f;
 
 	//1ページ目、2ページ目上段のX座標
 	const int			iconFirstRowPosX = 350;
@@ -49,6 +60,7 @@ private:
 	CTexture	rightButtonTexture;
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 775;
+	float				menuButtonScale = 1.0f;
 	const int			rightButtonPosX = 950;
 	const int			leftButtonPosX = 850;
 	const int			leftAndRightButtonPosY = 800;

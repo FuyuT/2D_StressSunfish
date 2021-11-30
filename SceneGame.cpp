@@ -28,7 +28,8 @@ CSceneGame::CSceneGame():
 deadFlag(false),
 posX(0.0f),
 posY(0.0f),
-poseFlg(false)
+poseFlg(false),
+startFlg(false)
 {
 }
 
@@ -75,6 +76,7 @@ void CSceneGame::Initialize()
 
 	configFlg = false;
 	poseFlg = false;
+	startFlg = false;
 
 	trophy.LoadTrophyFlg();
 	caseOfDeth.LoadStressFlg();
@@ -140,25 +142,26 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
+	ui.Update();
+	if (!startFlg)return;
+
 	//イベント
 	EventUpdate();	
 
+	//プレイヤー
+	pl.Update(false, 3);
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(cObstacle,i,false,2);
 	}
 
-	//プレイヤー
-	pl.Update(false, 3);
 	//障害物
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
 
-	ui.Update();
 }
 
 void CSceneGame::Render()
 {
-
 	stg.Render();
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
@@ -167,11 +170,15 @@ void CSceneGame::Render()
 
 	//UIの描画
 	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false);
-
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+	if (ui.StartSign())startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
+	
+	//最前面の岩背景
+	stg.ForGroundRender();
+
 	//ポップアップ描画
 	if (popUpFlg)
 	{

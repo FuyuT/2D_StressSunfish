@@ -111,11 +111,6 @@ void CPlayer::Initialize()
 	taskCompleteStep = 0;
 	moveUpTaskTimer.SetTotalTime(3);
 	moveDownTaskTimer.SetTotalTime(3);
-	moveUpTaskFlg = false;
-	moveDownTaskFlg = false;
-	eatTaskFlg = false;
-	jumpTaskFlg = false;
-	taskCompleteStep = 0;
 
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
@@ -245,9 +240,6 @@ void CPlayer::UpdateMove()
 	//上に移動
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
-		//チュートリアルタスク
-		moveUpTaskFlg = true;
-
 		moveY -= PLAYER_SPEED;
 		if (moveY < -PLAYER_MAXSPEED)
 		{
@@ -257,9 +249,6 @@ void CPlayer::UpdateMove()
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
-		//チュートリアルタスク
-		moveDownTaskFlg = true;
-
 		moveY += PLAYER_SPEED;
 		if (moveY > PLAYER_MAXSPEED)
 		{

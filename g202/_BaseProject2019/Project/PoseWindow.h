@@ -14,9 +14,19 @@ private:
 	const int			textPosY = 215;
 	const int			buttonPosX = 680;
 	const int			buttonConfigPosY = 350;
+	float				buttonConfigScale = 0.9f;
 	const int			buttonRetryPosY = 485;
+	float				buttonRetryScale = 0.9f;
 	const int			buttonTitlePosY = 620;
+	float				buttonTitleScale = 0.9f;
 	const int			buttonReturnGamePosY = 755;
+	float				buttonReturnGameScale = 0.9f;
+
+	const float			buttonScaleMini = 0.9f;
+	const float			buttonScaleMax = 0.95f;
+
+	//ƒ{ƒ^ƒ“‚Ì”»’è‚ª”í‚é‚Ì–hŽ~—p
+	bool				buttonFlg;
 
 public:
 	CPoseWindow();

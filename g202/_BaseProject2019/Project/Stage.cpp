@@ -42,14 +42,7 @@ bool Stage::Load() {
 	return true;
 }
 
-void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
-	//	scroll = 0;
-
-	/*
-	enemyNo = 0;
-	enemyStart = pSt;
-	enemyCount = cnt;
-	*/
+void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {	
 	WavePos.x = 0; WavePos.y = 0;
 	WaveSpeed = 0;
 	turnFlg = false;
@@ -189,9 +182,13 @@ void Stage::BackGroundRender() {
 	Scroll(BackGroundTex3, 1, 1);
 	Scroll(BackGroundTex4, 4, 1);
 	Scroll(BackGroundTex5, 3, 1);
-	Scroll(BackGroundTex6, 2, 1);
 
 
+}
+
+void Stage::ForGroundRender()
+{
+	Scroll(BackGroundTex6, 1, 1);
 }
 
 void Stage::Render() {

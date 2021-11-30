@@ -67,7 +67,7 @@ void CPlayer::Initialize()
 	random.SetSeed(time(NULL));
 	//座標
 	posX = STARTPOS_X;
-	posY = g_pGraphics->GetTargetHeight() * 0.5 - standTexture.GetHeight() * 0.5;
+	posY = STARTPOS_Y;
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
 	tempRegion = 50;
@@ -106,11 +106,11 @@ void CPlayer::Initialize()
 	parasiteTimer.SetTotalTime(15);
 
 	//チュートリアル
-	moveUpTaskCnt = 0;
-	moveDownTaskCnt = 0;
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
 	taskCompleteStep = 0;
+	moveUpTaskTimer.SetTotalTime(3);
+	moveDownTaskTimer.SetTotalTime(3);
 
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
@@ -220,15 +220,21 @@ void CPlayer::UpdateMove()
 	}
 
 	//チュートリアル用入力検知
-	//[W][S]をそれぞれ一回押すだけでタスクが終わってしまうとあっけなかったため、
-	//それぞれ三回ずつ押さないといけないようにする
 	if (g_pInput->IsKeyPush(MOFKEY_W))
 	{
-		moveUpTaskCnt++;
+		moveUpTaskTimer.StartTimer();
+	}
+	else if (g_pInput->IsKeyPull(MOFKEY_W))
+	{
+		moveUpTaskTimer.StopTimer();
 	}
 	if (g_pInput->IsKeyPush(MOFKEY_S))
 	{
-		moveDownTaskCnt++;
+		moveDownTaskTimer.StartTimer();
+	}
+	else if (g_pInput->IsKeyPull(MOFKEY_S))
+	{
+		moveDownTaskTimer.StopTimer();
 	}
 
 	//上に移動
@@ -505,7 +511,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 	/*********
 	 * 寄生虫
 	 *********/
-	if (tutorialStep >= 1)
+	if (!jumpFlg && tutorialStep >= 1)
 	{
 		if (parasite < PARASITE_LIMIT)
 		{
@@ -541,8 +547,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 		{
 			if (causeOfDeath == CAUSE_None)
 			{
-				//空腹度が増加する
-				if (hungerRegion >= STARVATION)
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
 					if (causeOfDeath == CAUSE_None && !unDeadFlg)
 					{
@@ -633,6 +638,9 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 	brakeTimer.Update();
 	if (!jumpFlg) jumpDangerTimer.Update();
 	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
+
+	moveUpTaskTimer.Update();
+	moveDownTaskTimer.Update();
 
 	//チュートリアル
 	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 0)
@@ -846,22 +854,19 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int
 	else if (prec.CollisionRect(cObstacle.GetRect(WaterFlow, num)) &&
 		cObstacle.GetShow(WaterFlow, num) && !hitFlg)
 	{
-		if (causeOfDeath == CAUSE_None && !unDeadFlg)
+		if (causeOfDeath == CAUSE_None && !waterFlowFlg && !unDeadFlg)
 		{
-			if (!waterFlowFlg)
-			{
-				//水流に当たったことを確認
-				waterFlowFlg = true;
-				//持続時間の設定
-				waterFlowTimer.SetTotalTime(4);
-				hitFlg = true;
-				hitTimer.SetTotalTime(2);
-			}
-			else
-			{
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_WaterFlow;
-			}
+			//水流に当たったことを確認
+			waterFlowFlg = true;
+			//持続時間の設定
+			waterFlowTimer.SetTotalTime(4);
+			hitFlg = true;
+			hitTimer.SetTotalTime(2);
+		}
+		else
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_WaterFlow;
 		}
 		
 	}

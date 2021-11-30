@@ -29,6 +29,7 @@ public:
 	{
 		return showFlg;
 	}
+	float GetPosX() { return pos.x; }
 	void SetShow(bool flg)
 	{
 		showFlg = flg;

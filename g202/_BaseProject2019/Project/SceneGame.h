@@ -5,6 +5,19 @@
 #include "Ui.h"
 #include "Stage.h"
 
+//イベント
+enum Event
+{
+	Event_None,
+	Event_Summer,
+	Event_Winter,
+	Event_Turtle,
+	Event_ShoalSardine,
+	Event_Garbage,
+
+	Event_Count,
+};
+
 class CSceneGame : public CSceneBase
 {
 private:
@@ -40,6 +53,13 @@ private:
 	bool newGetDeth;
 	//トロフィー用配列
 	int	numberOfTrophy[3];
+	
+	//イベント
+	CRandom eventRandom;
+	int		eventNum;
+	CTimer	eventTimer;
+	//開始フラグ
+	bool startFlg;
 
 public:
 	CSceneGame();
@@ -47,6 +67,7 @@ public:
 	void PlayBGM() override;
 	bool Load()override;
 	void Initialize() override;
+	void EventUpdate();
 	void Update() override;
 	void Render() override;
 	void RenderDebug() override;

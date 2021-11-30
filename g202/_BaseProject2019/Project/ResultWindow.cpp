@@ -156,18 +156,26 @@ void CResultWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		endFlg = true;
-		nextPopUp = POPUPNO_CONTINUE;
+		buttonNextScale = scaleController.ScaleControll(buttonNextScale,scaleMax,scaleMini,scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			endFlg = true;
+			nextPopUp = POPUPNO_CONTINUE;
+		}
+	}
+	else
+	{
+		buttonNextScale = scaleMini;
 	}
 }
 void CResultWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	resultTexture.Render(resultTextPosX, resultTextPosY);
-	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
+	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
 
 	if (numberOfTrophy[0] != TROPHY_NULL)
 	{

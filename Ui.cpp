@@ -187,28 +187,34 @@ void CUi::Update()
 	cautionColdB.Update();
 	radyGoB.Update();
 }
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
 	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
-
-	if (distanceNum < 1000)
+	if (tutorialFlg)
 	{
-		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "━━ m");
 	}
-	else if (distanceNum >= 1000)
+	else
 	{
-		//1.1km,1.2kmのように表記
-		//distance = distanceNum / 100;
-		//int dis = distance;
-		//double trueDis = (double)dis / 10;
+		if (distanceNum < 1000)
+		{
+			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
+		}
+		else if (distanceNum >= 1000)
+		{
+			//1.1km,1.2kmのように表記
+			//distance = distanceNum / 100;
+			//int dis = distance;
+			//double trueDis = (double)dis / 10;
 
-		//1km,2kmのように表記
-		distance = distanceNum / 1000;
-		int dis = distance;
-		double trueDis = (double)dis;
-		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
+			//1km,2kmのように表記
+			distance = distanceNum / 1000;
+			int dis = distance;
+			double trueDis = (double)dis;
+			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
+		}
 	}
 
 
@@ -345,7 +351,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceN
 	int w = g_pGraphics->GetTargetWidth();
 	if (turtle.GetShow())
 	{
-		if (w - w / 4 >= turtle.GetPosx())
+		if (w - w / 4 >= turtle.GetPosX())
 		{
 			cautionB.SetInStart(true);
 		}
@@ -359,6 +365,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceN
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
 	//低温注意UI
 	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
+
 }
 
 void CUi::Release()

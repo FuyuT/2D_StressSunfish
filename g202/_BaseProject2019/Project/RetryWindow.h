@@ -11,9 +11,10 @@ private:
 	const int			textPosX = 590;
 	const int			textPosY = 325;
 	const int			buttonYesPosX = 500;
-	const int			buttonYesPosY = 600;
+	const int			buttonPosY = 600;
+	float				buttonYesScale = 1.0f;
 	const int			buttonNoPosX = 1025;
-	const int			buttonNoPosY = 600;
+	float				buttonNoScale = 1.0f;
 public:
 	CRetryWindow();
 	~CRetryWindow();

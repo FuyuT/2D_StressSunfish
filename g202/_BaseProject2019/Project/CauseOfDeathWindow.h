@@ -13,6 +13,7 @@ private:
 
 	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
+	float				buttonNextScale = 1.0f;
 	const int			causeOfDeathTexturePosX = 725;
 	const int			causeOfDeathTexturePosY = 350;
 	const int			deathTextPosX = 830;

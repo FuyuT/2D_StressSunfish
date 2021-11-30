@@ -54,11 +54,18 @@ void CCheckCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
+	if ( GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		endFlg = true;
-		nextPopUp = POPUPNO_RESULT;
+		buttonBackScale = scaleController.ScaleControll(buttonBackScale,scaleMax,scaleMini,scaleSpeed+0.002);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			endFlg = true;
+		}
+	}
+	else
+	{
+		buttonBackScale = scaleMini;
 	}
 }
 void CCheckCauseOfDeathWindow::Render()
@@ -104,7 +111,7 @@ void CCheckCauseOfDeathWindow::Render()
 	if (buttonResult == CAUSE_WaterFlow)
 		font.RenderString(475, 250, MOF_XRGB(0, 0, 0), "‹}‚É‰Á‘¬‚³‚¹‚ç‚ê‚½ƒXƒgƒŒƒX‚ÅŽ€–S");
 	
-	buttonBackTexture.Render(buttonBackPosX, buttonBackPosY);
+	scaleController.ScaleRender(&buttonBackTexture,buttonBackPosX,buttonBackPosY,buttonBackScale);
 }
 void CCheckCauseOfDeathWindow::Release()
 {

@@ -1,0 +1,12 @@
+sakaki
+sceneConfig Update();
+ボタン処理確認
+
+nakagawa
+trtle.h　の GetPosXが無かった（ヘッダー挙げられてない）ので、
+自分で追加した
+あとで他の追加もないか確認
+
+mori
+sceneGameあがってない(多分）
+スタート表示処理はいってない

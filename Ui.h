@@ -94,7 +94,7 @@ public:
 	void Initialize();
 	void Update();
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	int distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
+	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
 	void Release();
 
 	bool StartSign();

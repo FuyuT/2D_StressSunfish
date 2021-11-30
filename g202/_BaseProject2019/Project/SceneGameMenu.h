@@ -8,7 +8,7 @@ private:
 	CTexture textTexture;
 	CTexture gamePlayButtonTexture;
 	CTexture configButtonTexture;
-	CTexture torophyButtonTexture;
+	CTexture trophyButtonTexture;
 	CTexture stressButtonTexture;
 	CTexture tutorialButtonTexture;
 	CTexture titleButtonTexture;
@@ -18,7 +18,7 @@ private:
 	float	gamePlayButtonScale = 1.0f;
 	const int configButtonPosY= 400;
 	float	configButtonScale = 1.0f;
-	const int torophyButtonPosY= 550;
+	const int trophyButtonPosY= 550;
 	float	trophyButtonScale = 1.0f;
 	const int stressButtonPosY= 700;
 	float	stressButtonScale = 1.0f;

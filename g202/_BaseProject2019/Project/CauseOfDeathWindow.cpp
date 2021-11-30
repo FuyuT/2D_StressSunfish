@@ -70,11 +70,19 @@ void CCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		Release();
-		endFlg = true;
-		nextPopUp = POPUPNO_RESULT;
+		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		{
+			Release();
+			endFlg = true;
+			nextPopUp = POPUPNO_RESULT;
+		}
+	}
+	else
+	{
+		buttonNextScale = scaleMini;
 	}
 }
 void CCauseOfDeathWindow::Render()
@@ -121,7 +129,7 @@ void CCauseOfDeathWindow::Render()
 		newGetTexture.Render(350, 250);
 	}
 	caseOfDethTexture.Render(causeOfDeathTexturePosX,causeOfDeathTexturePosY);
-	buttonNextTexture.Render(buttonNextPosX, buttonNextPosY);
+	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
 	deathTextTexture.Render(deathTextPosX, deathTextPosY);
 }
 void CCauseOfDeathWindow::Release()
