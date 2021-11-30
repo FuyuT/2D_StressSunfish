@@ -7,6 +7,7 @@
 
 //初期位置 X
 #define		STARTPOS_X				200
+#define		STARTPOS_Y				900
 
 //座標を進んだ距離に変換する割合
 #define		TRANSLATE_DISTANCE		10
@@ -57,7 +58,7 @@
 #define		PARASITE_LIMIT			5
 
 //体温が変動する度合い(速さ)
-#define		TEMPERATURE_LEVEL		0.13f
+#define		TEMPERATURE_LEVEL		0.07f
 //標準体温
 #define		STANDARD_TEMPERATURE	10
 //体温限界値(熱中症)
@@ -185,7 +186,7 @@ public:
 	bool Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep);
 	//ジャンプ
 	void Jump(bool unDeadFlg, int tutorialStep);
-	void UpdateStatus(bool unDeadFlg,int tutorialStep);
+	void UpdateStatus(bool unDeadFlg,int tutorialStep, int eventNum);
 
 	//Updateの引数について
 	// 
@@ -197,7 +198,7 @@ public:
 	//0     : 上下移動のみ可能
 	//1     : 上下移動に加え、「ジャンプ」、「食べる」が可能
 	//3以上 : チュートリアルの終了、制限なくプレイ可能
-	void Update(bool unDeadFlg,int tutorialStep);
+	void Update(bool unDeadFlg,int tutorialStep,int eventNum);
 	void Render(float wx,float wy);
 	void RenderDebug(float wx,float wy);
 	void Release();

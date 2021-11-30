@@ -1,14 +1,14 @@
-#include "Ui.h"
+﻿#include "Ui.h"
 
 bool CUi::Load()
 {
-	//�̉��A�C�R���̔w�i
+	//体温アイコンの背景
 	if (!stressMeter.Load("sutoresume--ta-.png"))
 	{
 		return false;
 	}
 
-	//�̉��A�C�R��
+	//体温アイコン
 	if (!tempNormal.Load("nicochyan5.png"))
 	{
 		return false;
@@ -22,7 +22,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//�̉��v
+	//体温計
 	if (!tempMeter.Load("temperatureMeter.png"))
 	{
 		return false;
@@ -32,7 +32,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//�󕠃Q�[�W
+	//空腹ゲージ
 	if (!hungerGauge.Load("stomach2.png"))
 	{
 		return false;
@@ -42,7 +42,7 @@ bool CUi::Load()
 		return false;
 	}
 
-	//�񐶒�
+	//寄生虫
 	if (!parasite1.Load("kiseitilyuu.png"))
 	{
 		return false;
@@ -64,31 +64,83 @@ bool CUi::Load()
 		return false;
 	}
 
-	//�s���\UI
-	//�W�����v
+	//行動可能UI
+	//ジャンプ
 	if (!jumpPoss.Load("UI_Jump.png"))
 	{
 		return false;
 	}
-	//�H��
+	//食事
 	if (!eatPoss.Load("UI_Eat.png"))
 	{
 		return false;
 	}
 
-	//����UI
+	//注意UI
 	if (!cautionUi.Load("UI_Caution.png"))
 	{
 		return false;
 	}
-	//���x����UI
-	//����
+	//温度注意UI
+	//高温
 	if (!cautionHot.Load("UI_CautionTempUp.png"))
 	{
 		return false;
 	}
-	//�ቷ
+	//低温
 	if (!cautionCold.Load("UI_CautionTempDown.png"))
+	{
+		return false;
+	}
+
+	//トロフィー画像
+	if (!riverIconTexture.Load("1_川級.png"))
+	{
+		return false;
+	}
+	if (!waterFallIconTexture.Load("2_滝級.png"))
+	{
+		return false;
+	}
+	if (!lakeIconTexture.Load("3_湖級.png"))
+	{
+		return false;
+	}
+	if (!damIconTexture.Load("4_ダム級.png"))
+	{
+		return false;
+	}
+	if (!sewerIconTexture.Load("5_下水道級.png"))
+	{
+		return false;
+	}
+	if (!indianOceanIconTexture.Load("6_インド洋級.png"))
+	{
+		return false;
+	}
+	if (!amazonRiverIconTexture.Load("7_アマゾン川級.png"))
+	{
+		return false;
+	}
+	if (!oceanIconTexture.Load("8_海級.png"))
+	{
+		return false;
+	}
+	if (!seaOf​​JapanIconTexture.Load("9_日本海級.png"))
+	{
+		return false;
+	}
+	if (!aroundTheGlobeIconTexture.Load("10_地球一周級.png"))
+	{
+		return false;
+	}
+
+	//スタート開始合図
+	if (!rady.Load("Rady.png"))
+	{
+		return false;
+	}
+	if (!go.Load("Go.png"))
 	{
 		return false;
 	}
@@ -98,64 +150,163 @@ bool CUi::Load()
 
 void CUi::Initialize()
 {
-	font.Create(48, "MS�@����");
-	//�_�Őݒ�
-	//����
-	cautionB.SetBlinkingCount(3);
+	font.Create(48, "MS　明朝");
+	trophyFont.Create(24, "MS　明朝");
+	//点滅設定
+	//亀注意
+	cautionB.SetBlinkingCount(5);
 	cautionB.SetBlinkingSpeed(50);
 	cautionB.Initialize();
-	//����
+	//高温
 	cautionHotB.SetBlinkingCount(3);
 	cautionHotB.SetBlinkingSpeed(50);
 	cautionHotB.Initialize();
-	//�ቷ
+	//低温
 	cautionColdB.SetBlinkingCount(3);
 	cautionColdB.SetBlinkingSpeed(50);
 	cautionColdB.Initialize();
+	//スタート合図
+	radyGoB.SetBlinkingCount(2);
+	radyGoB.SetBlinkingSpeed(100);
+	radyGoB.Initialize();
+	
+	radyScale = 1.5f;
+	radyPosx = 550;
+	radyPosy = 350;
+
+	goScale = 0.3f;
+	goPosx = 850;
+	goPosy = 450;
 }
 
 void CUi::Update()
 {
-	//�_�Őݒ�
+	//点滅設定
 	cautionB.Update();
 	cautionHotB.Update();
 	cautionColdB.Update();
+	radyGoB.Update();
 }
-
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
 {
-	//m���\�� �g�g��
+	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
 	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
-
 	if (tutorialFlg)
 	{
-		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "���� m");
+		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "━━ m");
 	}
 	else
 	{
 		if (distanceNum < 1000)
 		{
-			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%d m", distanceNum);
+			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
 		}
 		else if (distanceNum >= 1000)
 		{
+			//1.1km,1.2kmのように表記
+			//distance = distanceNum / 100;
+			//int dis = distance;
+			//double trueDis = (double)dis / 10;
+
+			//1km,2kmのように表記
 			distance = distanceNum / 1000;
-			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%3.1 km", distance);
+			int dis = distance;
+			double trueDis = (double)dis;
+			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
 		}
 	}
 
+	//イベントの表示
+	// 
+	//todo:画像に変える、動きを持たす
+	//今は仮として「○○イベント」という文字を表示している
+	switch (eventNum)
+	{
+		case 1:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "夏イベント");
+			break;
+		case 2:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "冬イベント");
+			break;
+		case 3:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ウミガメ大量発生イベント");
+			break;
+		case 4:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "魚群大量発生イベント");
+			break;
+		case 5:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ゴミ大量発生イベント");
+			break;
+
+	}
+
+
+	//次のトロフィーと距離(仮)
+	if (distanceNum < 1000)										//川級
+	{
+		riverIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
+	}
+	else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
+	{
+		waterFallIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
+	}
+	else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
+	{
+		lakeIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
+	}
+	else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
+	{
+		damIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
+	}
+	else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
+	{
+		sewerIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
+	}
+	else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
+	{
+		indianOceanIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
+	}
+	else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
+	{
+		amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
+	}
+	else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
+	{
+		oceanIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
+	}
+	else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
+	{
+		seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
+	}
+	else if (distanceNum >= 300000)								//地球一周級
+	{
+		aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+	}
+
+	//マンボウの顔の枠
 	stressMeter.Render(1600, 0);
 
-	//�̉�UI�`��
+	//体温UI描画
 	if (500 * (tempRegionNum * 0.01f) <= 150)
 	{
 		tempHot.Render(1600, 0);
+		//高温注意UIのフェードインスタート
 		cautionHotB.SetInStart(true);
 	}
 	else if (500 * (tempRegionNum * 0.01f) >= 330)
 	{
 		tempCold.Render(1600, 0);
+		//低温注意UIのフェードインスタート
 		cautionColdB.SetInStart(true);
 	}
 	else
@@ -165,12 +316,14 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceN
 		cautionColdB.SetInStart(false);
 	}
 
-	//���x�vUI�`��
+
+	//温度計UI描画
 	tempMeterFrame.Render(1550, 200);
 	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
 	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
-	//�񐶒�UI�̕`��
+
+	//寄生虫UIの描画
 	switch (parasiteNum)
 	{
 	case 1:
@@ -190,29 +343,39 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceN
 		break;
 	}
 
-	//�󕠃Q�[�WUI�`��
+	//空腹ゲージUI描画
 	CRectangle rec2(0, 0, 330, 200);
 	hungerGaugeFrame.Render(1400, 0, rec2);
 	CRectangle rec3(0, 200 * (hungry * 0.01f), 330, 200);
 	hungerGauge.Render(1400, 200 * (hungry * 0.01f), rec3);
 	
-	//�s���\UI�̕`��
-	//�W�����v
+	//行動可能UIの描画
+	//ジャンプ
 	if (jumpFlg)
 	{
-		jumpPoss.Render(1400, 0);
+		jumpAlpha = 255;
 	}
-	//�H��
+	else
+	{
+		jumpAlpha = 70;
+	}
+	jumpPoss.Render(1400, 0, MOF_ARGB(jumpAlpha, 255, 255, 255));
+	//食事
 	if (eatFlg)
 	{
-		eatPoss.Render(1400, 100);
+		eatAlpha = 255;
 	}
+	else
+	{
+		eatAlpha = 70;
+	}
+	eatPoss.Render(1400, 100, MOF_ARGB(eatAlpha, 255, 255, 255));
 
-	//����UI�̕`��
+	//亀注意UIの描画
 	int w = g_pGraphics->GetTargetWidth();
 	if (turtle.GetShow())
 	{
-		if (w - w / 4 >= turtle.GetPosx())
+		if (w - w / 4 >= turtle.GetPosX())
 		{
 			cautionB.SetInStart(true);
 		}
@@ -222,10 +385,11 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, int distanceN
 		cautionB.SetInStart(false);
 	}
 	cautionUi.Render(1000, 0, MOF_ARGB((int)(255 * cautionB.GetAlpha()), 255, 255, 255));
-	//��������UI
+	//高温注意UI
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
-	//�ቷ����UI
+	//低温注意UI
 	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
+
 }
 
 void CUi::Release()
@@ -252,5 +416,46 @@ void CUi::Release()
 	cautionHot.Release();
 	cautionCold.Release();
 
+	riverIconTexture.Release();
+	waterFallIconTexture.Release();
+	lakeIconTexture.Release();
+	damIconTexture.Release();
+	sewerIconTexture.Release();
+	indianOceanIconTexture.Release();
+	amazonRiverIconTexture.Release();
+	oceanIconTexture.Release();
+	seaOf​​JapanIconTexture.Release();
+	aroundTheGlobeIconTexture.Release();
+
+	rady.Release();
+	go.Release();
+
 	font.Release();
+}
+
+bool CUi::StartSign()
+{
+	radyGoB.SetInStart(true);
+
+	radyScale -= 0.01f;
+	radyPosx += 2.5f;
+	radyPosy += 1.0f;
+
+	goScale += 0.01f;
+	goPosx -= 2.0f;
+	goPosy -= 1.0f;
+
+	switch (radyGoB.GetCount())
+	{
+	case 0:
+		rady.RenderScale(radyPosx, radyPosy,radyScale,
+			MOF_ARGB((int)(255 * radyGoB.GetAlpha()), 255,255,255));
+		break;
+	case 1:
+		go.RenderScale(goPosx, goPosy,goScale,
+			MOF_ARGB((int)(255 * radyGoB.GetAlpha()), 255,255,255));
+		return true;
+		break;
+	}	
+	return false;
 }
