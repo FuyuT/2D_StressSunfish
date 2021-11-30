@@ -15,6 +15,7 @@ void CGameQuitWindow::Initialize()
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
 	finishTextTexture.Load("PopUpFinishGame.png");
+	buttonSelect = 0;
 	font.Create(32, "MS@–¾’©");
 	endFlg = false;
 }
@@ -22,30 +23,71 @@ void CGameQuitWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect(0).CollisionPoint(mousePosX, mousePosY) && !endFlg)
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonYesScale = scaleController.ScaleControll(buttonYesScale,scaleMax,scaleMini,scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 2;
+	}
+	else
+	{
+		if (!keyModeFlg)
+		{
+			buttonSelect = 0;
+		}
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT) || g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonYesScale = scaleMini;
+		buttonNoScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		buttonNoScale = scaleMini;
+
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			buttonSelect = 2;
+		}
+		buttonYesScale = scaleController.ScaleControll(buttonYesScale, scaleMax, scaleMini, scaleSpeed);
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			PostQuitMessage(0);
 		}
 	}
-	else
+	else if (buttonSelect == 2)
 	{
 		buttonYesScale = scaleMini;
-	}
-	if (GetRect(1).CollisionPoint(mousePosX, mousePosY) && !endFlg)
-	{
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			buttonSelect = 1;
+		}
 		buttonNoScale = scaleController.ScaleControll(buttonNoScale, scaleMax, scaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;
 		}
-	}
-	else
-	{
-		buttonNoScale = scaleMini;
 	}
 }
 void CGameQuitWindow::Render()

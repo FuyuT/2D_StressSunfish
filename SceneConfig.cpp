@@ -8,9 +8,10 @@ CSceneConfig::~CSceneConfig()
 {
 	Release();
 }
-void CSceneConfig::Initialize()
+
+bool CSceneConfig::Load()
 {
-	backGroundTex.Load("Title.png");
+	if (!backGroundTex.Load("Title.png"))return false;
 
 	//SceneGameMenuÇÃéûÇ∆SceneGameuÇÃéûÇ≈ì«çûÇ›ÇïœçX
 	if (!gamePlayFlg)
@@ -18,41 +19,79 @@ void CSceneConfig::Initialize()
 	else if (gamePlayFlg)
 		buttonTexture.Load("ButtonReturnGame.png");
 
+	if (!muteTexBGM.Load("sutoresume--ta-.png"))return false;
+	if (!muteTexSE.Load("sutoresume--ta-.png"))return false;
+
+	return true;
+}
+
+void CSceneConfig::Initialize()
+{
+	buttonSelect = 0;
 }
 void CSceneConfig::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect().CollisionPoint(mousePosX, mousePosY))
+	//SceneGameMenu
+	//if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
+	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
 	{
 		buttonScale = scaleController.ScaleControll(buttonScale,scaleMax,scaleMini,scaleSpeed);
 		//SceneGameMenu
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !gamePlayFlg)
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE) && !gamePlayFlg)
 		{
 			endFlg = true;
 			nextScene = SCENENO_GAMEMENU;
 			CSceneConfig::Release();
 		}
 		//SceneGame
-		else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && gamePlayFlg)
+		else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE) && gamePlayFlg)
 		{
 			CSceneConfig::Release();
 			gamePlayFlg = false;
 		}
 	}
-	else
-	{
-		buttonScale = scaleMini;
-	}
+	//SceneGame
+	//else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && gamePlayFlg)
+
 }
+
 void CSceneConfig::Render()
 {
 	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "ê›íËâÊñ ");
+	//buttonTexture.Render(buttonPosX, buttonPosY);
+
+	muteTexBGM.Render(300, 400);
+	muteTexSE.Render(300, 650);
 	scaleController.ScaleRender(&buttonTexture, buttonPosX,buttonPosY, buttonScale);
 }
+
 void CSceneConfig::Release()
 {
 	backGroundTex.Release();
 	buttonTexture.Release();
+	muteTexBGM.Release();
+	muteTexSE.Release();
 }

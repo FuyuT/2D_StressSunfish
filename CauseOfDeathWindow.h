@@ -15,9 +15,9 @@ private:
 	const int			buttonNextPosY = 850;
 	float				buttonNextScale = 1.0f;
 	const int			causeOfDeathTexturePosX = 725;
-	const int			causeOfDeathTexturePosY = 350;
+	const int			causeOfDeathTexturePosY = 370;
 	const int			deathTextPosX = 830;
-	const int			deathTextPosY = 230;
+	const int			deathTextPosY = 210;
 
 public:
 	CCauseOfDeathWindow();

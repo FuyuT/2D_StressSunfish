@@ -24,9 +24,14 @@ protected:
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
 	CSoundManager cSound;
+	//スケール用定数
 	const float		scaleSpeed = 0.002f;
 	const float		scaleMax = 1.05f;
 	const float		scaleMini = 1.0f;
+	//ボタン選択用変数
+	int				buttonSelect;
+	bool			keyModeFlg;
+	
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
 	CSceneBase() :

@@ -30,6 +30,9 @@ private:
 	const int textPosX = 100;
 	const int textPosY = 40;
 
+	//前選択ボタン保存用
+	int	beforButtonSelect;
+
 public:
 	CSceneGameMenu();
 	~CSceneGameMenu();

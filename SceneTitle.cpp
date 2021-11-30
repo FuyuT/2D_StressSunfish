@@ -30,6 +30,7 @@ bool CSceneTitle::Load()
 void CSceneTitle::Initialize()
 {
 	Load();
+	buttonSelect = 0;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
 	PlayBGM();
@@ -41,7 +42,6 @@ void CSceneTitle::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (popUpFlg)
 	{
-		nowPopUpTitle->Initialize();
 		nowPopUpTitle->Update();
 		if (nowPopUpTitle->IsEnd())
 		{
@@ -53,50 +53,72 @@ void CSceneTitle::Update()
 	{
 		if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 		{
-			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
-			/*if (gamePlayButtonScale <= 1.05f && scaleFlg)
-				gamePlayButtonScale += scaleSpeed;
-			else
-				scaleFlg = false;
+			keyModeFlg = false;
+			buttonSelect = 1;
+		}
+		else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+		{
+			keyModeFlg = false;
+			buttonSelect = 2;
+		}
+		else
+		{
+			if (!keyModeFlg)
+			{
+				buttonSelect = 0;
+			}
+		}
 
-			if (gamePlayButtonScale >= 1.0 && !scaleFlg)
-				gamePlayButtonScale -= scaleSpeed;
-			else
-				scaleFlg = true;
-				*/
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (buttonSelect == 0)
+		{
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+			{
+				keyModeFlg = true;
+				buttonSelect = 1;
+			}
+			gameFinishButtonScale = scaleMini;
+			gamePlayButtonScale = scaleMini;
+		}
+		else if (buttonSelect == 1)
+		{
+			gameFinishButtonScale = scaleMini;
+
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+			{
+				buttonSelect = 2;
+			}
+			if (g_pInput->IsKeyPush(MOFKEY_UP))
+			{
+				buttonSelect = 2;
+			}
+			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
+
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 			{
 				endFlg = true;
 				nextScene = SCENENO_GAMEMENU;
 				CSceneTitle::Release();
 			}
 		}
-		else
+		//ゲーム終了を押したときの処理
+		else if (buttonSelect == 2)
 		{
 			gamePlayButtonScale = scaleMini;
-		}
-		//ゲーム終了を押したときの処理
-		if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-		{
-			gameFinishButtonScale =  scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
-			/*if (gameFinishButtonScale <= 1.05f && gameFinishButtonFlg)
-				gameFinishButtonScale += scaleSpeed;
-			else
-				gameFinishButtonFlg = false;
-
-			if (gameFinishButtonScale >= 1.0 && !gameFinishButtonFlg)
-				gameFinishButtonScale -= scaleSpeed;
-			else
-				gameFinishButtonFlg = true;
-				*/
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 			{
+				buttonSelect = 1;
+			}
+			if (g_pInput->IsKeyPush(MOFKEY_UP))
+			{
+				buttonSelect = 1;
+			}
+			gameFinishButtonScale =  scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
+			
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+			{
+				nowPopUpTitle->Initialize();
 				popUpFlg = true;
 			}
-		}
-		else
-		{
-			gameFinishButtonScale = scaleMini;
 		}
 	}
 

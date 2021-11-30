@@ -28,7 +28,8 @@ CSceneGame::CSceneGame():
 deadFlag(false),
 posX(0.0f),
 posY(0.0f),
-poseFlg(false)
+poseFlg(false),
+startFlg(false)
 {
 }
 
@@ -60,7 +61,10 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 
-
+	//イベント
+	eventRandom.SetSeed((MofU32)time(NULL));
+	eventTimer.SetTotalTime(140);
+	eventNum = Event::Event_None;
 
 	//タイマー
 	tempTimer.SetTotalTime(2);
@@ -72,6 +76,7 @@ void CSceneGame::Initialize()
 
 	configFlg = false;
 	poseFlg = false;
+	startFlg = false;
 
 	trophy.LoadTrophyFlg();
 	caseOfDeth.LoadStressFlg();
@@ -80,6 +85,21 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
+}
+
+void CSceneGame::EventUpdate()
+{
+	eventTimer.StartTimer();
+	if (eventTimer.GetNowtime() < 0)
+	{
+		eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+		eventTimer.SetTotalTime(140);
+	}
+	else if (eventTimer.GetNowtime() < 120)
+	{
+		eventNum = Event::Event_None;
+	}
+	eventTimer.Update();
 }
 
 void CSceneGame::Update()
@@ -122,22 +142,26 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
-	//プレイヤー
-	pl.Update(false,2);
+	ui.Update();
+	if (!startFlg)return;
 
+	//イベント
+	EventUpdate();	
+
+	//プレイヤー
+	pl.Update(false, 3);
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(cObstacle,i,false,2);
 	}
-	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY());
 
-	ui.Update();
+	//障害物
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
+
 }
 
 void CSceneGame::Render()
 {
-
 	stg.Render();
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
@@ -145,12 +169,16 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat());
-
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+	if (ui.StartSign())startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
+	
+	//最前面の岩背景
+	stg.ForGroundRender();
+
 	//ポップアップ描画
 	if (popUpFlg)
 	{
@@ -221,6 +249,7 @@ void CSceneGame::PopUpController()
 		nextScene = SCENENO_CONFIG;
 		configFlg = true;
 		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Load();
 		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
