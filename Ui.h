@@ -3,10 +3,25 @@
 #include "timer.h"
 #include "Blinking.h"
 #include "ObstacleManager.h"
+#include "Turtle.h"
+
+enum EventMotion
+{
+	EVENTMOTION_SUMMER,
+	EVENTMOTION_WINTER,
+	EVENTMOTION_TURTLE,
+	EVENTMOTION_SHOALSARDINE,
+	EVENTMOTION_GARBAGE,
+
+	EVENTMOTION_COUNT,
+};
 
 class CUi
 {
 private:
+	//アニメーション
+	CSpriteMotionController motion;
+	
 	int bodyTemp = 10;
 
 	int parasiteCnt = 0;
@@ -19,18 +34,19 @@ private:
 	int jumpAlpha = 0;
 	int eatAlpha = 0;
 
+	float radyAlpha = 255;
+
 	float radyScale = 1.5f;
 	float radyPosx = 550;
 	float radyPosy = 350;
 
-	float goScale = 0.3f;
-	float goPosx = 850;
-	float goPosy = 450;
+	float goScale = 1.0f;
+	float goPosx = 700;
+	float goPosy = 370;
 
 	//マンボウの顔の枠
 	CTexture stressMeter;
 
-	//マンボウの顔
 	CTexture tempNormal;
 	CTexture tempHot;
 	CTexture tempCold;
@@ -75,6 +91,13 @@ private:
 	CTexture rady;
 	CTexture go;
 
+	//イベントアニメーション
+	CTexture eventSummer;
+	CTexture eventWinter;
+	CTexture eventTurtle;
+	CTexture eventShoalSardine;
+	CTexture eventGarbage;
+
 	//点滅
 	CBlinking cautionB;
 	CBlinking cautionHotB;
@@ -88,14 +111,16 @@ private:
 
 
 	CObstacleManager obs;
+	CTurtle turtle;
 public:
 	bool Load();
 	void Initialize();
 	void Update();
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	double distanceNum,bool jumpFlg,bool eatFlg,bool turtleFlg);
+	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
 	void Release();
 
-	bool StartSign();
+	bool StartSign(bool pose);
+	void Event(int event);
 };
 
