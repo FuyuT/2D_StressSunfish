@@ -1,7 +1,7 @@
 #include "Stage.h"
 
 Stage::Stage() :
-	BackGroundTex1(),
+	skyTex(),
 	scrollValueX(0.0f),
 	scrollValueY(0.0f),
 	enemyCount(0),
@@ -14,27 +14,27 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//í«â¡
-	if (!BackGroundTex1.Load("BackGround\\BackGround_1.png")) 
+	if (!skyTex.Load("BackGround\\BackGround_1.png")) 
 	{
 		return false;
 	}
-	if (!BackGroundTex2.Load("BackGround\\BackGround_2.png"))
+	if (!backWaveTex.Load("BackGround\\BackGround_2.png"))
 	{
 		return false;
 	}
-	if (!BackGroundTex3.Load("BackGround\\BackGround_3.png"))
+	if (!frontWaveTex.Load("BackGround\\BackGround_3.png"))
 	{
 		return false;
 	}
-	if (!BackGroundTex4.Load("BackGround\\BackGround_4.png"))
+	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))
 	{
 		return false;
 	}
-	if (!BackGroundTex5.Load("BackGround\\BackGround_5.png"))
+	if (!insideBackGroundTex.Load("BackGround\\BackGround_5.png"))
 	{
 		return false;
 	}
-	if (!BackGroundTex6.Load("BackGround\\BackGround_6.png"))
+	if (!closeBackGroundTex.Load("BackGround\\BackGround_6.png"))
 	{
 		return false;
 	}
@@ -43,9 +43,54 @@ bool Stage::Load() {
 }
 
 void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {	
-	WavePos.x = 0; WavePos.y = 0;
-	WaveSpeed = 0;
-	turnFlg = false;
+	scrollValueX = 0;
+	backWavePos.x = 0;
+	backWavePos.y = 0;
+	backWaveSpeed.x = 0;
+	backWaveSpeed.y = 0;
+	backWaveScrollValueX = 0;
+	backWaveTurnFlg = false;
+	frontWavePos.x = 0;
+	frontWavePos.y = 0;
+	frontWaveScrollValueX = 0;
+}
+
+void Stage::WaveUpdate(const CRectangle& rec, const float& hsw)
+{
+	//îgÇìÆÇ©Ç∑
+	//å„åiÇÃîg
+	//âEà⁄ìÆ
+	backWaveScrollValueX += BACK_WAVE_SPEED;
+
+	//è„â∫à⁄ìÆ
+	if (!backWaveTurnFlg && backWavePos.y > -100)
+	{
+		backWaveSpeed.y = -3;
+	}
+	else if (backWavePos.y < 0)
+	{
+		backWaveSpeed.y = 0;
+		backWaveTurnFlg = true;
+	}
+
+	if (backWaveTurnFlg && backWavePos.y < 0)
+	{
+		backWaveSpeed.y = 3;
+	}
+	else if (backWavePos.y > 100)
+	{
+		backWaveTurnFlg = false;
+	}
+	backWavePos.y += backWaveSpeed.y;
+
+	//ëOñ ÇÃîg
+	//ç∂à⁄ìÆ
+	frontWaveScrollValueX += FRONT_WAVE_SPEED;
+	if (rec.Right - scrollValueX > hsw)
+	{
+		frontWaveScrollValueX += ((rec.Right - scrollValueX) - hsw) * FRONT_WAVE_ADJUSTMENT_SPEED;
+	}
+
 }
 
 void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
@@ -57,31 +102,17 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	float sw = g_pGraphics->GetTargetWidth();
 	float sh = g_pGraphics->GetTargetHeight();
 	//ÉXÉeÅ[ÉWÇÃïùéläÑÇÃã´äEê¸
-	float hsw = sw * 0.7f;
+	float hsw = sw * 0.3f;
 	float hsh = sh * 0.4f;
 	//ÉXÉeÅ[ÉWëSëÃÇÃïù Ç∆ÇËÇ†Ç¶Ç∏âÊëúÇÃïùÇ≈
-	float stgh = BackGroundTex1.GetHeight();
+	float stgh = skyTex.GetHeight();
+	
+	WaveUpdate(prec,hsw);
 
-	//ç∂
-	if (prec.Left - scrollValueX < hsw)
-	{
-		//ã´äEê¸hswÇÊÇËêiÇÒÇæílÇÅAscrolValueÇ…ì¸ÇÍÇÈ
-		scrollValueX -= hsw - (prec.Left - scrollValueX);
-		if (scrollValueX <= 0)
-		{
-			scrollValueX = 0;
-		}
-	}
 	//âE
-	if (prec.Right - scrollValueX > sw - hsw)
+	if (prec.Right - scrollValueX > hsw)
 	{
-		scrollValueX += (prec.Right - scrollValueX) - (sw - hsw);
-		/*
-		if (scrollValueX >= 99999 - sw)
-		{
-			scrollValueX = 99999 - sw;
-		}
-		*/
+		scrollValueX += (prec.Right - scrollValueX) - hsw;
 	}
 	//è„
 	if (prec.Top - scrollValueY < hsh)
@@ -120,38 +151,18 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	//	enemyNo++;
 	//}
 
-	//îgÇìÆÇ©Ç∑
-	if (!turnFlg && WavePos.y > -100)
-	{
-		WaveSpeed = -3;
-	}
-	else if (WavePos.y < 0)
-	{
-		WaveSpeed = 0;
-		turnFlg = true;
-	}
-
-	if (turnFlg && WavePos.y < 0)
-	{
-		WaveSpeed = 3;
-	}
-	else if (WavePos.y > 100)
-	{
-		turnFlg = false;
-	}
-	WavePos.y += WaveSpeed;
 }
 
-void Stage::Scroll(CTexture tex, int scrollSpeedX, int scrollSpeedY)
+void Stage::Scroll(CTexture tex, float scrollSpeedX, float scrollSpeedY)
 {
 	//ScrollSpeedÇÕëÂÇ´Ç¢ÇŸÇ«ÉXÉNÉçÅ[ÉãÇ™íxÇ≠Ç»ÇÈ
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	int w = tex.GetWidth();
 	int h = tex.GetHeight();
-	for (float y = ((int)-scrollValueY / scrollSpeedY % h) - h; y < sch; y += h)
+	for (float y = ((int)(-scrollValueY * scrollSpeedY) % h) - h; y < sch; y += h)
 	{
-		for (float x = ((int)-scrollValueX / scrollSpeedX % w) - w; x < scw; x += w)
+		for (float x = ((int)(-scrollValueX * scrollSpeedX) % w) - w; x < scw; x += w)
 		{
 			tex.Render(x, y);
 		}
@@ -162,33 +173,38 @@ void Stage::WaveRender()
 {
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
-	int w = BackGroundTex2.GetWidth();
-	int h = BackGroundTex2.GetHeight();
-	for (float x = ((int)-scrollValueX / 2 % w) - w; x < scw; x += w)
+	int w = backWaveTex.GetWidth();
+	int h = backWaveTex.GetHeight();
+	////è„Ç∆âEÇ…ìÆÇ≠îgÅ@å„åi
+	for (float x = ((int)-backWaveScrollValueX % w) - w; x < scw; x += w)
 	{
-		BackGroundTex2.Render(x, WavePos.y - scrollValueY);
+		backWaveTex.Render(x, backWavePos.y - scrollValueY);
 	}
+	//ç∂Ç…ìÆÇ≠îg ëOåi
+	w = frontWaveTex.GetWidth();
+	h = frontWaveTex.GetHeight();
+	for (float x = ((int)-frontWaveScrollValueX % w) - w; x < scw; x += w)
+	{
+		frontWaveTex.Render(x, frontWavePos.y - scrollValueY);
+	}
+
 }
 
 void Stage::BackGroundRender() {
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 
-	int w = BackGroundTex1.GetWidth();
-	int h = BackGroundTex1.GetHeight();
-	Scroll(BackGroundTex1, 1, 1);
-	////ìÆÇ≠îg
-	WaveRender();
-	Scroll(BackGroundTex3, 1, 1);
-	Scroll(BackGroundTex4, 4, 1);
-	Scroll(BackGroundTex5, 3, 1);
-
-
+	int w = skyTex.GetWidth();
+	int h = skyTex.GetHeight();
+	Scroll(skyTex, 1, 1);
+	WaveRender(); //ìÆÇ≠îg
+	Scroll(distantBackGroundTex, 0.25, 1);
+	Scroll(insideBackGroundTex, 0.5, 1);
 }
 
-void Stage::ForGroundRender()
+void Stage::ForeGroundRender()
 {
-	Scroll(BackGroundTex6, 1, 1);
+	Scroll(closeBackGroundTex, 1, 1);
 }
 
 void Stage::Render() {
@@ -197,12 +213,12 @@ void Stage::Render() {
 
 
 void Stage::Release() {
-	BackGroundTex1.Release();
-	BackGroundTex2.Release();
-	BackGroundTex3.Release();
-	BackGroundTex4.Release();
-	BackGroundTex5.Release();
-	BackGroundTex6.Release();
+	skyTex.Release();
+	backWaveTex.Release();
+	frontWaveTex.Release();
+	distantBackGroundTex.Release();
+	insideBackGroundTex.Release();
+	closeBackGroundTex.Release();
 
 	enemyTexture.Release();
 }

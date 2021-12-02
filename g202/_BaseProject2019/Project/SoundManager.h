@@ -44,7 +44,11 @@ private:
 	CSoundBuffer collisionSE;		//Õ“Ë
 	CSoundBuffer bubbleCollisionSE;	//–A—pÕ“Ë‰¹
 
+	bool muteBGM;
+	bool muteSE;
 public:
+	CSoundManager();
+	~CSoundManager();
 	bool Load();
 
 	void SetLoop();	//BGM‚Ì‚İLoop‚Éİ’è‰Â
@@ -55,6 +59,9 @@ public:
 	//‰¹—Ê‚Í0.0`1.0‚Å•ÏX
 	void SetVolumeBGM(float volume);
 	void SetVolumeSE(float volume);
+
+	bool GetMuteBGM() { return muteBGM; }
+	bool GetMuteSE() { return muteSE; }
 
 	void Release();
 };

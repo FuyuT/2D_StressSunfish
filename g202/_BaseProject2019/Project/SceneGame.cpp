@@ -60,7 +60,7 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
-
+	sceneConfig.SetSoundManager(cSound);
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	eventTimer.SetTotalTime(140);
@@ -177,7 +177,7 @@ void CSceneGame::Render()
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 	
 	//最前面の岩背景
-	stg.ForGroundRender();
+	stg.ForeGroundRender();
 
 	//ポップアップ描画
 	if (popUpFlg)
@@ -218,7 +218,7 @@ void CSceneGame::Release()
 			nowPopUpGame = NULL;
 		}
 	}
-
+	
 	//障害物
 	cObstacle.Release();
 }

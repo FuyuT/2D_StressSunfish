@@ -27,12 +27,47 @@ bool CSceneConfig::Load()
 
 void CSceneConfig::Initialize()
 {
+	muteTexPosBGM.x = 300;
+	muteTexPosBGM.y = 400;
+	muteTexPosSE.x  = 300;
+	muteTexPosSE.y  = 650;
+}
+
+void CSceneConfig::SoundUpdate()
+{
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
+	if (GetRect(BUTTON_MUTE_BGM).CollisionPoint(mousePosX, mousePosY) && g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+	{
+		if (!cSound.GetMuteBGM())
+		{
+			cSound.SetVolumeBGM(0);
+		}
+		else
+		{
+			cSound.SetVolumeBGM(1);
+		}
+
+	}
+	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY) && g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+	{
+		if (!cSound.GetMuteSE())
+		{
+			cSound.SetVolumeSE(0);
+		}
+		else
+		{
+			cSound.SetVolumeSE(1);
+		}
+	}
 
 }
+
 void CSceneConfig::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
+	SoundUpdate();
 	//SceneGameMenu
 	//if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
 	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
@@ -69,6 +104,15 @@ void CSceneConfig::Render()
 	muteTexBGM.Render(300, 400);
 	muteTexSE.Render(300, 650);
 	scaleController.ScaleRender(&buttonTexture, buttonPosX,buttonPosY, buttonScale);
+	if (!cSound.GetMuteBGM())
+	{
+		CGraphicsUtilities::RenderString(100, 500, "mute‚¶‚á‚È‚¢");
+	}
+	else
+	{
+		CGraphicsUtilities::RenderString(100, 500, "mute’†");
+	}
+
 }
 
 void CSceneConfig::Release()
@@ -77,4 +121,5 @@ void CSceneConfig::Release()
 	buttonTexture.Release();
 	muteTexBGM.Release();
 	muteTexSE.Release();
+	cSound.Release();
 }

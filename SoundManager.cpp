@@ -1,5 +1,13 @@
 #include "SoundManager.h"
 
+CSoundManager::CSoundManager()
+{
+}
+
+CSoundManager::~CSoundManager()
+{
+}
+
 bool CSoundManager::Load()
 {
 	if (!titleBGM.Load("Sound\\BGM_Title.mp3"))return false;
@@ -161,6 +169,15 @@ void CSoundManager::AllStop()
 
 void CSoundManager::SetVolumeBGM(float volume)
 {
+	if (volume <= 0)
+	{
+		muteBGM = true;
+	}
+	else
+	{
+		muteBGM = false;
+	}
+
 	titleBGM.SetVolume(volume);
 	menuBGM.SetVolume(volume);
 	collectionBGM.SetVolume(volume);
@@ -169,6 +186,15 @@ void CSoundManager::SetVolumeBGM(float volume)
 
 void CSoundManager::SetVolumeSE(float volume)
 {
+	if (volume <= 0)
+	{
+		muteSE = true;
+	}
+	else
+	{
+		muteSE = false;
+	}
+
 	sceneChangeSE.SetVolume(volume);
 	buttonSE.SetVolume(volume);
 	alertSE.SetVolume(volume);
@@ -180,6 +206,7 @@ void CSoundManager::SetVolumeSE(float volume)
 	parasiteStickSE.SetVolume(volume);
 	collisionSE.SetVolume(volume);
 	bubbleCollisionSE.SetVolume(volume);
+	
 }
 
 void CSoundManager::Release()

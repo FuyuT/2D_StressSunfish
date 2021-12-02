@@ -36,8 +36,9 @@ MofBool CGameApp::Initialize(void) {
 	CUtilities::SetCurrentDirectory("Resource");
 	cSound.Load();
 	//ƒV[ƒ“‚Ì‰Šú‰»
-	nowScene = new CSceneTitle;
+	nowScene = new CSceneGame;
 	nowScene->SetSoundManager(cSound);
+	nowScene->Load();
 	nowScene->Initialize();
 	return TRUE;
 }
