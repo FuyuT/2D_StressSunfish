@@ -8,10 +8,11 @@
 class CShoalSardine :public CObstacleBase
 {
 private:
-	bool warningLineShow;
+	CTexture keikokuTexture;
 
 	//アニメーション
 	CSpriteMotionController motion;
+	CSpriteMotionController keikokumotion;
 public:
 	CShoalSardine();
 	~CShoalSardine();

@@ -1,17 +1,19 @@
 #include "ShoalSardine.h"
 
-CShoalSardine::CShoalSardine():
-	warningLineShow(true)
+CShoalSardine::CShoalSardine() 
 {
+
 }
 
 CShoalSardine::~CShoalSardine()
 {
+
 }
 
 bool CShoalSardine::Load()
 {
 	if (!Texture.Load("Obstacle\\mureanim.png"))return false;
+	if (!keikokuTexture.Load("Obstacle\\gyogunanim2.png"))return false;
 
 	return true;
 }
@@ -21,7 +23,7 @@ void CShoalSardine::Initialize()
 	pos.x = 1000;
 	pos.y = 1500;
 	moveSpeed.x = 20.0f;
-	warningLineShow = true;
+
 
 
 	SpriteAnimationCreate anim = {
@@ -38,7 +40,18 @@ void CShoalSardine::Initialize()
 			  {4,0,7},{4,1,7}}
 
 	};
+
+	SpriteAnimationCreate keikoku_anim = {
+		"警告",
+		0,0,
+		480,86,
+		FALSE,{{4,0,0},{4,0,1},{4,0,2},{4,0,3},{4,0,4},{4,0,5},{4,0,6},{4,0,7},{4,0,8},{4,0,9},{4,0,10},{4,0,11},{4,0,12}}
+	};
+
 	motion.Create(anim);
+	keikokumotion.Create(keikoku_anim);
+	
+	keikokumotion.AddTimer(CUtilities::GetFrameSecond());
 }
 
 void CShoalSardine::Update(float wx, float wy)
@@ -47,35 +60,45 @@ void CShoalSardine::Update(float wx, float wy)
 
 	//スクリーンから出たらshowFlgをfalse
 	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
-	pos.x -= moveSpeed.x;
 
 	//警告線
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //画面の右端
-	//画面外にいる時、警告線を表示　画面内に入ったら警告線を消す
-	if (scRight < pos.x)
+	
+	bool i;
+	i = keikokumotion.ChangeMotion(0);
+	if (i) 
 	{
-		warningLineShow = true;
+		pos.x = scRight;
+		
 	}
-	else
+	else 
 	{
-		warningLineShow = false;
+		pos.x -= moveSpeed.x;
 	}
 
 	motion.AddTimer(CUtilities::GetFrameSecond());
+	keikokumotion.AddTimer(CUtilities::GetFrameSecond());
+	keikokumotion.ChangeMotion(0);
 }
 
 void CShoalSardine::Render(float wx, float wy)
 {
 	if (!showFlg)return;
-	Texture.RenderScale(pos.x - wx, pos.y - wy,1.0f,motion.GetSrcRect());
+	if (!keikokumotion.IsEndMotion()) {
+		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 1.0f, keikokumotion.GetSrcRect());
+	}
+
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
+	
 	
 	//警告線の表示
-	CRectangle rect = GetRect();
+	/*CRectangle rect = GetRect();
 	if (warningLineShow)
 	{
 		CGraphicsUtilities::RenderFillRect(0,rect.Top - wy,
 			g_pGraphics->GetTargetWidth(), rect.Bottom - wy, MOF_ARGB(100,255,0,0));
 	}
+	*/
 
 }
 
@@ -90,4 +113,5 @@ void CShoalSardine::Release()
 {
 	Texture.Release();
 	motion.Release();
+	keikokumotion.Release();
 }
