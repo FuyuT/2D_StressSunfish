@@ -423,7 +423,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 }
 
 //プレイヤーの状態を更新
-void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
+void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 {
 
 	if (motion.GetMotionNo() != MOTION_STAND &&
@@ -464,7 +464,10 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 		{
 			if (tempRegion > HYPERTHERMIA_LIMIT)
 			{
-				tempRegion -= TEMPERATURE_LEVEL;
+				if(eventNum == 1)
+					tempRegion -= TEMPERATURE_LEVEL * 2;
+				else
+					tempRegion -= TEMPERATURE_LEVEL;
 			}
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
@@ -481,7 +484,10 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 		{
 			if (tempRegion < FROZEN_LIMIT)
 			{
-				tempRegion += TEMPERATURE_LEVEL;
+				if(eventNum == 2)
+					tempRegion += TEMPERATURE_LEVEL * 2;
+				else
+					tempRegion += TEMPERATURE_LEVEL;
 			}
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
@@ -495,13 +501,20 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 		}
 		else
 		{
-			if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			if(eventNum == 1)
+				tempRegion -= TEMPERATURE_LEVEL * 2;
+			else if(eventNum == 2)
+				tempRegion += TEMPERATURE_LEVEL * 2;
+			else
 			{
-				tempRegion += TEMPERATURE_LEVEL / 3.0f;
-			}
-			else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
-			{
-				tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+				if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+				{
+					tempRegion += TEMPERATURE_LEVEL / 3.0f;
+				}
+				else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+				{
+					tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+				}
 			}
 		}
 	}
@@ -605,7 +618,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep)
 }
 
 //更新
-void CPlayer::Update(bool unDeadFlg, int tutorialStep)
+void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 {
 	//アニメーションの更新
 	motion.AddTimer(CUtilities::GetFrameSecond());
@@ -624,7 +637,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 		return;
 
 	//ステータス(状態)の更新
-	UpdateStatus(unDeadFlg,tutorialStep);
+	UpdateStatus(unDeadFlg,tutorialStep,eventNum);
 
 	//ジャンプ
 	Jump(unDeadFlg,tutorialStep);
@@ -797,7 +810,7 @@ void CPlayer::Release()
 
 
 //敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int tutorialStep)
+void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, int tutorialStep)
 {
 
 	if ((deadFlg || motion.GetMotionNo() == MOTION_DEATH) && !jumpFlg)
@@ -809,36 +822,41 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int
 	CRectangle prec = GetRect();
 
 	//ウミガメ
-	if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
-		cObstacle.GetShow(Turtle, num) && !hitFlg)
+	if (num != 3)
 	{
-		if (causeOfDeath == CAUSE_None && !unDeadFlg)
+		if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
+			cObstacle.GetShow(Turtle, num) && !hitFlg)
 		{
-			//衝突
-			hitFlg = true;
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//衝突
+				hitFlg = true;
 
-			//死因：ショック死
-			//当たった時点で即死
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_SeaTurtle;
+				//死因：ショック死
+				//当たった時点で即死
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_SeaTurtle;
+			}
 		}
-	}
-	//todo:死因を障害物と衝突にしてるので、あとで変更
-	//魚群（イワシ）
-	else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
-		cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
-	{
-		if (causeOfDeath == CAUSE_None && !unDeadFlg)
+
+		//todo:死因を障害物と衝突にしてるので、あとで変更
+		//魚群（イワシ）
+		else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
+			cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 		{
-			//衝突
-			hitFlg = true;
-			//死因：衝突死
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Obstacle;
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//衝突
+				hitFlg = true;
+				//死因：衝突死
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_Obstacle;
+			}
 		}
 	}
+
 	//障害物
-	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
+	if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
 		cObstacle.GetShow(Garbage, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)

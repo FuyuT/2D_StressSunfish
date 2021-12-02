@@ -25,9 +25,6 @@ private:
 	const float			buttonScaleMini = 0.9f;
 	const float			buttonScaleMax = 0.95f;
 
-	//ƒ{ƒ^ƒ“‚Ì”»’è‚ª”í‚é‚Ì–hŽ~—p
-	bool				buttonFlg;
-
 public:
 	CPoseWindow();
 	~CPoseWindow();

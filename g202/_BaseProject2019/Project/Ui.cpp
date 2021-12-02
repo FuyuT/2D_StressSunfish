@@ -145,6 +145,28 @@ bool CUi::Load()
 		return false;
 	}
 
+	//イベント
+	if (!eventSummer.Load("sheet_anim5_anim5_anime_1.png"))
+	{
+		return false;
+	}
+	if (!eventWinter.Load("sheet_anim4_anim4_anime_1.png"))
+	{
+		return false;
+	}
+	if (!eventTurtle.Load("sheet_anim3_anim3_anime_1.png"))
+	{
+		return false;
+	}
+	if (!eventShoalSardine.Load("sheet_anim1_anim1_anime_1.png"))
+	{
+		return false;
+	}
+	if (!eventGarbage.Load("sheet_anim2_anim2_anime_1.png"))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -166,17 +188,64 @@ void CUi::Initialize()
 	cautionColdB.SetBlinkingSpeed(50);
 	cautionColdB.Initialize();
 	//スタート合図
-	radyGoB.SetBlinkingCount(2);
+	radyGoB.SetBlinkingCount(1);
 	radyGoB.SetBlinkingSpeed(100);
 	radyGoB.Initialize();
+
+	//アニメーション
+	SpriteAnimationCreate anim[] = {
+		{
+			"夏",
+			0,0,
+			500,250,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},
+				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1},{5,6,1},
+		          {5,0,2}}
+		},
+		{
+			"冬",
+			0,0,
+			400,250,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},{5,7,0},{5,8,0},
+				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1}}
+		},
+		{
+			"亀大量発生",
+			0,0,
+			850,250,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},
+				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},
+				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},
+				  {5,0,3},{5,1,3},{5,2,3}}
+		},
+		{
+			"魚群大量発生",
+			0,0,
+			800,250,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},
+				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},
+				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},{5,4,2}}
+		},
+		{
+			"ごみ大量発生",
+			0,0,
+			800,250,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},
+				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},
+				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},{5,4,2}}
+		},
+	};
+	motion.Create(anim, EVENTMOTION_COUNT);
 	
+	//スタート合図初期化
+	radyAlpha = 255;
 	radyScale = 1.5f;
 	radyPosx = 550;
 	radyPosy = 350;
 
-	goScale = 0.3f;
-	goPosx = 850;
-	goPosy = 450;
+	goScale = 1.0f;
+	goPosx = 700;
+	goPosy = 370;
 }
 
 void CUi::Update()
@@ -186,8 +255,12 @@ void CUi::Update()
 	cautionHotB.Update();
 	cautionColdB.Update();
 	radyGoB.Update();
+
+	//アニメーション
+	motion.AddTimer(CUtilities::GetFrameSecond());
 }
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
+
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -215,6 +288,30 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			double trueDis = (double)dis;
 			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
 		}
+	}
+
+	//イベントの表示
+	// 
+	//todo:画像に変える、動きを持たす
+	//今は仮として「○○イベント」という文字を表示している
+	switch (eventNum)
+	{
+		case 1:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "夏イベント");
+			break;
+		case 2:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "冬イベント");
+			break;
+		case 3:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ウミガメ大量発生イベント");
+			break;
+		case 4:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "魚群大量発生イベント");
+			break;
+		case 5:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ゴミ大量発生イベント");
+			break;
+
 	}
 
 
@@ -364,8 +461,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//高温注意UI
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
 	//低温注意UI
-	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
-
+	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));	
 }
 
 void CUi::Release()
@@ -403,35 +499,70 @@ void CUi::Release()
 	seaOf​​JapanIconTexture.Release();
 	aroundTheGlobeIconTexture.Release();
 
+	eventSummer.Release();
+	eventWinter.Release();
+	eventTurtle.Release();
+	eventShoalSardine.Release();
+	eventGarbage.Release();
+
+	motion.Release();
+
 	rady.Release();
 	go.Release();
 
 	font.Release();
 }
 
-bool CUi::StartSign()
+bool CUi::StartSign(bool pose)
 {
-	radyGoB.SetInStart(true);
-
-	radyScale -= 0.01f;
-	radyPosx += 2.5f;
-	radyPosy += 1.0f;
-
-	goScale += 0.01f;
-	goPosx -= 2.0f;
-	goPosy -= 1.0f;
-
-	switch (radyGoB.GetCount())
+	if (!pose)
 	{
-	case 0:
-		rady.RenderScale(radyPosx, radyPosy,radyScale,
-			MOF_ARGB((int)(255 * radyGoB.GetAlpha()), 255,255,255));
-		break;
-	case 1:
-		go.RenderScale(goPosx, goPosy,goScale,
-			MOF_ARGB((int)(255 * radyGoB.GetAlpha()), 255,255,255));
-		return true;
-		break;
-	}	
+		if (radyAlpha > 0)
+		{
+			radyScale -= 0.01f;
+			radyPosx += 2.5f;
+			radyPosy += 1.0f;
+			radyAlpha -= 2.55f;
+
+			rady.RenderScale(radyPosx, radyPosy, radyScale,
+				MOF_ARGB((int)radyAlpha, 255, 255, 255));
+		}
+		else if (radyAlpha <= 0)
+		{
+			goScale += 0.01f;
+			goPosx -= 2.0f;
+			goPosy -= 1.0f;
+
+			radyGoB.SetInStart(true);
+			go.RenderScale(goPosx, goPosy, goScale,
+				MOF_ARGB((int)(255 * radyGoB.GetAlpha()), 255, 255, 255));
+			return true;
+		}
+	}
 	return false;
+}
+
+void CUi::Event(int event)
+{
+	motion.ChangeMotion(event);
+
+	//イベントアニメーション
+	switch (motion.GetMotionNo())
+	{
+	case EVENTMOTION_SUMMER:
+		eventSummer.Render(800, 500, motion.GetSrcRect());
+		break;
+	case EVENTMOTION_WINTER:
+		eventWinter.Render(800, 500, motion.GetSrcRect());
+		break;
+	case EVENTMOTION_TURTLE:
+		eventTurtle.Render(800, 500, motion.GetSrcRect());
+		break;
+	case EVENTMOTION_SHOALSARDINE:
+		eventShoalSardine.Render(800, 500, motion.GetSrcRect());
+		break;
+	case EVENTMOTION_GARBAGE:
+		eventGarbage.Render(800, 500, motion.GetSrcRect());
+		break;
+	}
 }

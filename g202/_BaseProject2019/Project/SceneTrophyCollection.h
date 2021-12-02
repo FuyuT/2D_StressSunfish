@@ -83,8 +83,8 @@ private:
 	const int			iconSecondRowPosX = 850;
 	const int			iconThirdRowPosX = 1350;
 	//2ページ目以降の下段のX座標
-	const int			icon2PageFirstRowPosX = 600;
-	const int			icon2pageSecondRowPosX = 1100;
+	const int			icon2PageFirstRowPosX = 570;
+	const int			icon2pageSecondRowPosX = 1075;
 	//一行目のY座標
 	const int			iconOneLinePosY = 100;
 	//二行目のY座標
@@ -96,6 +96,8 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
+	CTexture	backGroundTexture1;
+	CTexture	backGroundTexture2;
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 875;
 	float				menuButtonScale = 1.0f;

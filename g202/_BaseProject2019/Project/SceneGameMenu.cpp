@@ -19,6 +19,7 @@ void CSceneGameMenu::PlayBGM()
 
 void CSceneGameMenu::Initialize()
 {
+	buttonSelect = 0;
 	backGroundTex.Load("Title.png");
 	textTexture.Load("MenuText.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
@@ -36,11 +37,80 @@ void CSceneGameMenu::Update()
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
-	if (GetRect(0).CollisionPoint(mousePosX,mousePosY))
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 2;
+	}
+	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 3;
+	}
+	else if (GetRect(3).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 4;
+	}
+	else if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 5;
+	}
+	else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 6;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		gamePlayButtonScale = scaleMini;
+		configButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		configButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 5;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			beforButtonSelect = 1;
+			buttonSelect = 6;
+		}
 		gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ゲームプレイ画面
 			endFlg = true;
@@ -48,15 +118,30 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
-	else
+	else if (buttonSelect == 2)
 	{
-		gamePlayButtonScale = 1.0f;
-	}
-	if (GetRect(1).CollisionPoint(mousePosX,mousePosY))
-	{
+		gamePlayButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+
 		configButtonScale = scaleController.ScaleControll(configButtonScale, scaleMax, scaleMini, scaleSpeed);
-		
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 3;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			beforButtonSelect = 2;
+			buttonSelect = 6;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//設定画面
 			endFlg = true;
@@ -64,31 +149,30 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
-	else
+	else if (buttonSelect == 3)
 	{
-		configButtonScale = 1.0f;
-	}
-	if (GetRect(2).CollisionPoint(mousePosX,mousePosY))
-	{
-		stressButtonScale = scaleController.ScaleControll(stressButtonScale, scaleMax, scaleMini, scaleSpeed);
-			
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
-		{
-			//ストレス集画面
-			endFlg = true;
-			nextScene = SCENENO_STRESSCOLLECTION;
-			Release();
-		}
-	}
-	else
-	{
-		stressButtonScale = 1.0f;
-	}
-	if (GetRect(3).CollisionPoint(mousePosX,mousePosY))
-	{
+		gamePlayButtonScale = scaleMini;
+		configButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+
 		trophyButtonScale = scaleController.ScaleControll(trophyButtonScale, scaleMax, scaleMini, scaleSpeed);
-		
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 4;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			beforButtonSelect = 3;
+			buttonSelect = 6;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//トロフィー集
 			endFlg = true;
@@ -96,15 +180,63 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
-	else
+	else if (buttonSelect == 4)
 	{
-		trophyButtonScale = 1.0f;
-	}
-	if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
-	{
-		tutorialButtonScale = scaleController.ScaleControll(tutorialButtonScale, scaleMax, scaleMini, scaleSpeed);
+		gamePlayButtonScale = scaleMini;
+		configButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+
+		stressButtonScale = scaleController.ScaleControll(stressButtonScale, scaleMax, scaleMini, scaleSpeed);
 			
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 5;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 3;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			beforButtonSelect = 4;
+			buttonSelect = 6;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			//ストレス集画面
+			endFlg = true;
+			nextScene = SCENENO_STRESSCOLLECTION;
+			Release();
+		}
+	}
+	else if (buttonSelect == 5)
+	{
+		gamePlayButtonScale = scaleMini;
+		configButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		titleButtonScale = scaleMini;
+
+		tutorialButtonScale = scaleController.ScaleControll(tutorialButtonScale, scaleMax, scaleMini, scaleSpeed);
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 4;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			beforButtonSelect = 5;
+			buttonSelect = 6;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//チュートリアルモード
 			flgTutorial = true;
@@ -113,25 +245,34 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
-	else
+	else if (buttonSelect == 6)
 	{
-		tutorialButtonScale = 1.0f;
-	}
-	if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
-	{
+		gamePlayButtonScale = scaleMini;
+		configButtonScale = scaleMini;
+		stressButtonScale = scaleMini;
+		trophyButtonScale = scaleMini;
+		tutorialButtonScale = scaleMini;
 		titleButtonScale = scaleController.ScaleControll(titleButtonScale, scaleMax, scaleMini, scaleSpeed);
-		
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 5;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT) || g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			buttonSelect = beforButtonSelect;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//タイトル画面
 			endFlg = true;
 			nextScene = SCENENO_TITLE;
 			Release();
 		}
-	}
-	else
-	{
-		titleButtonScale = 1.0f;
 	}
 }
 void CSceneGameMenu::SoundUpdate()
@@ -167,8 +308,8 @@ void CSceneGameMenu::Release()
 		@brief			各ボタンの矩形の取得
 		@param			0...泳ぐボタンの矩形を取得
 						1...設定ボタンの矩形を取得
-						2...ストレス集ボタンの矩形を取得
-						3...トロフィーボタンの矩形を取得
+						2...トロフィーボタンの矩形を取得
+						3...ストレス集ボタンの矩形を取得
 						4...チュートリアルボタンの矩形を取得
 						5...タイトルボタンの矩形を取得
 
@@ -181,9 +322,9 @@ CRectangle CSceneGameMenu::GetRect(int i)
 	else if (i == 1)
 		return CRectangle(buttonPosX, configButtonPosY, buttonPosX + configButtonTexture.GetWidth(), configButtonPosY + configButtonTexture.GetHeight());
 	else if (i == 2)
-		return CRectangle(buttonPosX, stressButtonPosY, buttonPosX + stressButtonTexture.GetWidth(), stressButtonPosY + stressButtonTexture.GetHeight());
-	else if (i == 3)
 		return CRectangle(buttonPosX, trophyButtonPosY,buttonPosX + trophyButtonTexture.GetWidth(), trophyButtonPosY + trophyButtonTexture.GetHeight());
+	else if (i == 3)
+		return CRectangle(buttonPosX, stressButtonPosY, buttonPosX + stressButtonTexture.GetWidth(), stressButtonPosY + stressButtonTexture.GetHeight());
 	else if (i == 4)
 		return CRectangle(buttonPosX, tutorialButtonPosY,buttonPosX + tutorialButtonTexture.GetWidth(), tutorialButtonPosY + tutorialButtonTexture.GetHeight());
 	else if (i == 5)

@@ -105,7 +105,6 @@ void CSceneStressCollection::Update()
 			nowPopUpStress->Release();
 			popUpFlg = false;
 		}
-		nowPopUpStress->Initialize();
 		nowPopUpStress->Update();
 	}
 
@@ -138,6 +137,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:体温上昇の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Hyperthermia);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -152,6 +152,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:体温低下の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Frozen);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -166,6 +167,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:餓死の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Starvation);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -180,6 +182,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:喉詰まりの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_ChokeOnShell);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -194,6 +197,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:肥満の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Obesity);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -208,6 +212,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:障害物と衝突の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Obstacle);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -230,6 +235,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:寄生虫の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Parasite);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -244,6 +250,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:ジャンプの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Jump);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -258,6 +265,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:泡の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Bubble);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -272,6 +280,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:ウミガメの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_SeaTurtle);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -286,6 +295,7 @@ void CSceneStressCollection::Update()
 					popUpFlg = true;
 					//ポップアップに死因:水流の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_WaterFlow);
+					nowPopUpStress->Initialize();
 				}
 			}
 			else
@@ -298,13 +308,6 @@ void CSceneStressCollection::Update()
 				page = 1;
 			}
 		}
-	}
-
-
-	//F1でポップアップ表示
-	if (g_pInput->IsKeyPush(MOFKEY_F1) && !popUpFlg)
-	{
-		popUpFlg = true;
 	}
 }
 void CSceneStressCollection::Render()

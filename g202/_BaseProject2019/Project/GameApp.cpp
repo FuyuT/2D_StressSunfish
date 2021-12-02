@@ -93,7 +93,7 @@ MofBool CGameApp::Update(void) {
 			nowScene = new CSceneTutorial;
 			break;
 		}
-		if (!nowScene->Load())return false;
+r		if (!nowScene->Load())return false;
 		nowScene->SetSoundManager(cSound);
 		nowScene->Initialize();
 	}

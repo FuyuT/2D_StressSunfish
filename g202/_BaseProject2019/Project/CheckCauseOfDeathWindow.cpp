@@ -38,7 +38,7 @@ void CCheckCauseOfDeathWindow::Initialize()
 		causeOfDeathTexture.Load("…–Ê‚É‚½‚½‚«‚Â‚¯‚ç‚êŽ€–S.png");
 
 	if (buttonResult == CAUSE_Bubble)
-		causeOfDeathTexture.Load("siin_aikon.png");
+		causeOfDeathTexture.Load("ƒ}ƒ“ƒ{ƒE–A.png");
 
 	if (buttonResult == CAUSE_SeaTurtle)
 		causeOfDeathTexture.Load("ƒ}ƒ“ƒ{ƒE‹T—\Š´.png");
@@ -47,25 +47,42 @@ void CCheckCauseOfDeathWindow::Initialize()
 		causeOfDeathTexture.Load("‰Á‘¬Ž€.png");
 
 	font.Create(64, "MS@–¾’©");
-
+	buttonSelect = 0;
 	endFlg = false;
 }
 void CCheckCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if ( GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonBackScale = scaleController.ScaleControll(buttonBackScale,scaleMax,scaleMini,scaleSpeed+0.002);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonBackScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		buttonBackScale = scaleController.ScaleControll(buttonBackScale, scaleMax, scaleMini, scaleSpeed);
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;
 		}
-	}
-	else
-	{
-		buttonBackScale = scaleMini;
 	}
 }
 void CCheckCauseOfDeathWindow::Render()

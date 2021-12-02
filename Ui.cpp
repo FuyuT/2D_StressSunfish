@@ -260,7 +260,6 @@ void CUi::Update()
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-}
 void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
 {
 	//m数表示 枠組み

@@ -157,7 +157,6 @@ void CSceneGame::Update()
 	EventUpdate();	
 
 	//ƒvƒŒƒCƒ„[
-	pl.Update(false, 3);
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(cObstacle,i,false,2);
@@ -181,7 +180,7 @@ void CSceneGame::Render()
 	//UI‚Ì•`‰æ
 	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-	if (ui.StartSign())startFlg = true;
+	if (ui.StartSign(false))startFlg = true;
 
 	//áŠQ•¨
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());

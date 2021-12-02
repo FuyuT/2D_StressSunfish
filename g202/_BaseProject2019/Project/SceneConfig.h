@@ -14,7 +14,7 @@ private:
 	CTexture	buttonTexture;
 	const int	buttonPosX = 800;
 	const int	buttonPosY = 800;
-	float		buttonScale = 1.0;
+	float		buttonScale = 1.0f;
 	bool		gamePlayFlg = false;
 
 	CTexture	muteTexBGM;
