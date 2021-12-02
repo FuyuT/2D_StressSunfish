@@ -17,6 +17,7 @@ void CContinueWindow::Initialize()
 	buttonMenuTexture.Load("ButtonMenu.png");
 	buttonTitleTexture.Load("ButtonTitle.png");
 	textTexture.Load("PopUpCountinue.png");
+	buttonSelect = 0;
 	endFlg = false;
 }
 void CContinueWindow::Update()
@@ -25,8 +26,51 @@ void CContinueWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonContinueScale = scaleController.ScaleControll(buttonContinueScale,scaleMax,scaleMini,scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 2;
+	}
+	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 3;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonContinueScale = scaleMini;
+		buttonMenuScale = scaleMini;
+		buttonTitleScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		buttonMenuScale = scaleMini;
+		buttonTitleScale = scaleMini;
+		buttonContinueScale = scaleController.ScaleControll(buttonContinueScale, scaleMax, scaleMini, scaleSpeed);
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 3;
+		}
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//コンティニューボタンが押された際の処理
@@ -36,14 +80,21 @@ void CContinueWindow::Update()
 			nextPopUp = NULL;
 		}
 	}
-	else
+	else if (buttonSelect == 2)
 	{
 		buttonContinueScale = scaleMini;
-	}
-	if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-	{
+		buttonTitleScale = scaleMini;
 		buttonMenuScale = scaleController.ScaleControll(buttonMenuScale, scaleMax, scaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 3;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 1;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//メニュー画面ボタンが押されたときの処理
@@ -54,14 +105,21 @@ void CContinueWindow::Update()
 			nextPopUp = NULL;
 		}
 	}
-	else
+	else if (buttonSelect == 3)
 	{
+		buttonContinueScale = scaleMini;
 		buttonMenuScale = scaleMini;
-	}
-	if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
-	{
 		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, scaleMax, scaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//タイトル画面ボタンが押された際の処理
@@ -71,10 +129,6 @@ void CContinueWindow::Update()
 
 			nextPopUp = NULL;
 		}
-	}
-	else
-	{
-		buttonTitleScale = scaleMini;
 	}
 }
 void CContinueWindow::Render()

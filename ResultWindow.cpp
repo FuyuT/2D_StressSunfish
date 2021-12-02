@@ -147,7 +147,7 @@ void CResultWindow::Initialize()
 		}
 	}
 
-
+	buttonSelect = 0;
 	font.Create(64, "MS@–¾’©");
 	distanceFont.Create(172, "MS@–¾’©");
 	endFlg = false;
@@ -158,18 +158,36 @@ void CResultWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonNextScale = scaleController.ScaleControll(buttonNextScale,scaleMax,scaleMini,scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP) || g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonNextScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;
 			nextPopUp = POPUPNO_CONTINUE;
 		}
 	}
-	else
-	{
-		buttonNextScale = scaleMini;
-	}
+
 }
 void CResultWindow::Render()
 {

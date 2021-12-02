@@ -52,7 +52,7 @@ void CCauseOfDeathWindow::Initialize()
 		break;
 	case CAUSE_Bubble:
 		//死因：泡画像を読み込む
-		caseOfDethTexture.Load("siin_aikon.png");
+		caseOfDethTexture.Load("マンボウ泡.png");
 		break;
 	case CAUSE_SeaTurtle:
 		//死因：ウミガメ画像を読み込む
@@ -64,25 +64,44 @@ void CCauseOfDeathWindow::Initialize()
 		break;
 	}
 	font.Create(64, "MS　明朝");
+	buttonSelect = 0;
 	endFlg = false;
 }
 void CCauseOfDeathWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
+
 	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP) || g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonNextScale = scaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
 		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;
 			nextPopUp = POPUPNO_RESULT;
 		}
-	}
-	else
-	{
-		buttonNextScale = scaleMini;
 	}
 }
 void CCauseOfDeathWindow::Render()

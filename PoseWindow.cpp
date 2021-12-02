@@ -18,18 +18,67 @@ void CPoseWindow::Initialize()
 	buttonTitleTexture.Load("ButtonTitle.png");
 	buttonReturnGameTexture.Load("ButtonReturnGame.png");
 
+	buttonSelect = 0;
 	endFlg = false;
-	buttonFlg = false;
 }
 void CPoseWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect(0).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonFlg = true;
+		keyModeFlg = false;
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 2;
+	}
+	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 3;
+	}
+	else if (GetRect(3).CollisionPoint(mousePosX, mousePosY))
+	{
+		keyModeFlg = false;
+		buttonSelect = 4;
+	}
+	else
+	{
+		if (!keyModeFlg)
+			buttonSelect = 0;
+	}
+
+	if (buttonSelect == 0)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			keyModeFlg = true;
+			buttonSelect = 1;
+		}
+		buttonConfigScale = buttonScaleMini;
+		buttonRetryScale = buttonScaleMini;
+		buttonTitleScale = buttonScaleMini;
+		buttonReturnGameScale = buttonScaleMini;
+	}
+	else if (buttonSelect == 1)
+	{
+		buttonRetryScale = buttonScaleMini;
+		buttonTitleScale = buttonScaleMini;
+		buttonReturnGameScale = buttonScaleMini;
 		buttonConfigScale = scaleController.ScaleControll(buttonConfigScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 2;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 4;
+		}
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
 			//Release();
@@ -40,16 +89,22 @@ void CPoseWindow::Update()
 			buttonResult = 4;
 		}
 	}
-	else
+	else if (buttonSelect == 2)
 	{
-		buttonFlg = false;
 		buttonConfigScale = buttonScaleMini;
-	}
-	if (GetRect(1).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
-	{
-		buttonFlg = true;
+		buttonTitleScale = buttonScaleMini;
+		buttonReturnGameScale = buttonScaleMini;
 		buttonRetryScale = scaleController.ScaleControll(buttonRetryScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 3;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 1;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//リトライボタンが押されたときの処理
 			Release();
@@ -57,34 +112,47 @@ void CPoseWindow::Update()
 			nextPopUp = POPUPNO_RETRY;
 		}
 	}
-	else
+	else if (buttonSelect == 3)
 	{
-		buttonFlg = false;
+		buttonConfigScale = buttonScaleMini;
 		buttonRetryScale = buttonScaleMini;
-	}
-	if (GetRect(2).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
-	{
-		buttonFlg = true;
+		buttonReturnGameScale = buttonScaleMini;
 		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
-			//タイトル画面ボタンが押された際の処理
+			buttonSelect = 4;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 2;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			//タイトルに戻るボタンが押されたときの処理
 			Release();
 			endFlg = true;
-			nextPopUp = NULL;
 			nextPopUp = POPUPNO_BACKTOTITLE;
 		}
 	}
-	else
+	else if (buttonSelect == 4)
 	{
-		buttonFlg = false;
+		buttonConfigScale = buttonScaleMini;
+		buttonRetryScale = buttonScaleMini;
 		buttonTitleScale = buttonScaleMini;
-	}
-	if (GetRect(3).CollisionPoint(mousePosX, mousePosY) && !buttonFlg)
-	{
-		buttonFlg = true;
 		buttonReturnGameScale = scaleController.ScaleControll(buttonReturnGameScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
+
+		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = 1;
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = 3;
+		}
+
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ゲームに戻るボタンが押された際の処理
 			Release();
@@ -92,11 +160,6 @@ void CPoseWindow::Update()
 			nextPopUp = NULL;
 			buttonResult = 5;
 		}
-	}
-	else
-	{
-		buttonFlg = false;
-		buttonReturnGameScale = buttonScaleMini;
 	}
 }
 void CPoseWindow::Render()
