@@ -37,9 +37,9 @@ private:
 	CRottenFish  cRottenFish[3];
 	CRottenCrab cRottenCrab[3];
 	CRottenShrimp cRottenShrimp[3];
-	CTurtle     cTurtle;
+	CTurtle     cTurtle[2];
 	CWaterFlow  cWaterFlow;
-	CShoalSardine cShoalSardine;
+	CShoalSardine cShoalSardine[2];
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
@@ -56,7 +56,7 @@ public:
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance, int posx, float wx, float wy, int tutorialStep);
+	void Update(int distance, int posx, float wx, float wy, int tutorialStep, int eventNum);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
@@ -78,10 +78,10 @@ public:
 		switch (type)
 		{
 		case Turtle:
-			return cTurtle.GetRect();
+			return cTurtle[num].GetRect();
 			break;
 		case ShoalSardine:
-			return cShoalSardine.GetRect();
+			return cShoalSardine[num].GetRect();
 			break;
 		case Garbage:
 			return cGarbage[num].GetRect();
@@ -145,10 +145,10 @@ public:
 		switch (type)
 		{
 		case Turtle:
-			return cTurtle.GetShow();
+			return cTurtle[num].GetShow();
 			break;
 		case ShoalSardine:
-			return cShoalSardine.GetShow();
+			return cShoalSardine[num].GetShow();
 			break;
 		case Garbage:
 			return cGarbage[num].GetShow();

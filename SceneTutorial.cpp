@@ -58,7 +58,6 @@ void CSceneTutorial::MessageUpdate()
 		{
 			if (tutorialStep == 2)
 			{
-				//todo:シーンの遷移
 				nextScene = SCENENO_GAME;
 				endFlg = true;
 			}
@@ -169,8 +168,8 @@ void CSceneTutorial::Update()
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	pl.Update(true, tutorialStep);
-	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep);
+	pl.Update(true, tutorialStep,0);
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep,0);
 	MessageUpdate();
 
 }
@@ -178,7 +177,7 @@ void CSceneTutorial::Update()
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),true);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),true,0);
 	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	MessageRender();
@@ -186,40 +185,40 @@ void CSceneTutorial::Render()
 	//現在のタスク一覧表示
 	if (tutorialStep >= 0)
 	{
-		CGraphicsUtilities::RenderString(10, 190, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+		CGraphicsUtilities::RenderString(10, 240, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
 		if (!pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 200, MOF_COLOR_BLACK, "□ [W]で上に移動");
+			CGraphicsUtilities::RenderString(40, 250, MOF_COLOR_BLACK, "□ [W]で上に移動");
 		else if (pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 200, MOF_COLOR_BLACK, "■ [W]で上に移動");
+			CGraphicsUtilities::RenderString(40, 250, MOF_COLOR_BLACK, "■ [W]で上に移動");
 
 		if (!pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 240, MOF_COLOR_BLACK, "□ [S]で下に移動");
+			CGraphicsUtilities::RenderString(40, 290, MOF_COLOR_BLACK, "□ [S]で下に移動");
 		else if (pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 240, MOF_COLOR_BLACK, "■ [S]で下に移動");
+			CGraphicsUtilities::RenderString(40, 290, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
 	if(tutorialStep >= 1)
 	{
-		CGraphicsUtilities::RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃");
+		CGraphicsUtilities::RenderString(10, 320, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
 		if (!pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "□ [A]でジャンプ");
 		else if (pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [A]でジャンプ");
 
 		if (!pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
 		else if (pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
 	if (tutorialStep != 2)
 	{
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+		CGraphicsUtilities::RenderString(10, 210, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
 	else
 	{
-		CGraphicsUtilities::RenderString(10, 160, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+		CGraphicsUtilities::RenderString(10, 210, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
 	}
 	
 

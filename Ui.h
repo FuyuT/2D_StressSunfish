@@ -108,8 +108,6 @@ private:
 	//フォント
 	CFont font;
 	CFont trophyFont;
-
-
 	CObstacleManager obs;
 	CTurtle turtle;
 public:
@@ -117,7 +115,7 @@ public:
 	void Initialize();
 	void Update();
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg);
+	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg,int eventNum);
 	void Release();
 
 	bool StartSign(bool pose);

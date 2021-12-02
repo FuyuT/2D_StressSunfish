@@ -259,7 +259,9 @@ void CUi::Update()
 	//アニメーション
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg)
+
+}
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -287,6 +289,30 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			double trueDis = (double)dis;
 			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
 		}
+	}
+
+	//イベントの表示
+	// 
+	//todo:画像に変える、動きを持たす
+	//今は仮として「○○イベント」という文字を表示している
+	switch (eventNum)
+	{
+		case 1:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "夏イベント");
+			break;
+		case 2:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "冬イベント");
+			break;
+		case 3:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ウミガメ大量発生イベント");
+			break;
+		case 4:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "魚群大量発生イベント");
+			break;
+		case 5:
+			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ゴミ大量発生イベント");
+			break;
+
 	}
 
 
