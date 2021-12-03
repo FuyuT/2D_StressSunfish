@@ -19,9 +19,10 @@ private:
 
 	CTexture	muteTexBGM;
 	Vector2     muteTexPosBGM;
+	bool		muteBGM;
 	CTexture	muteTexSE;
 	Vector2     muteTexPosSE;
-
+	bool		muteSE;
 public:
 	CSceneConfig();
 	~CSceneConfig();
@@ -29,6 +30,7 @@ public:
 	bool Load() override;
 	void Initialize() override;
 
+	void SoundUpdate() override;
 	void Update() override;
 
 	void Render() override;

@@ -60,10 +60,11 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
-
+	sceneConfig.SetSoundManager(cSound);
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
-	eventTimer.SetTotalTime(140);
+	//確認のためにイベントの発生までを早くしている
+	eventTimer.SetTotalTime(10);
 	eventNum = Event::Event_None;
 
 	//タイマー
@@ -89,17 +90,24 @@ void CSceneGame::Initialize()
 
 void CSceneGame::EventUpdate()
 {
-	eventTimer.StartTimer();
-	if (eventTimer.GetNowtime() < 0)
+	if (!pl.GetDead())
 	{
-		eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
-		eventTimer.SetTotalTime(140);
+		eventTimer.StartTimer();
+		if (eventTimer.GetNowtime() < 0)
+		{
+			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+			eventTimer.SetTotalTime(25);
+		}
+		else if (eventTimer.GetNowtime() < 15)
+		{
+			eventNum = Event::Event_None;
+		}
+		eventTimer.Update();
 	}
-	else if (eventTimer.GetNowtime() < 120)
+	else
 	{
 		eventNum = Event::Event_None;
 	}
-	eventTimer.Update();
 }
 
 void CSceneGame::Update()
@@ -149,14 +157,15 @@ void CSceneGame::Update()
 	EventUpdate();	
 
 	//プレイヤー
-	pl.Update(false, 3);
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(cObstacle,i,false,2);
 	}
+	//プレイヤー
+	pl.Update(false, 3, eventNum);
 
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3);
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3,eventNum);
 
 }
 
@@ -169,15 +178,15 @@ void CSceneGame::Render()
 	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-	if (ui.StartSign())startFlg = true;
+	if (ui.StartSign(false))startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
 	
 	//最前面の岩背景
-	stg.ForGroundRender();
+	stg.ForeGroundRender();
 
 	//ポップアップ描画
 	if (popUpFlg)
@@ -200,6 +209,7 @@ void CSceneGame::RenderDebug()
 
 	//デバッグ用
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+
 } 
 
 void CSceneGame::Release()
@@ -218,7 +228,7 @@ void CSceneGame::Release()
 			nowPopUpGame = NULL;
 		}
 	}
-
+	
 	//障害物
 	cObstacle.Release();
 }

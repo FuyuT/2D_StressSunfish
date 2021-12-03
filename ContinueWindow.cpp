@@ -17,7 +17,7 @@ void CContinueWindow::Initialize()
 	buttonMenuTexture.Load("ButtonMenu.png");
 	buttonTitleTexture.Load("ButtonTitle.png");
 	textTexture.Load("PopUpCountinue.png");
-	buttonSelect = 0;
+	buttonSelect = 1;
 	endFlg = false;
 }
 void CContinueWindow::Update()
@@ -26,37 +26,18 @@ void CContinueWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
 	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 2;
 	}
 	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 3;
 	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
-	}
-
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonContinueScale = scaleMini;
-		buttonMenuScale = scaleMini;
-		buttonTitleScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+	
+	if (buttonSelect == 1)
 	{
 		buttonMenuScale = scaleMini;
 		buttonTitleScale = scaleMini;
@@ -70,7 +51,7 @@ void CContinueWindow::Update()
 		{
 			buttonSelect = 3;
 		}
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//コンティニューボタンが押された際の処理
@@ -94,7 +75,7 @@ void CContinueWindow::Update()
 			buttonSelect = 1;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//メニュー画面ボタンが押されたときの処理
@@ -119,7 +100,7 @@ void CContinueWindow::Update()
 		{
 			buttonSelect = 2;
 		}
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			//タイトル画面ボタンが押された際の処理

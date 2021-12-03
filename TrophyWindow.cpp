@@ -95,7 +95,7 @@ void CTrophyWindow::Initialize()
 		trophyTexture.Load("S6_Ë”\–‚‹‰.png");
 		//à–¾•¶“Ç‚Ýž‚Ý
 	}
-	buttonSelect = 0;
+	buttonSelect = 1;
 	font.Create(64, "MS@–¾’©");
 	endFlg = false;
 }
@@ -105,29 +105,15 @@ void CTrophyWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
-	}
+	
 
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonBackScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+if (buttonSelect == 1)
 	{
 		buttonBackScale = scaleController.ScaleControll(buttonBackScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;

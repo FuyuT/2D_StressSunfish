@@ -19,7 +19,7 @@ void CSceneGameMenu::PlayBGM()
 
 void CSceneGameMenu::Initialize()
 {
-	buttonSelect = 0;
+	buttonSelect = 1;
 	backGroundTex.Load("Title.png");
 	textTexture.Load("MenuText.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
@@ -39,55 +39,31 @@ void CSceneGameMenu::Update()
 
 	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
 	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 2;
 	}
 	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 3;
 	}
 	else if (GetRect(3).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 4;
 	}
 	else if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 5;
 	}
 	else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 6;
-	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
+		beforButtonSelect = 1;
 	}
 
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		gamePlayButtonScale = scaleMini;
-		configButtonScale = scaleMini;
-		stressButtonScale = scaleMini;
-		trophyButtonScale = scaleMini;
-		tutorialButtonScale = scaleMini;
-		titleButtonScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+	if (buttonSelect == 1)
 	{
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -110,7 +86,7 @@ void CSceneGameMenu::Update()
 		}
 		gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ゲームプレイ画面
 			endFlg = true;
@@ -141,7 +117,7 @@ void CSceneGameMenu::Update()
 			buttonSelect = 6;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//設定画面
 			endFlg = true;
@@ -172,7 +148,7 @@ void CSceneGameMenu::Update()
 			buttonSelect = 6;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//トロフィー集
 			endFlg = true;
@@ -204,7 +180,7 @@ void CSceneGameMenu::Update()
 			buttonSelect = 6;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ストレス集画面
 			endFlg = true;
@@ -236,7 +212,7 @@ void CSceneGameMenu::Update()
 			buttonSelect = 6;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(4).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//チュートリアルモード
 			flgTutorial = true;
@@ -266,7 +242,7 @@ void CSceneGameMenu::Update()
 			buttonSelect = beforButtonSelect;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(5).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//タイトル画面
 			endFlg = true;

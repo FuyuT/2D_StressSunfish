@@ -30,7 +30,6 @@ protected:
 	const float		scaleMini = 1.0f;
 	//ボタン選択用変数
 	int				buttonSelect;
-	bool			keyModeFlg;
 	
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
