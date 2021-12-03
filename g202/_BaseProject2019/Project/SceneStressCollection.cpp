@@ -14,8 +14,8 @@ CSceneStressCollection::~CSceneStressCollection()
 
 void CSceneStressCollection::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_COLLECTION_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_COLLECTION_BGM);
 }
 
 void CSceneStressCollection::Initialize()

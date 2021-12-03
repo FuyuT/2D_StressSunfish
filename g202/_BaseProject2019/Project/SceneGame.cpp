@@ -40,8 +40,8 @@ CSceneGame::~CSceneGame()
 
 void CSceneGame::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_GAME_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_GAME_BGM);
 }
 
 
@@ -60,7 +60,7 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
-	sceneConfig.SetSoundManager(cSound);
+	sceneConfig.SetSoundManager(*cSound);
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
@@ -180,7 +180,7 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-	if (ui.StartSign(false))startFlg = true;
+	if (ui.StartSign(poseFlg))startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
@@ -209,6 +209,7 @@ void CSceneGame::RenderDebug()
 
 	//デバッグ用
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+
 
 } 
 

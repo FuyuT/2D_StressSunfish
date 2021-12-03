@@ -186,14 +186,14 @@ void CSoundManager::SetVolumeBGM(float volume)
 
 void CSoundManager::SetVolumeSE(float volume)
 {
-	if (volume <= 0)
-	{
-		muteSE = true;
-	}
-	else
-	{
-		muteSE = false;
-	}
+	//if (volume <= 0)
+	//{
+	//	muteSE = true;
+	//}
+	//else
+	//{
+	//	muteSE = false;
+	//}
 
 	sceneChangeSE.SetVolume(volume);
 	buttonSE.SetVolume(volume);

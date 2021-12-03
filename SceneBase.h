@@ -23,7 +23,7 @@ protected:
 	short		nextScene;
 	bool		popUpFlg = false;
 	CTexture    backGroundTex;
-	CSoundManager cSound;
+	CSoundManager* cSound;
 	//スケール用定数
 	const float		scaleSpeed = 0.002f;
 	const float		scaleMax = 1.05f;
@@ -53,6 +53,6 @@ public:
 	//ゲッター、セッター
 	short GetNextScene() { return nextScene; }
 	bool IsEnd() { return endFlg; }
-	void SetSoundManager(CSoundManager& p) { cSound = p; }
+	void SetSoundManager(CSoundManager& p) {cSound = &p; }
 };
 

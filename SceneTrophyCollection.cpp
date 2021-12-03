@@ -15,8 +15,8 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 
 void CSceneTrophyCollection::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_COLLECTION_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_COLLECTION_BGM);
 }
 
 void CSceneTrophyCollection::Initialize()

@@ -12,8 +12,8 @@ CSceneGameMenu::~CSceneGameMenu()
 
 void CSceneGameMenu::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_MENU_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_MENU_BGM);
 }
 
 

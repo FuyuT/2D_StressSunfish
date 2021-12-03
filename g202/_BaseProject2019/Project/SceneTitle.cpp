@@ -14,8 +14,8 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_TITLE_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_TITLE_BGM);
 }
 
 bool CSceneTitle::Load()

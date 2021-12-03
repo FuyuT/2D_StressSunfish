@@ -36,7 +36,7 @@ MofBool CGameApp::Initialize(void) {
 	CUtilities::SetCurrentDirectory("Resource");
 	cSound.Load();
 	//シーンの初期化
-	nowScene = new CSceneGame;
+	nowScene = new CSceneConfig;
 	nowScene->SetSoundManager(cSound);
 	nowScene->Load();
 	nowScene->Initialize();
@@ -93,7 +93,7 @@ MofBool CGameApp::Update(void) {
 			nowScene = new CSceneTutorial;
 			break;
 		}
-r		if (!nowScene->Load())return false;
+		if (!nowScene->Load())return false;
 		nowScene->SetSoundManager(cSound);
 		nowScene->Initialize();
 	}
@@ -120,6 +120,16 @@ MofBool CGameApp::Render(void) {
 	{
 		nowScene->RenderDebug();
 	}
+	//サウンド
+	//if (!cSound.GetMuteBGM())
+	//{
+	//	CGraphicsUtilities::RenderString(100, 500, "muteじゃない");
+	//}
+	//else
+	//{
+	//	CGraphicsUtilities::RenderString(100, 500, "mute中");
+	//}
+
 	//描画の終了
 	g_pGraphics->RenderEnd();
 	return TRUE;
