@@ -822,26 +822,26 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	CRectangle prec = GetRect();
 
 	//ウミガメ
+	if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
+		cObstacle.GetShow(Turtle, num) && !hitFlg)
+	{
+		if (causeOfDeath == CAUSE_None && !unDeadFlg)
+		{
+			//衝突
+			hitFlg = true;
+
+			//死因：ショック死
+			//当たった時点で即死
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_SeaTurtle;
+		}
+	}
+
 	if (num != 3)
 	{
-		if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
-			cObstacle.GetShow(Turtle, num) && !hitFlg)
-		{
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//衝突
-				hitFlg = true;
-
-				//死因：ショック死
-				//当たった時点で即死
-				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_SeaTurtle;
-			}
-		}
-
-		//todo:死因を障害物と衝突にしてるので、あとで変更
-		//魚群（イワシ）
-		else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
+			//todo:死因を障害物と衝突にしてるので、あとで変更
+			//魚群（イワシ）
+		if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
 			cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)

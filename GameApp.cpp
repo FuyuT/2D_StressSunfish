@@ -1,4 +1,4 @@
-/*************************************************************************//*!
+ /*************************************************************************//*!
 
 					@file	GameApp.cpp
 					@brief	基本ゲームアプリ。
@@ -15,9 +15,15 @@
 #include	"SceneConfig.h"
 #include	"SceneStressCollection.h"
 #include	"SceneTrophyCollection.h"
+#include	"SceneTutorial.h"
 
+#include	"SoundManager.h"
+CSoundManager cSound;
 //シーンクラス
 CSceneBase* nowScene = NULL;
+
+//デバッグ用
+bool debugShowFlg = false;
 /*************************************************************************//*!
 		@brief			アプリケーションの初期化
 		@param			None
@@ -28,9 +34,11 @@ CSceneBase* nowScene = NULL;
 MofBool CGameApp::Initialize(void) {
 	//リソースディレクトリの設定
 	CUtilities::SetCurrentDirectory("Resource");
-
+	cSound.Load();
 	//シーンの初期化
 	nowScene = new CSceneTitle;
+	nowScene->SetSoundManager(cSound);
+	nowScene->Load();
 	nowScene->Initialize();
 	return TRUE;
 }
@@ -44,6 +52,15 @@ MofBool CGameApp::Initialize(void) {
 MofBool CGameApp::Update(void) {
 	//キーの更新
 	g_pInput->RefreshKey();
+
+	//デバッグ用
+	if (g_pInput->IsKeyPush(MOFKEY_0))
+	{
+		if (debugShowFlg) debugShowFlg = false;
+		else if(!debugShowFlg) debugShowFlg = true;
+	}
+
+	//画面遷移
 	nowScene->Update();
 	if (nowScene->IsEnd())
 	{
@@ -72,9 +89,15 @@ MofBool CGameApp::Update(void) {
 		case SCENENO_TROPHY:
 			nowScene = new CSceneTrophyCollection;
 			break;
+		case SCENENO_TUTORIAL:
+			nowScene = new CSceneTutorial;
+			break;
 		}
+		if (!nowScene->Load())return false;
+		nowScene->SetSoundManager(cSound);
 		nowScene->Initialize();
 	}
+
 
 	return TRUE;
 }
@@ -93,7 +116,10 @@ MofBool CGameApp::Render(void) {
 	
 	//シーンの描画
 	nowScene->Render();
-
+	if (debugShowFlg)
+	{
+		nowScene->RenderDebug();
+	}
 	//描画の終了
 	g_pGraphics->RenderEnd();
 	return TRUE;
@@ -112,5 +138,6 @@ MofBool CGameApp::Release(void) {
 		delete nowScene;
 		nowScene = NULL;
 	}
+	cSound.Release();
 	return TRUE;
 }
