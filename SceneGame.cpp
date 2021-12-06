@@ -151,7 +151,7 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
-	ui.Update();
+	ui.Update(eventNum);
 	if (!startFlg)return;
 
 	//イベント
@@ -198,6 +198,7 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
+
 }
 
 //デバッグ

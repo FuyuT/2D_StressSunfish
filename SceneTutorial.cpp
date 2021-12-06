@@ -163,7 +163,7 @@ void CSceneTutorial::Initialize()
 void CSceneTutorial::Update()
 {
 	stg.Update(pl);
-	ui.Update();
+	ui.Update(0);
 	for (int i = 0; i < 3; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
