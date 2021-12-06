@@ -21,6 +21,7 @@ void CTurtle::Initialize()
     //pos.y = 1000;
     moveSpeed.x = 2.0f;
     //showFlg = true;
+    showFlg = false;
 
     SpriteAnimationCreate anim = {
         "ЙjВо",

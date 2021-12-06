@@ -24,6 +24,7 @@ void CGarbage::Initialize()
 	moveSpeed.x = 3.0f;
 	moveSpeed.y = MAX_MOVE_SPEED;
 	//showFlg = true;
+	showFlg = false;
 	moveUpFlg = true;
 	garbageNo = GARBAGE_NOT_SHOW;
 }

@@ -316,54 +316,57 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 
 	//次のトロフィーと距離(仮)
-	if (distanceNum < 1000)										//川級
+	if (!tutorialFlg)
 	{
-		riverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
-	}
-	else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
-	{
-		waterFallIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
-	}
-	else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
-	{
-		lakeIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
-	}
-	else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
-	{
-		damIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
-	}
-	else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
-	{
-		sewerIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
-	}
-	else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
-	{
-		indianOceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
-	}
-	else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
-	{
-		amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
-	}
-	else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
-	{
-		oceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
-	}
-	else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
-	{
-		seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
-	}
-	else if (distanceNum >= 300000)								//地球一周級
-	{
-		aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+		if (distanceNum < 1000)										//川級
+		{
+			riverIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
+		}
+		else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
+		{
+			waterFallIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
+		}
+		else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
+		{
+			lakeIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
+		}
+		else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
+		{
+			damIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
+		}
+		else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
+		{
+			sewerIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
+		}
+		else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
+		{
+			indianOceanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
+		}
+		else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
+		{
+			amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
+		}
+		else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
+		{
+			oceanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
+		}
+		else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
+		{
+			seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
+		}
+		else if (distanceNum >= 300000)								//地球一周級
+		{
+			aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+		}
 	}
 
 	//マンボウの顔の枠

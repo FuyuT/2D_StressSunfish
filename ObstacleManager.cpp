@@ -21,10 +21,11 @@ bool CObstacleManager::Load()
 		if (!cRottenFish[n].Load())return false;
 		if (!cRottenCrab[n].Load())return false;
 		if (!cRottenShrimp[n].Load())return false;
+		if (!cTurtle[n].Load())return false;
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		if (!cTurtle[n].Load())return false;
+		
 		if (!cShoalSardine[n].Load())return false;
 	}
 	if (!cWaterFlow.Load())return false;
@@ -45,10 +46,11 @@ void CObstacleManager::Initialize()
 		//è·äQï®
 		cGarbage[n].Initialize();
 		cBubble[n].Initialize();
+		cTurtle[n].Initialize();
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		cTurtle[n].Initialize();
+
 		cShoalSardine[n].Initialize();
 	}
 
@@ -67,23 +69,38 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 	{
 		//showFlgÇ™falseÇÃêHÇ◊ï®,è·äQï®ÇàÍÇ¬ÉâÉìÉ_ÉÄÇ≈ëIÇÒÇ≈ÅA
 		if (tutorialStep <= 2)
+		{
 			obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
-		else if (eventNum == 3)
-			obstacleNum = Turtle;
-		else if (eventNum == 4)
-			obstacleNum = ShoalSardine;
-		else if (eventNum == 5)
-			obstacleNum = Garbage;
+		}
+		else if(eventNum == 3 || eventNum == 4 || eventNum == 5)
+		{
+			eventFoodCreateFlg = ObstaclePercentage(25);
+			if (eventFoodCreateFlg)
+			{
+				obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
+			}
+			else
+			{
+				if (eventNum == 3)
+					obstacleNum = Turtle;
+				else if (eventNum == 4)
+					obstacleNum = ShoalSardine;
+				else if (eventNum == 5)
+					obstacleNum = Garbage;					
+			}
+		}
 		else
+		{
 			obstacleNum = obstacleRandom.Random(0, 11);
+		}
 
 		//è·äQï®ÇÃà íuéwíËÇ∆showflgÇtrue
 		switch (obstacleNum)
 		{
 		case Turtle:
-			for (int n = 0; n < 2; n++)
+			for (int n = 0; n < 3; n++)
 			{
-				if (eventNum != 3 && n == 1)
+				if (eventNum != 3 &&  n != 0)
 				{
 					return;
 				}
@@ -101,8 +118,8 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					cTurtle[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
 					cTurtle[n].SetPosy(posY);
-					if (eventNum == 3)
-						return;
+					/*if (eventNum == 3)
+						continue;*/
 					//èdÇ»Ç¡ÇΩèÍçáï\é¶ÇµÇ»Ç¢
 					for (int i = 0; i < 7; i++)
 					{
@@ -401,7 +418,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		case ShoalSardine:
 			for (int n = 0; n < 2; n++)
 			{
-				if (eventNum != 4 && n == 1)
+				if (eventNum != 4 && n != 0)
 				{
 					return;
 				}
@@ -458,11 +475,11 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		//è·äQï®
 		cGarbage[n].Update(wx, wy);
 		cBubble[n].Update(wx, wy);
-
+		cTurtle[n].Update(wx, wy);
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		cTurtle[n].Update(wx, wy);
+
 		cShoalSardine[n].Update(wx, wy);
 	}
 	cWaterFlow.Update(wx, wy);
@@ -482,13 +499,18 @@ void CObstacleManager::Render(float wx, float wy)
 		//è·äQï®
 		cGarbage[n].Render(wx, wy);
 		cBubble[n].Render(wx, wy);
+		cTurtle[n].Render(wx, wy);
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		cTurtle[n].Render(wx, wy);
+
 		cShoalSardine[n].Render(wx, wy);
 	}
 	cWaterFlow.Render(wx, wy);
+
+	CGraphicsUtilities::RenderString(50, 800, "%d", cTurtle[0].GetShow());
+	CGraphicsUtilities::RenderString(50, 830, "%d", cTurtle[1].GetShow());
+	CGraphicsUtilities::RenderString(50, 860, "%d", cTurtle[2].GetShow());
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
@@ -505,10 +527,11 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		//è·äQï®
 		cGarbage[n].RenderDebug(wx, wy);
 		cBubble[n].RenderDebug(wx, wy);
+		cTurtle[n].RenderDebug(wx, wy);
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		cTurtle[n].RenderDebug(wx, wy);
+
 		cShoalSardine[n].RenderDebug(wx, wy);
 	}
 	cWaterFlow.RenderDebug(wx, wy);
@@ -528,10 +551,11 @@ void CObstacleManager::Release()
 		//è·äQï®
 		cGarbage[n].Release();
 		cBubble[n].Release();
+		cTurtle[n].Release();
 	}
 	for (int n = 0; n < 2; n++)
 	{
-		cTurtle[n].Release();
+
 		cShoalSardine[n].Release();
 	}
 	cWaterFlow.Release();
