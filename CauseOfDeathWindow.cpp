@@ -64,7 +64,7 @@ void CCauseOfDeathWindow::Initialize()
 		break;
 	}
 	font.Create(64, "MS@–¾’©");
-	buttonSelect = 0;
+	buttonSelect = 1;
 	endFlg = false;
 }
 void CCauseOfDeathWindow::Update()
@@ -74,29 +74,14 @@ void CCauseOfDeathWindow::Update()
 
 	if (GetRect().CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
-	}
-
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP) || g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonNextScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+	
+	if (buttonSelect == 1)
 	{
 		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;

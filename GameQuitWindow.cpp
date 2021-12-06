@@ -15,7 +15,7 @@ void CGameQuitWindow::Initialize()
 	buttonYesTexture.Load("PopUpButton_YES.png");
 	buttonNoTexture.Load("PopUpButton_NO.png");
 	finishTextTexture.Load("PopUpFinishGame.png");
-	buttonSelect = 0;
+	buttonSelect = 1;
 	font.Create(32, "MS@–¾’©");
 	endFlg = false;
 }
@@ -25,33 +25,15 @@ void CGameQuitWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
 	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 2;
 	}
-	else
-	{
-		if (!keyModeFlg)
-		{
-			buttonSelect = 0;
-		}
-	}
 
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_LEFT) || g_pInput->IsKeyPush(MOFKEY_RIGHT))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonYesScale = scaleMini;
-		buttonNoScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+
+	if (buttonSelect == 1)
 	{
 		buttonNoScale = scaleMini;
 
@@ -65,7 +47,7 @@ void CGameQuitWindow::Update()
 		}
 		buttonYesScale = scaleController.ScaleControll(buttonYesScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			PostQuitMessage(0);
 		}
@@ -83,10 +65,11 @@ void CGameQuitWindow::Update()
 		}
 		buttonNoScale = scaleController.ScaleControll(buttonNoScale, scaleMax, scaleMini, scaleSpeed);
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			Release();
 			endFlg = true;
+			nextPopUp = POPUPNO_POSE;
 		}
 	}
 }

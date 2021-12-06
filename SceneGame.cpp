@@ -211,7 +211,6 @@ void CSceneGame::RenderDebug()
 	//デバッグ用
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-
 } 
 
 void CSceneGame::Release()

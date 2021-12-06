@@ -30,7 +30,7 @@ bool CSceneTitle::Load()
 void CSceneTitle::Initialize()
 {
 	Load();
-	buttonSelect = 0;
+	buttonSelect = 1;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
 	PlayBGM();
@@ -49,37 +49,16 @@ void CSceneTitle::Update()
 			popUpFlg = false;
 		}
 	}
-	else
+	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
-		{
-			keyModeFlg = false;
-			buttonSelect = 1;
-		}
-		else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-		{
-			keyModeFlg = false;
-			buttonSelect = 2;
-		}
-		else
-		{
-			if (!keyModeFlg)
-			{
-				buttonSelect = 0;
-			}
-		}
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
+	{
+		buttonSelect = 2;
+	}
 
-		if (buttonSelect == 0)
-		{
-			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-			{
-				keyModeFlg = true;
-				buttonSelect = 1;
-			}
-			gameFinishButtonScale = scaleMini;
-			gamePlayButtonScale = scaleMini;
-		}
-		else if (buttonSelect == 1)
+		if (buttonSelect == 1)
 		{
 			gameFinishButtonScale = scaleMini;
 
@@ -93,7 +72,7 @@ void CSceneTitle::Update()
 			}
 			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
 
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 			{
 				endFlg = true;
 				nextScene = SCENENO_GAMEMENU;
@@ -104,23 +83,23 @@ void CSceneTitle::Update()
 		else if (buttonSelect == 2)
 		{
 			gamePlayButtonScale = scaleMini;
-			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
 			{
 				buttonSelect = 1;
 			}
-			if (g_pInput->IsKeyPush(MOFKEY_UP))
+			if (g_pInput->IsKeyPush(MOFKEY_UP) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
 			{
 				buttonSelect = 1;
 			}
 			gameFinishButtonScale =  scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
 			
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 			{
 				nowPopUpTitle->Initialize();
 				popUpFlg = true;
 			}
 		}
-	}
+	
 
 	SoundUpdate();
 }

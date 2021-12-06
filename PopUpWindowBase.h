@@ -39,7 +39,6 @@ protected:
 	const float		scaleMini = 1.0f;
 	//ボタン選択用変数
 	int	buttonSelect;
-	bool keyModeFlg;
 public:
 	CPopUpWindowBase() {}
 	virtual ~CPopUpWindowBase() {}
