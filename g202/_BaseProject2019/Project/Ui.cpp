@@ -192,47 +192,50 @@ void CUi::Initialize()
 	radyGoB.SetBlinkingSpeed(100);
 	radyGoB.Initialize();
 
-	//アニメーション
+	//タイマー設定
+	eventTimer.SetTotalTime(3);
+
+	//イベントアニメーション
 	SpriteAnimationCreate anim[] = {
 		{
 			"夏",
 			0,0,
-			500,250,
+			131,68,
 			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},
-				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1},{5,6,1},
-		          {5,0,2}}
+				 {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1},{5,6,1},
+		         {5,0,2}}
 		},
 		{
 			"冬",
 			0,0,
-			400,250,
+			106,81,
 			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},{5,7,0},{5,8,0},
-				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1}}
+				 {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1}}
 		},
 		{
 			"亀大量発生",
 			0,0,
-			850,250,
-			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},
-				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},
-				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},
-				  {5,0,3},{5,1,3},{5,2,3}}
+			218,81,
+			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
+				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},
+				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},
+				 {4,0,3},{4,1,3},{4,2,3}}
 		},
 		{
 			"魚群大量発生",
 			0,0,
-			800,250,
-			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},
-				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},
-				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},{5,4,2}}
+			200,62,
+			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},
+				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},
+				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2}}
 		},
 		{
 			"ごみ大量発生",
 			0,0,
-			800,250,
-			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},
-				  {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},
-				  {5,0,2},{5,1,2},{5,2,2},{5,3,2},{5,4,2}}
+			200,62,
+			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},
+				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},
+				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2}}
 		},
 	};
 	motion.Create(anim, EVENTMOTION_COUNT);
@@ -248,7 +251,7 @@ void CUi::Initialize()
 	goPosy = 370;
 }
 
-void CUi::Update()
+void CUi::Update(int eventNum)
 {
 	//点滅設定
 	cautionB.Update();
@@ -256,7 +259,35 @@ void CUi::Update()
 	cautionColdB.Update();
 	radyGoB.Update();
 
-	//アニメーション
+	//タイマー
+	eventTimer.Update();
+
+	//イベントアニメーション
+	switch (eventNum)
+	{
+	case 1:
+		//夏
+		motion.ChangeMotion(EVENTMOTION_SUMMER, false);
+		break;
+	case 2:
+		//冬
+		motion.ChangeMotion(EVENTMOTION_WINTER, false);
+		break;
+	case 3:
+		//亀大量発生
+		motion.ChangeMotion(EVENTMOTION_TURTLE, false);
+		break;
+	case 4:
+		//魚群大量発生
+		motion.ChangeMotion(EVENTMOTION_SHOALSARDINE, false);
+		break;
+	case 5:
+		//ゴミ大量発生
+		motion.ChangeMotion(EVENTMOTION_GARBAGE, false);
+		break;
+	default:
+		break;
+	}
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
@@ -297,73 +328,179 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	switch (eventNum)
 	{
 		case 1:
-			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "夏イベント");
+			//夏イベント
+			if (eventPosX > 850)eventPosX -= 20;
+			else if (eventPosX <= 850)
+			{
+				eventTimer.StartTimer();
+				if (eventTimer.GetNowtime() < 0)
+				{
+					eventPosX -= 20;
+				}
+			}
+
+			eventSummer.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
 		case 2:
-			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "冬イベント");
+			//冬イベント
+			if (eventPosX > 870)eventPosX -= 20;
+			else if (eventPosX <= 870)
+			{
+				eventTimer.StartTimer();
+				if (eventTimer.GetNowtime() < 0)
+				{
+					eventPosX -= 20;
+				}
+			}
+
+			eventWinter.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
 		case 3:
-			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ウミガメ大量発生イベント");
+			//亀大量発生イベント
+			if (eventPosX > 800)eventPosX -= 20;
+			else if (eventPosX <= 800)
+			{
+				eventTimer.StartTimer();
+				if (eventTimer.GetNowtime() < 0)
+				{
+					eventPosX -= 20;
+				}
+			}
+
+			eventTurtle.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
 		case 4:
-			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "魚群大量発生イベント");
+			//魚群大量発生イベント
+			if (eventPosX > 800)eventPosX -= 20;
+			else if (eventPosX <= 800)
+			{
+				eventTimer.StartTimer();
+				if (eventTimer.GetNowtime() < 0)
+				{
+					eventPosX -= 20;
+				}
+			}
+
+			eventShoalSardine.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
 		case 5:
-			font.RenderFormatString(800, 80, MOF_COLOR_BLACK, "ゴミ大量発生イベント");
-			break;
+			//ゴミ大量発生イベント
+			if (eventPosX > 800)eventPosX -= 20;
+			else if (eventPosX <= 800)
+			{
+				eventTimer.StartTimer();
+				if (eventTimer.GetNowtime() < 0)
+				{
+					eventPosX -= 20;
+				}
+			}
 
+			eventGarbage.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			break;
+		default:
+			eventPosX = 1920;
+			eventTimer.SetTotalTime(3);
+			break;
 	}
 
 
-	//次のトロフィーと距離(仮)
-	if (distanceNum < 1000)										//川級
+	//現在獲得中のトロフィーと次にトロフィーを獲得できるまでの距離
+	if (distanceNum < RIVER)										//川級
 	{
 		riverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", RIVER - distanceNum);
 	}
-	else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
+	else if (distanceNum >= RIVER && distanceNum < WATERFALL)			//滝級
 	{
 		waterFallIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", WATERFALL - distanceNum);
 	}
-	else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
+	else if (distanceNum >= WATERFALL && distanceNum < LAKE)			//湖級
 	{
 		lakeIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", LAKE - distanceNum);
 	}
-	else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
+	else if (distanceNum >= LAKE && distanceNum < DAM)		//ダム級
 	{
 		damIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", DAM - distanceNum);
 	}
-	else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
+	else if (distanceNum >= DAM && distanceNum < SEWER)		//下水道級
 	{
 		sewerIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", SEWER - distanceNum);
 	}
-	else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
+	else if (distanceNum >= SEWER && distanceNum < INDIANOCEAN)		//インド洋級
 	{
 		indianOceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", INDIANOCEAN - distanceNum);
 	}
-	else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
+	else if (distanceNum >= INDIANOCEAN && distanceNum < AMAZONRIVER)		//アマゾン川級
 	{
 		amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", AMAZONRIVER - distanceNum);
 	}
-	else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
+	else if (distanceNum >= AMAZONRIVER && distanceNum < OCEAN)		//海級
 	{
 		oceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", OCEAN - distanceNum);
 	}
-	else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
+	else if (distanceNum >= OCEAN && distanceNum < SEAOFJAPAN)		//日本海級
 	{
 		seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", SEAOFJAPAN - distanceNum);
 	}
-	else if (distanceNum >= 300000)								//地球一周級
+	else if (distanceNum >= SEAOFJAPAN)								//地球一周級
 	{
-		aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+		if (distanceNum < 1000)										//川級
+		{
+			riverIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
+		}
+		else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
+		{
+			waterFallIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
+		}
+		else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
+		{
+			lakeIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
+		}
+		else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
+		{
+			damIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
+		}
+		else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
+		{
+			sewerIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
+		}
+		else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
+		{
+			indianOceanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
+		}
+		else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
+		{
+			amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
+		}
+		else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
+		{
+			oceanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
+		}
+		else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
+		{
+			seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
+			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
+		}
+		else if (distanceNum >= 300000)								//地球一周級
+		{
+			aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+		}
 	}
 
 	//マンボウの顔の枠
@@ -426,21 +563,21 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//ジャンプ
 	if (jumpFlg)
 	{
-		jumpAlpha = 255;
+		jumpAlpha = MAX_ALPHA;
 	}
 	else
 	{
-		jumpAlpha = 70;
+		jumpAlpha = TIN_ALPHA;
 	}
 	jumpPoss.Render(1400, 0, MOF_ARGB(jumpAlpha, 255, 255, 255));
 	//食事
 	if (eatFlg)
 	{
-		eatAlpha = 255;
+		eatAlpha = MAX_ALPHA;
 	}
 	else
 	{
-		eatAlpha = 70;
+		eatAlpha = TIN_ALPHA;
 	}
 	eatPoss.Render(1400, 100, MOF_ARGB(eatAlpha, 255, 255, 255));
 
@@ -461,7 +598,8 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//高温注意UI
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
 	//低温注意UI
-	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));	
+	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
+
 }
 
 void CUi::Release()
@@ -540,29 +678,4 @@ bool CUi::StartSign(bool pose)
 		}
 	}
 	return false;
-}
-
-void CUi::Event(int event)
-{
-	motion.ChangeMotion(event);
-
-	//イベントアニメーション
-	switch (motion.GetMotionNo())
-	{
-	case EVENTMOTION_SUMMER:
-		eventSummer.Render(800, 500, motion.GetSrcRect());
-		break;
-	case EVENTMOTION_WINTER:
-		eventWinter.Render(800, 500, motion.GetSrcRect());
-		break;
-	case EVENTMOTION_TURTLE:
-		eventTurtle.Render(800, 500, motion.GetSrcRect());
-		break;
-	case EVENTMOTION_SHOALSARDINE:
-		eventShoalSardine.Render(800, 500, motion.GetSrcRect());
-		break;
-	case EVENTMOTION_GARBAGE:
-		eventGarbage.Render(800, 500, motion.GetSrcRect());
-		break;
-	}
 }

@@ -37,7 +37,7 @@ private:
 	CRottenFish  cRottenFish[3];
 	CRottenCrab cRottenCrab[3];
 	CRottenShrimp cRottenShrimp[3];
-	CTurtle     cTurtle[2];
+	CTurtle     cTurtle[3];
 	CWaterFlow  cWaterFlow;
 	CShoalSardine cShoalSardine[2];
 
@@ -50,6 +50,7 @@ private:
 	int posYNum;
 
 	bool createFlg;
+	bool eventFoodCreateFlg;
 
 public:
 	CObstacleManager();

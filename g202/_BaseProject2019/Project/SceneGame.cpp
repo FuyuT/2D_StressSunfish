@@ -61,10 +61,11 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 	sceneConfig.SetSoundManager(*cSound);
+
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
-	eventTimer.SetTotalTime(10);
+	eventTimer.SetTotalTime(5);
 	eventNum = Event::Event_None;
 
 	//タイマー
@@ -95,10 +96,10 @@ void CSceneGame::EventUpdate()
 		eventTimer.StartTimer();
 		if (eventTimer.GetNowtime() < 0)
 		{
-			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
-			eventTimer.SetTotalTime(25);
+			eventNum = 3;// eventRandom.Random(Event::Event_Summer, Event_Count);
+			eventTimer.SetTotalTime(20);
 		}
-		else if (eventTimer.GetNowtime() < 15)
+		else if (eventTimer.GetNowtime() < 10)
 		{
 			eventNum = Event::Event_None;
 		}
@@ -150,7 +151,7 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
-	ui.Update();
+	ui.Update(eventNum);
 	if (!startFlg)return;
 
 	//イベント
@@ -159,7 +160,7 @@ void CSceneGame::Update()
 	//プレイヤー
 	for (int i = 0; i < 3; i++)
 	{
-		pl.Collision(cObstacle,i,false,2);
+		pl.Collision(cObstacle,i,false,3);
 	}
 	//プレイヤー
 	pl.Update(false, 3, eventNum);
@@ -197,6 +198,7 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
+
 }
 
 //デバッグ
@@ -206,9 +208,6 @@ void CSceneGame::RenderDebug()
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 	//障害物
 	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
-
-	//デバッグ用
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
 
 } 

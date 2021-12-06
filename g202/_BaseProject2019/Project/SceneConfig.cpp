@@ -36,7 +36,7 @@ void CSceneConfig::Initialize()
 	BGMControlButtonPos.y = BGM_CONTROL_BUTTON_POS_Y;
 	SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_POS_X;
 	SEControlButtonPos.y = SE_CONTROL_BUTTON_POS_X;
-	buttonSelect	= 0;
+	buttonSelect = 1;
 }
 
 //todo:mute機能作る あとミュートから戻した時の音どうするかだけ
@@ -143,36 +143,20 @@ void CSceneConfig::Update()
 	//if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
 	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
-	}
-
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonScale = scaleMini;
-	}
-	else if (buttonSelect == 1)
+	if (buttonSelect == 1)
 	{
 		buttonScale = scaleController.ScaleControll(buttonScale,scaleMax,scaleMini,scaleSpeed);
 		//SceneGameMenu
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !gamePlayFlg|| g_pInput->IsKeyPush(MOFKEY_SPACE) && !gamePlayFlg)
+		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))&& !gamePlayFlg)
 		{
 			endFlg = true;
 			nextScene = SCENENO_GAMEMENU;
 			CSceneConfig::Release();
 		}
 		//SceneGame
-		else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		else if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && gamePlayFlg)
 		{
 			CSceneConfig::Release();
 			gamePlayFlg = false;
@@ -184,7 +168,10 @@ void CSceneConfig::Update()
 	{
 		buttonScale = scaleMini;
 	}
+
 }
+
+
 
 void CSceneConfig::Render()
 {

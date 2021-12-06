@@ -18,7 +18,7 @@ void CPoseWindow::Initialize()
 	buttonTitleTexture.Load("ButtonTitle.png");
 	buttonReturnGameTexture.Load("ButtonReturnGame.png");
 
-	buttonSelect = 0;
+	buttonSelect = 1;
 	endFlg = false;
 }
 void CPoseWindow::Update()
@@ -27,43 +27,22 @@ void CPoseWindow::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 1;
 	}
 	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 2;
 	}
 	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 3;
 	}
 	else if (GetRect(3).CollisionPoint(mousePosX, mousePosY))
 	{
-		keyModeFlg = false;
 		buttonSelect = 4;
 	}
-	else
-	{
-		if (!keyModeFlg)
-			buttonSelect = 0;
-	}
-
-	if (buttonSelect == 0)
-	{
-		if (g_pInput->IsKeyPush(MOFKEY_DOWN) || g_pInput->IsKeyPush(MOFKEY_UP))
-		{
-			keyModeFlg = true;
-			buttonSelect = 1;
-		}
-		buttonConfigScale = buttonScaleMini;
-		buttonRetryScale = buttonScaleMini;
-		buttonTitleScale = buttonScaleMini;
-		buttonReturnGameScale = buttonScaleMini;
-	}
-	else if (buttonSelect == 1)
+	
+	if (buttonSelect == 1)
 	{
 		buttonRetryScale = buttonScaleMini;
 		buttonTitleScale = buttonScaleMini;
@@ -78,7 +57,7 @@ void CPoseWindow::Update()
 		{
 			buttonSelect = 4;
 		}
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
 			//Release();
@@ -104,7 +83,7 @@ void CPoseWindow::Update()
 			buttonSelect = 1;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//リトライボタンが押されたときの処理
 			Release();
@@ -128,7 +107,7 @@ void CPoseWindow::Update()
 			buttonSelect = 2;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//タイトルに戻るボタンが押されたときの処理
 			Release();
@@ -152,7 +131,7 @@ void CPoseWindow::Update()
 			buttonSelect = 3;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && !keyModeFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ゲームに戻るボタンが押された際の処理
 			Release();

@@ -209,8 +209,6 @@ void CSceneGame::RenderDebug()
 	//障害物
 	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-	//デバッグ用
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
 } 
 
