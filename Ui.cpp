@@ -329,13 +329,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	{
 		case 1:
 			//夏イベント
-			if (eventPosX > 850)eventPosX -= 20;
+			if (eventPosX > 850)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 850)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
 				{
-					eventPosX -= 20;
+					eventPosX -= EVENT_MOVE;
 				}
 			}
 
@@ -343,13 +343,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			break;
 		case 2:
 			//冬イベント
-			if (eventPosX > 870)eventPosX -= 20;
+			if (eventPosX > 870)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 870)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
 				{
-					eventPosX -= 20;
+					eventPosX -= EVENT_MOVE;
 				}
 			}
 
@@ -357,13 +357,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			break;
 		case 3:
 			//亀大量発生イベント
-			if (eventPosX > 800)eventPosX -= 20;
+			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
 				{
-					eventPosX -= 20;
+					eventPosX -= EVENT_MOVE;
 				}
 			}
 
@@ -371,13 +371,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			break;
 		case 4:
 			//魚群大量発生イベント
-			if (eventPosX > 800)eventPosX -= 20;
+			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
 				{
-					eventPosX -= 20;
+					eventPosX -= EVENT_MOVE;
 				}
 			}
 
@@ -385,13 +385,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			break;
 		case 5:
 			//ゴミ大量発生イベント
-			if (eventPosX > 800)eventPosX -= 20;
+			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
 				{
-					eventPosX -= 20;
+					eventPosX -= EVENT_MOVE;
 				}
 			}
 
