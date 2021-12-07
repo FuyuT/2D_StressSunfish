@@ -13,6 +13,14 @@
 #define  MESSAGE_ARRAY_BYTE   500	//メッセージの文字数を変更したかったら、ここを変更する
 #define  MESSAGE_DELAY_FRAME  5		//何フレームごとに一文字を表示するか
 
+enum TutorialStep
+{
+	Task_Movement		= 2,
+	Task_Action			= 3,
+	Task_Complete		= 6,
+	Task_End			= 7,
+};
+
 class CSceneTutorial : public CSceneBase
 {
 private:
@@ -39,7 +47,6 @@ private:
 	char			 fLineBuffer[MESSAGE_ARRAY_BYTE] = "\0";
 	int				 mShowDelay;
 	bool			 messageEndFlg;
-
 	int				tutorialStep;
 
 public:

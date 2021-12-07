@@ -56,12 +56,13 @@ void CSceneTutorial::MessageUpdate()
 		messageEndFlg = true;
 		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
-			if (tutorialStep == 2)
+			if (tutorialStep == TutorialStep::Task_Complete)
 			{
+				tutorialStep = TutorialStep::Task_End;
 				nextScene = SCENENO_GAME;
 				endFlg = true;
 			}
-			if (tutorialStep != pl.GetTaskCompleteStep())
+			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
 				for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
 				{
@@ -116,7 +117,7 @@ void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
 	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messageEndFlg && tutorialStep == 2)
+	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
 	{
 		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押してゲームを開始する");
 	}
@@ -163,8 +164,8 @@ void CSceneTutorial::Initialize()
 void CSceneTutorial::Update()
 {
 	stg.Update(pl);
-	ui.Update();
-	for (int i = 0; i < 3; i++)
+	ui.Update(0);
+	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
@@ -177,16 +178,16 @@ void CSceneTutorial::Update()
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),true,0);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	
 	//最前面の岩背景
 	stg.ForeGroundRender();
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, 0);
 	MessageRender();
 
 	//現在のタスク一覧表示
-	if (tutorialStep >= 0)
+	if (tutorialStep >= TutorialStep::Task_Movement)
 	{
 		CGraphicsUtilities::RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
@@ -200,7 +201,7 @@ void CSceneTutorial::Render()
 		else if (pl.GetMoveDownTask())
 			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
-	if(tutorialStep >= 1)
+	if(tutorialStep >= TutorialStep::Task_Action)
 	{
 		CGraphicsUtilities::RenderString(10, 360, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
@@ -215,7 +216,7 @@ void CSceneTutorial::Render()
 			CGraphicsUtilities::RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
-	if (tutorialStep != 2)
+	if (tutorialStep != TutorialStep::Task_Complete)
 	{
 		CGraphicsUtilities::RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}

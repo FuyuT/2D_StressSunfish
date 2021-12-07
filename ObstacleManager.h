@@ -37,7 +37,7 @@ private:
 	CRottenFish  cRottenFish[3];
 	CRottenCrab cRottenCrab[3];
 	CRottenShrimp cRottenShrimp[3];
-	CTurtle     cTurtle[3];
+	CTurtle     cTurtle[5];
 	CWaterFlow  cWaterFlow;
 	CShoalSardine cShoalSardine[2];
 
