@@ -15,8 +15,8 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 
 void CSceneTrophyCollection::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_COLLECTION_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_COLLECTION_BGM);
 }
 
 void CSceneTrophyCollection::Initialize()
@@ -78,6 +78,7 @@ void CSceneTrophyCollection::Initialize()
 
 	if(talentedDemonFlg)
 		talentedDemonIconTexture.Load("S6_才能魔級.png");
+	
 
 	//ボタンテクスチャ読み込み
 	menuButtonTexture.Load("ButtonMenu.png");
@@ -594,6 +595,11 @@ void CSceneTrophyCollection::Update()
 				}
 			}
 
+			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
+			{
+				page = 2;
+			}
+
 		}
 		else if (page == 2)
 		{
@@ -1040,6 +1046,15 @@ void CSceneTrophyCollection::Update()
 				}
 			}
 
+
+			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
+			{
+				page = 1;
+			}
+			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
+			{
+				page = 3;
+			}
 		}
 	
 		else if (page == 3)
@@ -1407,11 +1422,10 @@ void CSceneTrophyCollection::Update()
 					nowPopUpTrophy->Initialize();
 				
 				}
-			
-				if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
-				{
-					page = 2;
-				}
+			}
+		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
+		{
+			page = 2;
 		}
 	}
 }
@@ -1485,7 +1499,7 @@ void CSceneTrophyCollection::Render()
 	}
 
 	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
-	CGraphicsUtilities::RenderString(900, 900, "%d/3", page);
+	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(255, 255, 255), "%d/3", page);
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 

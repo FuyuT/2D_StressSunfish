@@ -40,8 +40,8 @@ CSceneGame::~CSceneGame()
 
 void CSceneGame::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_GAME_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_GAME_BGM);
 }
 
 
@@ -60,11 +60,12 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
-	sceneConfig.SetSoundManager(cSound);
+	sceneConfig.SetSoundManager(*cSound);
+
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
-	eventTimer.SetTotalTime(10);
+	eventTimer.SetTotalTime(5);
 	eventNum = Event::Event_None;
 
 	//タイマー
@@ -95,10 +96,10 @@ void CSceneGame::EventUpdate()
 		eventTimer.StartTimer();
 		if (eventTimer.GetNowtime() < 0)
 		{
-			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
-			eventTimer.SetTotalTime(25);
+			eventNum = 3;// eventRandom.Random(Event::Event_Summer, Event_Count);
+			eventTimer.SetTotalTime(20);
 		}
-		else if (eventTimer.GetNowtime() < 15)
+		else if (eventTimer.GetNowtime() < 10)
 		{
 			eventNum = Event::Event_None;
 		}
@@ -150,7 +151,7 @@ void CSceneGame::Update()
 	//スクロール
 	stg.Update(pl);
 
-	ui.Update();
+	ui.Update(eventNum);
 	if (!startFlg)return;
 
 	//イベント
@@ -159,7 +160,7 @@ void CSceneGame::Update()
 	//プレイヤー
 	for (int i = 0; i < 3; i++)
 	{
-		pl.Collision(cObstacle,i,false,2);
+		pl.Collision(cObstacle,i,false,3);
 	}
 	//プレイヤー
 	pl.Update(false, 3, eventNum);
@@ -180,7 +181,7 @@ void CSceneGame::Render()
 	//UIの描画
 	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
-	if (ui.StartSign(false))startFlg = true;
+	if (ui.StartSign(poseFlg))startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
@@ -197,6 +198,7 @@ void CSceneGame::Render()
 	{
 		sceneConfig.Render();
 	}
+
 }
 
 //デバッグ
@@ -207,8 +209,6 @@ void CSceneGame::RenderDebug()
 	//障害物
 	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-	//デバッグ用
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
 } 
 
@@ -376,6 +376,10 @@ void CSceneGame::CaseOfDethController()
 		case CAUSE_WaterFlow:
 			nowPopUpGame->SetDethResult(CAUSE_WaterFlow);
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
+			break;
+		case CAUSE_ShoalFish:
+			nowPopUpGame->SetDethResult(CAUSE_ShoalFish);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_ShoalFish);
 			break;
 		}
 		nowPopUpGame->SetNewGetDeath(newGetDeth);

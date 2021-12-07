@@ -46,6 +46,9 @@ void CCheckCauseOfDeathWindow::Initialize()
 	if (buttonResult == CAUSE_WaterFlow)
 		causeOfDeathTexture.Load("加速死.png");
 
+	if (buttonResult == CAUSE_ShoalFish)
+		causeOfDeathTexture.Load("マンボウ　魚群衝突死 .png");
+
 	font.Create(64, "MS　明朝");
 	buttonSelect = 1;
 	endFlg = false;
@@ -113,7 +116,10 @@ void CCheckCauseOfDeathWindow::Render()
 
 	if (buttonResult == CAUSE_WaterFlow)
 		font.RenderString(475, 250, MOF_XRGB(0, 0, 0), "急に加速させられたストレスで死亡");
-	
+
+	if(buttonResult == CAUSE_ShoalFish)
+		font.RenderString(475, 250, MOF_XRGB(0, 0, 0), "魚群に衝突したストレスで死亡");
+
 	scaleController.ScaleRender(&buttonBackTexture,buttonBackPosX,buttonBackPosY,buttonBackScale);
 }
 void CCheckCauseOfDeathWindow::Release()

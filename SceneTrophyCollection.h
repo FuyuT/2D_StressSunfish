@@ -101,8 +101,9 @@ private:
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 875;
 	float				menuButtonScale = 1.0f;
-	const int			rightButtonPosX = 950;
-	const int			leftButtonPosX = 850;
+
+	const int			rightButtonPosX = 990;
+	const int			leftButtonPosX = 900;
 	const int			leftAndRightButtonPosY = 900;
 
 	//取得したトロフィーを三つ保存するための配列ポインタ

@@ -69,7 +69,6 @@ void CGameQuitWindow::Update()
 		{
 			Release();
 			endFlg = true;
-			nextPopUp = POPUPNO_POSE;
 		}
 	}
 }
