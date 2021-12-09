@@ -65,10 +65,10 @@ void CShoalSardine::Update(float wx, float wy)
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //‰æ–Ê‚Ì‰E’[
 	
 	bool i;
-	i = keikokumotion.ChangeMotion(0);
+	i = keikokumotion.ChangeMotion(1);
 	if (i) 
 	{
-		pos.x = scRight;
+		pos.x = wx -  scRight;
 		
 	}
 	else 
