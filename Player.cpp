@@ -108,7 +108,7 @@ void CPlayer::Initialize()
 	//チュートリアル
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
-	taskCompleteStep = 0;
+	taskCompleteStep = 2;
 	moveUpTaskTimer.SetTotalTime(3);
 	moveDownTaskTimer.SetTotalTime(3);
 
@@ -164,7 +164,7 @@ void CPlayer::Initialize()
 }
 
 //移動
-void CPlayer::UpdateMove()
+void CPlayer::UpdateMove(int tutorialStep)
 {
 
 	//右に移動
@@ -220,21 +220,24 @@ void CPlayer::UpdateMove()
 	}
 
 	//チュートリアル用入力検知
-	if (g_pInput->IsKeyPush(MOFKEY_W))
+	if (tutorialStep == 2)
 	{
-		moveUpTaskTimer.StartTimer();
-	}
-	else if (g_pInput->IsKeyPull(MOFKEY_W))
-	{
-		moveUpTaskTimer.StopTimer();
-	}
-	if (g_pInput->IsKeyPush(MOFKEY_S))
-	{
-		moveDownTaskTimer.StartTimer();
-	}
-	else if (g_pInput->IsKeyPull(MOFKEY_S))
-	{
-		moveDownTaskTimer.StopTimer();
+		if (g_pInput->IsKeyPush(MOFKEY_W))
+		{
+			moveUpTaskTimer.StartTimer();
+		}
+		else if (g_pInput->IsKeyPull(MOFKEY_W))
+		{
+			moveUpTaskTimer.StopTimer();
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_S))
+		{
+			moveDownTaskTimer.StartTimer();
+		}
+		else if (g_pInput->IsKeyPull(MOFKEY_S))
+		{
+			moveDownTaskTimer.StopTimer();
+		}
 	}
 
 	//上に移動
@@ -301,7 +304,7 @@ void CPlayer::UpdateMove()
 bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 1)
+	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 3)
 	{
 		//チュートリアルタスク
 		eatTaskFlg = true;
@@ -368,7 +371,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
-		possibleToJumpFlg && tutorialStep >= 1)
+		possibleToJumpFlg && tutorialStep >= 3)
 	{
 		//チュートリアルタスク
 		jumpTaskFlg = true;
@@ -458,7 +461,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 体温
 	 *********/
-	if (!jumpFlg && tutorialStep >= 2)
+	if (!jumpFlg && tutorialStep >= 7)
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
@@ -524,7 +527,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 寄生虫
 	 *********/
-	if (!jumpFlg && tutorialStep >= 1)
+	if (!jumpFlg && tutorialStep >= 3)
 	{
 		if (parasite < PARASITE_LIMIT)
 		{
@@ -550,7 +553,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 空腹
 	 *********/
-	if (tutorialStep >= 1)
+	if (tutorialStep >= 3)
 	{
 		if (hungerRegion <= STARVATION)
 		{
@@ -656,13 +659,13 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 	moveDownTaskTimer.Update();
 
 	//チュートリアル
-	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 0)
+	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 2)
 	{
-		taskCompleteStep += 1;
+		taskCompleteStep = 3;
 	}
-	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 1)
+	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 3)
 	{
-		taskCompleteStep += 1;
+		taskCompleteStep = 6;
 	}
 
 	//ジャンプ中は操作が行えないように
@@ -670,7 +673,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 		return;
 
 	//移動更新
-	UpdateMove();
+	UpdateMove(tutorialStep);
 
 }
 
@@ -836,11 +839,17 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 			causeOfDeath = CAUSE_SeaTurtle;
 		}
 	}
-
-	if (num != 3)
+	//画面内に4体目、5対目が出てくるのは今のところウミガメだけのため、処理を切り上げる
+	if (num == 3 || num == 4)
 	{
-			//todo:死因を障害物と衝突にしてるので、あとで変更
-			//魚群（イワシ）
+		return;
+	}
+
+	//魚群は最大でも二体までしか出ない
+	if (num != 2)
+	{
+		//todo:死因を障害物と衝突にしてるので、あとで変更
+		//魚群（イワシ）
 		if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
 			cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 		{
@@ -850,7 +859,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 				hitFlg = true;
 				//死因：衝突死
 				motion.ChangeMotion(MOTION_DEATH);
-				causeOfDeath = CAUSE_Obstacle;
+				causeOfDeath = CAUSE_ShoalFish;
 			}
 		}
 	}

@@ -405,7 +405,11 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 
 	//現在獲得中のトロフィーと次にトロフィーを獲得できるまでの距離
-	if (distanceNum < RIVER)										//川級
+	if (tutorialFlg)
+	{
+		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと━━ m");
+	}
+	else if (distanceNum < RIVER)										//川級
 	{
 		riverIconTexture.RenderScale(220, 0, 0.75f);
 		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", RIVER - distanceNum);
