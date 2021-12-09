@@ -62,6 +62,10 @@ void CCauseOfDeathWindow::Initialize()
 		//死因：水流アイコンを読み込む
 		caseOfDethTexture.Load("加速死.png");
 		break;
+	case CAUSE_ShoalFish:
+		//死因：水流アイコンを読み込む
+		caseOfDethTexture.Load("マンボウ　魚群衝突死 .png");
+		break;
 	}
 	font.Create(64, "MS　明朝");
 	buttonSelect = 1;

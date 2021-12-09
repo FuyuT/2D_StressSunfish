@@ -65,7 +65,7 @@ void CSceneGame::Initialize()
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
-	eventTimer.SetTotalTime(5);
+	eventTimer.SetTotalTime(20);
 	eventNum = Event::Event_None;
 
 	//タイマー
@@ -96,10 +96,10 @@ void CSceneGame::EventUpdate()
 		eventTimer.StartTimer();
 		if (eventTimer.GetNowtime() < 0)
 		{
-			eventNum = 3;// eventRandom.Random(Event::Event_Summer, Event_Count);
-			eventTimer.SetTotalTime(20);
+			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+			eventTimer.SetTotalTime(40);
 		}
-		else if (eventTimer.GetNowtime() < 10)
+		else if (eventTimer.GetNowtime() < 20)
 		{
 			eventNum = Event::Event_None;
 		}
@@ -158,15 +158,15 @@ void CSceneGame::Update()
 	EventUpdate();	
 
 	//プレイヤー
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		pl.Collision(cObstacle,i,false,3);
+		pl.Collision(cObstacle,i,false,7);
 	}
 	//プレイヤー
-	pl.Update(false, 3, eventNum);
+	pl.Update(false, 7, eventNum);
 
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3,eventNum);
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),7,eventNum);
 
 }
 
@@ -376,6 +376,10 @@ void CSceneGame::CaseOfDethController()
 		case CAUSE_WaterFlow:
 			nowPopUpGame->SetDethResult(CAUSE_WaterFlow);
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
+			break;
+		case CAUSE_ShoalFish:
+			nowPopUpGame->SetDethResult(CAUSE_ShoalFish);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_ShoalFish);
 			break;
 		}
 		nowPopUpGame->SetNewGetDeath(newGetDeth);

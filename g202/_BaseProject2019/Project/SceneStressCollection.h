@@ -6,7 +6,7 @@ class CSceneStressCollection : public CSceneBase
 {
 private:
 	//死因用アイコンテクスチャと表示フラグ宣言
-	CTexture	hyperthermiaTexture;	//体温上昇
+	CTexture	hyperthermiaTexture;				//体温上昇
 	bool		hyperthermiaFlg = false;
 	float		hyperthermiaScale = 1.0f;
 	CTexture	lowerBodyTemperatureTexture;		//体温低下
@@ -18,6 +18,7 @@ private:
 	CTexture	cloggedThroatexture;				//餌が喉に刺さる
 	bool		cloggedThroatFlg = false;
 	float		cloggedThroatScale = 1.0f;
+
 	CTexture	obesityTexture;						//肥満
 	bool		obesityFlg = false;
 	float		obesityScale = 1.0f;
@@ -30,6 +31,7 @@ private:
 	CTexture	jumpTexture;						//ジャンプ
 	bool		jumpFlg = false;
 	float		jumpScale = 1.0f;
+
 	CTexture	bubbleTexture;						//泡
 	bool		bubbleFlg = false;
 	float		bubbleScale = 1.0f;
@@ -39,18 +41,17 @@ private:
 	CTexture	waterFlowTexture;					//水流
 	bool		waterFlowFlg = false;
 	float		waterFlowScale = 1.0f;
+	CTexture	shoalFishTexture;					//魚群
+	bool		shoalFishFlg = true;
+	float		shoalFishScale = 1.0f;
 
-	//1ページ目、2ページ目上段のX座標
-	const int			iconFirstRowPosX = 350;
-	const  int			iconSecondRowPosX = 850;
-	const int			iconThirdRowPosX = 1350;
-	//2ページ目下段のX座標
-	const int			icon2PageFirstRowPosX = 600;
-	const int			icon2pageSecondRowPosX = 1100;
-		//一行目のY座標
-	const int			iconOneLinePosY = 200;
-	//二行目のY座標
-	const int			iconTwoLinePosY = 500;
+	//X座標
+	const int			iconFirstRowPosX = 120;
+	const int			iconSecondRowPosX = 1050;
+
+	//Y座標
+	const int			iconOneLinePosY = 130;
+	const int			iconTwoLinePosY = 635;
 
 	//ページ数
 	int			page;
@@ -58,12 +59,14 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
-	const int			menuButtonPosX = 1150;
-	const int			menuButtonPosY = 775;
-	float				menuButtonScale = 1.0f;
-	const int			rightButtonPosX = 950;
-	const int			leftButtonPosX = 850;
-	const int			leftAndRightButtonPosY = 800;
+	const int			menuButtonPosX = 1250;
+	const int			menuButtonPosY = 920;
+	float				menuButtonScale = 0.9f;
+	float				menuButtonScaleMax = 0.95f;
+	float				menuButtonScaleMini = 0.9f;
+	const int			rightButtonPosX = 990;
+	const int			leftButtonPosX = 900;
+	const int			leftAndRightButtonPosY = 950;
 
 
 public:

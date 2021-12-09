@@ -88,7 +88,7 @@ enum CAUSE_OF_DEATH
 	CAUSE_Bubble,			//泡					
 	CAUSE_SeaTurtle,		//ショック死(ウミガメ)
 	CAUSE_WaterFlow,		//急な加速(水流)
-
+	CAUSE_ShoalFish,		//魚群衝突
 };
 
 //アニメーション種類
@@ -170,7 +170,7 @@ public:
 	~CPlayer();
 	bool Load();
 	void Initialize();
-	void UpdateMove();
+	void UpdateMove(int tutorialStep);
 	//確率で死ぬ 100を割り切れる数のみ対応(1,2,4,5,10,20,25,50,100)
 	bool DieInPercentage(int percent)
 	{
