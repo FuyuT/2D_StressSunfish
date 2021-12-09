@@ -20,6 +20,9 @@
 #define MAX_ALPHA 255
 #define TIN_ALPHA 70
 
+//イベントUI
+#define EVENT_MOVE 20
+
 enum EventMotion
 {
 	EVENTMOTION_SUMMER,
