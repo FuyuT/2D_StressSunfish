@@ -377,6 +377,10 @@ void CSceneGame::CaseOfDethController()
 			nowPopUpGame->SetDethResult(CAUSE_WaterFlow);
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
 			break;
+		case CAUSE_ShoalFish:
+			nowPopUpGame->SetDethResult(CAUSE_ShoalFish);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_ShoalFish);
+			break;
 		}
 		nowPopUpGame->SetNewGetDeath(newGetDeth);
 		nowPopUpGame->Initialize();
