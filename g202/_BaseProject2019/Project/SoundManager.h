@@ -22,16 +22,24 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_COUNT,
 }SOUNDTYPE;
 
+enum tag_Sound_NO
+{
+	SOUND_BGM,
+	SOUND_SE,
+};
+
 class CSoundManager
 {
 private:
 	//メインBGM
+	float		 volumeBGM;
 	CSoundBuffer titleBGM;
 	CSoundBuffer menuBGM;
 	CSoundBuffer collectionBGM;
 	CSoundBuffer gameBGM;
 
 	//効果音
+	float		 volumeSE;
 	CSoundBuffer sceneChangeSE;
 	CSoundBuffer buttonSE;			//ボタン
 	CSoundBuffer alertSE;			//警告
@@ -47,21 +55,43 @@ private:
 	bool muteBGM;
 	bool muteSE;
 public:
-	CSoundManager();
+	CSoundManager(bool muteBGM,bool muteSE);
 	~CSoundManager();
 	bool Load();
-
 	void SetLoop();	//BGMのみLoopに設定可
 	void Play(SOUNDTYPE sound);
 	void Stop(SOUNDTYPE sound); //todo:音の停止
 	void AllStop();
+	void Release();
 
-	//音量は0.0～1.0で変更
-	void SetVolumeBGM(float volume);
-	void SetVolumeSE(float volume);
+	//音量
+	//0.0～1.0で変更
+	void  SetVolumeBGM(float volume) { volumeBGM = volume; }
+	void  SetVolumeSE(float volume)  { volumeSE = volume; }
+	float GetVolumeBGM()			 { return volumeBGM; }
+	float GetVolumeSE()				 { return volumeSE; }
+	void  ChangeVolume(int soundNo);
 
+	//ミュート
+	void SetMute(int soundNo);
+	void CancelMute(int soundNo) {
+		switch (soundNo)
+		{
+		case SOUND_BGM:
+			muteBGM = false;
+		break;
+		case SOUND_SE:
+			muteSE = false;
+			break;
+		default:
+			break;
+		}
+	}
 	bool GetMuteBGM() { return muteBGM; }
 	bool GetMuteSE() { return muteSE; }
 
-	void Release();
+	//データ関連
+	void LoadSoundData();
+	void SaveSoundData();
+
 };

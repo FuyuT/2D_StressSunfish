@@ -6,12 +6,11 @@ constexpr int	VOLUME_BAR_POS_X			  = 600;
 constexpr int	BGM_BAR_POS_Y				  = 420;
 constexpr int	SE_BAR_POS_Y				  = 670;
 
-constexpr int	VOLUME_CONTROL_BUTTON_POS_X   = 600;
-constexpr int	BGM_CONTROL_BUTTON_POS_Y	  = 400;
-constexpr int	SE_CONTROL_BUTTON_POS_X		  = 650;
-
 constexpr float VOLUME_CONTROL_BUTTON_MIN	  = 600;
 constexpr float VOLUME_CONTROL_BUTTON_MAX     = 1575;
+constexpr int	BGM_CONTROL_BUTTON_POS_Y	  = 400;
+constexpr int	SE_CONTROL_BUTTON_POS_Y		  = 650;
+
 //ミュート
 constexpr int	MUTE_TEX_POS_X			      = 200;
 constexpr int	BGM_MUTE_TEX_POS_Y			  = 350;
@@ -39,6 +38,7 @@ enum tag_BUTTON_NO
 	BUTTON_SE_CONTROL,
 };
 
+
 class CSceneConfig :public CSceneBase
 {
 private:
@@ -50,6 +50,8 @@ private:
 
 	//サウンド関係
 	CTexture	volumeBarTex;
+	int			scrollBarLength;
+
 	CTexture	volumeControlButton;
 	Vector2		BGMControlButtonPos;
 	Vector2		SEControlButtonPos;
@@ -71,9 +73,10 @@ public:
 	void Initialize() override;
 
 	void SoundMute();
-	//引数にドラッグするボタンのpos,ボタンの番号,staticで宣言したdragFlg
-	void DragVolumeButton(Vector2& pos,int buttonNo,bool& dragFlg);
-	void VolumeAdjustment();
+	//引数(対象の位置,対象のボタンの番号,選択フラグ,ボタンの半分の長さ)
+	void DragButton(Vector2& pos, const int buttonNo, bool& scrollFlg, const int texHalfLength);
+	//引数（対象の位置,対象のサウンド番号)
+	void VolumeAdjustment(const Vector2 pos, const int soundNo);
 	void SoundUpdate() override;
 	void Update() override;
 

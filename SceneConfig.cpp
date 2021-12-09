@@ -8,8 +8,12 @@ CSceneConfig::~CSceneConfig()
 	Release();
 }
 
+//ロード
 bool CSceneConfig::Load()
 {
+	//スクロールバーの割合
+	scrollBarLength = VOLUME_CONTROL_BUTTON_MAX - VOLUME_CONTROL_BUTTON_MIN;
+
 	if (!backGroundTex.Load("Title.png"))return false;
 
 	//SceneGameMenuの時とSceneGameuの時で読込みを変更
@@ -30,17 +34,20 @@ bool CSceneConfig::Load()
 	return true;
 }
 
+//初期化
 void CSceneConfig::Initialize()
 {
-	BGMControlButtonPos.x = VOLUME_CONTROL_BUTTON_POS_X;
+	cSound->GetVolumeBGM();
+	BGMControlButtonPos.x = VOLUME_CONTROL_BUTTON_MIN + (cSound->GetVolumeBGM() * scrollBarLength);
 	BGMControlButtonPos.y = BGM_CONTROL_BUTTON_POS_Y;
-	SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_POS_X;
-	SEControlButtonPos.y = SE_CONTROL_BUTTON_POS_X;
+	SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_MIN + (cSound->GetVolumeSE() * scrollBarLength);
+	SEControlButtonPos.y = SE_CONTROL_BUTTON_POS_Y;
+
 	buttonSelect = 1;
 }
 
-//todo:mute機能作る あとミュートから戻した時の音どうするかだけ
-void CSceneConfig::SoundMute()
+//更新
+void CSceneConfig::SoundMute()//todo:ミュートから戻した時の音どうするか(dataで保存かなと思ってる）
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
@@ -48,28 +55,27 @@ void CSceneConfig::SoundMute()
 	{
 		if (!cSound->GetMuteBGM())
 		{
-			cSound->SetVolumeBGM(0);
+			cSound->SetMute(SOUND_BGM);
 		}
 		else
 		{
-			cSound->SetVolumeBGM(1);
+			cSound->CancelMute(SOUND_BGM);
 		}
-
 	}
 	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY) && g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 	{
-		if (!cSound->GetMuteSE())
+		if (!cSound->GetMuteBGM())
 		{
-			cSound->SetVolumeSE(0);
+			cSound->SetMute(SOUND_SE);
 		}
 		else
 		{
-			cSound->SetVolumeSE(1);
+			cSound->CancelMute(SOUND_SE);
 		}
 	}
 }
 
-void CSceneConfig::DragVolumeButton(Vector2& pos,int buttonNo,bool& scrollFlg)
+void CSceneConfig::DragButton(Vector2& pos, const int buttonNo, bool& scrollFlg, const int texHalfLength)
 {
 	//マウスでアイコンをドラッグして音量調節する機能
 	float mousePosX, mousePosY;
@@ -79,59 +85,67 @@ void CSceneConfig::DragVolumeButton(Vector2& pos,int buttonNo,bool& scrollFlg)
 	{
 		scrollFlg = true;
 	}
-	else if(g_pInput->IsMouseKeyPull(MOFMOUSE_LBUTTON))
+	if(scrollFlg && g_pInput->IsMouseKeyPull(MOFMOUSE_LBUTTON))
 	{
 		scrollFlg = false;
 	}
 
+	//移動
 	if (scrollFlg)
 	{
-		pos.x = mousePosX;
+		pos.x = mousePosX - texHalfLength;
 	}
-
-	//if (GetRect(BUTTON_BGM_CONTROL).CollisionPoint(mousePosX, mousePosY) && g_pInput->IsMouseKeyHold(MOFMOUSE_LBUTTON))
-	//{
-	//}
-	//else if (g_pInput->IsMouseKeyPull(MOFMOUSE_LBUTTON))
-	//{
-	//	controlBGMFlg = false;
-	//}
-
+	//ボタンの最大移動量
+	if (pos.x > VOLUME_CONTROL_BUTTON_MAX)
+	{
+		pos.x = VOLUME_CONTROL_BUTTON_MAX;
+	}
+	else if (pos.x < VOLUME_CONTROL_BUTTON_MIN)
+	{
+		pos.x = VOLUME_CONTROL_BUTTON_MIN;
+	}
 }
 
-void CSceneConfig::VolumeAdjustment()
-{
-	//BGMの最大値（ボタンの最大移動量）
-	if (BGMControlButtonPos.x > VOLUME_CONTROL_BUTTON_MAX)
+void CSceneConfig::VolumeAdjustment(const Vector2 pos, const int soundNo)
+{	
+	//スクロールバーとボタンの位置の割合によって、音量を変更する
+	float vol = (pos.x - VOLUME_CONTROL_BUTTON_MIN) / scrollBarLength;
+	if (vol > 1)
 	{
-		BGMControlButtonPos.x = VOLUME_CONTROL_BUTTON_MAX;
+		vol = 1;
 	}
-	else if (BGMControlButtonPos.x < VOLUME_CONTROL_BUTTON_MIN)
+	else if (vol < 0)
 	{
-		BGMControlButtonPos.x = VOLUME_CONTROL_BUTTON_MIN;
+		vol = 0;
 	}
-	//SEの最大値（ボタンの最大移動量）
-	if (SEControlButtonPos.x > VOLUME_CONTROL_BUTTON_MAX)
+	switch (soundNo)
 	{
-		SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_MAX;
+	case SOUND_BGM:
+		cSound->SetVolumeBGM(vol);
+		if (cSound->GetMuteBGM())return;
+		cSound->ChangeVolume(SOUND_BGM);
+		break;
+	case SOUND_SE:
+		cSound->SetVolumeSE(vol);
+		if (cSound->GetMuteSE())return;
+		cSound->ChangeVolume(SOUND_SE);
+		break;
+	default:
+		break;
 	}
-	else if (SEControlButtonPos.x < VOLUME_CONTROL_BUTTON_MIN)
-	{
-		SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_MIN;
-	}
-
 }
 
 void CSceneConfig::SoundUpdate()
 {
-	//ミュート
-	SoundMute();
 	//音量調整(スクロールバー)
 	static bool scrollBGMFlg = false;
-	DragVolumeButton(BGMControlButtonPos, BUTTON_BGM_CONTROL, scrollBGMFlg);
+	DragButton(BGMControlButtonPos, BUTTON_BGM_CONTROL, scrollBGMFlg, volumeControlButton.GetWidth() * 0.5);
 	static bool scrollSEFlg = false;
-	DragVolumeButton(SEControlButtonPos, BUTTON_SE_CONTROL, scrollSEFlg);
-	VolumeAdjustment();
+	DragButton(SEControlButtonPos, BUTTON_SE_CONTROL, scrollSEFlg, volumeControlButton.GetWidth() * 0.5);
+	//音量変更
+	SoundMute();
+	VolumeAdjustment(BGMControlButtonPos, SOUND_BGM);
+	VolumeAdjustment(SEControlButtonPos,SOUND_SE);
 }
 
 void CSceneConfig::Update()
@@ -171,8 +185,7 @@ void CSceneConfig::Update()
 
 }
 
-
-
+//描画
 void CSceneConfig::Render()
 {
 	backGroundTex.Render(0, 0);
@@ -201,6 +214,7 @@ void CSceneConfig::Render()
 
 }
 
+//解放
 void CSceneConfig::Release()
 {
 	backGroundTex.Release();

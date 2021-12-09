@@ -1,6 +1,8 @@
 #include "SoundManager.h"
 
-CSoundManager::CSoundManager()
+CSoundManager::CSoundManager(bool muteBGM, bool muteSE) :
+	muteBGM(muteBGM),
+	muteSE(muteSE)
 {
 }
 
@@ -10,6 +12,8 @@ CSoundManager::~CSoundManager()
 
 bool CSoundManager::Load()
 {
+	LoadSoundData();
+	
 	if (!titleBGM.Load("Sound\\BGM_Title.mp3"))return false;
 	if (!menuBGM.Load("Sound\\BGM_Menu.mp3"))return false;
 	if (!collectionBGM.Load("Sound\\BGM_Collection.mp3"))return false;
@@ -167,47 +171,103 @@ void CSoundManager::AllStop()
 	bubbleCollisionSE.Stop();
 }
 
-void CSoundManager::SetVolumeBGM(float volume)
+
+void CSoundManager::ChangeVolume(int soundNo)
 {
-	if (volume <= 0)
+	switch (soundNo)
 	{
+	case SOUND_BGM:
+		titleBGM.SetVolume(volumeBGM);
+		menuBGM.SetVolume(volumeBGM);
+		collectionBGM.SetVolume(volumeBGM);
+		gameBGM.SetVolume(volumeBGM);
+		break;
+	case SOUND_SE:
+		sceneChangeSE.SetVolume(volumeSE);
+		buttonSE.SetVolume(volumeSE);
+		alertSE.SetVolume(volumeSE);
+		jumpStartSE.SetVolume(volumeSE);
+		jumpingSE.SetVolume(volumeSE);
+		waterLandingSE.SetVolume(volumeSE);
+		eatSE.SetVolume(volumeSE);
+		waterFlowSE.SetVolume(volumeSE);
+		parasiteStickSE.SetVolume(volumeSE);
+		collisionSE.SetVolume(volumeSE);
+		bubbleCollisionSE.SetVolume(volumeSE);
+		break;
+	default:
+		break;
+	}
+	SaveSoundData();
+}
+
+void CSoundManager::SetMute(int soundNo)
+{
+	switch (soundNo)
+	{
+	case SOUND_BGM:
 		muteBGM = true;
+		titleBGM.SetVolume(0);
+		menuBGM.SetVolume(0);
+		collectionBGM.SetVolume(0);
+		gameBGM.SetVolume(0);
+		break;
+	case SOUND_SE:
+		muteSE = true;
+		sceneChangeSE.SetVolume(0);
+		buttonSE.SetVolume(0);
+		alertSE.SetVolume(0);
+		jumpStartSE.SetVolume(0);
+		jumpingSE.SetVolume(0);
+		waterLandingSE.SetVolume(0);
+		eatSE.SetVolume(0);
+		waterFlowSE.SetVolume(0);
+		parasiteStickSE.SetVolume(0);
+		collisionSE.SetVolume(0);
+		bubbleCollisionSE.SetVolume(0);
+		break;	
+	default:
+		break;
 	}
-	else
-	{
-		muteBGM = false;
-	}
-
-	titleBGM.SetVolume(volume);
-	menuBGM.SetVolume(volume);
-	collectionBGM.SetVolume(volume);
-	gameBGM.SetVolume(volume);
 }
 
-void CSoundManager::SetVolumeSE(float volume)
+void CSoundManager::LoadSoundData()
 {
-	//if (volume <= 0)
-	//{
-	//	muteSE = true;
-	//}
-	//else
-	//{
-	//	muteSE = false;
-	//}
-
-	sceneChangeSE.SetVolume(volume);
-	buttonSE.SetVolume(volume);
-	alertSE.SetVolume(volume);
-	jumpStartSE.SetVolume(volume);
-	jumpingSE.SetVolume(volume);
-	waterLandingSE.SetVolume(volume);
-	eatSE.SetVolume(volume);
-	waterFlowSE.SetVolume(volume);
-	parasiteStickSE.SetVolume(volume);
-	collisionSE.SetVolume(volume);
-	bubbleCollisionSE.SetVolume(volume);
-	
+	FILE* fp = fopen("Volume.dat", "rb");
+	//ファイルが無い時、音量を設定して新しく作る
+	if (fp == nullptr)
+	{
+		muteBGM   = false;
+		muteSE    = false;
+		volumeBGM = 0.5;
+		volumeSE  = 0.5;
+		SaveSoundData();
+		return;
+	}
+	//ファイルがある時は、前回のデータを読み込む
+	if (fp)
+	{
+		fread(&muteBGM, sizeof(bool), 1, fp);
+		fread(&muteSE, sizeof(bool), 1, fp);
+		fread(&volumeBGM, sizeof(float), 1, fp);
+		fread(&volumeSE, sizeof(float), 1, fp);
+		fclose(fp);
+	}
 }
+
+void CSoundManager::SaveSoundData()
+{
+	FILE* fp = fopen("Volume.dat", "wb");
+	if (fp)
+	{
+		fwrite(&muteBGM, sizeof(bool), 1, fp);
+		fwrite(&muteSE, sizeof(bool), 1, fp);
+		fwrite(&volumeBGM, sizeof(float), 1, fp);
+		fwrite(&volumeSE, sizeof(float), 1, fp);
+		fclose(fp);
+	}
+}
+
 
 void CSoundManager::Release()
 {

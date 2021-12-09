@@ -18,7 +18,7 @@
 #include	"SceneTutorial.h"
 
 #include	"SoundManager.h"
-CSoundManager cSound;
+CSoundManager cSound(false,false);
 //シーンクラス
 CSceneBase* nowScene = NULL;
 
