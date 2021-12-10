@@ -27,7 +27,7 @@ constexpr int	OPEN_OYSTER_POS_X			  = 1500;
 constexpr int	BGM_OPEN_OYSTER_POS_Y		  = 300;
 constexpr int	SE_OPEN_OYSTER_POS_Y		  = 550;
 
-
+constexpr float VOLUME_CONTROL_SPEED		  = 0.05;
 
 enum tag_BUTTON_NO
 {
@@ -42,24 +42,32 @@ enum tag_BUTTON_NO
 class CSceneConfig :public CSceneBase
 {
 private:
-	CTexture	buttonTexture;
-	const int	buttonPosX = 800;
-	const int	buttonPosY = 800;
-	float		buttonScale = 1.0f;
+	CTexture	buttonReturnTexture;
+	const int	buttonReturnPosX = 800;
+	const int	buttonReturnPosY = 800;
+	float		buttonReturnScale = 1.0f;
 	bool		gamePlayFlg = false;
 
 	//サウンド関係
+	//ボリュームバー
 	CTexture	volumeBarTex;
 	int			scrollBarLength;
 
+	
 	CTexture	volumeControlButton;
 	Vector2		BGMControlButtonPos;
 	Vector2		SEControlButtonPos;
+	float		buttonBGMControlScale = 1.0f;
+	float		buttonSEControlScale = 1.0f;
+
 	//ミュート
 	CTexture	muteTexBGM;
 	CTexture	muteTexSE;
 	bool		muteBGM;
 	bool		muteSE;
+	float		buttonMuteBGMScale = 1.0f;
+	float		buttonMuteSEScale = 1.0f;
+
 	//UI
 	CTexture	oysterCloseBottomTex;
 	CTexture	oysterCloseTopTex;
@@ -72,6 +80,8 @@ public:
 	bool Load() override;
 	void Initialize() override;
 
+	void SelectButton();
+	void ButtonUpdate();
 	void SoundMute();
 	//引数(対象の位置,対象のボタンの番号,選択フラグ,ボタンの半分の長さ)
 	void DragButton(Vector2& pos, const int buttonNo, bool& scrollFlg, const int texHalfLength);
@@ -93,8 +103,8 @@ public:
 		switch (no)
 		{
 		case BUTTON_RETURN:
-			return CRectangle(buttonPosX, buttonPosY,
-				buttonPosX + buttonTexture.GetWidth(), buttonPosY + buttonTexture.GetHeight());
+			return CRectangle(buttonReturnPosX, buttonReturnPosY,
+				buttonReturnPosX + buttonReturnTexture.GetWidth(), buttonReturnPosY + buttonReturnTexture.GetHeight());
 		case BUTTON_MUTE_BGM:
 			return CRectangle(MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y,
 				MUTE_TEX_POS_X + muteTexBGM.GetWidth(), BGM_MUTE_TEX_POS_Y + muteTexBGM.GetHeight());

@@ -18,9 +18,9 @@ bool CSceneConfig::Load()
 
 	//SceneGameMenuの時とSceneGameuの時で読込みを変更
 	if (!gamePlayFlg)
-		buttonTexture.Load("ButtonMenu.png");
+		buttonReturnTexture.Load("ButtonMenu.png");
 	else if (gamePlayFlg)
-		buttonTexture.Load("ButtonReturnGame.png");
+		buttonReturnTexture.Load("ButtonReturnGame.png");
 
 	if (!muteTexBGM.Load("sutoresume--ta-.png"))return false;
 	if (!muteTexSE.Load("sutoresume--ta-.png"))return false;
@@ -43,11 +43,11 @@ void CSceneConfig::Initialize()
 	SEControlButtonPos.x = VOLUME_CONTROL_BUTTON_MIN + (cSound->GetVolumeSE() * scrollBarLength);
 	SEControlButtonPos.y = SE_CONTROL_BUTTON_POS_Y;
 
-	buttonSelect = 1;
+	buttonSelect = BUTTON_RETURN;
 }
 
 //更新
-void CSceneConfig::SoundMute()//todo:ミュートから戻した時の音どうするか(dataで保存かなと思ってる）
+void CSceneConfig::SoundMute()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
@@ -148,22 +148,112 @@ void CSceneConfig::SoundUpdate()
 	VolumeAdjustment(SEControlButtonPos,SOUND_SE);
 }
 
-void CSceneConfig::Update()
+void CSceneConfig::SelectButton()
 {
+	//マウスで選択
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	SoundUpdate();
-	//SceneGameMenu
-	//if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && !gamePlayFlg)
+	//ボタン　メニュー
 	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonSelect = 1;
+		buttonSelect = BUTTON_RETURN;
 	}
-	if (buttonSelect == 1)
+	else if (GetRect(BUTTON_SE_CONTROL).CollisionPoint(mousePosX, mousePosY))
 	{
-		buttonScale = scaleController.ScaleControll(buttonScale,scaleMax,scaleMini,scaleSpeed);
+		buttonSelect = BUTTON_SE_CONTROL;
+	}
+	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY))
+	{
+		buttonSelect = BUTTON_MUTE_SE;
+	}
+	else if (GetRect(BUTTON_BGM_CONTROL).CollisionPoint(mousePosX, mousePosY))
+	{
+		buttonSelect = BUTTON_BGM_CONTROL;
+	}
+	else if (GetRect(BUTTON_MUTE_BGM).CollisionPoint(mousePosX, mousePosY))
+	{
+		buttonSelect = BUTTON_MUTE_BGM;
+	}
+
+	//矢印キーで選択
+	switch (buttonSelect)
+	{
+	case BUTTON_RETURN:
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = BUTTON_SE_CONTROL;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			buttonSelect = BUTTON_MUTE_SE;
+		}
+		break;
+	case BUTTON_SE_CONTROL:
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			buttonSelect = BUTTON_MUTE_SE;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = BUTTON_BGM_CONTROL;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = BUTTON_RETURN;
+		}
+		break;
+	case BUTTON_MUTE_SE:
+		if (g_pInput->IsKeyPush(MOFKEY_UP))
+		{
+			buttonSelect = BUTTON_MUTE_BGM;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			buttonSelect = BUTTON_SE_CONTROL;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = BUTTON_RETURN;
+		}
+		break;
+	case BUTTON_BGM_CONTROL:
+		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
+		{
+			buttonSelect = BUTTON_MUTE_BGM;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = BUTTON_SE_CONTROL;
+		}
+		break;
+	case BUTTON_MUTE_BGM:
+		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
+		{
+			buttonSelect = BUTTON_BGM_CONTROL;
+		}
+		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+		{
+			buttonSelect = BUTTON_MUTE_SE;
+		}
+		break;
+	default:
+		break;
+	}
+
+}
+
+void CSceneConfig::ButtonUpdate()
+{
+	//ボタンの選択
+	SelectButton();
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
+	switch (buttonSelect)
+	{
+	case BUTTON_RETURN:			//ボタン　メニューに戻る
+		buttonReturnScale = scaleController.ScaleControll(buttonReturnScale, scaleMax, scaleMini, scaleSpeed);
 		//SceneGameMenu
-		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))&& !gamePlayFlg)
+		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && !gamePlayFlg)
 		{
 			endFlg = true;
 			nextScene = SCENENO_GAMEMENU;
@@ -175,14 +265,64 @@ void CSceneConfig::Update()
 			CSceneConfig::Release();
 			gamePlayFlg = false;
 		}
-	}
-	//SceneGame
-	//else if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && gamePlayFlg)
-	else
-	{
-		buttonScale = scaleMini;
-	}
 
+		//大きさの初期化
+		buttonSEControlScale = scaleMini;
+		buttonMuteSEScale = scaleMini;
+		buttonBGMControlScale = scaleMini;
+		buttonMuteBGMScale = scaleMini;
+
+		break;
+	case BUTTON_SE_CONTROL:		//ボタン　SE
+		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, scaleMax, scaleMini, scaleSpeed);
+
+		//大きさの初期化
+		buttonReturnScale = scaleMini;
+		buttonMuteSEScale = scaleMini;
+		buttonBGMControlScale = scaleMini;
+		buttonMuteBGMScale = scaleMini;
+
+		break;
+	case BUTTON_MUTE_SE:		//ボタン　SEMUTE
+		buttonMuteSEScale = scaleController.ScaleControll(buttonMuteSEScale, scaleMax, scaleMini, scaleSpeed);
+
+		//大きさの初期化
+		buttonReturnScale = scaleMini;
+		buttonSEControlScale = scaleMini;
+		buttonBGMControlScale = scaleMini;
+		buttonMuteBGMScale = scaleMini;
+
+		break;
+	case BUTTON_BGM_CONTROL:	//ボタン　BGM
+		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, scaleMax, scaleMini, scaleSpeed);
+
+		//大きさの初期化
+		buttonReturnScale = scaleMini;
+		buttonSEControlScale = scaleMini;
+		buttonMuteSEScale = scaleMini;
+		buttonMuteBGMScale = scaleMini;
+
+
+		break;
+	case BUTTON_MUTE_BGM:		//ボタン　BGMMUTE
+		buttonMuteBGMScale = scaleController.ScaleControll(buttonMuteBGMScale, scaleMax, scaleMini, scaleSpeed);
+
+		//大きさの初期化
+		buttonReturnScale = scaleMini;
+		buttonSEControlScale = scaleMini;
+		buttonMuteSEScale = scaleMini;
+		buttonBGMControlScale = scaleMini;
+
+		break;
+	default:
+		break;
+	}
+}
+
+void CSceneConfig::Update()
+{
+	ButtonUpdate();
+	SoundUpdate();
 }
 
 //描画
@@ -190,26 +330,26 @@ void CSceneConfig::Render()
 {
 	backGroundTex.Render(0, 0);
 	CGraphicsUtilities::RenderString(100, 300, "設定画面");
-	buttonTexture.Render(buttonPosX, buttonPosY);
-	scaleController.ScaleRender(&buttonTexture, buttonPosX,buttonPosY, buttonScale);
+	buttonReturnTexture.Render(buttonReturnPosX, buttonReturnPosY);
+	scaleController.ScaleRender(&buttonReturnTexture, buttonReturnPosX,buttonReturnPosY, buttonReturnScale);
 
 	//サウンド関係
 	//BGM
 	volumeBarTex.Render(VOLUME_BAR_POS_X, BGM_BAR_POS_Y);
 	oysterOpenTex.Render(OPEN_OYSTER_POS_X, BGM_OPEN_OYSTER_POS_Y);
 	oysterCloseBottomTex.Render(CLOSE_OYSTER_POS_X, BGM_CLOSE_OYSTER_BOTTOM_POS_Y);
-	volumeControlButton.Render(BGMControlButtonPos.x, BGMControlButtonPos.y);
+	scaleController.ScaleRender(&volumeControlButton, BGMControlButtonPos.x, BGMControlButtonPos.y, buttonBGMControlScale);
 	oysterCloseTopTex.Render(CLOSE_OYSTER_POS_X, BGM_CLOSE_OYSTER_TOP_POS_Y);
 	//SE
 	volumeBarTex.Render(VOLUME_BAR_POS_X, SE_BAR_POS_Y);
 	oysterOpenTex.Render(OPEN_OYSTER_POS_X, SE_OPEN_OYSTER_POS_Y);
 	oysterCloseBottomTex.Render(CLOSE_OYSTER_POS_X, SE_CLOSE_OYSTER_BOTTOM_POS_Y);
-	volumeControlButton.Render(SEControlButtonPos.x, SEControlButtonPos.y);
+	scaleController.ScaleRender(&volumeControlButton,SEControlButtonPos.x, SEControlButtonPos.y,buttonSEControlScale);
 	oysterCloseTopTex.Render(CLOSE_OYSTER_POS_X, SE_CLOSE_OYSTER_TOP_POS_Y);
 
 	//ミュート
-	muteTexBGM.Render(MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y);
-	muteTexSE.Render(MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y);
+	scaleController.ScaleRender(&muteTexBGM,MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y, buttonMuteBGMScale);
+	scaleController.ScaleRender(&muteTexSE,MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y,buttonMuteSEScale);
 	CGraphicsUtilities::RenderString(0, 0, "%f", BGMControlButtonPos.x);
 
 }
@@ -218,9 +358,12 @@ void CSceneConfig::Render()
 void CSceneConfig::Release()
 {
 	backGroundTex.Release();
-	buttonTexture.Release();
+	buttonReturnTexture.Release();
 	muteTexBGM.Release();
 	muteTexSE.Release();
 	volumeBarTex.Release();
 	volumeControlButton.Release();
+	oysterCloseBottomTex.Release();
+	oysterCloseTopTex.Release();
+	oysterOpenTex.Release();
 }
