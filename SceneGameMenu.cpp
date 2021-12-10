@@ -12,13 +12,21 @@ CSceneGameMenu::~CSceneGameMenu()
 
 void CSceneGameMenu::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_MENU_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_MENU_BGM);
 }
 
 
 void CSceneGameMenu::Initialize()
 {
+	FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "rb");
+	if (fp)
+	{
+		fread(&tutorialFlg, sizeof(bool), 1, fp);
+
+		fclose(fp);
+	}
+
 	buttonSelect = 1;
 	backGroundTex.Load("Title.png");
 	textTexture.Load("MenuText.png");
@@ -26,7 +34,11 @@ void CSceneGameMenu::Initialize()
 	configButtonTexture.Load("ButtonConfig.png");
 	stressButtonTexture.Load("ButtonStressCollection.png");
 	trophyButtonTexture.Load("ButtonTrophy.png");
-	tutorialButtonTexture.Load("ButtonTutorial.png");
+	if(tutorialFlg)
+		tutorialButtonTexture.Load("ButtonTutorial.png");
+	else
+		tutorialButtonTexture.Load("ButtonTutorialBigin.png");
+
 	titleButtonTexture.Load("ButtonTitle.png");	
 
 	PlayBGM();
@@ -63,6 +75,7 @@ void CSceneGameMenu::Update()
 		beforButtonSelect = 1;
 	}
 
+	//ゲームプレイボタン
 	if (buttonSelect == 1)
 	{
 		configButtonScale = scaleMini;
@@ -94,6 +107,7 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
+	//設定ボタン
 	else if (buttonSelect == 2)
 	{
 		gamePlayButtonScale = scaleMini;
@@ -125,6 +139,7 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
+	//トロフィー集ボタン
 	else if (buttonSelect == 3)
 	{
 		gamePlayButtonScale = scaleMini;
@@ -156,6 +171,7 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
+	//ストレス一覧ボタン
 	else if (buttonSelect == 4)
 	{
 		gamePlayButtonScale = scaleMini;
@@ -188,6 +204,7 @@ void CSceneGameMenu::Update()
 			Release();
 		}
 	}
+	//チュートリアルボタン
 	else if (buttonSelect == 5)
 	{
 		gamePlayButtonScale = scaleMini;
@@ -215,12 +232,19 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(4).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//チュートリアルモード
-			flgTutorial = true;
+			tutorialFlg = true;
 			endFlg = true;
 			nextScene = SCENENO_TUTORIAL;
+			FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "wb");
+			if (fp)
+			{
+				fwrite(&tutorialFlg, sizeof(bool), 1, fp);
+				fclose(fp);
+			}
 			Release();
 		}
 	}
+	//タイトルボタン
 	else if (buttonSelect == 6)
 	{
 		gamePlayButtonScale = scaleMini;

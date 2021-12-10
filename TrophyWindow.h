@@ -3,7 +3,6 @@
 class CTrophyWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
 	CTexture	popUpTexture;
 	CTexture	buttonBackTexture;
 	CTexture	trophyTexture;
@@ -12,7 +11,7 @@ private:
 	const int			buttonBackPosY = 100;
 	float				buttonBackScale = 1.0f;
 	const int			trophyTexturePosX = 815;
-	const int			trophyTexturePosY = 350;
+	const int			trophyTexturePosY = 375;
 public:
 	CTrophyWindow();
 	~CTrophyWindow();

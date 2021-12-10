@@ -2,6 +2,7 @@
 #include	"Mof.h"
 #include "SceneTrophyCollection.h"
 #include "ScaleController.h"
+#include "ResourceFont.h"
 
 constexpr int popUpPosX = 200;
 constexpr int popUpPosY = 50;
@@ -21,6 +22,11 @@ enum tag_POPUPNO {
 class CPopUpWindowBase
 {
 protected:
+	//フォント
+	CResourceFont font;
+	LPMofChar fontAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
+
 	ScaleController	scaleController;
 	bool endFlg = false;
 	short	nextPopUp;

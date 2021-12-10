@@ -26,6 +26,11 @@ void CSceneStressCollection::Initialize()
 	//ストレスフラグ読み込み
 	LoadStressFlg();
 
+	//フォント
+	font.Load(fontAdd, fontName);
+	font.Create(64, fontName);
+
+
 	page = 1;
 	//死因テクスチャ読み込み
 	hyperthermiaTexture.Load("マンボウ 体温上昇icon.png");
@@ -973,6 +978,7 @@ void CSceneStressCollection::Update()
 void CSceneStressCollection::Render()
 {
 	backGroundTex.Render(0, 0);
+	font.RenderString(textPosX,textPosY, MOF_XRGB(0, 0, 0), "ストレス一覧");
 	if (page == 1)
 	{
 		//1ページ目に表示
@@ -1193,7 +1199,7 @@ bool CSceneStressCollection::GetStress(int i)
 
 void CSceneStressCollection::SaveStressFlg()
 {
-	FILE* fp = fopen("SaveStress.dat", "wb");
+	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "wb");
 	if (fp)
 	{
 		fwrite(&hyperthermiaFlg, sizeof(bool), 1, fp);
@@ -1214,7 +1220,7 @@ void CSceneStressCollection::SaveStressFlg()
 
 void CSceneStressCollection::LoadStressFlg()
 {
-	FILE* fp = fopen("SaveStress.dat", "rb");
+	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "rb");
 	if (fp)
 	{
 		fread(&hyperthermiaFlg, sizeof(bool), 1, fp);

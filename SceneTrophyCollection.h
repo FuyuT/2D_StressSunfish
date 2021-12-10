@@ -98,6 +98,10 @@ private:
 	CTexture	rightButtonTexture;
 	CTexture	backGroundTexture1;
 	CTexture	backGroundTexture2;
+	//文字座標
+	const int			textPosX = 20;
+	const int			textPosY = 30;
+	//ボタン座標
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 875;
 	float				menuButtonScale = 1.0f;

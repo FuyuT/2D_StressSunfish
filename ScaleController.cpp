@@ -10,7 +10,7 @@ ScaleController::~ScaleController()
 }
 
 /*************************************************************************//*!
-		@brief			画像の拡大縮小
+		@brief			画像の拡大縮小アニメーション
 		@param			元画像のスケール値
 						大きさの最大値
 						大きさの最小値
@@ -30,6 +30,21 @@ float ScaleController::ScaleControll(float scale, float max, float mini, float s
 	else
 		scaleFlg = true;
 
+	return scale;
+}
+
+/*************************************************************************//*!
+		@brief			画像の縮小アニメーション
+		@param			元画像のスケール値
+						大きさの最小値
+						拡大縮小のスピード
+
+		@return			縮小したスケール値
+*//**************************************************************************/
+float ScaleController::ScaleShrinkControll(float scale, float mini, float speed)
+{
+	if (scale >= mini)
+		scale -= speed;
 	return scale;
 }
 

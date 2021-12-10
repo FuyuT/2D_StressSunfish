@@ -4,7 +4,7 @@
 class CSceneGameMenu : public CSceneBase
 {
 private:
-	bool flgTutorial = false;
+	bool tutorialFlg = false;
 	CTexture textTexture;
 	CTexture gamePlayButtonTexture;
 	CTexture configButtonTexture;
@@ -43,9 +43,8 @@ public:
 	void Render() override;
 	void Release() override;
 
-	//ÉQÉbÉ^Å[
-	bool GetTutorialFlg(){ return flgTutorial; }
 
 	CRectangle GetRect(int i);
+	
 };
 
