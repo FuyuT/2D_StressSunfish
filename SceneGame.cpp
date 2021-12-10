@@ -40,8 +40,8 @@ CSceneGame::~CSceneGame()
 
 void CSceneGame::PlayBGM()
 {
-	cSound.AllStop();
-	cSound.Play(SOUND_GAME_BGM);
+	cSound->AllStop();
+	cSound->Play(SOUND_GAME_BGM);
 }
 
 
@@ -60,11 +60,12 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
-	sceneConfig.SetSoundManager(cSound);
+	sceneConfig.SetSoundManager(*cSound);
+
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
-	eventTimer.SetTotalTime(10);
+	eventTimer.SetTotalTime(20);
 	eventNum = Event::Event_None;
 
 	//タイマー
@@ -96,9 +97,9 @@ void CSceneGame::EventUpdate()
 		if (eventTimer.GetNowtime() < 0)
 		{
 			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
-			eventTimer.SetTotalTime(25);
+			eventTimer.SetTotalTime(40);
 		}
-		else if (eventTimer.GetNowtime() < 15)
+		else if (eventTimer.GetNowtime() < 20)
 		{
 			eventNum = Event::Event_None;
 		}
@@ -157,15 +158,15 @@ void CSceneGame::Update()
 	EventUpdate();	
 
 	//プレイヤー
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		pl.Collision(cObstacle,i,false,2);
+		pl.Collision(cObstacle,i,false,7);
 	}
 	//プレイヤー
-	pl.Update(false, 3, eventNum);
+	pl.Update(false, 7, eventNum);
 
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),3,eventNum);
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),7,eventNum);
 
 }
 
@@ -208,8 +209,6 @@ void CSceneGame::RenderDebug()
 	//障害物
 	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
-	//デバッグ用
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 
 } 
 
@@ -377,6 +376,10 @@ void CSceneGame::CaseOfDethController()
 		case CAUSE_WaterFlow:
 			nowPopUpGame->SetDethResult(CAUSE_WaterFlow);
 			newGetDeth = caseOfDeth.GetStress(CAUSE_WaterFlow);
+			break;
+		case CAUSE_ShoalFish:
+			nowPopUpGame->SetDethResult(CAUSE_ShoalFish);
+			newGetDeth = caseOfDeth.GetStress(CAUSE_ShoalFish);
 			break;
 		}
 		nowPopUpGame->SetNewGetDeath(newGetDeth);

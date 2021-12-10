@@ -106,11 +106,11 @@ void CPlayer::Initialize()
 	parasiteTimer.SetTotalTime(15);
 
 	//チュートリアル
-	moveUpTaskFlg = false;
-	moveDownTaskFlg = false;
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
-	taskCompleteStep = 0;
+	taskCompleteStep = 2;
+	moveUpTaskTimer.SetTotalTime(3);
+	moveDownTaskTimer.SetTotalTime(3);
 
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
@@ -164,7 +164,7 @@ void CPlayer::Initialize()
 }
 
 //移動
-void CPlayer::UpdateMove()
+void CPlayer::UpdateMove(int tutorialStep)
 {
 
 	//右に移動
@@ -219,12 +219,30 @@ void CPlayer::UpdateMove()
 		moveX += PLAYER_SPEED;
 	}
 
+	//チュートリアル用入力検知
+	if (tutorialStep == 2)
+	{
+		if (g_pInput->IsKeyPush(MOFKEY_W))
+		{
+			moveUpTaskTimer.StartTimer();
+		}
+		else if (g_pInput->IsKeyPull(MOFKEY_W))
+		{
+			moveUpTaskTimer.StopTimer();
+		}
+		if (g_pInput->IsKeyPush(MOFKEY_S))
+		{
+			moveDownTaskTimer.StartTimer();
+		}
+		else if (g_pInput->IsKeyPull(MOFKEY_S))
+		{
+			moveDownTaskTimer.StopTimer();
+		}
+	}
+
 	//上に移動
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
-		//チュートリアルタスク
-		moveUpTaskFlg = true;
-
 		moveY -= PLAYER_SPEED;
 		if (moveY < -PLAYER_MAXSPEED)
 		{
@@ -234,9 +252,6 @@ void CPlayer::UpdateMove()
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
-		//チュートリアルタスク
-		moveDownTaskFlg = true;
-
 		moveY += PLAYER_SPEED;
 		if (moveY > PLAYER_MAXSPEED)
 		{
@@ -289,7 +304,7 @@ void CPlayer::UpdateMove()
 bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 1)
+	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 3)
 	{
 		//チュートリアルタスク
 		eatTaskFlg = true;
@@ -356,7 +371,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
-		possibleToJumpFlg && tutorialStep >= 1)
+		possibleToJumpFlg && tutorialStep >= 3)
 	{
 		//チュートリアルタスク
 		jumpTaskFlg = true;
@@ -382,7 +397,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 			if (jumpDangerFlg)
 			{
 				//死因が確定していない
-				if (causeOfDeath == CAUSE_None)
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
 					motion.ChangeMotion(MOTION_DEATH);
 					causeOfDeath = CAUSE_Jump;
@@ -411,7 +426,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 }
 
 //プレイヤーの状態を更新
-void CPlayer::UpdateStatus(bool unDeadFlg)
+void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 {
 
 	if (motion.GetMotionNo() != MOTION_STAND &&
@@ -446,98 +461,112 @@ void CPlayer::UpdateStatus(bool unDeadFlg)
 	/*********
 	 * 体温
 	 *********/
-	if (!jumpFlg)
+	if (!jumpFlg && tutorialStep >= 7)
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
 			if (tempRegion > HYPERTHERMIA_LIMIT)
 			{
-				tempRegion -= TEMPERATURE_LEVEL;
-			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：熱中症
-				if (tempRegion <= HYPERTHERMIA_LIMIT)
-				{
-
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Hyperthermia;
-				}
-			}
+				if(eventNum == 1)
+					tempRegion -= TEMPERATURE_LEVEL * 2;
+				else
+					tempRegion -= TEMPERATURE_LEVEL;
+			}			
 		}
 		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
 			if (tempRegion < FROZEN_LIMIT)
 			{
-				tempRegion += TEMPERATURE_LEVEL;
-			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：凍死
-				if (tempRegion >= FROZEN_LIMIT)
-				{
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Frozen;
-				}
+				if(eventNum == 2)
+					tempRegion += TEMPERATURE_LEVEL * 2;
+				else
+					tempRegion += TEMPERATURE_LEVEL;
 			}
 		}
 		else
 		{
-			if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+			if(eventNum == 1)
+				tempRegion -= TEMPERATURE_LEVEL * 2;
+			else if(eventNum == 2)
+				tempRegion += TEMPERATURE_LEVEL * 2;
+			else
 			{
-				tempRegion += TEMPERATURE_LEVEL / 3.0f;
-			}
-			else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
-			{
-				tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+				if (tempRegion < (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+				{
+					tempRegion += TEMPERATURE_LEVEL / 3.0f;
+				}
+				else if (tempRegion > (FROZEN_LIMIT + HYPERTHERMIA_LIMIT) / 2)
+				{
+					tempRegion -= TEMPERATURE_LEVEL / 3.0f;
+				}
 			}
 		}
 	}
 
+	if (causeOfDeath == CAUSE_None && !unDeadFlg)
+	{
+		//死因：熱中症
+		if (tempRegion <= HYPERTHERMIA_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Hyperthermia;
+		}
+		//死因：凍死
+		if (tempRegion >= FROZEN_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Frozen;
+		}
+	}
 
 
 	/*********
 	 * 寄生虫
 	 *********/
-	if (parasite < PARASITE_LIMIT)
+	if (!jumpFlg && tutorialStep >= 3)
 	{
-		//タイマーセット
-		parasiteTimer.StartTimer();
-		if (parasiteTimer.GetNowtime() <= 0)
+		if (parasite < PARASITE_LIMIT)
 		{
-			parasite += 1;
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			//タイマーセット
+			parasiteTimer.StartTimer();
+			if (parasiteTimer.GetNowtime() <= 0)
 			{
-				if (parasite == PARASITE_LIMIT)
+				parasite += 1;
+				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
-					//死因：寄生死
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Parasite;
+					if (parasite == PARASITE_LIMIT)
+					{
+						//死因：寄生死
+						motion.ChangeMotion(MOTION_DEATH);
+						causeOfDeath = CAUSE_Parasite;
+					}
 				}
+				parasiteTimer.SetTotalTime(15);
 			}
-			parasiteTimer.SetTotalTime(15);
 		}
 	}
 
 	/*********
 	 * 空腹
 	 *********/
-	if (hungerRegion <= STARVATION)
+	if (tutorialStep >= 3)
 	{
-		hungerRegion += HUNGRYLEVEL;
-	}
-	else if (hungerRegion >= STARVATION)
-	{
-		if (causeOfDeath == CAUSE_None)
+		if (hungerRegion <= STARVATION)
 		{
-			//空腹度が増加する
-			if (hungerRegion >= STARVATION)
+			hungerRegion += HUNGRYLEVEL;
+		}
+		else if (hungerRegion >= STARVATION)
+		{
+			if (causeOfDeath == CAUSE_None)
 			{
 				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
-					//死因：餓死
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Starvation;
+					if (causeOfDeath == CAUSE_None && !unDeadFlg)
+					{
+						//死因：餓死
+						motion.ChangeMotion(MOTION_DEATH);
+						causeOfDeath = CAUSE_Starvation;
+					}
 				}
 			}
 		}
@@ -588,7 +617,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg)
 }
 
 //更新
-void CPlayer::Update(bool unDeadFlg, int tutorialStep)
+void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 {
 	//アニメーションの更新
 	motion.AddTimer(CUtilities::GetFrameSecond());
@@ -607,7 +636,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 		return;
 
 	//ステータス(状態)の更新
-	UpdateStatus(unDeadFlg);
+	UpdateStatus(unDeadFlg,tutorialStep,eventNum);
 
 	//ジャンプ
 	Jump(unDeadFlg,tutorialStep);
@@ -622,14 +651,17 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 	if (!jumpFlg) jumpDangerTimer.Update();
 	if (!jumpDangerTimer.GetUpdateFlg()) jumpDangerFlg = false;
 
+	moveUpTaskTimer.Update();
+	moveDownTaskTimer.Update();
+
 	//チュートリアル
-	if (moveUpTaskFlg && moveDownTaskFlg && taskCompleteStep == 0)
+	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 2)
 	{
-		taskCompleteStep += 1;
+		taskCompleteStep = 3;
 	}
-	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 1)
+	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 3)
 	{
-		taskCompleteStep += 1;
+		taskCompleteStep = 6;
 	}
 
 	//ジャンプ中は操作が行えないように
@@ -637,7 +669,7 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep)
 		return;
 
 	//移動更新
-	UpdateMove();
+	UpdateMove(tutorialStep);
 
 }
 
@@ -777,7 +809,7 @@ void CPlayer::Release()
 
 
 //敵(障害物、エサ、ウミガメ、泡、水流)との当たり判定
-void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int tutorialStep)
+void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, int tutorialStep)
 {
 
 	if ((deadFlg || motion.GetMotionNo() == MOTION_DEATH) && !jumpFlg)
@@ -803,22 +835,33 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num,bool unDeadFlg, int
 			causeOfDeath = CAUSE_SeaTurtle;
 		}
 	}
-	//todo:死因を障害物と衝突にしてるので、あとで変更
-	//魚群（イワシ）
-	else if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
-		cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
+	//画面内に4体目、5対目が出てくるのは今のところウミガメだけのため、処理を切り上げる
+	if (num == 3 || num == 4)
 	{
-		if (causeOfDeath == CAUSE_None)
+		return;
+	}
+
+	//魚群は最大でも二体までしか出ない
+	if (num != 2)
+	{
+		//todo:死因を障害物と衝突にしてるので、あとで変更
+		//魚群（イワシ）
+		if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
+			cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
 		{
-			//衝突
-			hitFlg = true;
-			//死因：衝突死
-			motion.ChangeMotion(MOTION_DEATH);
-			causeOfDeath = CAUSE_Obstacle;
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//衝突
+				hitFlg = true;
+				//死因：衝突死
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_ShoalFish;
+			}
 		}
 	}
+
 	//障害物
-	else if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
+	if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
 		cObstacle.GetShow(Garbage, num) && !hitFlg)
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
