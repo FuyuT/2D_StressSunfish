@@ -265,23 +265,23 @@ void CUi::Update(int eventNum)
 	//イベントアニメーション
 	switch (eventNum)
 	{
-	case 1:
+	case Event_Summer:
 		//夏
 		motion.ChangeMotion(EVENTMOTION_SUMMER, false);
 		break;
-	case 2:
+	case Event_Winter:
 		//冬
 		motion.ChangeMotion(EVENTMOTION_WINTER, false);
 		break;
-	case 3:
+	case Event_Turtle:
 		//亀大量発生
 		motion.ChangeMotion(EVENTMOTION_TURTLE, false);
 		break;
-	case 4:
+	case Event_ShoalSardine:
 		//魚群大量発生
 		motion.ChangeMotion(EVENTMOTION_SHOALSARDINE, false);
 		break;
-	case 5:
+	case Event_Garbage:
 		//ゴミ大量発生
 		motion.ChangeMotion(EVENTMOTION_GARBAGE, false);
 		break;
@@ -327,7 +327,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//今は仮として「○○イベント」という文字を表示している
 	switch (eventNum)
 	{
-		case 1:
+		case Event_Summer:
 			//夏イベント
 			if (eventPosX > 850)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 850)
@@ -341,7 +341,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 			eventSummer.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
-		case 2:
+		case Event_Winter:
 			//冬イベント
 			if (eventPosX > 870)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 870)
@@ -355,7 +355,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 			eventWinter.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
-		case 3:
+		case Event_Turtle:
 			//亀大量発生イベント
 			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
@@ -369,7 +369,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 			eventTurtle.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
-		case 4:
+		case Event_ShoalSardine:
 			//魚群大量発生イベント
 			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
@@ -383,7 +383,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 			eventShoalSardine.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
 			break;
-		case 5:
+		case Event_Garbage:
 			//ゴミ大量発生イベント
 			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
 			else if (eventPosX <= 800)
