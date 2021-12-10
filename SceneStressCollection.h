@@ -59,6 +59,8 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
+	const int			textPosX = 80;
+	const int			textPosY = 10;
 	const int			menuButtonPosX = 1250;
 	const int			menuButtonPosY = 920;
 	float				menuButtonScale = 0.9f;

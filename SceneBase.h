@@ -2,6 +2,7 @@
 #include	"Mof.h"
 #include	"SoundManager.h"
 #include	"ScaleController.h"
+#include "ResourceFont.h"
 
 //シーンの列挙
 enum tag_SCENENO {
@@ -18,6 +19,11 @@ enum tag_SCENENO {
 class CSceneBase
 {
 protected:
+	//フォント
+	CResourceFont font;
+	LPMofChar fontAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
+
 	ScaleController scaleController;
 	bool		endFlg = false;
 	short		nextScene;
