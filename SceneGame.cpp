@@ -65,7 +65,7 @@ void CSceneGame::Initialize()
 	//イベント
 	eventRandom.SetSeed((MofU32)time(NULL));
 	//確認のためにイベントの発生までを早くしている
-	eventTimer.SetTotalTime(10);
+	eventTimer.SetTotalTime(20);
 	eventNum = Event::Event_None;
 
 	//タイマー

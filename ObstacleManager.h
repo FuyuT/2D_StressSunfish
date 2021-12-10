@@ -55,6 +55,7 @@ private:
 	CRandom createRandom;
 	CRandom posYRndom;
 	CRandom garbageNoRandom;
+	int random;
 	int obstacleNum;
 	int posY;
 	int posYNum;
@@ -74,7 +75,7 @@ public:
 	void Release();
 	void PosYRndom();
 
-	bool ObstaclePercentage(int percent)
+		bool ObstaclePercentage(int percent)
 	{
 		//Šm—¦‚É‚æ‚Á‚Ätrue‚ð•Ô‚·
 		if (createRandom.Random(1, 100 / percent + 1) == 1)

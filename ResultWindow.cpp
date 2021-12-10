@@ -151,6 +151,9 @@ void CResultWindow::Initialize()
 	font.Create(64, "MSÅ@ñæí©");
 	distanceFont.Create(172, "MSÅ@ñæí©");
 	endFlg = false;
+
+	font.Load(fileAdd, fontName);
+	font.Create(64, fontName);
 }
 void CResultWindow::Update()
 {

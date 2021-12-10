@@ -471,17 +471,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 					tempRegion -= TEMPERATURE_LEVEL * 2;
 				else
 					tempRegion -= TEMPERATURE_LEVEL;
-			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：熱中症
-				if (tempRegion <= HYPERTHERMIA_LIMIT)
-				{
-
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Hyperthermia;
-				}
-			}
+			}			
 		}
 		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
@@ -491,15 +481,6 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 					tempRegion += TEMPERATURE_LEVEL * 2;
 				else
 					tempRegion += TEMPERATURE_LEVEL;
-			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：凍死
-				if (tempRegion >= FROZEN_LIMIT)
-				{
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Frozen;
-				}
 			}
 		}
 		else
@@ -522,6 +503,21 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 		}
 	}
 
+	if (causeOfDeath == CAUSE_None && !unDeadFlg)
+	{
+		//死因：熱中症
+		if (tempRegion <= HYPERTHERMIA_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Hyperthermia;
+		}
+		//死因：凍死
+		if (tempRegion >= FROZEN_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Frozen;
+		}
+	}
 
 
 	/*********

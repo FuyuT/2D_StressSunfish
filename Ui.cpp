@@ -172,8 +172,12 @@ bool CUi::Load()
 
 void CUi::Initialize()
 {
-	font.Create(48, "MS　明朝");
-	trophyFont.Create(24, "MS　明朝");
+	//フォント
+	font.Load(fileAdd, fontName);
+	font.Create(48, fontName);
+
+	trophyFont.Load(fileAdd, fontName);
+	trophyFont.Create(32, fontName);
 	//点滅設定
 	//亀注意
 	cautionB.SetBlinkingCount(5);
@@ -200,22 +204,24 @@ void CUi::Initialize()
 		{
 			"夏",
 			0,0,
-			131,68,
-			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},
-				 {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1},{5,6,1},
-		         {5,0,2}}
+			486,276,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},
+				 {5,0,1},{5,1,1},{5,2,1},{5,3,1},
+				 {5,0,2},{5,1,2},{5,2,2},{5,3,2},
+		         {5,0,3},{5,1,3},{5,2,3}}
 		},
 		{
 			"冬",
 			0,0,
-			106,81,
-			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},{5,6,0},{5,7,0},{5,8,0},
-				 {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1}}
+			306,181,
+			TRUE,{{5,0,0},{5,1,0},{5,2,0},{5,3,0},{5,4,0},{5,5,0},
+		         {5,0,1},{5,1,1},{5,2,1},{5,3,1},{5,4,1},{5,5,1},
+		         {5,0,2},{5,1,2},{5,2,2}}
 		},
 		{
 			"亀大量発生",
 			0,0,
-			218,81,
+			486,181,
 			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
 				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},
 				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},
@@ -224,18 +230,20 @@ void CUi::Initialize()
 		{
 			"魚群大量発生",
 			0,0,
-			200,62,
-			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},
-				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},
-				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2}}
+			486,181,
+			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
+				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},
+				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},
+				 {4,0,3},{4,1,3},{4,2,3}}
 		},
 		{
 			"ごみ大量発生",
 			0,0,
-			200,62,
-			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},
-				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},{4,4,1},
-				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},{4,4,2}}
+			486,181,
+			TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
+				 {4,0,1},{4,1,1},{4,2,1},{4,3,1},
+				 {4,0,2},{4,1,2},{4,2,2},{4,3,2},
+				 {4,0,3},{4,1,3},{4,2,3}}
 		},
 	};
 	motion.Create(anim, EVENTMOTION_COUNT);
@@ -329,8 +337,8 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	{
 		case Event_Summer:
 			//夏イベント
-			if (eventPosX > 850)eventPosX -= EVENT_MOVE;
-			else if (eventPosX <= 850)
+			if (eventPosX > 730)eventPosX -= EVENT_MOVE;
+			else if (eventPosX <= 730)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
@@ -339,12 +347,12 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 				}
 			}
 
-			eventSummer.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			eventSummer.RenderScale(eventPosX, 380,0.75f, motion.GetSrcRect());
 			break;
 		case Event_Winter:
 			//冬イベント
-			if (eventPosX > 870)eventPosX -= EVENT_MOVE;
-			else if (eventPosX <= 870)
+			if (eventPosX > 820)eventPosX -= EVENT_MOVE;
+			else if (eventPosX <= 820)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
@@ -353,12 +361,12 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 				}
 			}
 
-			eventWinter.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			eventWinter.Render(eventPosX, 380, motion.GetSrcRect());
 			break;
 		case Event_Turtle:
 			//亀大量発生イベント
-			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
-			else if (eventPosX <= 800)
+			if (eventPosX > 750)eventPosX -= EVENT_MOVE;
+			else if (eventPosX <= 750)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
@@ -367,12 +375,12 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 				}
 			}
 
-			eventTurtle.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			eventTurtle.Render(eventPosX, 380, motion.GetSrcRect());
 			break;
 		case Event_ShoalSardine:
 			//魚群大量発生イベント
-			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
-			else if (eventPosX <= 800)
+			if (eventPosX > 750)eventPosX -= EVENT_MOVE;
+			else if (eventPosX <= 750)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
@@ -381,12 +389,12 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 				}
 			}
 
-			eventShoalSardine.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			eventShoalSardine.Render(eventPosX, 380, motion.GetSrcRect());
 			break;
 		case Event_Garbage:
 			//ゴミ大量発生イベント
-			if (eventPosX > 800)eventPosX -= EVENT_MOVE;
-			else if (eventPosX <= 800)
+			if (eventPosX > 750)eventPosX -= EVENT_MOVE;
+			else if (eventPosX <= 750)
 			{
 				eventTimer.StartTimer();
 				if (eventTimer.GetNowtime() < 0)
@@ -395,7 +403,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 				}
 			}
 
-			eventGarbage.RenderScale(eventPosX, 450, 1.5f, motion.GetSrcRect());
+			eventGarbage.Render(eventPosX, 380, motion.GetSrcRect());
 			break;
 		default:
 			eventPosX = 1920;
