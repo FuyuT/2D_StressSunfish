@@ -1,11 +1,11 @@
 #pragma once
 #include "ObstacleBase.h"
-#define  SHOALSARDINE_RECT_TOP_ADJ 0
-#define  SHOALSARDINE_RECT_LEFT_ADJ 0
-#define  SHOALSARDINE_RECT_RIGHT_ADJ 446
-#define  SHOALSARDINE_RECT_BUTTOM_ADJ 286
+#define  SCHOOLTUNA_RECT_TOP_ADJ 100
+#define  SCHOOLTUNA_RECT_LEFT_ADJ 0
+#define  SCHOOLTUNA_RECT_RIGHT_ADJ 450
+#define  SCHOOLTUNA_RECT_BUTTOM_ADJ 350
 
-class CShoalSardine :public CObstacleBase
+class CSchoolTuna : public CObstacleBase
 {
 private:
 	CTexture keikokuTexture;
@@ -14,8 +14,8 @@ private:
 	CSpriteMotionController motion;
 	CSpriteMotionController keikokumotion;
 public:
-	CShoalSardine();
-	~CShoalSardine();
+	CSchoolTuna();
+	~CSchoolTuna();
 	bool Load()override;
 	void Initialize()override;
 	void Update(float wx, float wy)override;
@@ -23,8 +23,8 @@ public:
 	void RenderDebug(float wx, float wy)override;
 	void Release()override;
 	CRectangle GetRect() {
-		return CRectangle(pos.x + SHOALSARDINE_RECT_LEFT_ADJ, pos.y + SHOALSARDINE_RECT_TOP_ADJ,
-			pos.x  + SHOALSARDINE_RECT_RIGHT_ADJ, pos.y + SHOALSARDINE_RECT_BUTTOM_ADJ);
+		return CRectangle(pos.x + SCHOOLTUNA_RECT_LEFT_ADJ, pos.y + SCHOOLTUNA_RECT_TOP_ADJ,
+			pos.x + SCHOOLTUNA_RECT_RIGHT_ADJ, pos.y + SCHOOLTUNA_RECT_BUTTOM_ADJ);
 	}
 	void SetShow(bool flg)
 	{

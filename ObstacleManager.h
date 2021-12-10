@@ -10,6 +10,8 @@
 #include "RottenCrab.h"
 #include "RottenShrimp.h"
 #include "ShoalSardine.h"
+#include "SwordFish.h"
+#include "SchoolTuna.h"
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -24,6 +26,8 @@ enum obstacle {
 	RottenCrab,
 	RottenShrimp,
 	ShoalSardine,
+	SwordFish,
+	SchoolTuna,
 };
 
 class CObstacleManager
@@ -37,9 +41,11 @@ private:
 	CRottenFish  cRottenFish[3];
 	CRottenCrab cRottenCrab[3];
 	CRottenShrimp cRottenShrimp[3];
-	CTurtle     cTurtle;
+	CTurtle     cTurtle[5];
 	CWaterFlow  cWaterFlow;
-	CShoalSardine cShoalSardine;
+	CShoalSardine cShoalSardine[2];
+	CSwordFish cSwordFish[2];
+	CSchoolTuna cSchoolTuna[2];
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
@@ -50,13 +56,14 @@ private:
 	int posYNum;
 
 	bool createFlg;
+	bool eventFoodCreateFlg;
 
 public:
 	CObstacleManager();
 	~CObstacleManager();
 	bool Load();
 	void Initialize();
-	void Update(int distance, int posx, float wx, float wy);
+	void Update(int distance, int posx, float wx, float wy, int tutorialStep, int eventNum);
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
@@ -78,7 +85,10 @@ public:
 		switch (type)
 		{
 		case Turtle:
-			return cTurtle.GetRect();
+			return cTurtle[num].GetRect();
+			break;
+		case ShoalSardine:
+			return cShoalSardine[num].GetRect();
 			break;
 		case Garbage:
 			return cGarbage[num].GetRect();
@@ -101,17 +111,19 @@ public:
 		case RottenFish:
 			return cRottenFish[num].GetRect();
 			break;
-		case RottenCrab :
+		case RottenCrab:
 			return cRottenCrab[num].GetRect();
 			break;
-		case RottenShrimp :
+		case RottenShrimp:
 			return cRottenShrimp[num].GetRect();
 			break;
-		case ShoalSardine:
-			return cShoalSardine.GetRect();
+		case SwordFish:
+			return cSwordFish[num].GetRect();
+			break;
+		case SchoolTuna:
+			return cSchoolTuna[num].GetRect();
 			break;
 		}
-
 	}
 
 	//player‘¤‚©‚ç”ñ•\Ž¦‚É‚·‚é‚½‚ß’Ç‰Á
@@ -146,7 +158,10 @@ public:
 		switch (type)
 		{
 		case Turtle:
-			return cTurtle.GetShow();
+			return cTurtle[num].GetShow();
+			break;
+		case ShoalSardine:
+			return cShoalSardine[num].GetShow();
 			break;
 		case Garbage:
 			return cGarbage[num].GetShow();
@@ -175,8 +190,11 @@ public:
 		case RottenShrimp:
 			return cRottenShrimp[num].GetShow();
 			break;
-		case ShoalSardine:
-			return cShoalSardine.GetShow();
+		case SwordFish:
+			return cSwordFish[num].GetRect();
+			break;
+		case SchoolTuna:
+			return cSchoolTuna[num].GetRect();
 			break;
 		}
 	}

@@ -1,21 +1,19 @@
-#include "ShoalSardine.h"
+#include "SchoolTuna.h"
 
-CShoalSardine::CShoalSardine() 
+CSchoolTuna::CSchoolTuna()
 {
-
 }
 
-CShoalSardine::~CShoalSardine()
+CSchoolTuna::~CSchoolTuna()
 {
-
 }
 
-bool CShoalSardine::Load()
+bool CSchoolTuna::Load()
 {
-	if (!Texture.Load("Obstacle\\mureanim.png"))return false;
+	if (!Texture.Load("Obstacle\\ƒ}ƒOƒ.png"))return false;
 	if (!keikokuTexture.Load("Obstacle\\gyogunanim2.png"))return false;
 
-	SpriteAnimationCreate anim = {
+	/*SpriteAnimationCreate anim = {
 		"‰j‚®",
 		0,0,
 		446,286,
@@ -29,7 +27,7 @@ bool CShoalSardine::Load()
 			  {4,0,7},{4,1,7}}
 
 	};
-
+	*/
 	SpriteAnimationCreate keikoku_anim[] = {
 		"Œx",
 		0,0,
@@ -42,37 +40,36 @@ bool CShoalSardine::Load()
 		FALSE,{{4,0,0}}
 	};
 
-	motion.Create(anim);
-	keikokumotion.Create(keikoku_anim,2);
-	
+	//motion.Create(anim);
+	keikokumotion.Create(keikoku_anim, 2);
+
 
 	return true;
 }
 
-void CShoalSardine::Initialize()
+void CSchoolTuna::Initialize()
 {
 	pos.x = 1000;
 	pos.y = 1500;
-	moveSpeed.x = 15.0f;
+	moveSpeed.x = 13.0f;
 	keikokumotion.ChangeMotion(0, false);
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-void CShoalSardine::Update(float wx, float wy)
+void CSchoolTuna::Update(float wx, float wy)
 {
-
 	if (!showFlg)return;
 
 	//Œxü
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //‰æ–Ê‚Ì‰E’[
 
-    keikokumotion.ChangeMotion(0, false);
+	keikokumotion.ChangeMotion(0, false);
 	if (!keikokumotion.IsEndMotion()) {
 		pos.x = scRight;
 	}
 	else
 	{
-		
+
 		pos.x -= moveSpeed.x;
 	}
 
@@ -87,35 +84,31 @@ void CShoalSardine::Update(float wx, float wy)
 	keikokumotion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-void CShoalSardine::Render(float wx, float wy)
+void CSchoolTuna::Render(float wx, float wy)
 {
 
 	if (!showFlg)return;
 	if (!keikokumotion.IsEndMotion()) {
 		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.5f, keikokumotion.GetSrcRect());
-		
+
 	}
 	else
 	{
-		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
-		
-	}
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f);
 
-		
-	
-	
+	}
 }
 
-void CShoalSardine::RenderDebug(float wx, float wy)
+void CSchoolTuna::RenderDebug(float wx, float wy)
 {
 	if (!showFlg)return;
 	CRectangle rect = GetRect();
 	CGraphicsUtilities::RenderRect(rect.Left - wx, rect.Top - wy, rect.Right - wx, rect.Bottom - wy, MOF_COLOR_RED);
 }
 
-void CShoalSardine::Release()
+void CSchoolTuna::Release()
 {
 	Texture.Release();
-	motion.Release();
+	//motion.Release();
 	keikokumotion.Release();
 }
