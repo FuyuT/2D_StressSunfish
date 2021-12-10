@@ -4,6 +4,7 @@
 #include "ObstacleManager.h"
 #include "timer.h"
 #include "time.h"
+#include "HeaderDefine.h"
 
 //‰ŠúˆÊ’u X
 #define		STARTPOS_X				200

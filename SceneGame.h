@@ -4,19 +4,8 @@
 #include "ObstacleManager.h"
 #include "Ui.h"
 #include "Stage.h"
+#include "HeaderDefine.h"
 
-//イベント
-enum Event
-{
-	Event_None,
-	Event_Summer,
-	Event_Winter,
-	Event_Turtle,
-	Event_ShoalSardine,
-	Event_Garbage,
-
-	Event_Count,
-};
 
 class CSceneGame : public CSceneBase
 {
@@ -58,6 +47,8 @@ private:
 	CRandom eventRandom;
 	int		eventNum;
 	CTimer	eventTimer;
+	//開始フラグ
+	bool startFlg;
 
 public:
 	CSceneGame();

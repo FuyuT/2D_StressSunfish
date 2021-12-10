@@ -108,7 +108,7 @@ void CPlayer::Initialize()
 	//チュートリアル
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
-	taskCompleteStep = 2;
+	taskCompleteStep = Task_Movement;
 	moveUpTaskTimer.SetTotalTime(3);
 	moveDownTaskTimer.SetTotalTime(3);
 
@@ -220,7 +220,7 @@ void CPlayer::UpdateMove(int tutorialStep)
 	}
 
 	//チュートリアル用入力検知
-	if (tutorialStep == 2)
+	if (tutorialStep == Task_Movement)
 	{
 		if (g_pInput->IsKeyPush(MOFKEY_W))
 		{
@@ -304,7 +304,7 @@ void CPlayer::UpdateMove(int tutorialStep)
 bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= 3)
+	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
 	{
 		//チュートリアルタスク
 		eatTaskFlg = true;
@@ -371,7 +371,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
-		possibleToJumpFlg && tutorialStep >= 3)
+		possibleToJumpFlg && tutorialStep >= Task_Action)
 	{
 		//チュートリアルタスク
 		jumpTaskFlg = true;
@@ -461,7 +461,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 体温
 	 *********/
-	if (!jumpFlg && tutorialStep >= 7)
+	if (!jumpFlg && tutorialStep >= Task_End)
 	{
 		if (GetRect().Top < SEA_LEVEL + TEMPERATURE_CHANGEZONE)
 		{
@@ -527,7 +527,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 寄生虫
 	 *********/
-	if (!jumpFlg && tutorialStep >= 3)
+	if (!jumpFlg && tutorialStep >= Task_Action)
 	{
 		if (parasite < PARASITE_LIMIT)
 		{
@@ -553,7 +553,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	/*********
 	 * 空腹
 	 *********/
-	if (tutorialStep >= 3)
+	if (tutorialStep >= Task_Action)
 	{
 		if (hungerRegion <= STARVATION)
 		{
@@ -659,13 +659,13 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 	moveDownTaskTimer.Update();
 
 	//チュートリアル
-	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == 2)
+	if (GetMoveUpTask() && GetMoveDownTask() && taskCompleteStep == Task_Movement)
 	{
-		taskCompleteStep = 3;
+		taskCompleteStep = Task_Action;
 	}
-	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == 3)
+	else if (eatTaskFlg && jumpTaskFlg && taskCompleteStep == Task_Action)
 	{
-		taskCompleteStep = 6;
+		taskCompleteStep = Task_Complete;
 	}
 
 	//ジャンプ中は操作が行えないように

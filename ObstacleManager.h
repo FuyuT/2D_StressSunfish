@@ -10,6 +10,10 @@
 #include "RottenCrab.h"
 #include "RottenShrimp.h"
 #include "ShoalSardine.h"
+#include "HeaderDefine.h"
+
+#define		SHOW_LIMIT	9
+
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -48,6 +52,7 @@ private:
 	int obstacleNum;
 	int posY;
 	int posYNum;
+	int lastTimePosY;
 
 	bool createFlg;
 	bool eventFoodCreateFlg;
@@ -63,7 +68,7 @@ public:
 	void Release();
 	void PosYRndom();
 
-		bool ObstaclePercentage(int percent)
+	bool ObstaclePercentage(int percent)
 	{
 		//Šm—¦‚É‚æ‚Á‚Ätrue‚ð•Ô‚·
 		if (createRandom.Random(1, 100 / percent + 1) == 1)

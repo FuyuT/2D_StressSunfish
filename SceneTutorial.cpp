@@ -43,8 +43,8 @@ bool CSceneTutorial::TextLoad()
 void CSceneTutorial::FontLoad()
 {
 	//fontの作成
-	CFontCharaInputArray(fontAdd);
-	FontPopRumCute.Create(26, "PoPRumCute");
+	font.Load(fontAdd, fontName);
+	font.Create(26, fontName);
 }
 
 //メッセージの更新
@@ -116,7 +116,7 @@ void CSceneTutorial::MessageUpdate()
 void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
-	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
+	font.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
 	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
 	{
 		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押してゲームを開始する");
@@ -164,13 +164,13 @@ void CSceneTutorial::Initialize()
 void CSceneTutorial::Update()
 {
 	stg.Update(pl);
-	ui.Update(0);
+	ui.Update(Event_None);
 	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	pl.Update(true, tutorialStep,0);
-	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep,0);
+	pl.Update(true, tutorialStep,Event_None);
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep, Event_None);
 	MessageUpdate();
 
 }
@@ -183,7 +183,7 @@ void CSceneTutorial::Render()
 	
 	//最前面の岩背景
 	stg.ForeGroundRender();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, 0);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None);
 	MessageRender();
 
 	//現在のタスク一覧表示
