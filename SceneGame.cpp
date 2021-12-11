@@ -131,6 +131,13 @@ void CSceneGame::Update()
 		popUpFlg = true;
 		poseFlg = true;
 	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg)
+	{
+		nowPopUpGame->Release();
+		nowPopUpGame = NULL;
+		popUpFlg = false;
+		poseFlg = false;
+	}
 
 	//İ’è•\¦
 	//ƒQ[ƒ€‰æ–Ê‚É–ß‚Á‚½‚çconfigFlg‚ğfalse
