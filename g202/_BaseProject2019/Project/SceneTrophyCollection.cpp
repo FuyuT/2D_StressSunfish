@@ -26,6 +26,10 @@ void CSceneTrophyCollection::Initialize()
 
 	page = 1;
 
+	//フォント
+	font.Load(fontAdd, fontName);
+	font.Create(64, fontName);
+
 	LoadTrophyFlg();
 
 	//トロフィーテクスチャ読み込み
@@ -597,6 +601,7 @@ void CSceneTrophyCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
+				buttonSelect = 1;
 				page = 2;
 			}
 
@@ -685,6 +690,7 @@ void CSceneTrophyCollection::Update()
 				seaOf​​JapanScale = scaleMini;
 				aroundTheGlobeScale = scaleMini;
 				zeroMotivationScale = scaleMini;
+				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					buttonSelect = 0;
@@ -759,7 +765,7 @@ void CSceneTrophyCollection::Update()
 				seaOf​​JapanScale = scaleMini;
 				aroundTheGlobeScale = scaleMini;
 				zeroMotivationScale = scaleMini;
-
+				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					buttonSelect = 0;
@@ -834,6 +840,7 @@ void CSceneTrophyCollection::Update()
 				seaOf​​JapanScale = scaleController.ScaleControll(seaOf​​JapanScale, scaleMax, scaleMini, scaleSpeed);
 				aroundTheGlobeScale = scaleMini;
 				zeroMotivationScale = scaleMini;
+				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					buttonSelect = 0;
@@ -908,6 +915,7 @@ void CSceneTrophyCollection::Update()
 				seaOf​​JapanScale = scaleMini;
 				aroundTheGlobeScale = scaleController.ScaleControll(aroundTheGlobeScale, scaleMax, scaleMini, scaleSpeed);
 				zeroMotivationScale = scaleMini;
+				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					if (amazonRiverFlg)
@@ -981,6 +989,7 @@ void CSceneTrophyCollection::Update()
 				seaOf​​JapanScale = scaleMini;
 				aroundTheGlobeScale = scaleMini;
 				zeroMotivationScale = scaleController.ScaleControll(zeroMotivationScale, scaleMax, scaleMini, scaleSpeed);
+				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					if (seaOf​​JapanFlg)
@@ -1049,10 +1058,12 @@ void CSceneTrophyCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
+				buttonSelect = 1;
 				page = 1;
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
+				buttonSelect = 1;
 				page = 3;
 			}
 		}
@@ -1181,7 +1192,7 @@ void CSceneTrophyCollection::Update()
 					else
 						buttonSelect = 0;
 				}
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					popUpFlg = true;
 					//ポップアップにトロフィー:富士山級の画像を表示させる
@@ -1242,7 +1253,7 @@ void CSceneTrophyCollection::Update()
 						buttonSelect = 0;
 					
 				}
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					popUpFlg = true;
 					//ポップアップにトロフィー:大阪マラソンの画像を表示させる
@@ -1300,7 +1311,7 @@ void CSceneTrophyCollection::Update()
 					}
 				}
 
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					popUpFlg = true;
 					//ポップアップにトロフィー:琵琶湖級の画像を表示させる
@@ -1359,7 +1370,7 @@ void CSceneTrophyCollection::Update()
 					else	
 						buttonSelect = 0;
 				}
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					popUpFlg = true;
 					//ポップアップにトロフィー:ジャックポット級の画像を表示させる
@@ -1414,7 +1425,7 @@ void CSceneTrophyCollection::Update()
 							buttonSelect = 0;
 					}
 				}
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					popUpFlg = true;
 					//ポップアップにトロフィー:才能魔の画像を表示させる
@@ -1425,6 +1436,7 @@ void CSceneTrophyCollection::Update()
 			}
 		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 		{
+			buttonSelect = 1;
 			page = 2;
 		}
 	}
@@ -1502,7 +1514,7 @@ void CSceneTrophyCollection::Render()
 	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(255, 255, 255), "%d/3", page);
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
-
+	font.RenderString(textPosX, textPosY, MOF_XRGB(255, 255, 255), "トロフィー集");
 	if (popUpFlg)
 	{
 		nowPopUpTrophy->Render();
@@ -1726,7 +1738,7 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 
 void CSceneTrophyCollection::SaveTrophyFlg()
 {
-	FILE* fp = fopen("SaveTrophy.dat", "wb");
+	FILE* fp = fopen("SaveDeta\\SaveTrophy.dat", "wb");
 	if (fp)
 	{
 		fwrite(&riverFlg, sizeof(bool), 1, fp);
@@ -1751,7 +1763,7 @@ void CSceneTrophyCollection::SaveTrophyFlg()
 
 void CSceneTrophyCollection::LoadTrophyFlg()
 {
-	FILE* fp = fopen("SaveTrophy.dat", "rb");
+	FILE* fp = fopen("SaveDeta\\SaveTrophy.dat", "rb");
 	if (fp)
 	{
 		fread(&riverFlg, sizeof(bool), 1, fp);

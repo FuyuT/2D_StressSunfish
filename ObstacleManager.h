@@ -197,10 +197,10 @@ public:
 			return cRottenShrimp[num].GetShow();
 			break;
 		case SwordFish:
-			return cSwordFish[num].GetRect();
+			return cSwordFish[num].GetShow();
 			break;
 		case SchoolTuna:
-			return cSchoolTuna[num].GetRect();
+			return cSchoolTuna[num].GetShow();
 			break;
 		}
 	}

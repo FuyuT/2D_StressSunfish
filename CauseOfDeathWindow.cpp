@@ -147,11 +147,11 @@ void CCauseOfDeathWindow::Render()
 		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "éÄàˆ:êÖó¨");
 		break;
 	}*/
+	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	if (newGetDeathFlg)
 	{
 		newGetTexture.Render(350, 250);
 	}
-	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
 	scaleController.ScaleRender(&deathTextTexture,deathTextPosX,deathTextPosY,deathTextScale);
 }

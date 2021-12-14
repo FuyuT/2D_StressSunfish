@@ -4,6 +4,8 @@
 #include "Blinking.h"
 #include "ObstacleManager.h"
 #include "Turtle.h"
+#include "HeaderDefine.h"
+#include "ResourceFont.h"
 
 //トロフィーの距離
 #define RIVER 1000
@@ -33,6 +35,7 @@ enum EventMotion
 
 	EVENTMOTION_COUNT,
 };
+
 
 class CUi
 {
@@ -123,8 +126,10 @@ private:
 	CBlinking radyGoB;
 
 	//フォント
-	CFont font;
-	CFont trophyFont;
+	CResourceFont font;
+	CResourceFont trophyFont;
+	LPMofChar fileAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
 
 	//アニメーション
 	CSpriteMotionController motion;

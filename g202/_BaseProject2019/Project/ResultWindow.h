@@ -1,10 +1,15 @@
 #pragma once
 #include "PopUpWindowBase.h"
 #include "Player.h"
+#include "ResourceFont.h"
+
 class CResultWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
+	CResourceFont font;
+	LPMofChar fileAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
+
 	CFont		distanceFont;
 	CTexture	popUpTexture;
 	CTexture	buttonNextTexture;

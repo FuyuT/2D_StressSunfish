@@ -566,7 +566,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 			eventFoodCreateFlg = ObstaclePercentage(25);
 			if (eventFoodCreateFlg)
 			{
-				obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
+				obstacleNum = obstacleRandom.Random(ShoalSardine, FoodCrab + 1);
 			}
 			else
 			{

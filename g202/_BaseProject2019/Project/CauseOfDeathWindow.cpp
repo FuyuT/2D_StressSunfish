@@ -67,12 +67,25 @@ void CCauseOfDeathWindow::Initialize()
 		caseOfDethTexture.Load("マンボウ　魚群衝突死 .png");
 		break;
 	}
-	font.Create(64, "MS　明朝");
 	buttonSelect = 1;
 	endFlg = false;
+	buttonNextScaleFlg = false;
+
+	//フォント
+	font.Load(fontAdd, fontName);
+	font.Create(32,fontName);
 }
 void CCauseOfDeathWindow::Update()
 {
+	popUpScale = scaleController.ScaleShrinkControll(popUpScale, scaleMini, causeOfDeathScaleSpeed);
+	if (!buttonNextScaleFlg )
+	{
+		buttonNextScale = scaleController.ScaleShrinkControll(buttonNextScale, scaleMini, causeOfDeathScaleSpeed);
+		if (buttonNextScale = scaleMini)
+		buttonNextScaleFlg = true;
+	}
+	causeOfDeathTextureScale = scaleController.ScaleShrinkControll(causeOfDeathTextureScale, scaleMini, causeOfDeathScaleSpeed);
+	deathTextScale = scaleController.ScaleShrinkControll(deathTextScale,scaleMini,causeOfDeathScaleSpeed);
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
@@ -83,6 +96,7 @@ void CCauseOfDeathWindow::Update()
 	
 	if (buttonSelect == 1)
 	{
+		if(buttonNextScaleFlg)
 		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
@@ -95,7 +109,8 @@ void CCauseOfDeathWindow::Update()
 }
 void CCauseOfDeathWindow::Render()
 {
-	popUpTexture.Render(popUpPosX, popUpPosY);
+	//popUpTexture.Render(popUpPosX, popUpPosY);
+	scaleController.ScaleRender(&popUpTexture,popUpPosX,popUpPosY,popUpScale);
 	/*switch (deathResult)
 	{
 	case CAUSE_Hyperthermia:
@@ -132,13 +147,13 @@ void CCauseOfDeathWindow::Render()
 		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:水流");
 		break;
 	}*/
+	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	if (newGetDeathFlg)
 	{
 		newGetTexture.Render(350, 250);
 	}
-	caseOfDethTexture.Render(causeOfDeathTexturePosX,causeOfDeathTexturePosY);
 	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
-	deathTextTexture.Render(deathTextPosX, deathTextPosY);
+	scaleController.ScaleRender(&deathTextTexture,deathTextPosX,deathTextPosY,deathTextScale);
 }
 void CCauseOfDeathWindow::Release()
 {

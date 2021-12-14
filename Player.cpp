@@ -858,6 +858,31 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 				causeOfDeath = CAUSE_ShoalFish;
 			}
 		}
+		else if (prec.CollisionRect(cObstacle.GetRect(SwordFish, num)) &&
+			cObstacle.GetShow(SwordFish, num) && !hitFlg)
+		{
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//è’ìÀ
+				hitFlg = true;
+				//éÄàˆÅFè’ìÀéÄ
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_ShoalFish;
+			}
+		}
+		else if (prec.CollisionRect(cObstacle.GetRect(SchoolTuna, num)) &&
+			cObstacle.GetShow(SchoolTuna, num) && !hitFlg)
+		{
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//è’ìÀ
+				hitFlg = true;
+				//éÄàˆÅFè’ìÀéÄ
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = SchoolTuna;
+			}
+		}
+
 	}
 
 	//è·äQï®

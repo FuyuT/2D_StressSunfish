@@ -12,7 +12,6 @@ CSoundManager::~CSoundManager()
 
 bool CSoundManager::Load()
 {
-	LoadSoundData();
 	
 	if (!titleBGM.Load("Sound\\BGM_Title.mp3"))return false;
 	if (!menuBGM.Load("Sound\\BGM_Menu.mp3"))return false;
@@ -30,6 +29,7 @@ bool CSoundManager::Load()
 	if (!collisionSE.Load("Sound\\SE_Collision.mp3"))return false;
 	if (!bubbleCollisionSE.Load("Sound\\SE_BubbleCollision.mp3"))return false;
 	SetLoop();
+	LoadSoundData();
 
 	return true;
 }
@@ -233,7 +233,7 @@ void CSoundManager::SetMute(int soundNo)
 
 void CSoundManager::LoadSoundData()
 {
-	FILE* fp = fopen("Volume.dat", "rb");
+	FILE* fp = fopen("SaveData\\Volume.dat", "rb");
 	//ファイルが無い時、音量を設定して新しく作る
 	if (fp == nullptr)
 	{
@@ -253,11 +253,15 @@ void CSoundManager::LoadSoundData()
 		fread(&volumeSE, sizeof(float), 1, fp);
 		fclose(fp);
 	}
+	if (muteBGM)SetMute(SOUND_BGM);
+	if (muteSE)SetMute(SOUND_SE);
+	ChangeVolume(SOUND_BGM);
+	ChangeVolume(SOUND_SE);
 }
 
 void CSoundManager::SaveSoundData()
 {
-	FILE* fp = fopen("Volume.dat", "wb");
+	FILE* fp = fopen("SaveData\\Volume.dat", "wb");
 	if (fp)
 	{
 		fwrite(&muteBGM, sizeof(bool), 1, fp);

@@ -56,6 +56,7 @@ void CShoalSardine::Initialize()
 	moveSpeed.x = 15.0f;
 	keikokumotion.ChangeMotion(0, false);
 	motion.AddTimer(CUtilities::GetFrameSecond());
+	showFlg = false;
 }
 
 void CShoalSardine::Update(float wx, float wy)

@@ -70,8 +70,15 @@ void CSceneTutorial::MessageUpdate()
 				}
 				fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
 				messageEndFlg = false;
-				//チュートリアルの段階を一つ進める
-				tutorialStep += 1;
+				//チュートリアルの段階を一つ進める 最後のタスクが終わっていたら、タスクを完了状態にする
+				if (tutorialStep == TutorialStep::Task_Action)
+				{
+					tutorialStep = TutorialStep::Task_Complete;
+				}
+				else
+				{
+					tutorialStep += 1;
+				}
 			}
 		}
 	}
@@ -158,11 +165,18 @@ void CSceneTutorial::Initialize()
 	fBufferOffset = 0;
 	mShowDelay = 0;
 	messageEndFlg = false;
-	tutorialStep = 0;
+	tutorialStep = TutorialStep::Task_Movement;
 }
 
 void CSceneTutorial::Update()
 {
+	//todo:ポーズ画面表示に変更　現在Enterでメニューに戻る
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	{
+		nextScene = SCENENO_GAMEMENU;
+		endFlg = true;
+	}
+
 	stg.Update(pl);
 	ui.Update(Event_None);
 	for (int i = 0; i < 5; i++)
@@ -189,42 +203,45 @@ void CSceneTutorial::Render()
 	//現在のタスク一覧表示
 	if (tutorialStep >= TutorialStep::Task_Movement)
 	{
-		CGraphicsUtilities::RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+		font.RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
 		if (!pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "□ [W]で上に移動");
+			font.RenderString(40, 280, MOF_COLOR_BLACK, "□ [W]で上に移動");
 		else if (pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 280, MOF_COLOR_BLACK, "■ [W]で上に移動");
+			font.RenderString(40, 280, MOF_COLOR_BLACK, "■ [W]で上に移動");
 
 		if (!pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "□ [S]で下に移動");
+			font.RenderString(40, 320, MOF_COLOR_BLACK, "□ [S]で下に移動");
 		else if (pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [S]で下に移動");
+			font.RenderString(40, 320, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
 	if(tutorialStep >= TutorialStep::Task_Action)
 	{
-		CGraphicsUtilities::RenderString(10, 360, MOF_COLOR_BLACK, "┃\n┃\n┃");
+		font.RenderString(10, 360, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
 		if (!pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+			font.RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でジャンプ");
 		else if (pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+			font.RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でジャンプ");
 
 		if (!pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 400, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+			font.RenderString(40, 400, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
 		else if (pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+			font.RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
 	if (tutorialStep != TutorialStep::Task_Complete)
 	{
-		CGraphicsUtilities::RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+		font.RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
 	else
 	{
-		CGraphicsUtilities::RenderString(10, 240, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+		font.RenderString(10, 240, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
 	}
 	
+	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
+	font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
+	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
 
 }
 

@@ -14,21 +14,21 @@
     <ProjectGuid>{582B9C61-742D-4D2B-9C72-42C088CE473D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>SimpleProject</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -113,8 +113,10 @@
     <ClCompile Include="RottenFish.cpp" />
     <ClCompile Include="RottenShrimp.cpp" />
     <ClCompile Include="ScaleController.cpp" />
+    <ClCompile Include="SchoolTuna.cpp" />
     <ClCompile Include="ShoalSardine.cpp" />
     <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="SwordFish.cpp" />
     <ClCompile Include="WaterFlow.cpp" />
     <ClCompile Include="FoodCrab.cpp" />
     <ClCompile Include="FoodFish.cpp" />
@@ -148,13 +150,16 @@
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
+    <ClInclude Include="HeaderDefine.h" />
     <ClInclude Include="ResourceFont.h" />
     <ClInclude Include="RottenCrab.h" />
     <ClInclude Include="RottenFish.h" />
     <ClInclude Include="RottenShrimp.h" />
     <ClInclude Include="ScaleController.h" />
+    <ClInclude Include="SchoolTuna.h" />
     <ClInclude Include="ShoalSardine.h" />
     <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SwordFish.h" />
     <ClInclude Include="WaterFlow.h" />
     <ClInclude Include="ObstacleBase.h" />
     <ClInclude Include="FoodCrab.h" />

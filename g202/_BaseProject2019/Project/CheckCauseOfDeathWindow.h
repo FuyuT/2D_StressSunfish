@@ -5,7 +5,6 @@
 class CCheckCauseOfDeathWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
 	CTexture	popUpTexture;
 	CTexture	buttonBackTexture;
 	CTexture	causeOfDeathTexture;
@@ -14,7 +13,7 @@ private:
 	const int			buttonBackPosY = 100;
 	float				buttonBackScale = 1.0f;
 	const int			causeOfDeathTexturePosX = 725;
-	const int			causeOfDeathTexturePosY = 350;
+	const int			causeOfDeathTexturePosY = 225;
 public:
 	CCheckCauseOfDeathWindow();
 	~CCheckCauseOfDeathWindow();

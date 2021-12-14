@@ -15,17 +15,6 @@ bool CShoalSardine::Load()
 	if (!Texture.Load("Obstacle\\mureanim.png"))return false;
 	if (!keikokuTexture.Load("Obstacle\\gyogunanim2.png"))return false;
 
-	return true;
-}
-
-void CShoalSardine::Initialize()
-{
-	pos.x = 1000;
-	pos.y = 1500;
-	moveSpeed.x = 20.0f;
-
-
-
 	SpriteAnimationCreate anim = {
 		"泳ぐ",
 		0,0,
@@ -41,65 +30,80 @@ void CShoalSardine::Initialize()
 
 	};
 
-	SpriteAnimationCreate keikoku_anim = {
+	SpriteAnimationCreate keikoku_anim[] = {
 		"警告",
 		0,0,
 		480,86,
 		FALSE,{{4,0,0},{4,0,1},{4,0,2},{4,0,3},{4,0,4},{4,0,5},{4,0,6},{4,0,7},{4,0,8},{4,0,9},{4,0,10},{4,0,11},{4,0,12}}
+		,
+		"空",
+		0,0,
+		0,0,
+		FALSE,{{4,0,0}}
 	};
 
 	motion.Create(anim);
-	keikokumotion.Create(keikoku_anim);
+	keikokumotion.Create(keikoku_anim,2);
 	
-	keikokumotion.AddTimer(CUtilities::GetFrameSecond());
+
+	return true;
+}
+
+void CShoalSardine::Initialize()
+{
+	pos.x = 1000;
+	pos.y = 1500;
+	moveSpeed.x = 15.0f;
+	keikokumotion.ChangeMotion(0, false);
+	motion.AddTimer(CUtilities::GetFrameSecond());
+	showFlg = false;
 }
 
 void CShoalSardine::Update(float wx, float wy)
 {
-	if (!showFlg)return;
 
-	//スクリーンから出たらshowFlgをfalse
-	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	if (!showFlg)return;
 
 	//警告線
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //画面の右端
-	
-	bool i;
-	i = keikokumotion.ChangeMotion(1);
-	if (i) 
+
+    keikokumotion.ChangeMotion(0, false);
+	if (!keikokumotion.IsEndMotion()) 
 	{
-		pos.x = wx -  scRight;
-		
+		pos.x = scRight;
 	}
 	else 
-	{
+	{		
 		pos.x -= moveSpeed.x;
+	}
+
+	//スクリーンから出たらshowFlgをfalse
+	if (pos.x + Texture.GetWidth() <= wx)showFlg = false;
+	if (!showFlg)
+	{
+		keikokumotion.ChangeMotion(1, false);
 	}
 
 	motion.AddTimer(CUtilities::GetFrameSecond());
 	keikokumotion.AddTimer(CUtilities::GetFrameSecond());
-	keikokumotion.ChangeMotion(0);
 }
 
 void CShoalSardine::Render(float wx, float wy)
 {
+
 	if (!showFlg)return;
 	if (!keikokumotion.IsEndMotion()) {
-		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 1.0f, keikokumotion.GetSrcRect());
+		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.5f, keikokumotion.GetSrcRect());
+		
 	}
-
-		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
-	
-	
-	//警告線の表示
-	/*CRectangle rect = GetRect();
-	if (warningLineShow)
+	else
 	{
-		CGraphicsUtilities::RenderFillRect(0,rect.Top - wy,
-			g_pGraphics->GetTargetWidth(), rect.Bottom - wy, MOF_ARGB(100,255,0,0));
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
 	}
-	*/
 
+		
+	
+	
 }
 
 void CShoalSardine::RenderDebug(float wx, float wy)

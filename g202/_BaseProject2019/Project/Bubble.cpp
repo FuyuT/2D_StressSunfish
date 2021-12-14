@@ -19,7 +19,7 @@ void CBubble::Initialize()
 	//pos.x = 1000;
 	//pos.y = 2160;
 	moveSpeed.y = 2.0f;
-	//showFlg = true;
+	showFlg = false;
 }
 
 void CBubble::Update(float wx, float wy)

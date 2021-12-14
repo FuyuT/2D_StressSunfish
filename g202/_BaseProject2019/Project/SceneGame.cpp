@@ -117,6 +117,10 @@ void CSceneGame::Update()
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
 		Initialize();
+		if (nowPopUpGame != nullptr)
+		{
+			nowPopUpGame->Release();
+		}
 	}
 
 	//画面遷移 ポップアップ画面 
@@ -160,13 +164,13 @@ void CSceneGame::Update()
 	//プレイヤー
 	for (int i = 0; i < 5; i++)
 	{
-		pl.Collision(cObstacle,i,false,7);
+		pl.Collision(cObstacle,i,false, Task_End);
 	}
 	//プレイヤー
-	pl.Update(false, 7, eventNum);
+	pl.Update(false, Task_End, eventNum);
 
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),7,eventNum);
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(), Task_End,eventNum);
 
 }
 

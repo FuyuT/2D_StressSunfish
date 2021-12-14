@@ -189,6 +189,12 @@
     <ClCompile Include="ResourceFont.cpp">
       <Filter>ソース ファイル\Utilitys</Filter>
     </ClCompile>
+    <ClCompile Include="SchoolTuna.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="SwordFish.cpp">
+      <Filter>ソース ファイル\Obstacle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -313,6 +319,15 @@
     </ClInclude>
     <ClInclude Include="ResourceFont.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
+    </ClInclude>
+    <ClInclude Include="HeaderDefine.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SchoolTuna.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="SwordFish.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Obstacle</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

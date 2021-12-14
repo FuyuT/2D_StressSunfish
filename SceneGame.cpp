@@ -117,6 +117,10 @@ void CSceneGame::Update()
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
 		Initialize();
+		if (nowPopUpGame != nullptr)
+		{
+			nowPopUpGame->Release();
+		}
 	}
 
 	//画面遷移 ポップアップ画面 
