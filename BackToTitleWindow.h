@@ -24,6 +24,5 @@ public:
 	void Render() override;
 	void Release() override;
 	CRectangle GetRect(int i);
-	bool ChangeEndFlg() { !endFlg; return endFlg; }
 };
 

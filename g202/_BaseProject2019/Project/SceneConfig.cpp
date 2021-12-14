@@ -1,6 +1,8 @@
 #include "SceneConfig.h"
 
-CSceneConfig::CSceneConfig()
+CSceneConfig::CSceneConfig():
+	BGMControlFlg(false),
+	SEControlFlg(false)
 {
 }
 CSceneConfig::~CSceneConfig()
@@ -15,6 +17,7 @@ bool CSceneConfig::Load()
 	scrollBarLength = VOLUME_CONTROL_BUTTON_MAX - VOLUME_CONTROL_BUTTON_MIN;
 
 	if (!backGroundTex.Load("Title.png"))return false;
+	if (!scaneTextImage.Load("PopUpOption.png"))return false;
 
 	//SceneGameMenuの時とSceneGameuの時で読込みを変更
 	if (!gamePlayFlg)
@@ -22,8 +25,8 @@ bool CSceneConfig::Load()
 	else if (gamePlayFlg)
 		buttonReturnTexture.Load("ButtonReturnGame.png");
 
-	if (!muteTexBGM.Load("sutoresume--ta-.png"))return false;
-	if (!muteTexSE.Load("sutoresume--ta-.png"))return false;
+	if (!soundMuteTex.Load("UI\\SoundNoMute.png"))return false;
+	if (!soundNoMuteTex.Load("UI\\SoundMute.png"))return false;
 
 
 	if (!volumeBarTex.Load("UI\\ScrollBar.png"))return false;
@@ -31,6 +34,11 @@ bool CSceneConfig::Load()
 	if (!oysterCloseBottomTex.Load("UI\\PearlOysterCloseBottom.png"))return false;
 	if (!oysterCloseTopTex.Load("UI\\PearlOysterCloseTop.png"))return false;
 	if (!oysterOpenTex.Load("UI\\PearlOysterOpen.png"))return false;
+	
+	if (!SETextTex.Load("UI\\SE.png"))return false;
+	if (!BGMTextTex.Load("UI\\BGM.png"))return false;
+	if (!muteTextTex.Load("UI\\MUTE.png"))return false;
+	if (!spaceSelectTex.Load("UI\\SpaceSelect.png"))return false;
 	return true;
 }
 
@@ -64,7 +72,7 @@ void CSceneConfig::SoundMute()
 	}
 	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY) && g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON))
 	{
-		if (!cSound->GetMuteBGM())
+		if (!cSound->GetMuteSE())
 		{
 			cSound->SetMute(SOUND_SE);
 		}
@@ -106,54 +114,11 @@ void CSceneConfig::DragButton(Vector2& pos, const int buttonNo, bool& scrollFlg,
 	}
 }
 
-void CSceneConfig::VolumeAdjustment(const Vector2 pos, const int soundNo)
-{	
-	//スクロールバーとボタンの位置の割合によって、音量を変更する
-	float vol = (pos.x - VOLUME_CONTROL_BUTTON_MIN) / scrollBarLength;
-	if (vol > 1)
-	{
-		vol = 1;
-	}
-	else if (vol < 0)
-	{
-		vol = 0;
-	}
-	switch (soundNo)
-	{
-	case SOUND_BGM:
-		cSound->SetVolumeBGM(vol);
-		if (cSound->GetMuteBGM())return;
-		cSound->ChangeVolume(SOUND_BGM);
-		break;
-	case SOUND_SE:
-		cSound->SetVolumeSE(vol);
-		if (cSound->GetMuteSE())return;
-		cSound->ChangeVolume(SOUND_SE);
-		break;
-	default:
-		break;
-	}
-}
-
-void CSceneConfig::SoundUpdate()
-{
-	//音量調整(スクロールバー)
-	static bool scrollBGMFlg = false;
-	DragButton(BGMControlButtonPos, BUTTON_BGM_CONTROL, scrollBGMFlg, volumeControlButton.GetWidth() * 0.5);
-	static bool scrollSEFlg = false;
-	DragButton(SEControlButtonPos, BUTTON_SE_CONTROL, scrollSEFlg, volumeControlButton.GetWidth() * 0.5);
-	//音量変更
-	SoundMute();
-	VolumeAdjustment(BGMControlButtonPos, SOUND_BGM);
-	VolumeAdjustment(SEControlButtonPos,SOUND_SE);
-}
-
 void CSceneConfig::SelectButton()
 {
 	//マウスで選択
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	//ボタン　メニュー
 	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
 	{
 		buttonSelect = BUTTON_RETURN;
@@ -175,7 +140,7 @@ void CSceneConfig::SelectButton()
 		buttonSelect = BUTTON_MUTE_BGM;
 	}
 
-	//矢印キーで選択
+	//キーで選択
 	switch (buttonSelect)
 	{
 	case BUTTON_RETURN:
@@ -189,6 +154,20 @@ void CSceneConfig::SelectButton()
 		}
 		break;
 	case BUTTON_SE_CONTROL:
+		//SEの音量変更選択
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			if (SEControlFlg)
+			{
+				SEControlFlg = false;
+			}
+			else
+			{
+				SEControlFlg = true;
+			}
+		}
+		if (SEControlFlg)return;
+
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			buttonSelect = BUTTON_MUTE_SE;
@@ -201,6 +180,7 @@ void CSceneConfig::SelectButton()
 		{
 			buttonSelect = BUTTON_RETURN;
 		}
+
 		break;
 	case BUTTON_MUTE_SE:
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
@@ -217,6 +197,20 @@ void CSceneConfig::SelectButton()
 		}
 		break;
 	case BUTTON_BGM_CONTROL:
+		//BGMの音量変更選択
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			if (BGMControlFlg)
+			{
+				BGMControlFlg = false;
+			}
+			else
+			{
+				BGMControlFlg = true;
+			}
+		}
+		if (BGMControlFlg) return;
+
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			buttonSelect = BUTTON_MUTE_BGM;
@@ -225,6 +219,7 @@ void CSceneConfig::SelectButton()
 		{
 			buttonSelect = BUTTON_SE_CONTROL;
 		}
+		
 		break;
 	case BUTTON_MUTE_BGM:
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
@@ -281,7 +276,6 @@ void CSceneConfig::ButtonUpdate()
 		buttonMuteSEScale = scaleMini;
 		buttonBGMControlScale = scaleMini;
 		buttonMuteBGMScale = scaleMini;
-
 		break;
 	case BUTTON_MUTE_SE:		//ボタン　SEMUTE
 		buttonMuteSEScale = scaleController.ScaleControll(buttonMuteSEScale, scaleMax, scaleMini, scaleSpeed);
@@ -291,7 +285,17 @@ void CSceneConfig::ButtonUpdate()
 		buttonSEControlScale = scaleMini;
 		buttonBGMControlScale = scaleMini;
 		buttonMuteBGMScale = scaleMini;
-
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			if (cSound->GetMuteSE())
+			{
+				cSound->CancelMute(SOUND_SE);
+			}
+			else
+			{
+				cSound->SetMute(SOUND_SE);
+			}
+		}
 		break;
 	case BUTTON_BGM_CONTROL:	//ボタン　BGM
 		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, scaleMax, scaleMini, scaleSpeed);
@@ -312,11 +316,88 @@ void CSceneConfig::ButtonUpdate()
 		buttonSEControlScale = scaleMini;
 		buttonMuteSEScale = scaleMini;
 		buttonBGMControlScale = scaleMini;
-
+		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
+		{
+			if (cSound->GetMuteBGM())
+			{
+				cSound->CancelMute(SOUND_BGM);
+			}
+			else
+			{
+				cSound->SetMute(SOUND_BGM);
+			}
+		}
 		break;
 	default:
 		break;
 	}
+}
+
+void CSceneConfig::VolumeAdjustment(const Vector2 pos, const int soundNo)
+{
+	//スクロールバーとボタンの位置の割合によって、音量を変更する
+	float vol = (pos.x - VOLUME_CONTROL_BUTTON_MIN) / scrollBarLength;
+	if (vol > 1)
+	{
+		vol = 1;
+	}
+	else if (vol < 0)
+	{
+		vol = 0;
+	}
+	switch (soundNo)
+	{
+	case SOUND_BGM:
+		cSound->SetVolumeBGM(vol);
+		if (cSound->GetMuteBGM())return;
+		cSound->ChangeVolume(SOUND_BGM);
+		break;
+	case SOUND_SE:
+		cSound->SetVolumeSE(vol);
+		if (cSound->GetMuteSE())return;
+		cSound->ChangeVolume(SOUND_SE);
+		break;
+	default:
+		break;
+	}
+}
+
+void CSceneConfig::SoundUpdate()
+{
+	//音量調整
+	//スクロールバー
+	static bool scrollBGMFlg = false;
+	DragButton(BGMControlButtonPos, BUTTON_BGM_CONTROL, scrollBGMFlg, volumeControlButton.GetWidth() * 0.5);
+	static bool scrollSEFlg = false;
+	DragButton(SEControlButtonPos, BUTTON_SE_CONTROL, scrollSEFlg, volumeControlButton.GetWidth() * 0.5);
+	//矢印キー
+	if (BGMControlFlg)
+	{
+		if (g_pInput->IsKeyHold(MOFKEY_RIGHT))
+		{
+			BGMControlButtonPos.x += VOLUME_CONTROL_SPEED;
+		}
+		else if (g_pInput->IsKeyHold(MOFKEY_LEFT))
+		{
+			BGMControlButtonPos.x -= VOLUME_CONTROL_SPEED;
+		}
+	}
+	else if (SEControlFlg)
+	{
+		if (g_pInput->IsKeyHold(MOFKEY_RIGHT))
+		{
+			SEControlButtonPos.x += VOLUME_CONTROL_SPEED;
+		}
+		else if (g_pInput->IsKeyHold(MOFKEY_LEFT))
+		{
+			SEControlButtonPos.x -= VOLUME_CONTROL_SPEED;
+		}
+
+	}
+	//音量変更
+	SoundMute();
+	VolumeAdjustment(BGMControlButtonPos, SOUND_BGM);
+	VolumeAdjustment(SEControlButtonPos,SOUND_SE);
 }
 
 void CSceneConfig::Update()
@@ -329,9 +410,15 @@ void CSceneConfig::Update()
 void CSceneConfig::Render()
 {
 	backGroundTex.Render(0, 0);
-	CGraphicsUtilities::RenderString(100, 300, "設定画面");
+	scaneTextImage.Render(SCENE_TEXT_IMAGE_X, SCENE_TEXT_IMAGE_Y);
 	buttonReturnTexture.Render(buttonReturnPosX, buttonReturnPosY);
 	scaleController.ScaleRender(&buttonReturnTexture, buttonReturnPosX,buttonReturnPosY, buttonReturnScale);
+
+	//テキスト
+	BGMTextTex.Render(30, BGM_BAR_POS_Y);
+	SETextTex.Render(30, SE_BAR_POS_Y);
+	muteTextTex.Render(250, 800);
+	spaceSelectTex.Render(830, 200);
 
 	//サウンド関係
 	//BGM
@@ -348,9 +435,28 @@ void CSceneConfig::Render()
 	oysterCloseTopTex.Render(CLOSE_OYSTER_POS_X, SE_CLOSE_OYSTER_TOP_POS_Y);
 
 	//ミュート
-	scaleController.ScaleRender(&muteTexBGM,MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y, buttonMuteBGMScale);
-	scaleController.ScaleRender(&muteTexSE,MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y,buttonMuteSEScale);
-	CGraphicsUtilities::RenderString(0, 0, "%f", BGMControlButtonPos.x);
+	if (cSound->GetMuteBGM())
+	{
+		scaleController.ScaleRender(&soundNoMuteTex, MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y, buttonMuteBGMScale);
+	}
+	else
+	{
+		scaleController.ScaleRender(&soundMuteTex,MUTE_TEX_POS_X, BGM_MUTE_TEX_POS_Y, buttonMuteBGMScale);
+	}
+	if (cSound->GetMuteSE())
+	{
+		scaleController.ScaleRender(&soundNoMuteTex, MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y, buttonMuteSEScale);
+	}
+	else
+	{
+		scaleController.ScaleRender(&soundMuteTex,MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y,buttonMuteSEScale);
+	}
+
+	//デバッグ　位置決め用
+	Vector2 mousePos;
+	g_pInput->GetMousePos(mousePos);
+	CGraphicsUtilities::RenderString(0, 0, "%f", mousePos.x);
+	CGraphicsUtilities::RenderString(0, 50, "%f", mousePos.y);
 
 }
 
@@ -358,12 +464,18 @@ void CSceneConfig::Render()
 void CSceneConfig::Release()
 {
 	backGroundTex.Release();
+	scaneTextImage.Release();
 	buttonReturnTexture.Release();
-	muteTexBGM.Release();
-	muteTexSE.Release();
+	soundMuteTex.Release();
+	soundNoMuteTex.Release();
 	volumeBarTex.Release();
 	volumeControlButton.Release();
 	oysterCloseBottomTex.Release();
 	oysterCloseTopTex.Release();
 	oysterOpenTex.Release();
+	SETextTex.Release();
+	BGMTextTex.Release();
+	muteTextTex.Release();
+	spaceSelectTex.Release();
+
 }

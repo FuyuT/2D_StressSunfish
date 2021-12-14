@@ -23,7 +23,7 @@ public:
 	void Release()override;
 	CRectangle GetRect() {
 		return CRectangle(pos.x + TURTLE_RECT_LEFT_ADJ, pos.y + TURTLE_RECT_TOP_ADJ,
-			pos.x + TURTLE_RECT_RIGHT_ADJ,pos.y + TURTLE_RECT_BOTTOM_ADJ);
+			pos.x + TURTLE_RECT_RIGHT_ADJ, pos.y + TURTLE_RECT_BOTTOM_ADJ);
 	}
 	bool GetShow()
 	{

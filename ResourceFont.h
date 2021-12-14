@@ -14,9 +14,8 @@ public:
 		:CFont()
 		, m_hResourceFontHandle(NULL)
 	{
-		//•¶š‚Ì•‚í‚©‚ç‚È‚¢‚Ì‚Åˆê’UÁ‚µ‚Ä‚é
-		//m_FontInfo.lfHeight         = 16;
-		//m_FontInfo.lfWidth          = 16;
+		m_FontInfo.lfHeight         = 0;
+		m_FontInfo.lfWidth          = 0;
 		m_FontInfo.lfEscapement     = 0;
 		m_FontInfo.lfOrientation    = 0;
 		m_FontInfo.lfWeight         = FW_REGULAR;

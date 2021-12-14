@@ -108,6 +108,7 @@ void CSceneTitle::Update()
 
 void CSceneTitle::SoundUpdate()
 {
+
 }
 
 void CSceneTitle::Render()
