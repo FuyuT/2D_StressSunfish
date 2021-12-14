@@ -10,6 +10,12 @@
 #include "RottenCrab.h"
 #include "RottenShrimp.h"
 #include "ShoalSardine.h"
+#include "SwordFish.h"
+#include "SchoolTuna.h"
+#include "HeaderDefine.h"
+
+#define		SHOW_LIMIT	9
+
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -24,6 +30,8 @@ enum obstacle {
 	RottenCrab,
 	RottenShrimp,
 	ShoalSardine,
+	SwordFish,
+	SchoolTuna,
 };
 
 class CObstacleManager
@@ -40,6 +48,8 @@ private:
 	CTurtle     cTurtle[5];
 	CWaterFlow  cWaterFlow;
 	CShoalSardine cShoalSardine[2];
+	CSwordFish cSwordFish[2];
+	CSchoolTuna cSchoolTuna[2];
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
@@ -47,8 +57,11 @@ private:
 	CRandom garbageNoRandom;
 	int random;
 	int obstacleNum;
+	int foodRandom;
+	int rottenRandom;
 	int posY;
 	int posYNum;
+	int lastTimePosY;
 
 	bool createFlg;
 	bool eventFoodCreateFlg;
@@ -111,6 +124,12 @@ public:
 			break;
 		case RottenShrimp:
 			return cRottenShrimp[num].GetRect();
+			break;
+		case SwordFish:
+			return cSwordFish[num].GetRect();
+			break;
+		case SchoolTuna:
+			return cSchoolTuna[num].GetRect();
 			break;
 		}
 	}
@@ -178,6 +197,12 @@ public:
 			break;
 		case RottenShrimp:
 			return cRottenShrimp[num].GetShow();
+			break;
+		case SwordFish:
+			return cSwordFish[num].GetShow();
+			break;
+		case SchoolTuna:
+			return cSchoolTuna[num].GetShow();
 			break;
 		}
 	}

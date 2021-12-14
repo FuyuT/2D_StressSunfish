@@ -30,6 +30,8 @@ bool CObstacleManager::Load()
 	for (int n = 0; n < 2; n++)
 	{	
 		if (!cShoalSardine[n].Load())return false;
+		if (!cSwordFish[n].Load())return false;
+		if (!cSchoolTuna[n].Load())return false;
 	}
 	if (!cWaterFlow.Load())return false;
 	return true;
@@ -59,66 +61,41 @@ void CObstacleManager::Initialize()
 	{
 
 		cShoalSardine[n].Initialize();
+		cSwordFish[n].Initialize();
+		cSchoolTuna[n].Initialize();
 	}
 
 	cWaterFlow.Initialize();
 
 	obstacleRandom.SetSeed((MofU32)time(NULL));
 	posYRndom.SetSeed((MofU32)time(NULL));
+
+	lastTimePosY = 0;
 }
 
 void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutorialStep, int eventNum)
 {
-	if (tutorialStep < 3)
+	if (tutorialStep < Task_Action)
 		return;
 
 	//新しいランダム生成の仮
 	/*showFlgがfalseの食べ物, 障害物を一つランダムで選んで、
-	if (tutorialStep <= 6)
+	if (distance % 60 == 0 && distance != 0)
 	{
-		random = 1;
-	}
-	else if (eventNum == 3 || eventNum == 4 || eventNum == 5)
-	{
-		eventFoodCreateFlg = ObstaclePercentage(25);
-		if (eventFoodCreateFlg)
-		{
-			random = 1;
-		}
-		else
-		{
-			random = 0;
-		}
-	}
-	else
-	{
-		random = obstacleRandom.Random(0, 3);
-	}
-
-
-	switch (random)
-	{
-	case 0:
-		obstacleNum = obstacleRandom.Random(0, 500);
-
-		if (eventNum == 3)
-			obstacleNum = 0;
-		else if (eventNum == 4)
-			obstacleNum = 400;
-		else if (eventNum == 5)
-			obstacleNum = 100;
-
+		obstacleNum = obstacleRandom.Random(0, 700);
+		//ランダムで出た数字によってif文で障害物を表示する
 		if (obstacleNum < 100)
 		{
+			//亀
 			for (int n = 0; n < 5; n++)
 			{
-				if (eventNum != 3 && n != 0)
+				if (eventNum != Event_Turtle && n != 0)
 				{
 					return;
 				}
 				if (!cTurtle[n].GetShow())
 				{
-					if (eventNum != 3)
+					if (eventNum != Event_Turtle)
 					{
 						createFlg = ObstaclePercentage(25);
 						if (!createFlg)
@@ -154,15 +131,28 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		}
 		else if (obstacleNum >= 100 && obstacleNum < 200)
 		{
+			//ごみ
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cGarbage[n].GetShow())
 				{
-					if (eventNum != 5)
+					if (eventNum != Event_Garbage)
 					{
 						createFlg = ObstaclePercentage(50);
 						if (!createFlg)
 							return;
+					}
+					PosYRndom();
+					if (eventNum == Event_Garbage)
+					{
+						if (posY == lastTimePosY)
+						{
+							continue;
+						}
+						else
+						{
+							lastTimePosY = posY;
+						}
 					}
 					cGarbage[n].SetShow(true);
 					//ゴミのランダム決定
@@ -171,12 +161,12 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
 					cGarbage[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
-					PosYRndom();
+
 					cGarbage[n].SetPosy(posY);
-					if (eventNum == 5)
+					if (eventNum == Event_Garbage)
 						return;
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -197,6 +187,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		}
 		else if (obstacleNum >= 200 && obstacleNum < 300)
 		{
+			//水流
 			if (!cWaterFlow.GetShow())
 			{
 				createFlg = ObstaclePercentage(25);
@@ -209,7 +200,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				PosYRndom();
 				cWaterFlow.SetPosy(posY);
 				//重なった場合表示しない
-				for (int i = 0; i < 7; i++)
+				for (int i = 0; i < SHOW_LIMIT; i++)
 				{
 					for (int m = 0; m < 3; m++)
 					{
@@ -229,6 +220,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		}
 		else if (obstacleNum >= 300 && obstacleNum < 400)
 		{
+			//泡
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cBubble[n].GetShow())
@@ -240,7 +232,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cBubble[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -261,15 +253,16 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		}
 		else if (obstacleNum >= 400 && obstacleNum < 500)
 		{
+			//魚群
 			for (int n = 0; n < 2; n++)
 			{
-				if (eventNum != 4 && n != 0)
+				if (eventNum != Event_ShoalSardine && n != 0)
 				{
 					return;
 				}
 				if (!cShoalSardine[n].GetShow())
 				{
-					if (eventNum != 4)
+					if (eventNum != Event_ShoalSardine)
 					{
 						createFlg = ObstaclePercentage(25);
 						if (!createFlg)
@@ -281,10 +274,10 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					cShoalSardine[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
 					PosYRndom();
 					cShoalSardine[n].SetPosy(posY);
-					if (eventNum == 4)
+					if (eventNum == Event_ShoalSardine)
 						return;
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -303,11 +296,104 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		break;
-	case 1:
-		obstacleNum = obstacleRandom.Random(0, 300);
-		if (obstacleNum < 100)
+		else if (obstacleNum >= 500 && obstacleNum < 600)
 		{
+			//カジキ
+			for (int n = 0; n < 2; n++)
+			{
+				if (eventNum != 4 && n != 0)
+				{
+					return;
+				}
+				if (!cSwordFish[n].GetShow())
+				{
+					if (eventNum != 4)
+					{
+						createFlg = ObstaclePercentage(25);
+						if (!createFlg)
+							return;
+					}
+					cSwordFish[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cSwordFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
+					PosYRndom();
+					cSwordFish[n].SetPosy(posY);
+					if (eventNum == 4)
+						return;
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(SwordFish, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == SwordFish)
+								{
+									return;
+								}
+								cSwordFish[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+		}
+		else if (obstacleNum >= 600)
+		{
+			//マグロ
+			for (int n = 0; n < 2; n++)
+			{
+				if (eventNum != 4 && n != 0)
+				{
+					return;
+				}
+				if (!cSchoolTuna[n].GetShow())
+				{
+					if (eventNum != 4)
+					{
+						createFlg = ObstaclePercentage(25);
+						if (!createFlg)
+							return;
+					}
+					cSchoolTuna[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cSchoolTuna[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
+					PosYRndom();
+					cSchoolTuna[n].SetPosy(posY);
+					if (eventNum == 4)
+						return;
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(SchoolTuna, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == SchoolTuna)
+								{
+									return;
+								}
+								cSchoolTuna[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+		}
+	}
+	else if(distance % 35 == 0 && distance != 0)
+	{
+		foodRandom = obstacleRandom.Random(0, 300);
+		//ランダムで出た数字によってif文で食べ物を表示する
+		if (foodRandom < 100)
+		{
+			//魚
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cFish[n].GetShow())
@@ -319,7 +405,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cFish[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -338,8 +424,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		else if (obstacleNum >= 100 && obstacleNum < 200)
+		else if (foodRandom >= 100 && foodRandom < 200)
 		{
+			//エビ
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cShrimp[n].GetShow())
@@ -351,7 +438,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cShrimp[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -370,8 +457,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		else if (obstacleNum >= 200 && obstacleNum < 300)
+		else if (foodRandom >= 200)
 		{
+			//カニ
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cCrab[n].GetShow())
@@ -383,7 +471,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cCrab[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -402,11 +490,14 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		break;
-	case 2:
-		obstacleNum = obstacleRandom.Random(0, 300);
-		if (obstacleNum < 100)
+	}
+	else if(distance % 50 == 0 && distance != 0)
+	{
+		rottenRandom = obstacleRandom.Random(0, 300);
+		//ランダムで出た数字によってif文で腐った食べ物を表示する
+		if (rottenRandom < 100)
 		{
+			//腐った魚
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cRottenFish[n].GetShow())
@@ -421,8 +512,9 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		else if (obstacleNum >= 100 && obstacleNum < 200)
+		else if (rottenRandom >= 100 && rottenRandom < 200)
 		{
+			//腐ったエビ
 			for (int n = 0; n < 3; n++)
 			{
 				if (!cRottenShrimp[n].GetShow())
@@ -434,7 +526,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cRottenShrimp[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -453,42 +545,31 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		else if (obstacleNum >= 200 && obstacleNum < 300)
+		else if (rottenRandom >= 200)
 		{
-			for (int n = 0; n < 2; n++)
+			//腐ったカニ
+			for (int n = 0; n < 3; n++)
 			{
-				if (eventNum != 4 && n != 0)
+				if (!cRottenCrab[n].GetShow())
 				{
-					return;
-				}
-				if (!cShoalSardine[n].GetShow())
-				{
-					if (eventNum != 4)
-					{
-						createFlg = ObstaclePercentage(25);
-						if (!createFlg)
-							return;
-					}
-					cShoalSardine[n].SetShow(true);
+					cRottenCrab[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
-					cShoalSardine[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
+					cRottenCrab[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
 					PosYRndom();
-					cShoalSardine[n].SetPosy(posY);
-					if (eventNum == 4)
-						return;
+					cRottenCrab[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
-							if (GetRect(ShoalSardine, m).CollisionRect(GetRect(i, m)))
+							if (GetRect(RottenCrab, n).CollisionRect(GetRect(i, m)))
 							{
-								if (i == ShoalSardine)
+								if (i == RottenCrab && n == m)
 								{
 									return;
 								}
-								cShoalSardine[n].SetShow(false);
+								cRottenCrab[n].SetShow(false);
 								return;
 							}
 						}
@@ -497,39 +578,37 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 		}
-		break;
-	default:
-		break;
 	}*/
 
 
+	eventNum = ShoalSardine;
 	if (distance % 35 == 0 && distance != 0)
 	{
 		//showFlgがfalseの食べ物,障害物を一つランダムで選んで、
-		if (tutorialStep <= 6)
+		if (tutorialStep <= Task_Complete)
 		{
 			obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
 		}
-		else if(eventNum == 3 || eventNum == 4 || eventNum == 5)
+		else if(eventNum == Event_Turtle || eventNum == Event_ShoalSardine || eventNum == Event_Garbage)
 		{
 			eventFoodCreateFlg = ObstaclePercentage(25);
 			if (eventFoodCreateFlg)
 			{
-				obstacleNum = obstacleRandom.Random(FoodFish, FoodCrab + 1);
+				obstacleNum = obstacleRandom.Random(ShoalSardine, FoodCrab + 1);
 			}
 			else
 			{
-				if (eventNum == 3)
+				if (eventNum == Event_Turtle)
 					obstacleNum = Turtle;
-				else if (eventNum == 4)
+				else if (eventNum == Event_ShoalSardine)
 					obstacleNum = ShoalSardine;
-				else if (eventNum == 5)
+				else if (eventNum == Event_Garbage)
 					obstacleNum = Garbage;					
 			}
 		}
 		else
 		{
-			obstacleNum = obstacleRandom.Random(0, 11);
+			obstacleNum = obstacleRandom.Random(0, 13);
 		}
 
 		//障害物の位置指定とshowflgをtrue
@@ -538,13 +617,13 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		case Turtle:
 			for (int n = 0; n < 5; n++)
 			{
-				if (eventNum != 3 &&  n != 0)
+				if (eventNum != Event_Turtle &&  n != 0)
 				{
 					return;
 				}
 				if (!cTurtle[n].GetShow())
 				{
-					if (eventNum != 3)
+					if (eventNum != Event_Turtle)
 					{
 						createFlg = ObstaclePercentage(25);
 						if (!createFlg)
@@ -583,11 +662,23 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 			{
 				if (!cGarbage[n].GetShow())
 				{
-					if (eventNum != 5)
+					if (eventNum != Event_Garbage)
 					{
 						createFlg = ObstaclePercentage(50);
 						if (!createFlg)
 							return;
+					}
+					PosYRndom();
+					if (eventNum == Event_Garbage)
+					{
+						if (posY == lastTimePosY)
+						{
+							continue;
+						}
+						else
+						{
+							lastTimePosY = posY;
+						}
 					}
 					cGarbage[n].SetShow(true);
 					//ゴミのランダム決定
@@ -596,12 +687,12 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
 					cGarbage[n].SetPosx(posx + g_pGraphics->GetTargetWidth());
-					PosYRndom();
+					
 					cGarbage[n].SetPosy(posY);
-					if (eventNum == 5)
+					if (eventNum == Event_Garbage)
 						return;
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -633,7 +724,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				PosYRndom();
 				cWaterFlow.SetPosy(posY);
 				//重なった場合表示しない
-				for (int i = 0; i < 7; i++)
+				for (int i = 0; i < SHOW_LIMIT; i++)
 				{
 					for (int m = 0; m < 3; m++)
 					{
@@ -664,7 +755,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cBubble[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -695,7 +786,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cFish[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -726,7 +817,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cShrimp[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -757,7 +848,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cCrab[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -803,7 +894,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cRottenShrimp[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -834,7 +925,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					PosYRndom();
 					cRottenCrab[n].SetPosy(posY);
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -856,13 +947,13 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		case ShoalSardine:
 			for (int n = 0; n < 2; n++)
 			{
-				if (eventNum != 4 && n != 0)
+				if (eventNum != Event_ShoalSardine && n != 0)
 				{
 					return;
 				}
 				if (!cShoalSardine[n].GetShow())
 				{
-					if (eventNum != 4)
+					if (eventNum != Event_ShoalSardine)
 					{
 						createFlg = ObstaclePercentage(25);
 						if (!createFlg)
@@ -874,10 +965,10 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					cShoalSardine[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
 					PosYRndom();
 					cShoalSardine[n].SetPosy(posY);
-					if (eventNum == 4)
+					if (eventNum == Event_ShoalSardine)
 						return;
 					//重なった場合表示しない
-					for (int i = 0; i < 7; i++)
+					for (int i = 0; i < SHOW_LIMIT; i++)
 					{
 						for (int m = 0; m < 3; m++)
 						{
@@ -896,6 +987,93 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 				}
 			}
 			break;
+		case SwordFish:
+			for (int n = 0; n < 2; n++)
+			{
+				if (eventNum != 4 && n != 0)
+				{
+					return;
+				}
+				if (!cSwordFish[n].GetShow())
+				{
+					if (eventNum != 4)
+					{
+						createFlg = ObstaclePercentage(25);
+						if (!createFlg)
+							return;
+					}
+					cSwordFish[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cSwordFish[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
+					PosYRndom();
+					cSwordFish[n].SetPosy(posY);
+					if (eventNum == 4)
+						return;
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(SwordFish, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == SwordFish)
+								{
+									return;
+								}
+								cSwordFish[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+			break;
+		case SchoolTuna:
+			for (int n = 0; n < 2; n++)
+			{
+				if (eventNum != 4 && n != 0)
+				{
+					return;
+				}
+				if (!cSchoolTuna[n].GetShow())
+				{
+					if (eventNum != 4)
+					{
+						createFlg = ObstaclePercentage(25);
+						if (!createFlg)
+							return;
+					}
+					cSchoolTuna[n].SetShow(true);
+					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+					cSchoolTuna[n].SetPosx(posx + g_pGraphics->GetTargetWidth() + 500);
+					PosYRndom();
+					cSchoolTuna[n].SetPosy(posY);
+					if (eventNum == 4)
+						return;
+					//重なった場合表示しない
+					for (int i = 0; i < 7; i++)
+					{
+						for (int m = 0; m < 3; m++)
+						{
+							if (GetRect(SchoolTuna, m).CollisionRect(GetRect(i, m)))
+							{
+								if (i == SchoolTuna)
+								{
+									return;
+								}
+								cSchoolTuna[n].SetShow(false);
+								return;
+							}
+						}
+					}
+					return;
+				}
+			}
+			break;
+
 		}
 	}
 
@@ -921,6 +1099,8 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 	for (int n = 0; n < 2; n++)
 	{
 		cShoalSardine[n].Update(wx, wy);
+		cSwordFish[n].Update(wx, wy);
+		cSchoolTuna[n].Update(wx, wy);
 	}
 	cWaterFlow.Update(wx, wy);
 }
@@ -948,7 +1128,10 @@ void CObstacleManager::Render(float wx, float wy)
 	for (int n = 0; n < 2; n++)
 	{
 		cShoalSardine[n].Render(wx, wy);
+		cSwordFish[n].Render(wx, wy);
+		cSchoolTuna[n].Render(wx, wy);
 	}
+
 	cWaterFlow.Render(wx, wy);
 }
 
@@ -976,6 +1159,8 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 	{
 
 		cShoalSardine[n].RenderDebug(wx, wy);
+		cSwordFish[n].RenderDebug(wx, wy);
+		cSchoolTuna[n].RenderDebug(wx, wy);
 	}
 	cWaterFlow.RenderDebug(wx, wy);
 }
@@ -1004,6 +1189,8 @@ void CObstacleManager::Release()
 	{
 
 		cShoalSardine[n].Release();
+		cSwordFish[n].Release();
+		cSchoolTuna[n].Release();
 	}
 	cWaterFlow.Release();
 }
