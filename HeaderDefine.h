@@ -16,8 +16,8 @@ enum Event
 //チュートリアル
 enum TutorialStep
 {
-	Task_Movement = 2,
-	Task_Action = 3,
-	Task_Complete = 6,
-	Task_End = 7,
+	Task_Movement,
+	Task_Action,
+	Task_Complete,
+	Task_End,
 };

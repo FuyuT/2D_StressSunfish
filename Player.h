@@ -103,6 +103,13 @@ enum MOTION
 	MOTION_COUNT,
 };
 
+enum Temperature
+{
+	Temp_Normal,
+	Temp_Hot,
+	Temp_Cold,
+};
+
 class CPlayer
 {
 private:
@@ -112,6 +119,17 @@ private:
 	CTexture	eatTexture;
 	CTexture	jumpTexture;
 	CTexture	deathTexture;
+
+	CTexture	hotStandTexture;
+	CTexture	hotEatTexture;
+	CTexture	hotJumpTexture;
+	CTexture	hotDeathTexture;
+
+	CTexture	coldStandTexture;
+	CTexture	coldEatTexture;
+	CTexture	coldJumpTexture;
+	CTexture	coldDeathTexture;
+
 	//Šm—¦
 	CRandom		random;
 	//À•W
@@ -141,6 +159,7 @@ private:
 	//‘Ì‰·
 	int         bodyTemp;
 	float       tempRegion;
+	Temperature	temperature;
 	//‹ó• 
 	float       hungerRegion;
 	//Šñ¶’

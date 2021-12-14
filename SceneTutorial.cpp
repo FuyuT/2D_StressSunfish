@@ -126,15 +126,15 @@ void CSceneTutorial::MessageRender()
 	font.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
 	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押してゲームを開始する");
+		font.RenderString(1200, 980, "Spaceを押してゲームを開始する");
 	}
 	else if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押して次へ→");
+		font.RenderString(1200, 980, "Spaceを押して次へ→");
 	}
 	else if (messageEndFlg && tutorialStep == pl.GetTaskCompleteStep())
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "タスクをこなそう！");
+		font.RenderString(1200, 980, "タスクをこなそう！");
 	}
 }
 
