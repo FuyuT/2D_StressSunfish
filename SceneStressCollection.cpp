@@ -1199,7 +1199,7 @@ bool CSceneStressCollection::GetStress(int i)
 
 void CSceneStressCollection::SaveStressFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "wb");
+	FILE* fp = fopen("SaveData\\SaveStress.dat", "wb");
 	if (fp)
 	{
 		fwrite(&hyperthermiaFlg, sizeof(bool), 1, fp);
@@ -1220,7 +1220,7 @@ void CSceneStressCollection::SaveStressFlg()
 
 void CSceneStressCollection::LoadStressFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "rb");
+	FILE* fp = fopen("SaveData\\SaveStress.dat", "rb");
 	if (fp)
 	{
 		fread(&hyperthermiaFlg, sizeof(bool), 1, fp);

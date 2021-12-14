@@ -33,6 +33,7 @@ void CSceneTitle::Initialize()
 	buttonSelect = 1;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
+	SEReset();
 	PlayBGM();
 }
 
@@ -51,25 +52,18 @@ void CSceneTitle::Update()
 	}
 	else if (!popUpFlg)
 	{
-		if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
-		{
-			buttonSelect = 1;
-		}
-		else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-		{
-			buttonSelect = 2;
-		}
-
 		if (buttonSelect == 1)
 		{
 			gameFinishButtonScale = scaleMini;
-
+			MouseCollision(mousePosX, mousePosY);
 			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 			{
+				cSound->Play(SOUND_BUTTON_SELECT);
 				buttonSelect = 2;
 			}
 			if (g_pInput->IsKeyPush(MOFKEY_UP))
 			{
+				cSound->Play(SOUND_BUTTON_SELECT);
 				buttonSelect = 2;
 			}
 			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
@@ -78,6 +72,7 @@ void CSceneTitle::Update()
 			{
 				endFlg = true;
 				nextScene = SCENENO_GAMEMENU;
+				cSound->Play(SOUND_BUTTON_PUSH);
 				CSceneTitle::Release();
 			}
 		}
@@ -85,19 +80,23 @@ void CSceneTitle::Update()
 		else if (buttonSelect == 2)
 		{
 			gamePlayButtonScale = scaleMini;
+			MouseCollision(mousePosX, mousePosY);
 			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
 			{
 				buttonSelect = 1;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 			if (g_pInput->IsKeyPush(MOFKEY_UP) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
 			{
 				buttonSelect = 1;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 			gameFinishButtonScale = scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
 
 			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 			{
 				nowPopUpTitle->Initialize();
+				cSound->Play(SOUND_BUTTON_PUSH);
 				popUpFlg = true;
 			}
 		}
@@ -108,7 +107,11 @@ void CSceneTitle::Update()
 
 void CSceneTitle::SoundUpdate()
 {
-
+	if (seSelectFlg)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		seSelectFlg = false;
+	}
 }
 
 void CSceneTitle::Render()
@@ -132,6 +135,20 @@ void CSceneTitle::Release()
 	{
 		delete nowPopUpTitle;
 		nowPopUpTitle = NULL;
+	}
+}
+
+void CSceneTitle::MouseCollision( int posX, int posY)
+{
+	if (GetRect(0).CollisionPoint(posX, posY) && buttonSelect != 1)
+	{
+		buttonSelect = 1;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	if (GetRect(1).CollisionPoint(posX, posY) && buttonSelect != 2)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 2;
 	}
 }
 

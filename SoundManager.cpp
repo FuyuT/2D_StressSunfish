@@ -28,6 +28,15 @@ bool CSoundManager::Load()
 	if (!waterFlowSE.Load("Sound\\SE_WaterFlow.mp3"))return false;
 	if (!collisionSE.Load("Sound\\SE_Collision.mp3"))return false;
 	if (!bubbleCollisionSE.Load("Sound\\SE_BubbleCollision.mp3"))return false;
+
+	if (!eventWinterSE.Load("Sound\\SE_Winter.mp3"))return false;
+	if (!eventSummerSE.Load("Sound\\SE_Summer.mp3"))return false;
+	if (!eventOtherSE.Load("Sound\\SE_Event.mp3"))return false;
+	if (!buttonCancelSE.Load("Sound\\SE_ButtonCancel.mp3"))return false;
+	if (!buttonSelectSE.Load("Sound\\SE_ButtonSelect.mp3"))return false;
+	if (!buttonOKSE.Load("Sound\\SE_ButtonOK.mp3"))return false;
+	if (!buttonPushSE.Load("Sound\\SE_ButtonPush.mp3"))return false;
+	if (!resultSE.Load("Sound\\SE_Result.mp3"))return false;
 	SetLoop();
 	LoadSoundData();
 
@@ -45,52 +54,100 @@ void CSoundManager::SetLoop()
 
 void CSoundManager::Play(SOUNDTYPE sound)
 {
+	//todo:àÍÇ©èäÇ…Ç‹Ç∆ÇﬂÇÍÇªÇ§
 	switch (sound)
 	{
 	case SOUND_TITLE_BGM:
+		nowSound = SOUND_TITLE_BGM;
 		titleBGM.Play();
 		break;
 	case SOUND_MENU_BGM:
+		nowSound = SOUND_MENU_BGM;
 		menuBGM.Play();
 		break;
 	case SOUND_COLLECTION_BGM:
+		nowSound = SOUND_COLLECTION_BGM;
 		collectionBGM.Play();
 		break;
 	case SOUND_GAME_BGM:
+		nowSound = SOUND_GAME_BGM;
 		gameBGM.Play();
 		break;
 	case SOUND_SCENE_CHANGE:
+		nowSound = SOUND_SCENE_CHANGE;
 		sceneChangeSE.Play();
 		break;
 	case SOUND_BUTTON:
+		nowSound = SOUND_BUTTON;
 		buttonSE.Play();
 		break;
 	case SOUND_ALERT:
+		nowSound = SOUND_ALERT;
 		alertSE.Play();
 		break;
 	case SOUND_JUMP_START:
+		nowSound = SOUND_JUMP_START;
 		jumpStartSE.Play();
 		break;
 	case SOUND_JUMPING:
+		nowSound = SOUND_JUMPING;
 		jumpingSE.Play();
 		break;
 	case SOUND_WATER_LANDING:
+		nowSound = SOUND_WATER_LANDING;
 		waterLandingSE.Play();
 		break;
 	case SOUND_EAT:
+		nowSound = SOUND_EAT;
 		eatSE.Play();
 		break;
 	case SOUND_WATERFLOW:
+		nowSound = SOUND_WATERFLOW;
 		waterFlowSE.Play();
 		break;
 	case SOUND_PARASITE_STICK:
+		nowSound = SOUND_PARASITE_STICK;
 		parasiteStickSE.Play();
 		break;
 	case SOUND_COLLISION:
+		nowSound = SOUND_COLLISION;
 		collisionSE.Play();
 		break;
 	case SOUND_BUBBLE_COLLISION:
+		nowSound = SOUND_BUBBLE_COLLISION;
 		bubbleCollisionSE.Play();
+		break;
+	case SOUND_EVENT_SUMMER:
+		nowSound = SOUND_EVENT_SUMMER;
+		eventSummerSE.Play();
+		break;
+	case SOUND_EVENT_WINTER:
+		nowSound = SOUND_EVENT_WINTER;
+		eventWinterSE.Play();
+		break;
+	case SOUND_EVENT_OTHERS:
+		nowSound = SOUND_EVENT_OTHERS;
+		eventOtherSE.Play();
+		break;
+	case SOUND_BUTTON_SELECT:
+		nowSound = SOUND_BUTTON_SELECT;
+		buttonSelectSE.Play();
+		break;
+	case SOUND_BUTTON_OK:
+		nowSound = SOUND_BUTTON_OK;
+		buttonOKSE.Play();
+		break;
+	case SOUND_BUTTON_CANCEL:
+		nowSound = SOUND_BUTTON_CANCEL;
+		buttonCancelSE.Play();
+		break;
+	case SOUND_BUTTON_PUSH:
+		nowSound = SOUND_BUTTON_PUSH;
+		buttonPushSE.Play();
+		break;
+	case SOUND_RESULT:
+		nowSound = SOUND_RESULT;
+		resultSE.Play();
 		break;
 	default:
 		break;
@@ -99,6 +156,7 @@ void CSoundManager::Play(SOUNDTYPE sound)
 
 void CSoundManager::Stop(SOUNDTYPE sound)
 {
+	nowSound = SOUND_COUNT;
 	switch (sound)
 	{
 	case SOUND_TITLE_BGM:
@@ -146,6 +204,30 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 	case SOUND_BUBBLE_COLLISION:
 		bubbleCollisionSE.Stop();
 		break;
+	case SOUND_EVENT_SUMMER:
+		eventSummerSE.Stop();
+		break;
+	case SOUND_EVENT_WINTER:
+		eventWinterSE.Stop();
+		break;
+	case SOUND_EVENT_OTHERS:
+		eventOtherSE.Stop();
+		break;
+	case SOUND_BUTTON_SELECT:
+		buttonSelectSE.Stop();
+		break;
+	case SOUND_BUTTON_OK:
+		buttonOKSE.Stop();
+		break;
+	case SOUND_BUTTON_CANCEL:
+		buttonCancelSE.Stop();
+		break;
+	case SOUND_BUTTON_PUSH:
+		buttonPushSE.Stop();
+		break;
+	case SOUND_RESULT:
+		resultSE.Stop();
+		break;
 	default:
 		break;
 	}
@@ -154,6 +236,7 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 
 void CSoundManager::AllStop()
 {
+	nowSound = SOUND_COUNT;
 	titleBGM.Stop();
 	menuBGM.Stop();
 	collectionBGM.Stop();
@@ -169,6 +252,14 @@ void CSoundManager::AllStop()
 	parasiteStickSE.Stop();
 	collisionSE.Stop();
 	bubbleCollisionSE.Stop();
+	eventSummerSE.Stop();
+	eventWinterSE.Stop();
+	eventOtherSE.Stop();
+	buttonSelectSE.Stop();
+	buttonOKSE.Stop();
+	buttonCancelSE.Stop();
+	buttonPushSE.Stop();
+	resultSE.Stop();
 }
 
 
@@ -194,6 +285,14 @@ void CSoundManager::ChangeVolume(int soundNo)
 		parasiteStickSE.SetVolume(volumeSE);
 		collisionSE.SetVolume(volumeSE);
 		bubbleCollisionSE.SetVolume(volumeSE);
+		eventWinterSE.SetVolume(volumeSE);
+		eventSummerSE.SetVolume(volumeSE);
+		eventOtherSE.SetVolume(volumeSE);
+		buttonSelectSE.SetVolume(volumeSE);
+		buttonCancelSE.SetVolume(volumeSE);
+		buttonOKSE.SetVolume(volumeSE);
+		buttonPushSE.SetVolume(volumeSE);
+		resultSE.SetVolume(volumeSE);
 		break;
 	default:
 		break;
@@ -225,6 +324,14 @@ void CSoundManager::SetMute(int soundNo)
 		parasiteStickSE.SetVolume(0);
 		collisionSE.SetVolume(0);
 		bubbleCollisionSE.SetVolume(0);
+		eventWinterSE.SetVolume(0);
+		eventSummerSE.SetVolume(0);
+		eventOtherSE.SetVolume(0);
+		buttonSelectSE.SetVolume(0);
+		buttonCancelSE.SetVolume(0);
+		buttonOKSE.SetVolume(0);
+		buttonPushSE.SetVolume(0);
+		resultSE.SetVolume(0);
 		break;	
 	default:
 		break;
@@ -290,4 +397,12 @@ void CSoundManager::Release()
 	parasiteStickSE.Release();
 	collisionSE.Release();
 	bubbleCollisionSE.Release();
+	eventWinterSE.Release();
+	eventSummerSE.Release();
+	eventOtherSE.Release();
+	buttonSelectSE.Release();
+	buttonCancelSE.Release();
+	buttonOKSE.Release();
+	buttonPushSE.Release();
+	resultSE.Release();
 }
