@@ -1,19 +1,28 @@
 #pragma once
 #include "PopUpWindowBase.h"
 #include "Player.h"
+#include "ResourceFont.h"
+
 class CResultWindow : public CPopUpWindowBase
 {
 private:
-	CFont		font;
+	CResourceFont font;
+	LPMofChar fileAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
+
 	CFont		distanceFont;
 	CTexture	popUpTexture;
 	CTexture	buttonNextTexture;
 	CTexture	resultTexture;
 	CTexture	newGetTexture;
 
+	//トロフィーテクスチャ
 	CTexture	trophyTexture;
 	CTexture	trophyTexture2;
 	CTexture	trophyTexture3;
+
+	//板テクスチャ
+	CTexture	classPlateTexture;
 
 	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;
@@ -22,6 +31,8 @@ private:
 	const int			trophyTexturePosY = 220;
 	const int			resultTextPosX = 800;
 	const int			resultTextPosY = 250;
+	const int			classPlatePosX = 550;
+	const int			classPlatePosY = 675;
 
 	char		meter[10];
 public:

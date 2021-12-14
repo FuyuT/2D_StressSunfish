@@ -42,7 +42,7 @@ private:
 	bool		waterFlowFlg = false;
 	float		waterFlowScale = 1.0f;
 	CTexture	shoalFishTexture;					//ãõåQ
-	bool		shoalFishFlg = false;
+	bool		shoalFishFlg = true;
 	float		shoalFishScale = 1.0f;
 
 	//Xç¿ïW

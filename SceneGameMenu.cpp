@@ -12,8 +12,11 @@ CSceneGameMenu::~CSceneGameMenu()
 
 void CSceneGameMenu::PlayBGM()
 {
-	cSound->AllStop();
-	cSound->Play(SOUND_MENU_BGM);
+	if (!cSound->GetNowSound() == SOUND_MENU_BGM)
+	{
+		cSound->AllStop();
+		cSound->Play(SOUND_MENU_BGM);
+	}
 }
 
 
@@ -41,6 +44,7 @@ void CSceneGameMenu::Initialize()
 
 	titleButtonTexture.Load("ButtonTitle.png");	
 
+	SEReset();
 	PlayBGM();
 }
 

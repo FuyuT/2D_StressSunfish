@@ -36,7 +36,7 @@ private:
 	bool		waterFallFlg = false;
 	float		waterFallScale = 1.0f;
 	CTexture	lakeIconTexture;		//湖級
-	bool		lakeFlg = false;
+	bool		lakeFlg = true;
 	float		lakeScale = 1.0f;
 	CTexture	damIconTexture;			//ダム級
 	bool		damFlg = false;

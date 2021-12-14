@@ -117,6 +117,10 @@ void CSceneGame::Update()
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
 		Initialize();
+		if (nowPopUpGame != nullptr)
+		{
+			nowPopUpGame->Release();
+		}
 	}
 
 	//画面遷移 ポップアップ画面 
@@ -130,13 +134,6 @@ void CSceneGame::Update()
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 		poseFlg = true;
-	}
-	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg)
-	{
-		nowPopUpGame->Release();
-		nowPopUpGame = NULL;
-		popUpFlg = false;
-		poseFlg = false;
 	}
 
 	//設定表示
@@ -167,13 +164,13 @@ void CSceneGame::Update()
 	//プレイヤー
 	for (int i = 0; i < 5; i++)
 	{
-		pl.Collision(cObstacle,i,false,7);
+		pl.Collision(cObstacle,i,false, Task_End);
 	}
 	//プレイヤー
-	pl.Update(false, 7, eventNum);
+	pl.Update(false, Task_End, eventNum);
 
 	//障害物
-	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),7,eventNum);
+	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(), Task_End,eventNum);
 
 }
 
@@ -398,144 +395,132 @@ void CSceneGame::CaseOfDethController()
 void CSceneGame::TrophyController()
 {
 	//川級
-	if (pl.GetDistance() <= 1000)
+	if (pl.GetDistance() > 0)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_RIVER);
+		numberOfTrophy[1] = numberOfTrophy[0];
 		numberOfTrophy[0] = TROPHY_RIVER;
+		//やる気ゼロ級
+		if (pl.GetDistance() <= 500)
+		{
+			newGetTrophy = trophy.GetTrophy(TROPHY_ZEROMOTIVATION);
+			numberOfTrophy[1] = numberOfTrophy[0];
+			numberOfTrophy[0] = TROPHY_ZEROMOTIVATION;
+		}
 	}
 	//滝級
-	else if (pl.GetDistance() <= 2500)
+	if (pl.GetDistance() > 1000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_WATERFALL);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
 		numberOfTrophy[0] = TROPHY_WATERFALL;
 	}
 	//湖級
-	else if (pl.GetDistance() <= 5000)
+	if (pl.GetDistance() > 2500)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_LAKE);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
 		numberOfTrophy[0] = TROPHY_LAKE;
 	}
-	//ダム級
-	else if (pl.GetDistance() <= 10000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_DAM);
-		numberOfTrophy[0] = TROPHY_DAM;
-	}
-	//下水道級
-	else if (pl.GetDistance() <= 25000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_SEWER);
-		numberOfTrophy[0] = TROPHY_SEWER;
-	}
-	//インド洋級
-	else if (pl.GetDistance() <= 50000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_INDIANOCEAN);
-		numberOfTrophy[0] = TROPHY_INDIANOCEAN;
-	}
-	//アマゾン川級
-	else if (pl.GetDistance() <= 100000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_AMAZONROVER);
-		numberOfTrophy[0] = TROPHY_AMAZONROVER;
-	}
-	//海級
-	else if (pl.GetDistance() <= 200000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_OCEAN);
-		numberOfTrophy[0] = TROPHY_OCEAN;
-	}
-	//日本海級
-	else if (pl.GetDistance() <= 300000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_SEAOFJAPAN);
-		numberOfTrophy[0] = TROPHY_SEAOFJAPAN;
-	}
-	//地球一周級
-	else if (30001<= pl.GetDistance())
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_AROUNDTHEGLOBE);
-		numberOfTrophy[0] = TROPHY_AROUNDTHEGLOBE;
-	}
 
-	//特別級
-	//やる気ゼロ級
-	if (pl.GetDistance() < 1000)
-	{
-		newGetTrophy = trophy.GetTrophy(TROPHY_ZEROMOTIVATION);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_ZEROMOTIVATION;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_ZEROMOTIVATION;
-		}
-	}
 	//富士山級
 	if (3000 <= pl.GetDistance() && pl.GetDistance() < 4000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_MOUNTFJI);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_MOUNTFJI;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_MOUNTFJI;
-		}
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_MOUNTFJI;
+	}
+
+	//ダム級
+	if (pl.GetDistance() > 5000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_DAM);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_DAM;
+	}
+	//下水道級
+	if (pl.GetDistance() > 10000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEWER);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_SEWER;
+	}
+	//インド洋級
+	if (pl.GetDistance() > 25000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_INDIANOCEAN);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_INDIANOCEAN;
 	}
 	//大阪マラソン級
 	if (42000 <= pl.GetDistance() && pl.GetDistance() < 43000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_OSAKAMARATHON);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_OSAKAMARATHON;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_OSAKAMARATHON;
-		}
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_OSAKAMARATHON;
+	}
+	//アマゾン川級
+	if (pl.GetDistance() > 50000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_AMAZONROVER);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_AMAZONROVER;
 	}
 	//琵琶湖級
 	if (63000 <= pl.GetDistance() && pl.GetDistance() < 64000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_BIWALAKE);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_BIWALAKE;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_BIWALAKE;
-		}
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_BIWALAKE;
+	}
+	//海級
+	if (pl.GetDistance() > 100000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_OCEAN);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_OCEAN;
+	}
+	//日本海級
+	if (pl.GetDistance() > 200000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_SEAOFJAPAN);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_SEAOFJAPAN;
+	}
+	//地球一周級
+	if ( pl.GetDistance() > 300000)
+	{
+		newGetTrophy = trophy.GetTrophy(TROPHY_AROUNDTHEGLOBE);
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_AROUNDTHEGLOBE;
 	}
 	//ジャックポット級
 	if (777000 <= pl.GetDistance() && pl.GetDistance() < 778000)
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_JACKPOD);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_JACKPOD;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_JACKPOD;
-		}
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_JACKPOD;
 	}
 	//才能魔級
 	if (999000 <= pl.GetDistance())
 	{
 		newGetTrophy = trophy.GetTrophy(TROPHY_TALENTEDDEMON);
-		if (numberOfTrophy[1] == TROPHY_NULL)
-		{
-			numberOfTrophy[1] = TROPHY_TALENTEDDEMON;
-		}
-		else if (numberOfTrophy[2] == TROPHY_NULL)
-		{
-			numberOfTrophy[2] = TROPHY_TALENTEDDEMON;
-		}
+		numberOfTrophy[2] = numberOfTrophy[1];
+		numberOfTrophy[1] = numberOfTrophy[0];
+		numberOfTrophy[0] = TROPHY_TALENTEDDEMON;
 	}
 
 	nowPopUpGame->SetNewGetTrophy(newGetTrophy);
