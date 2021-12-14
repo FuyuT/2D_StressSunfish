@@ -52,6 +52,40 @@ bool CPlayer::Load()
 	{
 		return false;
 	}
+	//hot
+	if (!hotStandTexture.Load("sheet_manbo si_manbo hot_Stand.png"))
+	{
+		return false;
+	}
+	if (!hotEatTexture.Load("sheet_manbo si_manbo hot_Eat.png"))
+	{
+		return false;
+	}
+	if (!hotDeathTexture.Load("sheet_manbo si_manbo hot_Death.png"))
+	{
+		return false;
+	}
+	if (!hotJumpTexture.Load("sheet_manbo si_manbo hot_jump.png"))
+	{
+		return false;
+	}
+	//cold
+	if (!coldStandTexture.Load("sheet_manbo si_manbo cold_stand.png"))
+	{
+		return false;
+	}
+	if (!coldEatTexture.Load("sheet_manbo si_manbo cold_Eat_anim.png"))
+	{
+		return false;
+	}
+	if (!coldDeathTexture.Load("sheet_manbo si_manbo cold_Death.png"))
+	{
+		return false;
+	}
+	if (!coldJumpTexture.Load("sheet_manbo_manbo jump_cold_jump.png"))
+	{
+		return false;
+	}
 
 
 	return true;
@@ -71,6 +105,7 @@ void CPlayer::Initialize()
 	//体温
 	bodyTemp = STANDARD_TEMPERATURE;
 	tempRegion = 50;
+	temperature = Temperature::Temp_Normal;
 	//空腹度
 	hungerRegion = FULL_STOMACH;
 	//寄生虫
@@ -467,46 +502,27 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 		{
 			if (tempRegion > HYPERTHERMIA_LIMIT)
 			{
-				if(eventNum == 1)
+				if(eventNum == Event_Summer)
 					tempRegion -= TEMPERATURE_LEVEL * 2;
 				else
 					tempRegion -= TEMPERATURE_LEVEL;
-			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：熱中症
-				if (tempRegion <= HYPERTHERMIA_LIMIT)
-				{
-
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Hyperthermia;
-				}
-			}
+			}			
 		}
 		else if (GetRect().Top > UNDER_SEA - TEMPERATURE_CHANGEZONE)
 		{
 			if (tempRegion < FROZEN_LIMIT)
 			{
-				if(eventNum == 2)
+				if(eventNum == Event_Winter)
 					tempRegion += TEMPERATURE_LEVEL * 2;
 				else
 					tempRegion += TEMPERATURE_LEVEL;
 			}
-			if (causeOfDeath == CAUSE_None && !unDeadFlg)
-			{
-				//死因：凍死
-				if (tempRegion >= FROZEN_LIMIT)
-				{
-					motion.ChangeMotion(MOTION_DEATH);
-					causeOfDeath = CAUSE_Frozen;
-				}
-			}
 		}
 		else
 		{
-			if(eventNum == 1)
+			if(eventNum == Event_Summer)
 				tempRegion -= TEMPERATURE_LEVEL * 2;
-			else if(eventNum == 2)
+			else if(eventNum == Event_Winter)
 				tempRegion += TEMPERATURE_LEVEL * 2;
 			else
 			{
@@ -522,6 +538,35 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 		}
 	}
 
+	if (causeOfDeath == CAUSE_None && !unDeadFlg)
+	{
+		//死因：熱中症
+		if (tempRegion <= HYPERTHERMIA_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Hyperthermia;
+		}
+		//死因：凍死
+		if (tempRegion >= FROZEN_LIMIT)
+		{
+			motion.ChangeMotion(MOTION_DEATH);
+			causeOfDeath = CAUSE_Frozen;
+		}
+	}
+
+	//モーション切り替え用
+	if (500 * (tempRegion * 0.01f) <= 150)
+	{
+		temperature = Temperature::Temp_Hot;
+	}
+	else if(500 * (tempRegion * 0.01f) >= 330)
+	{
+		temperature = Temperature::Temp_Cold;
+	}
+	else
+	{
+		temperature = Temperature::Temp_Normal;
+	}
 
 
 	/*********
@@ -688,16 +733,40 @@ void CPlayer::Render(float wx, float wy)
 	switch (motion.GetMotionNo())
 	{
 		case MOTION_STAND:
-			standTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			if(temperature == Temperature::Temp_Normal)
+				standTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else if (temperature == Temperature::Temp_Hot)
+				hotStandTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else
+				coldStandTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+
 			break;
 		case MOTION_EAT:
-			eatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			if (temperature == Temperature::Temp_Normal)
+				eatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else if (temperature == Temperature::Temp_Hot)
+				hotEatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else
+				coldEatTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+
 			break;
 		case MOTION_JUMP:
-			jumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
+			if (temperature == Temperature::Temp_Normal)
+				jumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
+			else if (temperature == Temperature::Temp_Hot)
+				hotJumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
+			else
+				coldJumpTexture.RenderScale(posX - wx, posY - wy, 1.8f, motion.GetSrcRect());
+			
 			break;
 		case MOTION_DEATH:
-			deathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			if (temperature == Temperature::Temp_Normal)
+				deathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else if (temperature == Temperature::Temp_Hot)
+				hotDeathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			else
+				coldDeathTexture.RenderScale(posX - wx, posY - wy, 2.0f, motion.GetSrcRect());
+			
 			break;
 	}
 }
@@ -808,6 +877,16 @@ void CPlayer::Release()
 	jumpTexture.Release();
 	deathTexture.Release();
 
+	hotStandTexture.Release();
+	hotEatTexture.Release();
+	hotJumpTexture.Release();
+	hotDeathTexture.Release();
+
+	coldStandTexture.Release();
+	coldEatTexture.Release();
+	coldJumpTexture.Release();
+	coldDeathTexture.Release();
+
 	motion.Release();
 }
 
@@ -862,6 +941,31 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 				causeOfDeath = CAUSE_ShoalFish;
 			}
 		}
+		else if (prec.CollisionRect(cObstacle.GetRect(SwordFish, num)) &&
+			cObstacle.GetShow(SwordFish, num) && !hitFlg)
+		{
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//衝突
+				hitFlg = true;
+				//死因：衝突死
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = CAUSE_ShoalFish;
+			}
+		}
+		else if (prec.CollisionRect(cObstacle.GetRect(SchoolTuna, num)) &&
+			cObstacle.GetShow(SchoolTuna, num) && !hitFlg)
+		{
+			if (causeOfDeath == CAUSE_None && !unDeadFlg)
+			{
+				//衝突
+				hitFlg = true;
+				//死因：衝突死
+				motion.ChangeMotion(MOTION_DEATH);
+				causeOfDeath = SchoolTuna;
+			}
+		}
+
 	}
 
 	//障害物
