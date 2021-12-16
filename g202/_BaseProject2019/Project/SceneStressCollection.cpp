@@ -1012,7 +1012,7 @@ void CSceneStressCollection::Render()
 		if(turtleFlg)
 		scaleController.ScaleRender(&turtleTexture, iconSecondRowPosX, iconOneLinePosY, turtleScalse);
 		if(waterFlowFlg)
-		scaleController.ScaleRender(&waterFlowTexture, iconFirstRowPosX, iconTwoLinePosY+20, waterFlowScale);
+		scaleController.ScaleRender(&waterFlowTexture, iconFirstRowPosX, iconTwoLinePosY+10, waterFlowScale);
 		if(shoalFishFlg)
 		scaleController.ScaleRender(&shoalFishTexture,iconSecondRowPosX,iconTwoLinePosY+20,shoalFishScale);
 	}
@@ -1199,7 +1199,7 @@ bool CSceneStressCollection::GetStress(int i)
 
 void CSceneStressCollection::SaveStressFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "wb");
+	FILE* fp = fopen("SaveData\\SaveStress.dat", "wb");
 	if (fp)
 	{
 		fwrite(&hyperthermiaFlg, sizeof(bool), 1, fp);
@@ -1220,7 +1220,7 @@ void CSceneStressCollection::SaveStressFlg()
 
 void CSceneStressCollection::LoadStressFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveStress.dat", "rb");
+	FILE* fp = fopen("SaveData\\SaveStress.dat", "rb");
 	if (fp)
 	{
 		fread(&hyperthermiaFlg, sizeof(bool), 1, fp);

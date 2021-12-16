@@ -1012,7 +1012,7 @@ void CSceneStressCollection::Render()
 		if(turtleFlg)
 		scaleController.ScaleRender(&turtleTexture, iconSecondRowPosX, iconOneLinePosY, turtleScalse);
 		if(waterFlowFlg)
-		scaleController.ScaleRender(&waterFlowTexture, iconFirstRowPosX, iconTwoLinePosY+20, waterFlowScale);
+		scaleController.ScaleRender(&waterFlowTexture, iconFirstRowPosX, iconTwoLinePosY+10, waterFlowScale);
 		if(shoalFishFlg)
 		scaleController.ScaleRender(&shoalFishTexture,iconSecondRowPosX,iconTwoLinePosY+20,shoalFishScale);
 	}

@@ -19,6 +19,15 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_BUBBLE,
 	SOUND_BUBBLE_COLLISION,
 
+	SOUND_EVENT_SUMMER,
+	SOUND_EVENT_WINTER,
+	SOUND_EVENT_OTHERS,
+	SOUND_BUTTON_SELECT,
+	SOUND_BUTTON_OK,
+	SOUND_BUTTON_CANCEL,
+	SOUND_BUTTON_PUSH,
+	SOUND_RESULT,
+
 	SOUND_COUNT,
 }SOUNDTYPE;
 
@@ -52,8 +61,21 @@ private:
 	CSoundBuffer collisionSE;		//衝突
 	CSoundBuffer bubbleCollisionSE;	//泡用衝突音
 
+	CSoundBuffer eventWinterSE;		//冬イベント
+	CSoundBuffer eventSummerSE;		//夏イベント
+	CSoundBuffer eventOtherSE;		//その他イベント
+	CSoundBuffer buttonSelectSE;	//ボタン選択時
+	CSoundBuffer buttonCancelSE;	//いいえボタンを押した時
+	CSoundBuffer buttonOKSE;		//はいボタンを押した時
+	CSoundBuffer buttonPushSE;		//上記以外のボタンを押した時
+	CSoundBuffer resultSE;			//リザルトポップアップ表示する時のSE	
+
+
 	bool muteBGM;
 	bool muteSE;
+
+	//現在流している音楽の取得用変数
+	int nowSound;
 public:
 	CSoundManager(bool muteBGM,bool muteSE);
 	~CSoundManager();
@@ -89,6 +111,7 @@ public:
 	}
 	bool GetMuteBGM() { return muteBGM; }
 	bool GetMuteSE() { return muteSE; }
+	int	GetNowSound() { return nowSound; }
 
 	//データ関連
 	void LoadSoundData();

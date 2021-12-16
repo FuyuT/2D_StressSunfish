@@ -54,104 +54,81 @@ void CSoundManager::SetLoop()
 
 void CSoundManager::Play(SOUNDTYPE sound)
 {
-	//todo:àÍÇ©èäÇ…Ç‹Ç∆ÇﬂÇÍÇªÇ§
 	switch (sound)
 	{
 	case SOUND_TITLE_BGM:
-		nowSound = SOUND_TITLE_BGM;
 		titleBGM.Play();
 		break;
 	case SOUND_MENU_BGM:
-		nowSound = SOUND_MENU_BGM;
 		menuBGM.Play();
 		break;
 	case SOUND_COLLECTION_BGM:
-		nowSound = SOUND_COLLECTION_BGM;
 		collectionBGM.Play();
 		break;
 	case SOUND_GAME_BGM:
-		nowSound = SOUND_GAME_BGM;
 		gameBGM.Play();
 		break;
 	case SOUND_SCENE_CHANGE:
-		nowSound = SOUND_SCENE_CHANGE;
 		sceneChangeSE.Play();
 		break;
 	case SOUND_BUTTON:
-		nowSound = SOUND_BUTTON;
 		buttonSE.Play();
 		break;
 	case SOUND_ALERT:
-		nowSound = SOUND_ALERT;
 		alertSE.Play();
 		break;
 	case SOUND_JUMP_START:
-		nowSound = SOUND_JUMP_START;
 		jumpStartSE.Play();
 		break;
 	case SOUND_JUMPING:
-		nowSound = SOUND_JUMPING;
 		jumpingSE.Play();
 		break;
 	case SOUND_WATER_LANDING:
-		nowSound = SOUND_WATER_LANDING;
 		waterLandingSE.Play();
 		break;
 	case SOUND_EAT:
-		nowSound = SOUND_EAT;
 		eatSE.Play();
 		break;
 	case SOUND_WATERFLOW:
-		nowSound = SOUND_WATERFLOW;
 		waterFlowSE.Play();
 		break;
 	case SOUND_PARASITE_STICK:
-		nowSound = SOUND_PARASITE_STICK;
 		parasiteStickSE.Play();
 		break;
 	case SOUND_COLLISION:
-		nowSound = SOUND_COLLISION;
 		collisionSE.Play();
 		break;
 	case SOUND_BUBBLE_COLLISION:
-		nowSound = SOUND_BUBBLE_COLLISION;
 		bubbleCollisionSE.Play();
 		break;
 	case SOUND_EVENT_SUMMER:
-		nowSound = SOUND_EVENT_SUMMER;
 		eventSummerSE.Play();
 		break;
 	case SOUND_EVENT_WINTER:
-		nowSound = SOUND_EVENT_WINTER;
 		eventWinterSE.Play();
 		break;
 	case SOUND_EVENT_OTHERS:
-		nowSound = SOUND_EVENT_OTHERS;
 		eventOtherSE.Play();
 		break;
 	case SOUND_BUTTON_SELECT:
-		nowSound = SOUND_BUTTON_SELECT;
 		buttonSelectSE.Play();
 		break;
 	case SOUND_BUTTON_OK:
-		nowSound = SOUND_BUTTON_OK;
 		buttonOKSE.Play();
 		break;
 	case SOUND_BUTTON_CANCEL:
-		nowSound = SOUND_BUTTON_CANCEL;
 		buttonCancelSE.Play();
 		break;
 	case SOUND_BUTTON_PUSH:
-		nowSound = SOUND_BUTTON_PUSH;
 		buttonPushSE.Play();
 		break;
 	case SOUND_RESULT:
-		nowSound = SOUND_RESULT;
 		resultSE.Play();
 		break;
 	default:
 		break;
 	}
+	nowSound = sound;
 }
 
 void CSoundManager::Stop(SOUNDTYPE sound)

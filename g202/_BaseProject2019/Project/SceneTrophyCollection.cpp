@@ -1738,7 +1738,7 @@ bool CSceneTrophyCollection::GetTrophy(int i)
 
 void CSceneTrophyCollection::SaveTrophyFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveTrophy.dat", "wb");
+	FILE* fp = fopen("SaveData\\SaveTrophy.dat", "wb");
 	if (fp)
 	{
 		fwrite(&riverFlg, sizeof(bool), 1, fp);
@@ -1763,7 +1763,7 @@ void CSceneTrophyCollection::SaveTrophyFlg()
 
 void CSceneTrophyCollection::LoadTrophyFlg()
 {
-	FILE* fp = fopen("SaveDeta\\SaveTrophy.dat", "rb");
+	FILE* fp = fopen("SaveData\\SaveTrophy.dat", "rb");
 	if (fp)
 	{
 		fread(&riverFlg, sizeof(bool), 1, fp);

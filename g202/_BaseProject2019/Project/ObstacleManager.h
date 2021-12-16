@@ -57,6 +57,8 @@ private:
 	CRandom garbageNoRandom;
 	int random;
 	int obstacleNum;
+	int foodRandom;
+	int rottenRandom;
 	int posY;
 	int posYNum;
 	int lastTimePosY;

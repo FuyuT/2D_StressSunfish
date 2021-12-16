@@ -453,10 +453,10 @@ void CSceneConfig::Render()
 	}
 
 	//デバッグ　位置決め用
-	Vector2 mousePos;
-	g_pInput->GetMousePos(mousePos);
-	CGraphicsUtilities::RenderString(0, 0, "%f", mousePos.x);
-	CGraphicsUtilities::RenderString(0, 50, "%f", mousePos.y);
+	//Vector2 mousePos;
+	//g_pInput->GetMousePos(mousePos);
+	//CGraphicsUtilities::RenderString(0, 0, "%f", mousePos.x);
+	//CGraphicsUtilities::RenderString(0, 50, "%f", mousePos.y);
 
 }
 
