@@ -89,8 +89,9 @@ void CCauseOfDeathWindow::Update()
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
-	if (GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect().CollisionPoint(mousePosX, mousePosY) && buttonSelect != 1)
 	{
+		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
 	}
 	
@@ -101,6 +102,7 @@ void CCauseOfDeathWindow::Update()
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 			endFlg = true;
 			nextPopUp = POPUPNO_RESULT;
@@ -147,11 +149,11 @@ void CCauseOfDeathWindow::Render()
 		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "éÄàˆ:êÖó¨");
 		break;
 	}*/
+	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	if (newGetDeathFlg)
 	{
 		newGetTexture.Render(350, 250);
 	}
-	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
 	scaleController.ScaleRender(&deathTextTexture,deathTextPosX,deathTextPosY,deathTextScale);
 }
@@ -162,4 +164,8 @@ void CCauseOfDeathWindow::Release()
 	caseOfDethTexture.Release();
 	popUpTexture.Release();
 	buttonNextTexture.Release();
+}
+
+void CCauseOfDeathWindow::MouseCollision(int posX, int posY)
+{
 }

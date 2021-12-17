@@ -27,6 +27,8 @@ protected:
 	LPMofChar fontAdd = "Text\\PopRumCute.otf";
 	LPMofChar fontName = "ポプらむ☆キュート";
 
+	CSoundManager* cSound;
+
 	ScaleController	scaleController;
 	bool endFlg = false;
 	short	nextPopUp;
@@ -52,6 +54,7 @@ public:
 	virtual void Update() {}
 	virtual void Render() {}
 	virtual void Release() {}
+	virtual void MouseCollision(int posX, int posY) {}
 	//ゲッター
 	int	  GetButtonResult() { return buttonResult; }
 	short GetNextPopUp() { return nextPopUp; }
@@ -69,6 +72,6 @@ public:
 	}
 	void SetDistance(int i) { distance = i; };
 	bool IsEnd() { return endFlg; }
-
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

@@ -32,6 +32,7 @@ public:
 	void Update() override;
 	void Render() override;
 	void Release() override;
+	void MouseCollision(int posX, int posY) override;
 	CRectangle GetRect(int i);
 };
 

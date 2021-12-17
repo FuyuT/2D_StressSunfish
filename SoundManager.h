@@ -2,6 +2,7 @@
 #include "Mof.h"
 //サウンド列挙
 typedef enum tag_SOUNDTYPE {
+	NOT_SOUND,
 	SOUND_TITLE_BGM,
 	SOUND_MENU_BGM,
 	SOUND_COLLECTION_BGM,
@@ -27,8 +28,6 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_BUTTON_CANCEL,
 	SOUND_BUTTON_PUSH,
 	SOUND_RESULT,
-
-	SOUND_COUNT,
 }SOUNDTYPE;
 
 enum tag_Sound_NO
@@ -60,6 +59,7 @@ private:
 	CSoundBuffer parasiteStickSE;	//寄生虫ひっつき
 	CSoundBuffer collisionSE;		//衝突
 	CSoundBuffer bubbleCollisionSE;	//泡用衝突音
+
 	CSoundBuffer eventWinterSE;		//冬イベント
 	CSoundBuffer eventSummerSE;		//夏イベント
 	CSoundBuffer eventOtherSE;		//その他イベント
@@ -82,7 +82,7 @@ public:
 	void SetLoop();	//BGMのみLoopに設定可
 	void Play(SOUNDTYPE sound);
 	void Stop(SOUNDTYPE sound); //todo:音の停止
-	void AllStop();
+	void BGMStop();
 	void Release();
 
 	//音量

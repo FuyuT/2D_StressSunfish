@@ -36,11 +36,6 @@ protected:
 	const float		scaleMini = 1.0f;
 	//ボタン選択用変数
 	int				buttonSelect;
-	//SE用変数
-	bool seSelectFlg;
-	bool seOkFlg;
-	bool seCancelFlg;
-	bool sePushFlg;
 	
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
@@ -65,6 +60,5 @@ public:
 	short GetNextScene() { return nextScene; }
 	bool IsEnd() { return endFlg; }
 	void SetSoundManager(CSoundManager& p) {cSound = &p; }
-	void SEReset() { seSelectFlg = false; seOkFlg = false; seCancelFlg = false; sePushFlg = false; };
 };
 

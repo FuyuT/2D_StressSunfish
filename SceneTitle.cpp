@@ -14,7 +14,7 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_TITLE_BGM);
 }
 
@@ -33,7 +33,7 @@ void CSceneTitle::Initialize()
 	buttonSelect = 1;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
-	SEReset();
+	nowPopUpTitle->SetSoundManager(*cSound);
 	PlayBGM();
 }
 
@@ -72,7 +72,8 @@ void CSceneTitle::Update()
 			{
 				endFlg = true;
 				nextScene = SCENENO_GAMEMENU;
-				cSound->Play(SOUND_BUTTON_PUSH);
+				cSound->Play(SOUND_BUTTON_OK);
+				//cSound->Play(SOUND_BUTTON_PUSH);
 				CSceneTitle::Release();
 			}
 		}
@@ -107,11 +108,6 @@ void CSceneTitle::Update()
 
 void CSceneTitle::SoundUpdate()
 {
-	if (seSelectFlg)
-	{
-		cSound->Play(SOUND_BUTTON_SELECT);
-		seSelectFlg = false;
-	}
 }
 
 void CSceneTitle::Render()

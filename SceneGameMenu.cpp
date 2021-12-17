@@ -12,9 +12,9 @@ CSceneGameMenu::~CSceneGameMenu()
 
 void CSceneGameMenu::PlayBGM()
 {
-	if (!cSound->GetNowSound() == SOUND_MENU_BGM)
+	if (cSound->GetNowSound() != SOUND_MENU_BGM)
 	{
-		cSound->AllStop();
+		cSound->BGMStop();
 		cSound->Play(SOUND_MENU_BGM);
 	}
 }
@@ -44,7 +44,7 @@ void CSceneGameMenu::Initialize()
 
 	titleButtonTexture.Load("ButtonTitle.png");	
 
-	SEReset();
+	
 	PlayBGM();
 }
 
@@ -53,35 +53,10 @@ void CSceneGameMenu::Update()
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
-	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 1;
-	}
-	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 2;
-	}
-	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 3;
-	}
-	else if (GetRect(3).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 4;
-	}
-	else if (GetRect(4).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 5;
-	}
-	else if (GetRect(5).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 6;
-		beforButtonSelect = 1;
-	}
-
 	//ゲームプレイボタン
 	if (buttonSelect == 1)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -91,14 +66,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 2;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 5;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			beforButtonSelect = 1;
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 6;
 		}
 		gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
@@ -108,12 +86,15 @@ void CSceneGameMenu::Update()
 			//ゲームプレイ画面
 			endFlg = true;
 			nextScene = SCENENO_GAME;
+			//cSound->Play(SOUND_BUTTON_PUSH);
+			cSound->Play(SOUND_BUTTON_OK);
 			Release();
 		}
 	}
 	//設定ボタン
 	else if (buttonSelect == 2)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -124,14 +105,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 3;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 1;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			beforButtonSelect = 2;
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 6;
 		}
 
@@ -140,12 +124,14 @@ void CSceneGameMenu::Update()
 			//設定画面
 			endFlg = true;
 			nextScene = SCENENO_CONFIG;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 		}
 	}
 	//トロフィー集ボタン
 	else if (buttonSelect == 3)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -156,14 +142,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 4;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 2;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			beforButtonSelect = 3;
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 6;
 		}
 
@@ -172,12 +161,14 @@ void CSceneGameMenu::Update()
 			//トロフィー集
 			endFlg = true;
 			nextScene = SCENENO_TROPHY;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 		}
 	}
 	//ストレス一覧ボタン
 	else if (buttonSelect == 4)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -189,14 +180,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 5;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 3;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			beforButtonSelect = 4;
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 6;
 		}
 
@@ -205,12 +199,14 @@ void CSceneGameMenu::Update()
 			//ストレス集画面
 			endFlg = true;
 			nextScene = SCENENO_STRESSCOLLECTION;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 		}
 	}
 	//チュートリアルボタン
 	else if (buttonSelect == 5)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -222,14 +218,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 1;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 4;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT) || g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			beforButtonSelect = 5;
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 6;
 		}
 
@@ -238,6 +237,7 @@ void CSceneGameMenu::Update()
 			//チュートリアルモード
 			tutorialFlg = true;
 			endFlg = true;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			nextScene = SCENENO_TUTORIAL;
 			FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "wb");
 			if (fp)
@@ -251,6 +251,7 @@ void CSceneGameMenu::Update()
 	//タイトルボタン
 	else if (buttonSelect == 6)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -260,14 +261,17 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = 1;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = 5;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT) || g_pInput->IsKeyPush(MOFKEY_RIGHT))
 		{
 			buttonSelect = beforButtonSelect;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(5).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
@@ -275,6 +279,7 @@ void CSceneGameMenu::Update()
 			//タイトル画面
 			endFlg = true;
 			nextScene = SCENENO_TITLE;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 		}
 	}
@@ -305,6 +310,41 @@ void CSceneGameMenu::Release()
 	tutorialButtonTexture.Release();
 	titleButtonTexture.Release();
 	textTexture.Release();
+}
+
+void CSceneGameMenu::MouseCollision(int posX, int posY)
+{
+	if (GetRect(0).CollisionPoint(posX, posY) && buttonSelect != 1)
+	{
+		buttonSelect = 1;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(1).CollisionPoint(posX, posY) && buttonSelect != 2)
+	{
+		buttonSelect = 2;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(2).CollisionPoint(posX, posY) && buttonSelect != 3)
+	{
+		buttonSelect = 3;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(3).CollisionPoint(posX, posY) && buttonSelect != 4)
+	{
+		buttonSelect = 4;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(4).CollisionPoint(posX, posY) && buttonSelect != 5)
+	{
+		buttonSelect = 5;
+		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(5).CollisionPoint(posX,posY) && buttonSelect != 6)
+	{
+		buttonSelect = 6;
+		cSound->Play(SOUND_BUTTON_SELECT);
+		beforButtonSelect = 1;
+	}
 }
 
 

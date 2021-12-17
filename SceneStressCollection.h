@@ -81,6 +81,7 @@ public:
 	void Release() override;
 	CRectangle ButtonGetRect(int i);
 	CRectangle GetRect( int i);
+	void MouseCollision(int posX, int posY) override;
 
 	//ゲームシーンでフラグを変えるための関数
 	bool GetStress(int i);
