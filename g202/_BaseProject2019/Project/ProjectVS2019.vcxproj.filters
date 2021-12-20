@@ -198,6 +198,9 @@
     <ClCompile Include="FishShadow.cpp">
       <Filter>ソース ファイル\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Utility.cpp">
+      <Filter>ソース ファイル\Utilitys</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="FishShadow.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

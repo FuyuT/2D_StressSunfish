@@ -52,6 +52,8 @@ private:
 	const int	buttonReturnPosX = 800;
 	const int	buttonReturnPosY = 800;
 	float		buttonReturnScale = 1.0f;
+	const float	volumeButtonScaleMax = 1.2f;
+	const float	volumeButtonScaleSpeed = 0.007f;
 	bool		gamePlayFlg = false;
 	//現在のシーンの案内テクスチャ
 	CTexture	scaneTextImage;

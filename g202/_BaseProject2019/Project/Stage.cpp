@@ -1,5 +1,5 @@
 #include "Stage.h"
-
+#include "Utility.h"
 Stage::Stage() :
 	skyTex(),
 	scrollValueX(0.0f),
@@ -13,7 +13,7 @@ Stage::~Stage() {
 }
 
 bool Stage::Load() {
-	//追加
+	//背景画像
 	if (!skyTex.Load("BackGround\\BackGround_1.png")) 
 	{
 		return false;
@@ -38,6 +38,8 @@ bool Stage::Load() {
 	{
 		return false;
 	}
+	//アニメーション画像
+	CUtility::PosEditDataLoad("Text\\konbu_test.txt", imageTotalNo, useImageTotalNo,imageArray, sameImageTotalNo, imagePosX, imagePosY);
 
 	return true;
 }
@@ -133,23 +135,17 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 		}
 	}
 
-	/*if (g_pInput->IsKeyPush(MOFKEY_U))
+	//背景オブジェクト
+	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
 	{
-		ene[0].SetTexture(&enemyTexture);
-		ene[0].Start(g_pGraphics->GetTargetWidth() + scrollValueX, 1000, 3);
-	}*/
-
-	//if (enemyNo < enemyCount && scroll >= enemyStart[enemyNo].scroll) {
-	//	for (int i = 0; i < ecnt; i++) {
-	//		if (ene[i].GetShow()) {
-	//			continue;
-	//		}
-	//		ene[i].SetTexture(&enemyTexture);
-	//		ene[i].Start(enemyStart[enemyNo].posX, 0, enemyStart[enemyNo].type);
-	//		break;
-	//	}
-	//	enemyNo++;
-	//}
+		for (int sameTexNo = 0; sameTexNo < sameImageTotalNo[imageNo]; sameTexNo++)
+		{
+			if (imagePosX[imageNo][sameTexNo] + imageArray[0].GetWidth() < 0)
+			{
+				imagePosX[imageNo][sameTexNo] += closeBackGroundTex.GetWidth();
+			}
+		}
+	}
 
 }
 
@@ -207,8 +203,21 @@ void Stage::ForeGroundRender()
 	Scroll(closeBackGroundTex, 1, 1);
 }
 
+
 void Stage::Render() {
 	BackGroundRender();
+	//テキストから読み込んだ画像を描画(昆布）
+	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
+	{
+		for (int sameTexNo = 0; sameTexNo < sameImageTotalNo[imageNo]; sameTexNo++)
+		{
+			if (imagePosX[imageNo][sameTexNo] > 0)
+			{
+				imageArray[imageNo].Render(-scrollValueX + imagePosX[imageNo][sameTexNo], -scrollValueY + imagePosY[imageNo][sameTexNo]);
+			}
+		}
+	}
+
 }
 
 
@@ -219,6 +228,20 @@ void Stage::Release() {
 	distantBackGroundTex.Release();
 	insideBackGroundTex.Release();
 	closeBackGroundTex.Release();
+
+	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
+	{
+		imageArray[imageNo].Release();
+	}
+	
+	for (int n = 0; n < useImageTotalNo; n++)
+	{
+		delete[] imagePosX[n];
+		delete[] imagePosY[n];
+	}
+	delete[] imagePosX;
+	delete[] imagePosY;
+
 
 	enemyTexture.Release();
 }

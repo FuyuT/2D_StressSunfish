@@ -32,6 +32,13 @@ private:
 	float scrollValueX;
 	float scrollValueY;
 
+	//背景のオブジェクトのアニメーション用（昆布など）
+	int imageTotalNo;
+	int useImageTotalNo;
+	CTexture* imageArray;
+	int* sameImageTotalNo;
+	float** imagePosX;
+	float** imagePosY;
 public:
 	Stage();
 	~Stage();

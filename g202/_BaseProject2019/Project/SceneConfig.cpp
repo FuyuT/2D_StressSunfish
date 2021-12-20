@@ -269,7 +269,7 @@ void CSceneConfig::ButtonUpdate()
 
 		break;
 	case BUTTON_SE_CONTROL:		//ボタン　SE
-		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, scaleMax, scaleMini, scaleSpeed);
+		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;
@@ -298,7 +298,7 @@ void CSceneConfig::ButtonUpdate()
 		}
 		break;
 	case BUTTON_BGM_CONTROL:	//ボタン　BGM
-		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, scaleMax, scaleMini, scaleSpeed);
+		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;
