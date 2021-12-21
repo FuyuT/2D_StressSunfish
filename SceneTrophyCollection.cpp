@@ -115,9 +115,31 @@ void CSceneTrophyCollection::Initialize()
 		buttonSelect = 6;
 	else
 		buttonSelect = 0;
+
+	bubbleFade.Load();
+	bubbleFade.Initialize();
 }
+
+
+
 void CSceneTrophyCollection::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneTrophyCollection::Release();
+		return;
+	}
+
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
@@ -131,7 +153,7 @@ void CSceneTrophyCollection::Update()
 		}
 		nowPopUpTrophy->Update();
 	}
-	
+		
 	if (!popUpFlg)
 	{
 		MouseCollision(mousePosX,mousePosY);
@@ -189,6 +211,9 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -655,6 +680,9 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -1119,6 +1147,9 @@ void CSceneTrophyCollection::Update()
 				
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -1447,7 +1478,6 @@ void CSceneTrophyCollection::Update()
 		}
 	}
 }
-}
 
 void CSceneTrophyCollection::Render()
 {
@@ -1525,6 +1555,7 @@ void CSceneTrophyCollection::Render()
 	{
 		nowPopUpTrophy->Render();
 	}
+	bubbleFade.Render();
 }
 void CSceneTrophyCollection::Release()
 {
@@ -1558,6 +1589,8 @@ void CSceneTrophyCollection::Release()
 			nowPopUpTrophy = NULL;
 		}
 	}
+	bubbleFade.Release();
+
 }
 
 void CSceneTrophyCollection::MouseCollision(int posX, int posY)

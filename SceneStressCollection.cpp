@@ -80,9 +80,28 @@ void CSceneStressCollection::Initialize()
 		buttonSelect = 4;
 	else
 		buttonSelect = 0;
+
+	bubbleFade.Load();
+	bubbleFade.Initialize();
 }
 void CSceneStressCollection::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneStressCollection::Release();
+		return;
+	}
+
 	//ポップアップ処理
 	if (popUpFlg)
 	{		
@@ -94,10 +113,7 @@ void CSceneStressCollection::Update()
 		nowPopUpStress->Update();
 	}
 
-	float mousePosX, mousePosY;
-	g_pInput->GetMousePos(mousePosX, mousePosY);
-
-	if(!popUpFlg)
+	if (!popUpFlg)
 	{
 		MouseCollision(mousePosX, mousePosY);
 		if (page == 1)
@@ -140,6 +156,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -415,6 +434,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -749,6 +771,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -1038,6 +1063,8 @@ void CSceneStressCollection::Render()
 	{
 		nowPopUpStress->Render();
 	}
+
+	bubbleFade.Render();
 }
 void CSceneStressCollection::Release()
 {
@@ -1065,6 +1092,7 @@ void CSceneStressCollection::Release()
 			nowPopUpStress = NULL;
 		}
 	}
+	bubbleFade.Release();
 }
 
 CRectangle CSceneStressCollection::GetRect(int i)

@@ -24,6 +24,8 @@ bool CSceneTitle::Load()
 	if(!titleLogoTex.Load("TitleLogo.png"))return false;
 	if (!gamePrayButtonTexture.Load("ButtonStart.png"))return false;
 	if(!gameFinishButtonTexture.Load("ButtonFinish.png"))return false;
+	bubbleFade.Load();
+
 	return true;
 }
 
@@ -35,10 +37,31 @@ void CSceneTitle::Initialize()
 	nowPopUpTitle->Initialize();
 	nowPopUpTitle->SetSoundManager(*cSound);
 	PlayBGM();
+	bubbleFade.Initialize();
 }
 
 void CSceneTitle::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneTitle::Release();
+		return;
+	}
+
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
+	if (popUpFlg)
+	{
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (popUpFlg)
@@ -49,6 +72,70 @@ void CSceneTitle::Update()
 			nowPopUpTitle->Release();
 			popUpFlg = false;
 		}
+	}
+	else if (!popUpFlg)
+	{
+		if (buttonSelect == 1)
+		{
+			gameFinishButtonScale = scaleMini;
+			MouseCollision(mousePosX, mousePosY);
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
+			{
+				cSound->Play(SOUND_BUTTON_SELECT);
+				buttonSelect = 2;
+			}
+			if (g_pInput->IsKeyPush(MOFKEY_UP))
+			{
+				cSound->Play(SOUND_BUTTON_SELECT);
+				buttonSelect = 2;
+			}
+			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
+
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+			{
+				//endFlg = true;
+				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAMEMENU;
+				//nextScene = SCENENO_GAMEMENU;
+				cSound->Play(SOUND_BUTTON_PUSH);
+				//CSceneTitle::Release();
+			}
+		}
+		//ゲーム終了を押したときの処理
+		else if (buttonSelect == 2)
+		{
+			gamePlayButtonScale = scaleMini;
+			MouseCollision(mousePosX, mousePosY);
+			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
+			{
+				buttonSelect = 1;
+				cSound->Play(SOUND_BUTTON_SELECT);
+			}
+			if (g_pInput->IsKeyPush(MOFKEY_UP) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
+			{
+				buttonSelect = 1;
+				cSound->Play(SOUND_BUTTON_SELECT);
+			}
+			gameFinishButtonScale = scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
+
+			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+			{
+				nowPopUpTitle->Initialize();
+				cSound->Play(SOUND_BUTTON_PUSH);
+				popUpFlg = true;
+			}
+		}
+	}
+
+	SoundUpdate();
+}
+
+void CSceneTitle::SoundUpdate()
+{
+	if (seSelectFlg)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		seSelectFlg = false;
 	}
 	else if (!popUpFlg)
 	{
@@ -102,13 +189,10 @@ void CSceneTitle::Update()
 			}
 		}
 	}
-
+	//todo:soundUpdateでsoundupdate呼んでる？
 	SoundUpdate();
 }
 
-void CSceneTitle::SoundUpdate()
-{
-}
 
 void CSceneTitle::Render()
 {
@@ -120,6 +204,7 @@ void CSceneTitle::Render()
 	{
 		nowPopUpTitle->Render();
 	}
+	bubbleFade.Render();
 }
 
 void CSceneTitle::Release()
@@ -132,6 +217,7 @@ void CSceneTitle::Release()
 		delete nowPopUpTitle;
 		nowPopUpTitle = NULL;
 	}
+	bubbleFade.Release();
 }
 
 void CSceneTitle::MouseCollision( int posX, int posY)
