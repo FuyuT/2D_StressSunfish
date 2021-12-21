@@ -24,19 +24,7 @@ void CContinueWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 1;
-	}
-	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 2;
-	}
-	else if (GetRect(2).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 3;
-	}
-	
+	MouseCollision(mousePosX,mousePosY);
 	if (buttonSelect == 1)
 	{
 		buttonMenuScale = scaleMini;
@@ -45,14 +33,17 @@ void CContinueWindow::Update()
 
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 2;
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 3;
 		}
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 			//コンティニューボタンが押された際の処理
 			endFlg = true;
@@ -68,15 +59,18 @@ void CContinueWindow::Update()
 		buttonMenuScale = scaleController.ScaleControll(buttonMenuScale, scaleMax, scaleMini, scaleSpeed);
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 3;
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 1;
 		}
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 			//メニュー画面ボタンが押されたときの処理
 			endFlg = true;
@@ -94,14 +88,17 @@ void CContinueWindow::Update()
 
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 1;
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 2;
 		}
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 			//タイトル画面ボタンが押された際の処理
 			endFlg = true;
@@ -127,6 +124,26 @@ void CContinueWindow::Release()
 	buttonContinueTexture.Release();
 	buttonMenuTexture.Release();
 	buttonTitleTexture.Release();
+}
+
+void CContinueWindow::MouseCollision(int posX, int posY)
+{
+	if (GetRect(0).CollisionPoint(posX,posY) && buttonSelect != 1)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(posX, posY) && buttonSelect != 2)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 2;
+	}
+	else if (GetRect(2).CollisionPoint(posX, posY) && buttonSelect != 3)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 3;
+	}
+
 }
 
 /*************************************************************************//*!

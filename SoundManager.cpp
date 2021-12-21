@@ -26,6 +26,7 @@ bool CSoundManager::Load()
 	if (!waterLandingSE.Load("Sound\\SE_WaterLanding.mp3"))return false;
 	if (!eatSE.Load("Sound\\SE_Eat.mp3"))return false;
 	if (!waterFlowSE.Load("Sound\\SE_WaterFlow.mp3"))return false;
+	if (!parasiteStickSE.Load("Sound\\SE_ParasiteStick.mp3"))return false;
 	if (!collisionSE.Load("Sound\\SE_Collision.mp3"))return false;
 	if (!bubbleCollisionSE.Load("Sound\\SE_BubbleCollision.mp3"))return false;
 
@@ -58,15 +59,19 @@ void CSoundManager::Play(SOUNDTYPE sound)
 	{
 	case SOUND_TITLE_BGM:
 		titleBGM.Play();
+		nowSound = sound;
 		break;
 	case SOUND_MENU_BGM:
 		menuBGM.Play();
+		nowSound = sound;
 		break;
 	case SOUND_COLLECTION_BGM:
 		collectionBGM.Play();
+		nowSound = sound;
 		break;
 	case SOUND_GAME_BGM:
 		gameBGM.Play();
+		nowSound = sound;
 		break;
 	case SOUND_SCENE_CHANGE:
 		sceneChangeSE.Play();
@@ -133,7 +138,7 @@ void CSoundManager::Play(SOUNDTYPE sound)
 
 void CSoundManager::Stop(SOUNDTYPE sound)
 {
-	nowSound = SOUND_COUNT;
+	nowSound = NOT_SOUND;
 	switch (sound)
 	{
 	case SOUND_TITLE_BGM:
@@ -211,14 +216,15 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 
 }
 
-void CSoundManager::AllStop()
+void CSoundManager::BGMStop()
 {
-	nowSound = SOUND_COUNT;
+	nowSound = NOT_SOUND;
 	titleBGM.Stop();
 	menuBGM.Stop();
 	collectionBGM.Stop();
 	gameBGM.Stop();
-	sceneChangeSE.Stop();
+	//todo:égÇ§Ç∆Ç´Ç…Ç»Ç¡ÇΩÇÁèCê≥Å@SE
+	/*sceneChangeSE.Stop();
 	buttonSE.Stop();
 	alertSE.Stop();
 	jumpStartSE.Stop();
@@ -236,7 +242,7 @@ void CSoundManager::AllStop()
 	buttonOKSE.Stop();
 	buttonCancelSE.Stop();
 	buttonPushSE.Stop();
-	resultSE.Stop();
+	resultSE.Stop();*/
 }
 
 

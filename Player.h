@@ -5,6 +5,7 @@
 #include "timer.h"
 #include "time.h"
 #include "HeaderDefine.h"
+#include "SoundManager.h"
 
 //初期位置 X
 #define		STARTPOS_X				200
@@ -185,6 +186,8 @@ private:
 	CTimer	moveUpTaskTimer;
 	CTimer	moveDownTaskTimer;
 
+	//サウンド用
+	CSoundManager* cSound;
 public:
 	CPlayer();
 	~CPlayer();
@@ -345,5 +348,8 @@ public:
 	{
 		return taskCompleteStep;
 	}
+
+	//サウンド用
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

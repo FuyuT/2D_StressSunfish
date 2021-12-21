@@ -36,7 +36,7 @@ MofBool CGameApp::Initialize(void) {
 	CUtilities::SetCurrentDirectory("Resource");
 	cSound.Load();
 	//シーンの初期化
-	nowScene = new CSceneGame;
+	nowScene = new CSceneTitle;
 	nowScene->SetSoundManager(cSound);
 	nowScene->Load();
 	nowScene->Initialize();
@@ -67,7 +67,6 @@ MofBool CGameApp::Update(void) {
 		//次のシーンの取得
 		short nextScene = nowScene->GetNextScene();		
 		//古いシーンの消去
-		nowScene->Release();
 		delete nowScene;
 		//次のシーン番号に応じてシーンを作って初期化
 		switch (nextScene)

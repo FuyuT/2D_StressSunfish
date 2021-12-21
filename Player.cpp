@@ -341,6 +341,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
 	{
+		cSound->Play(SOUND_EAT);
 		//チュートリアルタスク
 		eatTaskFlg = true;
 
@@ -408,6 +409,8 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 	if (g_pInput->IsKeyPush(MOFKEY_A) &&
 		possibleToJumpFlg && tutorialStep >= Task_Action)
 	{
+		cSound->Play(SOUND_JUMP_START);
+		cSound->Play(SOUND_JUMPING);
 		//チュートリアルタスク
 		jumpTaskFlg = true;
 
@@ -423,6 +426,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 	}
 	else if (jumpFlg)
 	{
+		cSound->Play(SOUND_WATER_LANDING);
 		moveY += PLAYER_SPEED;
 		//海面より下か(海に戻ったか)
 		//落下による勢いで少し潜るように
@@ -580,6 +584,7 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 			parasiteTimer.StartTimer();
 			if (parasiteTimer.GetNowtime() <= 0)
 			{
+				cSound->Play(SOUND_PARASITE_STICK);
 				parasite += 1;
 				if (causeOfDeath == CAUSE_None && !unDeadFlg)
 				{
@@ -909,6 +914,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
+			cSound->Play(SOUND_COLLISION);
 			//衝突
 			hitFlg = true;
 
@@ -934,6 +940,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
+				cSound->Play(SOUND_COLLISION);
 				//衝突
 				hitFlg = true;
 				//死因：衝突死
@@ -946,6 +953,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
+				cSound->Play(SOUND_COLLISION);
 				//衝突
 				hitFlg = true;
 				//死因：衝突死
@@ -958,6 +966,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
+				cSound->Play(SOUND_COLLISION);
 				//衝突
 				hitFlg = true;
 				//死因：衝突死
@@ -974,6 +983,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
+			cSound->Play(SOUND_COLLISION);
 			//衝突
 			hitFlg = true;
 			//死因：衝突死
@@ -987,6 +997,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	{
 		if (causeOfDeath == CAUSE_None && !waterFlowFlg && !unDeadFlg)
 		{
+			cSound->Play(SOUND_WATERFLOW);
 			//水流に当たったことを確認
 			waterFlowFlg = true;
 			//持続時間の設定
@@ -1010,6 +1021,7 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
+			cSound->Play(SOUND_BUBBLE_COLLISION);
 			//衝突
 			hitFlg = true;
 			//泡死

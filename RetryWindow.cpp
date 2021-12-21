@@ -22,15 +22,7 @@ void CRetryWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect(0).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 1;
-	}
-	else if (GetRect(1).CollisionPoint(mousePosX, mousePosY))
-	{
-		buttonSelect = 2;
-	}
-	
+	MouseCollision(mousePosX, mousePosY);
 
 	if (buttonSelect == 1)
 	{
@@ -38,16 +30,19 @@ void CRetryWindow::Update()
 
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 2;
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 2;
 		}
 		buttonYesScale = scaleController.ScaleControll(buttonYesScale, scaleMax, scaleMini, scaleSpeed);
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_OK);
 			Release();
 			endFlg = true;
 			//ゲーム画面を初期化
@@ -60,16 +55,19 @@ void CRetryWindow::Update()
 		buttonYesScale = scaleMini;
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 1;
 		}
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 		{
+			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 1;
 		}
 		buttonNoScale = scaleController.ScaleControll(buttonNoScale, scaleMax, scaleMini, scaleSpeed);
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_CANCEL);
 			Release();
 			endFlg = true;
 			nextPopUp = POPUPNO_POSE;
@@ -89,6 +87,19 @@ void CRetryWindow::Release()
 	textTexture.Release();
 	buttonYesTexture.Release();
 	buttonNoTexture.Release();
+}
+void CRetryWindow::MouseCollision(int posX, int posY)
+{
+	if (GetRect(0).CollisionPoint(posX, posY) && buttonSelect != 1)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 1;
+	}
+	else if (GetRect(1).CollisionPoint(posX, posY) && buttonSelect != 2)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 2;
+	}
 }
 /*************************************************************************//*!
 		@brief			各ボタンの矩形の取得

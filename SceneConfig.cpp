@@ -119,25 +119,30 @@ void CSceneConfig::SelectButton()
 	//マウスで選択
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY))
+	if (GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) && buttonSelect != BUTTON_RETURN)
 	{
 		buttonSelect = BUTTON_RETURN;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
-	else if (GetRect(BUTTON_SE_CONTROL).CollisionPoint(mousePosX, mousePosY))
+	else if (GetRect(BUTTON_SE_CONTROL).CollisionPoint(mousePosX, mousePosY) && buttonSelect != BUTTON_SE_CONTROL)
 	{
 		buttonSelect = BUTTON_SE_CONTROL;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
-	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY))
+	else if (GetRect(BUTTON_MUTE_SE).CollisionPoint(mousePosX, mousePosY) && buttonSelect != BUTTON_MUTE_SE)
 	{
 		buttonSelect = BUTTON_MUTE_SE;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
-	else if (GetRect(BUTTON_BGM_CONTROL).CollisionPoint(mousePosX, mousePosY))
+	else if (GetRect(BUTTON_BGM_CONTROL).CollisionPoint(mousePosX, mousePosY) && buttonSelect != BUTTON_BGM_CONTROL)
 	{
 		buttonSelect = BUTTON_BGM_CONTROL;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
-	else if (GetRect(BUTTON_MUTE_BGM).CollisionPoint(mousePosX, mousePosY))
+	else if (GetRect(BUTTON_MUTE_BGM).CollisionPoint(mousePosX, mousePosY) && buttonSelect != BUTTON_MUTE_BGM)
 	{
 		buttonSelect = BUTTON_MUTE_BGM;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
 
 	//キーで選択
@@ -147,10 +152,12 @@ void CSceneConfig::SelectButton()
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = BUTTON_SE_CONTROL;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			buttonSelect = BUTTON_MUTE_SE;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		break;
 	case BUTTON_SE_CONTROL:
@@ -160,10 +167,12 @@ void CSceneConfig::SelectButton()
 			if (SEControlFlg)
 			{
 				SEControlFlg = false;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 			else
 			{
 				SEControlFlg = true;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 		}
 		if (SEControlFlg)return;
@@ -171,14 +180,17 @@ void CSceneConfig::SelectButton()
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			buttonSelect = BUTTON_MUTE_SE;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = BUTTON_BGM_CONTROL;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = BUTTON_RETURN;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 
 		break;
@@ -186,14 +198,17 @@ void CSceneConfig::SelectButton()
 		if (g_pInput->IsKeyPush(MOFKEY_UP))
 		{
 			buttonSelect = BUTTON_MUTE_BGM;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 		{
 			buttonSelect = BUTTON_SE_CONTROL;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = BUTTON_RETURN;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		break;
 	case BUTTON_BGM_CONTROL:
@@ -203,10 +218,12 @@ void CSceneConfig::SelectButton()
 			if (BGMControlFlg)
 			{
 				BGMControlFlg = false;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 			else
 			{
 				BGMControlFlg = true;
+				cSound->Play(SOUND_BUTTON_SELECT);
 			}
 		}
 		if (BGMControlFlg) return;
@@ -214,10 +231,12 @@ void CSceneConfig::SelectButton()
 		if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 		{
 			buttonSelect = BUTTON_MUTE_BGM;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = BUTTON_SE_CONTROL;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		
 		break;
@@ -225,10 +244,12 @@ void CSceneConfig::SelectButton()
 		if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 		{
 			buttonSelect = BUTTON_BGM_CONTROL;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
 			buttonSelect = BUTTON_MUTE_SE;
+			cSound->Play(SOUND_BUTTON_SELECT);
 		}
 		break;
 	default:
@@ -252,12 +273,14 @@ void CSceneConfig::ButtonUpdate()
 		{
 			endFlg = true;
 			nextScene = SCENENO_GAMEMENU;
+			cSound->Play(SOUND_BUTTON_PUSH);
 			CSceneConfig::Release();
 		}
 		//SceneGame
 		else if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && gamePlayFlg)
 		{
 			CSceneConfig::Release();
+			cSound->Play(SOUND_BUTTON_PUSH);
 			gamePlayFlg = false;
 		}
 
@@ -269,7 +292,7 @@ void CSceneConfig::ButtonUpdate()
 
 		break;
 	case BUTTON_SE_CONTROL:		//ボタン　SE
-		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
+		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, scaleMax, scaleMini, scaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;
@@ -298,7 +321,7 @@ void CSceneConfig::ButtonUpdate()
 		}
 		break;
 	case BUTTON_BGM_CONTROL:	//ボタン　BGM
-		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
+		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, scaleMax, scaleMini, scaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;

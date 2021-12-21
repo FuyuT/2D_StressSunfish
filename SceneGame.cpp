@@ -35,11 +35,12 @@ startFlg(false)
 
 CSceneGame::~CSceneGame()
 {
+	Release();
 }
 
 void CSceneGame::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_GAME_BGM);
 }
 
@@ -59,6 +60,7 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
+	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 
 	//ƒCƒxƒ“ƒg
@@ -130,11 +132,12 @@ void CSceneGame::Update()
 	if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
 	{
 		nowPopUpGame = new CPoseWindow;
+		nowPopUpGame->SetSoundManager(*cSound);
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
 		poseFlg = true;
 	}
-	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg)
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg && !pl.GetDead())
 	{
 		nowPopUpGame->Release();
 		nowPopUpGame = NULL;
@@ -294,28 +297,32 @@ void CSceneGame::PopUpController()
 		{
 		case POPUPNO_CAUSEOFDEATH:
 			nowPopUpGame = new CCauseOfDeathWindow;
-			nowPopUpGame->Initialize();
 			break;
 		case POPUPNO_RESULT:
 			nowPopUpGame = new CResultWindow;
 			TrophyController();
 			nowPopUpGame->Initialize();
+			nowPopUpGame->SetSoundManager(*cSound);
 			break;
 		case POPUPNO_CONTINUE:
 			nowPopUpGame = new CContinueWindow;
 			nowPopUpGame->Initialize();
+			nowPopUpGame->SetSoundManager(*cSound);
 			break;
 		case POPUPNO_POSE:
 			nowPopUpGame = new CPoseWindow;
 			nowPopUpGame->Initialize();
+			nowPopUpGame->SetSoundManager(*cSound);
 			break;
 		case POPUPNO_BACKTOTITLE:
 			nowPopUpGame = new CBackToTitleWindow;
 			nowPopUpGame->Initialize();
+			nowPopUpGame->SetSoundManager(*cSound);
 			break;
 		case POPUPNO_RETRY:
 			nowPopUpGame = new CRetryWindow;
 			nowPopUpGame->Initialize();
+			nowPopUpGame->SetSoundManager(*cSound);
 			break;
 		case NULL:
 			nowPopUpGame = NULL;
@@ -329,6 +336,7 @@ void CSceneGame::CaseOfDethController()
 {
 	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg)
 	{
+		cSound->Play(SOUND_RESULT);
 		nowPopUpGame = new CCauseOfDeathWindow;
 		switch (pl.GetCauseOfDeath())
 		{
@@ -392,6 +400,7 @@ void CSceneGame::CaseOfDethController()
 			newGetDeth = caseOfDeth.GetStress(CAUSE_ShoalFish);
 			break;
 		}
+		nowPopUpGame->SetSoundManager(*cSound);
 		nowPopUpGame->SetNewGetDeath(newGetDeth);
 		nowPopUpGame->Initialize();
 		popUpFlg = true;
