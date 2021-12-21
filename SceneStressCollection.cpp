@@ -80,9 +80,28 @@ void CSceneStressCollection::Initialize()
 		buttonSelect = 4;
 	else
 		buttonSelect = 0;
+
+	bubbleFade.Load();
+	bubbleFade.Initialize();
 }
 void CSceneStressCollection::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneStressCollection::Release();
+		return;
+	}
+
 	//ポップアップ処理
 	if (popUpFlg)
 	{		
@@ -96,8 +115,7 @@ void CSceneStressCollection::Update()
 
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-
-	if(!popUpFlg)
+	if (!popUpFlg)
 	{
 		MouseCollision(mousePosX, mousePosY);
 		if (page == 1)
@@ -140,6 +158,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -415,6 +436,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -749,6 +773,9 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
 					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
@@ -991,7 +1018,7 @@ void CSceneStressCollection::Render()
 	if (page == 1)
 	{
 		//1ページ目に表示
-
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY-2, MOF_XRGB(0, 0, 0), "1/3");
 		if(hyperthermiaFlg)
 		scaleController.ScaleRender(&hyperthermiaTexture, iconFirstRowPosX, iconOneLinePosY, hyperthermiaScale);
 		if(lowerBodyTemperatureFlg)
@@ -1004,6 +1031,7 @@ void CSceneStressCollection::Render()
 	if (page == 2)
 	{
 		//2ページ目に表示
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY-2, MOF_XRGB(0, 0, 0), "2/3");
 		if(obesityFlg)
 		scaleController.ScaleRender(&obesityTexture, iconFirstRowPosX, iconOneLinePosY, obesityScale);
 		if(impactFlg)
@@ -1016,6 +1044,7 @@ void CSceneStressCollection::Render()
 	if (page == 3)
 	{
 		//3ページ目に表示
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY -2, MOF_XRGB(0, 0, 0), "3/3");
 		if(bubbleFlg)
 		scaleController.ScaleRender(&bubbleTexture, iconFirstRowPosX, iconOneLinePosY, bubbleScale);
 		if(turtleFlg)
@@ -1028,7 +1057,6 @@ void CSceneStressCollection::Render()
 
 	scaleController.ScaleRender(&menuButtonTexture , menuButtonPosX,menuButtonPosY,menuButtonScale);
 	
-	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(0, 0, 0), "%d/3",page);
 	if(page != 1)
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	if (page !=3)
@@ -1038,6 +1066,8 @@ void CSceneStressCollection::Render()
 	{
 		nowPopUpStress->Render();
 	}
+
+	bubbleFade.Render();
 }
 void CSceneStressCollection::Release()
 {
@@ -1065,6 +1095,7 @@ void CSceneStressCollection::Release()
 			nowPopUpStress = NULL;
 		}
 	}
+	bubbleFade.Release();
 }
 
 CRectangle CSceneStressCollection::GetRect(int i)

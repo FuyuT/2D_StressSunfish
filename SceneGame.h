@@ -50,6 +50,8 @@ private:
 	//開始フラグ
 	bool startFlg;
 
+	bool seFlg;
+
 public:
 	CSceneGame();
 	~CSceneGame();
