@@ -14,7 +14,7 @@ CSceneStressCollection::~CSceneStressCollection()
 
 void CSceneStressCollection::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_COLLECTION_BGM);
 }
 
@@ -66,6 +66,7 @@ void CSceneStressCollection::Initialize()
 	popUpFlg = false;
 	nowPopUpStress = new CCheckCauseOfDeathWindow;
 	nowPopUpStress->Initialize();
+	nowPopUpStress->SetSoundManager(*cSound);
 	PlayBGM();
 
 	//選択初期化
@@ -114,33 +115,11 @@ void CSceneStressCollection::Update()
 
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-
-	if(!popUpFlg)
+	if (!popUpFlg)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		if (page == 1)
 		{
-
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(CAUSE_Hyperthermia).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-			else if (GetRect(CAUSE_Frozen).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-			else if (GetRect(CAUSE_Starvation).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-			else if (GetRect(CAUSE_ChokeOnShell).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-
 			if (buttonSelect == 0)
 			{
 				hyperthermiaScale = scaleMini;
@@ -150,6 +129,7 @@ void CSceneStressCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, menuButtonScaleMax, menuButtonScaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (starvationFlg)
 						buttonSelect = 3;
 					else if (cloggedThroatFlg)
@@ -161,6 +141,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (hyperthermiaFlg)
 						buttonSelect = 1;
 					else if (lowerBodyTemperatureFlg)
@@ -172,12 +153,15 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					bubbleFade.FadeOut();
 					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					//endFlg = true;
 					//nextScene = SCENENO_GAMEMENU;
 					//CSceneStressCollection::Release();
@@ -193,10 +177,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (starvationFlg)
 						buttonSelect = 3;
 					else if (cloggedThroatFlg)
@@ -206,6 +192,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (lowerBodyTemperatureFlg)
 						buttonSelect = 2;
 					else if (cloggedThroatFlg)
@@ -227,6 +214,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Hyperthermia).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE) && !popUpFlg)
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:体温上昇の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Hyperthermia);
@@ -243,10 +231,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (cloggedThroatFlg)
 						buttonSelect = 4;
 					else if (starvationFlg)
@@ -256,6 +246,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (hyperthermiaFlg)
 						buttonSelect = 1;
 					else if (starvationFlg)
@@ -263,6 +254,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (obesityFlg)
 						buttonSelect = 1;
@@ -277,6 +269,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Frozen).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:体温低下の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Frozen);
@@ -292,6 +285,7 @@ void CSceneStressCollection::Update()
 				menuButtonScale = menuButtonScaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (hyperthermiaFlg)
 						buttonSelect = 1;
 					else if (lowerBodyTemperatureFlg)
@@ -301,10 +295,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (cloggedThroatFlg)
 						buttonSelect = 4;
 					else if (lowerBodyTemperatureFlg)
@@ -326,6 +322,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Starvation).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:餓死の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Starvation);
@@ -342,6 +339,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (lowerBodyTemperatureFlg)
 						buttonSelect = 2;
 					else if (hyperthermiaFlg)
@@ -351,10 +349,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (starvationFlg)
 						buttonSelect = 3;
 					else if (hyperthermiaFlg)
@@ -362,6 +362,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (parasiteFlg)
 					buttonSelect = 3;
@@ -376,6 +377,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_ChokeOnShell).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:喉詰まりの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_ChokeOnShell);
@@ -386,32 +388,11 @@ void CSceneStressCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX,mousePosY)))
 			{
 				page = 2;
+				cSound->Play(SOUND_BUTTON_PUSH);
 			}
 		}
 		else if (page == 2)
 		{
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(CAUSE_Obesity).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-			else if (GetRect(CAUSE_Obstacle).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-			else if (GetRect(CAUSE_Parasite).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-			else if (GetRect(CAUSE_Jump).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-
-
 			if (buttonSelect == 0)
 			{
 				obesityScale = scaleMini;
@@ -421,6 +402,7 @@ void CSceneStressCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, menuButtonScaleMax, menuButtonScaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (parasiteFlg)
 						buttonSelect = 3;
 					else if (jumpFlg)
@@ -432,6 +414,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (obesityFlg)
 						buttonSelect = 1;
 					else if (impactFlg)
@@ -443,16 +426,20 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					bubbleFade.FadeOut();
 					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					//endFlg = true;
 					//nextScene = SCENENO_GAMEMENU;
 					//CSceneStressCollection::Release();
@@ -468,10 +455,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (parasiteFlg)
 						buttonSelect = 3;
 					else if (jumpFlg)
@@ -481,6 +470,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (impactFlg)
 						buttonSelect = 2;
 					else if (jumpFlg)
@@ -502,6 +492,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 					if (starvationFlg)
 						buttonSelect = 2;
@@ -515,6 +506,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obesity).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE) && !popUpFlg)
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:肥満の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Obesity);
@@ -531,10 +523,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jumpFlg)
 						buttonSelect = 4;
 					else if (parasiteFlg)
@@ -544,6 +538,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (obesityFlg)
 						buttonSelect = 1;
 					else if (parasiteFlg)
@@ -565,6 +560,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 					if (bubbleFlg)
 						buttonSelect = 1;
@@ -579,6 +575,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obstacle).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:障害物と衝突の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Obstacle);
@@ -594,6 +591,7 @@ void CSceneStressCollection::Update()
 				menuButtonScale = menuButtonScaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (obesityFlg)
 						buttonSelect = 1;
 					else if (impactFlg)
@@ -603,10 +601,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jumpFlg)
 						buttonSelect = 4;
 					else if (impactFlg)
@@ -628,6 +628,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 					if (cloggedThroatFlg)
 						buttonSelect = 4;
@@ -642,6 +643,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Parasite).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:寄生虫の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Parasite);
@@ -658,6 +660,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (impactFlg)
 						buttonSelect = 2;
 					else if (obesityFlg)
@@ -667,10 +670,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (parasiteFlg)
 						buttonSelect = 3;
 					else if (obesityFlg)
@@ -692,6 +697,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 					if (waterFlowFlg)
 						buttonSelect = 3;
@@ -706,6 +712,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Jump).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:ジャンプの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Jump);
@@ -717,37 +724,17 @@ void CSceneStressCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON)&& ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_PUSH);
 				page = 1;
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_PUSH);
 				page = 3;
 			}
 		}
 		else if (page == 3)
 		{
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(CAUSE_Bubble).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-			else if (GetRect(CAUSE_SeaTurtle).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-			else if (GetRect(CAUSE_WaterFlow).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-			else if (GetRect(CAUSE_ShoalFish).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-
-
 			if (buttonSelect == 0)
 			{
 				bubbleScale = scaleMini;
@@ -757,6 +744,7 @@ void CSceneStressCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, menuButtonScaleMax, menuButtonScaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFlowFlg)
 						buttonSelect = 3;
 					else if (shoalFishFlg)
@@ -768,6 +756,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (bubbleFlg)
 						buttonSelect = 1;
 					else if (turtleFlg)
@@ -779,12 +768,15 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					bubbleFade.FadeOut();
 					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					//endFlg = true;
 					//nextScene = SCENENO_GAMEMENU;
 					//CSceneStressCollection::Release();
@@ -800,10 +792,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFlowFlg)
 						buttonSelect = 3;
 					else if (shoalFishFlg)
@@ -813,6 +807,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (turtleFlg)
 						buttonSelect = 2;
 					else if (shoalFishFlg)
@@ -821,6 +816,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (impactFlg)
 						buttonSelect = 2;
@@ -836,6 +832,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Bubble).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE) && !popUpFlg)
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:泡の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_Bubble);
@@ -852,10 +849,12 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (shoalFishFlg)
 						buttonSelect = 4;
 					else if (waterFlowFlg)
@@ -865,6 +864,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (bubbleFlg)
 						buttonSelect = 1;
 					else if (waterFlowFlg)
@@ -886,6 +886,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obstacle).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:ウミガメの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_SeaTurtle);
@@ -902,6 +903,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (bubbleFlg)
 						buttonSelect = 1;
 					else if (turtleFlg)
@@ -911,10 +913,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (shoalFishFlg)
 						buttonSelect = 4;
 					else if (turtleFlg)
@@ -922,6 +926,7 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (jumpFlg)
 						buttonSelect = 4;
@@ -936,6 +941,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_WaterFlow).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:水流の死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_WaterFlow);
@@ -952,6 +958,7 @@ void CSceneStressCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (turtleFlg)
 						buttonSelect = 2;
 					else if (bubbleFlg)
@@ -961,10 +968,12 @@ void CSceneStressCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFlowFlg)
 						buttonSelect = 3;
 					else if (bubbleFlg)
@@ -986,6 +995,7 @@ void CSceneStressCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_ShoalFish).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップに死因:ジャンプの死因画像を表示させる
 					nowPopUpStress->SetButtonResult(CAUSE_ShoalFish);
@@ -995,6 +1005,7 @@ void CSceneStressCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_PUSH);
 				page = 2;
 			}
 		}
@@ -1045,13 +1056,16 @@ void CSceneStressCollection::Render()
 	scaleController.ScaleRender(&menuButtonTexture , menuButtonPosX,menuButtonPosY,menuButtonScale);
 	
 	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(0, 0, 0), "%d/3",page);
+	if(page != 1)
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
+	if (page !=3)
 	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 
 	if (popUpFlg)
 	{
 		nowPopUpStress->Render();
 	}
+
 	bubbleFade.Render();
 }
 void CSceneStressCollection::Release()
@@ -1123,6 +1137,84 @@ CRectangle CSceneStressCollection::GetRect(int i)
 	//死因:魚群
 	if(i == CAUSE_ShoalFish && shoalFishFlg)
 		return CRectangle(iconSecondRowPosX, iconTwoLinePosY, iconSecondRowPosX + shoalFishTexture.GetWidth(), iconTwoLinePosY + shoalFishTexture.GetHeight());
+}
+
+void CSceneStressCollection::MouseCollision(int posX, int posY)
+{
+		if (ButtonGetRect(0).CollisionPoint(posX, posY) && buttonSelect != 0)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 0;
+		}
+	if (page == 1)
+	{
+		if (GetRect(CAUSE_Hyperthermia).CollisionPoint(posX, posY) && buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+		else if (GetRect(CAUSE_Frozen).CollisionPoint(posX, posY) && buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+		else if (GetRect(CAUSE_Starvation).CollisionPoint(posX, posY) && buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+		else if (GetRect(CAUSE_ChokeOnShell).CollisionPoint(posX, posY) && buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+	}
+	else if (page == 2)
+	{
+		if (GetRect(CAUSE_Obesity).CollisionPoint(posX, posY) && buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+		else if (GetRect(CAUSE_Obstacle).CollisionPoint(posX, posY) && buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+		else if (GetRect(CAUSE_Parasite).CollisionPoint(posX, posY) && buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+		else if (GetRect(CAUSE_Jump).CollisionPoint(posX, posY) && buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+	}
+	else if (page == 3)
+	{
+		if (GetRect(CAUSE_Bubble).CollisionPoint(posX, posY) &&buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+		else if (GetRect(CAUSE_SeaTurtle).CollisionPoint(posX, posY)&&buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+		else if (GetRect(CAUSE_WaterFlow).CollisionPoint(posX, posY)&& buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+		else if (GetRect(CAUSE_ShoalFish).CollisionPoint(posX, posY)&& buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+	}
 }
 
 CRectangle CSceneStressCollection::ButtonGetRect(int i)

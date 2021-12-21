@@ -59,8 +59,11 @@ void CSceneTutorial::MessageUpdate()
 			if (tutorialStep == TutorialStep::Task_Complete)
 			{
 				tutorialStep = TutorialStep::Task_End;
-				nextScene = SCENENO_GAME;
-				endFlg = true;
+
+				nextSceneTemp = SCENENO_GAME;
+				bubbleFade.FadeOut();
+				//nextScene = SCENENO_GAME;
+				//endFlg = true;
 			}
 			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
@@ -153,6 +156,8 @@ bool CSceneTutorial::Load()
 	if (!TextLoad())return false;
 	//フォントの読込み
 	FontLoad();
+
+	bubbleFade.Load();
 	return true;
 }
 
@@ -166,6 +171,7 @@ void CSceneTutorial::Initialize()
 	mShowDelay = 0;
 	messageEndFlg = false;
 	tutorialStep = TutorialStep::Task_Movement;
+	bubbleFade.Initialize();
 }
 
 void CSceneTutorial::Update()
@@ -178,12 +184,29 @@ void CSceneTutorial::Update()
 	}
 
 	stg.Update(pl);
+	pl.Update(true, tutorialStep, Event_None);
+
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		//Release();
+		return;
+	}
+
 	ui.Update(Event_None);
 	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	pl.Update(true, tutorialStep,Event_None);
 	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep, Event_None);
 	MessageUpdate();
 
@@ -243,6 +266,7 @@ void CSceneTutorial::Render()
 	font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
 	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
 
+	bubbleFade.Render();
 }
 
 void CSceneTutorial::RenderDebug()
@@ -259,4 +283,5 @@ void CSceneTutorial::Release()
 	obs.Release();
 	messageWindowImg.Release();
 	free(fBuffer);
+	bubbleFade.Release();
 }
