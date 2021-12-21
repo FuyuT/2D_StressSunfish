@@ -234,13 +234,13 @@ void Stage::Release() {
 		imageArray[imageNo].Release();
 	}
 	
-	for (int n = 0; n < useImageTotalNo; n++)
-	{
-		delete[] imagePosX[n];
-		delete[] imagePosY[n];
-	}
-	delete[] imagePosX;
-	delete[] imagePosY;
+	//for (int n = 0; n < useImageTotalNo; n++)
+	//{
+	//	delete[] imagePosX[n];
+	//	delete[] imagePosY[n];
+	//}
+	//delete[] imagePosX;
+	//delete[] imagePosY;
 
 
 	enemyTexture.Release();

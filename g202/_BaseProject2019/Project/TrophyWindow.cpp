@@ -105,8 +105,9 @@ void CTrophyWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (GetRect().CollisionPoint(mousePosX, mousePosY))
+	if (GetRect().CollisionPoint(mousePosX, mousePosY) && buttonSelect != 1)
 	{
+		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
 	}
 	
@@ -117,6 +118,7 @@ if (buttonSelect == 1)
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
+			cSound->Play(SOUND_BUTTON_PUSH);
 			Release();
 			endFlg = true;
 		}
@@ -262,4 +264,8 @@ void CTrophyWindow::Release()
 	popUpTexture.Release();
 	trophyTexture.Release();
 	buttonBackTexture.Release();
+}
+
+void CTrophyWindow::MouseCollision(int posX, int posY)
+{
 }

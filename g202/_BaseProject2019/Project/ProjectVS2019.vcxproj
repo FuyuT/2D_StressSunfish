@@ -108,6 +108,7 @@
     <ClCompile Include="CauseOfDeathWindow.cpp" />
     <ClCompile Include="CheckCauseOfDeathWindow.cpp" />
     <ClCompile Include="ContinueWindow.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FishShadow.cpp" />
     <ClCompile Include="ResourceFont.cpp" />
     <ClCompile Include="RottenCrab.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="CauseOfDeathWindow.h" />
     <ClInclude Include="CheckCauseOfDeathWindow.h" />
     <ClInclude Include="ContinueWindow.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="FishShadow.h" />
     <ClInclude Include="HeaderDefine.h" />
     <ClInclude Include="ResourceFont.h" />

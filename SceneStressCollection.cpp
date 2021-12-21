@@ -113,6 +113,8 @@ void CSceneStressCollection::Update()
 		nowPopUpStress->Update();
 	}
 
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (!popUpFlg)
 	{
 		MouseCollision(mousePosX, mousePosY);

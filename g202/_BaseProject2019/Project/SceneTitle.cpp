@@ -14,7 +14,7 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_TITLE_BGM);
 }
 
@@ -24,6 +24,8 @@ bool CSceneTitle::Load()
 	if(!titleLogoTex.Load("TitleLogo.png"))return false;
 	if (!gamePrayButtonTexture.Load("ButtonStart.png"))return false;
 	if(!gameFinishButtonTexture.Load("ButtonFinish.png"))return false;
+	bubbleFade.Load();
+
 	return true;
 }
 
@@ -33,12 +35,29 @@ void CSceneTitle::Initialize()
 	buttonSelect = 1;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
-	SEReset();
+	nowPopUpTitle->SetSoundManager(*cSound);
 	PlayBGM();
+	bubbleFade.Initialize();
 }
 
 void CSceneTitle::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneTitle::Release();
+		return;
+	}
+
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (popUpFlg)
@@ -70,10 +89,12 @@ void CSceneTitle::Update()
 
 			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 			{
-				endFlg = true;
-				nextScene = SCENENO_GAMEMENU;
+				//endFlg = true;
+				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAMEMENU;
+				//nextScene = SCENENO_GAMEMENU;
 				cSound->Play(SOUND_BUTTON_PUSH);
-				CSceneTitle::Release();
+				//CSceneTitle::Release();
 			}
 		}
 		//ゲーム終了を押したときの処理
@@ -101,18 +122,13 @@ void CSceneTitle::Update()
 			}
 		}
 	}
-
 	SoundUpdate();
 }
 
 void CSceneTitle::SoundUpdate()
 {
-	if (seSelectFlg)
-	{
-		cSound->Play(SOUND_BUTTON_SELECT);
-		seSelectFlg = false;
-	}
 }
+
 
 void CSceneTitle::Render()
 {
@@ -124,6 +140,7 @@ void CSceneTitle::Render()
 	{
 		nowPopUpTitle->Render();
 	}
+	bubbleFade.Render();
 }
 
 void CSceneTitle::Release()
@@ -136,6 +153,7 @@ void CSceneTitle::Release()
 		delete nowPopUpTitle;
 		nowPopUpTitle = NULL;
 	}
+	bubbleFade.Release();
 }
 
 void CSceneTitle::MouseCollision( int posX, int posY)

@@ -282,10 +282,6 @@ void CSceneGameMenu::Update()
 	//タイトルボタン
 	else if (buttonSelect == 6)
 	{
-		MouseCollision(mousePosX, mousePosY);
-	//タイトルボタン
-	else if (buttonSelect == 6)
-	{
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -337,6 +333,7 @@ void CSceneGameMenu::Render()
 	textTexture.Render(textPosX, textPosY);
 	bubbleFade.Render();
 }
+
 void CSceneGameMenu::Release()
 {
 	backGroundTex.Release();

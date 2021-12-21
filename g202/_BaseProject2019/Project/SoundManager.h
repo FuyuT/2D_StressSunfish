@@ -2,6 +2,7 @@
 #include "Mof.h"
 //ÉTÉEÉìÉhóÒãì
 typedef enum tag_SOUNDTYPE {
+	NOT_SOUND,
 	SOUND_TITLE_BGM,
 	SOUND_MENU_BGM,
 	SOUND_COLLECTION_BGM,
@@ -27,8 +28,6 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_BUTTON_CANCEL,
 	SOUND_BUTTON_PUSH,
 	SOUND_RESULT,
-
-	SOUND_COUNT,
 }SOUNDTYPE;
 
 enum tag_Sound_NO
@@ -83,7 +82,7 @@ public:
 	void SetLoop();	//BGMÇÃÇ›LoopÇ…ê›íËâ¬
 	void Play(SOUNDTYPE sound);
 	void Stop(SOUNDTYPE sound); //todo:âπÇÃí‚é~
-	void AllStop();
+	void BGMStop();
 	void Release();
 
 	//âπó 

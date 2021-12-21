@@ -2,7 +2,8 @@
 #include	"Mof.h"
 #include	"SoundManager.h"
 #include	"ScaleController.h"
-#include "ResourceFont.h"
+#include	"ResourceFont.h"
+#include	"Fade.h"
 
 //シーンの列挙
 enum tag_SCENENO {
@@ -41,6 +42,10 @@ protected:
 	bool seOkFlg;
 	bool seCancelFlg;
 	bool sePushFlg;
+
+	//泡フェード
+	CFade bubbleFade;
+	short nextSceneTemp;
 	
 public:
 	//デストラクタをvirtualにしないとポリモーフィズムを使用している場合、子クラスのデストラクタが見つけられないのでvirtualを付けている
@@ -48,7 +53,8 @@ public:
 	endFlg(false),
 	nextScene(0),
 	popUpFlg(false),
-	backGroundTex()
+	backGroundTex(),
+	nextSceneTemp(0)
 	{
 	}
 	virtual ~CSceneBase() {}

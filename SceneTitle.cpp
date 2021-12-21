@@ -62,10 +62,6 @@ void CSceneTitle::Update()
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (popUpFlg)
 	{
-	float mousePosX, mousePosY;
-	g_pInput->GetMousePos(mousePosX, mousePosY);
-	if (popUpFlg)
-	{
 		nowPopUpTitle->Update();
 		if (nowPopUpTitle->IsEnd())
 		{
@@ -126,71 +122,11 @@ void CSceneTitle::Update()
 			}
 		}
 	}
-
 	SoundUpdate();
 }
 
 void CSceneTitle::SoundUpdate()
 {
-	if (seSelectFlg)
-	{
-		cSound->Play(SOUND_BUTTON_SELECT);
-		seSelectFlg = false;
-	}
-	else if (!popUpFlg)
-	{
-		if (buttonSelect == 1)
-		{
-			gameFinishButtonScale = scaleMini;
-			MouseCollision(mousePosX, mousePosY);
-			if (g_pInput->IsKeyPush(MOFKEY_DOWN))
-			{
-				cSound->Play(SOUND_BUTTON_SELECT);
-				buttonSelect = 2;
-			}
-			if (g_pInput->IsKeyPush(MOFKEY_UP))
-			{
-				cSound->Play(SOUND_BUTTON_SELECT);
-				buttonSelect = 2;
-			}
-			gamePlayButtonScale = scaleController.ScaleControll(gamePlayButtonScale, scaleMax, scaleMini, scaleSpeed);
-
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
-			{
-				endFlg = true;
-				nextScene = SCENENO_GAMEMENU;
-				cSound->Play(SOUND_BUTTON_OK);
-				//cSound->Play(SOUND_BUTTON_PUSH);
-				CSceneTitle::Release();
-			}
-		}
-		//ƒQ[ƒ€I—¹‚ğ‰Ÿ‚µ‚½‚Æ‚«‚Ìˆ—
-		else if (buttonSelect == 2)
-		{
-			gamePlayButtonScale = scaleMini;
-			MouseCollision(mousePosX, mousePosY);
-			if (g_pInput->IsKeyPush(MOFKEY_DOWN) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-				cSound->Play(SOUND_BUTTON_SELECT);
-			}
-			if (g_pInput->IsKeyPush(MOFKEY_UP) || GetRect(0).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-				cSound->Play(SOUND_BUTTON_SELECT);
-			}
-			gameFinishButtonScale = scaleController.ScaleControll(gameFinishButtonScale, scaleMax, scaleMini, scaleSpeed);
-
-			if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
-			{
-				nowPopUpTitle->Initialize();
-				cSound->Play(SOUND_BUTTON_PUSH);
-				popUpFlg = true;
-			}
-		}
-	}
-	//todo:soundUpdate‚ÅsoundupdateŒÄ‚ñ‚Å‚éH
-	SoundUpdate();
 }
 
 

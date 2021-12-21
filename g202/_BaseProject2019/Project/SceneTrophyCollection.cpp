@@ -15,7 +15,7 @@ CSceneTrophyCollection::~CSceneTrophyCollection()
 
 void CSceneTrophyCollection::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_COLLECTION_BGM);
 }
 
@@ -96,6 +96,8 @@ void CSceneTrophyCollection::Initialize()
 	//ポップアップ初期化
 	popUpFlg = false;
 	nowPopUpTrophy = new CTrophyWindow;
+	nowPopUpTrophy->SetSoundManager(*cSound);
+
 	PlayBGM();
 
 	//選択初期化
@@ -113,11 +115,31 @@ void CSceneTrophyCollection::Initialize()
 		buttonSelect = 6;
 	else
 		buttonSelect = 0;
+
+	bubbleFade.Load();
+	bubbleFade.Initialize();
 }
+
+
+
 void CSceneTrophyCollection::Update()
 {
-	float mousePosX, mousePosY;
-	g_pInput->GetMousePos(mousePosX, mousePosY);
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneTrophyCollection::Release();
+		return;
+	}
+
 
 	//ポップアップ処理
 	if (popUpFlg)
@@ -129,47 +151,14 @@ void CSceneTrophyCollection::Update()
 		}
 		nowPopUpTrophy->Update();
 	}
-	
+
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (!popUpFlg)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		if (page == 1)
 		{
-
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(TROPHY_RIVER).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-
-			else if (GetRect(TROPHY_WATERFALL).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-
-			else if (GetRect(TROPHY_LAKE).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-
-			else if (GetRect(TROPHY_DAM).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-
-			else if (GetRect(TROPHY_SEWER).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 5;
-			}
-
-			else if (GetRect(TROPHY_INDIANOCEAN).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 6;
-			}
-
-
 			if (buttonSelect == 0)
 			{
 				riverScale = scaleMini;
@@ -181,6 +170,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, scaleMax, scaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (damFlg)
 						buttonSelect = 4;
 					else if (sewerFlg)
@@ -198,6 +188,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (riverFlg)
 						buttonSelect = 1;
 					else if (waterFallFlg)
@@ -215,10 +206,15 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
 					CSceneTrophyCollection::Release();
@@ -235,10 +231,12 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (damFlg)
 						buttonSelect = 4;
 					else if (sewerFlg)
@@ -251,6 +249,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFallFlg)
 						buttonSelect = 2;
 					else if (sewerFlg)
@@ -280,6 +279,7 @@ void CSceneTrophyCollection::Update()
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_RIVER).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:川級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_RIVER);
@@ -298,10 +298,12 @@ void CSceneTrophyCollection::Update()
 
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (sewerFlg)
 						buttonSelect = 5;
 					else if (damFlg)
@@ -313,6 +315,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (riverFlg)
 						buttonSelect = 1;
 					else if (damFlg)
@@ -322,7 +325,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
-
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (lakeFlg)
 						buttonSelect = 3;
 					else if (indianOceanFlg)
@@ -346,6 +349,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_WATERFALL).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:滝級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_WATERFALL);
@@ -363,10 +367,12 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (indianOceanFlg)
 						buttonSelect = 6;
 					else if (sewerFlg)
@@ -378,6 +384,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFallFlg)
 						buttonSelect = 2;
 					else if (sewerFlg)
@@ -391,6 +398,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (amazonRiverFlg)
 						buttonSelect = 1;
@@ -407,6 +415,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_LAKE).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:湖級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_LAKE);
@@ -424,6 +433,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (riverFlg)
 						buttonSelect = 1;
 					else if (waterFallFlg)
@@ -435,10 +445,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (sewerFlg)
 						buttonSelect = 5;
 					else if (waterFallFlg)
@@ -466,6 +478,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_DAM).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:ダム級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_DAM);
@@ -483,6 +496,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (waterFallFlg)
 						buttonSelect = 2;
 					else if (riverFlg)
@@ -494,10 +508,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (damFlg)
 						buttonSelect = 4;
 					else if (riverFlg)
@@ -507,6 +523,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (indianOceanFlg)
 						buttonSelect = 6;
 					else if (lakeFlg)
@@ -530,6 +547,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_SEWER).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:下水道級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_SEWER);
@@ -547,6 +565,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (lakeFlg)
 						buttonSelect = 3;
 					else if (waterFallFlg)
@@ -558,10 +577,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (sewerFlg)
 						buttonSelect = 5;
 					else if (waterFallFlg)
@@ -575,6 +596,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (aroundTheGlobeFlg)
 						buttonSelect = 4;
@@ -592,6 +614,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_INDIANOCEAN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:インド洋級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_INDIANOCEAN);
@@ -601,6 +624,7 @@ void CSceneTrophyCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_SELECT);
 				buttonSelect = 1;
 				page = 2;
 			}
@@ -608,32 +632,6 @@ void CSceneTrophyCollection::Update()
 		}
 		else if (page == 2)
 		{
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg)
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(TROPHY_AMAZONROVER).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-			if (GetRect(TROPHY_OCEAN).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-			if (GetRect(TROPHY_SEAOFJAPAN).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-			if (GetRect(TROPHY_AROUNDTHEGLOBE).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-			if (GetRect(TROPHY_ZEROMOTIVATION).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 5;
-			}
-
-
 			if (buttonSelect == 0)
 			{
 				amazonRiverScale = scaleMini;
@@ -644,6 +642,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, scaleMax, scaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (aroundTheGlobeFlg)
 						buttonSelect = 4;
 					else if (zeroMotivationFlg)
@@ -657,6 +656,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (amazonRiverFlg)
 						buttonSelect = 1;
 					else if (oceanFlg)
@@ -670,14 +670,20 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
 					CSceneTrophyCollection::Release();
@@ -693,10 +699,12 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (aroundTheGlobeFlg)
 						buttonSelect = 4;
 					else if (zeroMotivationFlg)
@@ -706,6 +714,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 					if (lakeFlg)
 						buttonSelect = 3;
@@ -724,6 +733,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (oceanFlg)
 						buttonSelect = 2;
 					else if (aroundTheGlobeFlg)
@@ -752,6 +762,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_AMAZONROVER).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:アマゾン川級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_AMAZONROVER);
@@ -768,10 +779,12 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (aroundTheGlobeFlg)
 						buttonSelect = 4;
 					else if (zeroMotivationFlg)
@@ -779,6 +792,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (amazonRiverFlg)
 						buttonSelect = 1;
 					else if (aroundTheGlobeFlg)
@@ -804,6 +818,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (seaOf​​JapanFlg)
 						buttonSelect = 3;
 					else if (zeroMotivationFlg)
@@ -827,6 +842,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OCEAN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:海級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_OCEAN);
@@ -843,10 +859,12 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (zeroMotivationFlg)
 						buttonSelect = 5;
 					else if (aroundTheGlobeFlg)
@@ -856,6 +874,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (oceanFlg)
 						buttonSelect = 2;
 					else if (zeroMotivationFlg)
@@ -885,6 +904,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 					if (mountFujiFlg)
 						buttonSelect = 1;
@@ -902,6 +922,7 @@ void CSceneTrophyCollection::Update()
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_SEAOFJAPAN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:日本海級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_SEAOFJAPAN);
@@ -918,6 +939,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (amazonRiverFlg)
 						buttonSelect = 1;
 					else if (oceanFlg)
@@ -929,10 +951,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 1;
 					if (indianOceanFlg)
 						buttonSelect = 6;
@@ -951,6 +975,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (zeroMotivationFlg)
 						buttonSelect = 5;
 					else if (oceanFlg)
@@ -976,6 +1001,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_AROUNDTHEGLOBE).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:地球一周級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_AROUNDTHEGLOBE);
@@ -992,6 +1018,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleMini;
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (seaOf​​JapanFlg)
 						buttonSelect = 3;
 					else if (oceanFlg)
@@ -1001,10 +1028,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (aroundTheGlobeFlg)
 						buttonSelect = 4;
 					else if (oceanFlg)
@@ -1032,6 +1061,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 3;
 					if (jackPodFlg)
 						buttonSelect = 4;
@@ -1048,6 +1078,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_ZEROMOTIVATION).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush((MOFKEY_SPACE)))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:やる気ゼロ級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_ZEROMOTIVATION);
@@ -1058,44 +1089,20 @@ void CSceneTrophyCollection::Update()
 
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_SELECT);
 				buttonSelect = 1;
 				page = 1;
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
+				cSound->Play(SOUND_BUTTON_SELECT);
 				buttonSelect = 1;
 				page = 3;
 			}
 		}
-	
+
 		else if (page == 3)
 		{
-			if (ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 0;
-			}
-			else if (GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 1;
-			}
-			else if (GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 2;
-			}
-			
-			else if (GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 3;
-			}
-			else if (GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 4;
-			}
-			else if (GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY))
-			{
-				buttonSelect = 5;
-			}
-
 			if (buttonSelect == 0)
 			{
 				mountFujiScale = scaleMini;
@@ -1106,6 +1113,7 @@ void CSceneTrophyCollection::Update()
 				menuButtonScale = scaleController.ScaleControll(menuButtonScale, scaleMax, scaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jackPodFlg)
 						buttonSelect = 4;
 					else if (talentedDemonFlg)
@@ -1119,6 +1127,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (mountFujiFlg)
 						buttonSelect = 1;
 					else if (osakaMarathonFlg)
@@ -1132,11 +1141,16 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 				}
-				
+
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					bubbleFade.FadeOut();
+					nextSceneTemp = SCENENO_GAMEMENU;
+
+					cSound->Play(SOUND_BUTTON_PUSH);
 					endFlg = true;
 					nextScene = SCENENO_GAMEMENU;
 					CSceneTrophyCollection::Release();
@@ -1152,10 +1166,12 @@ void CSceneTrophyCollection::Update()
 				mountFujiScale = scaleController.ScaleControll(mountFujiScale, scaleMax, scaleMini, scaleSpeed);
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jackPodFlg)
 						buttonSelect = 4;
 					else if (talentedDemonFlg)
@@ -1165,6 +1181,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (seaOf​​JapanFlg)
 						buttonSelect = 3;
@@ -1181,6 +1198,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (osakaMarathonFlg)
 						buttonSelect = 2;
 					else if (jackPodFlg)
@@ -1194,6 +1212,7 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_MOUNTFJI).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:富士山級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_MOUNTFJI);
@@ -1208,13 +1227,15 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jackPodFlg)
 						buttonSelect = 4;
 					else if (talentedDemonFlg)
@@ -1222,6 +1243,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (mountFujiFlg)
 						buttonSelect = 1;
 					else if (jackPodFlg)
@@ -1245,16 +1267,18 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (biwaLakeFlg)
 						buttonSelect = 3;
 					else if (talentedDemonFlg)
 						buttonSelect = 5;
 					else
 						buttonSelect = 0;
-					
+
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:大阪マラソンの画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_OSAKAMARATHON);
@@ -1269,13 +1293,15 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (talentedDemonFlg)
 						buttonSelect = 5;
 					else if (jackPodFlg)
@@ -1285,6 +1311,7 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (osakaMarathonFlg)
 						buttonSelect = 2;
 					else if (talentedDemonFlg)
@@ -1313,6 +1340,7 @@ void CSceneTrophyCollection::Update()
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_BIWALAKE).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:琵琶湖級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_BIWALAKE);
@@ -1327,9 +1355,10 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleController.ScaleControll(jackPodScale, scaleMax, scaleMini, scaleSpeed);
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (mountFujiFlg)
 						buttonSelect = 1;
 					else if (osakaMarathonFlg)
@@ -1341,10 +1370,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 					if (zeroMotivationFlg)
 						buttonSelect = 5;
@@ -1361,17 +1392,19 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_RIGHT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (talentedDemonFlg)
 						buttonSelect = 5;
 					else if (osakaMarathonFlg)
 						buttonSelect = 2;
 					else if (biwaLakeFlg)
 						buttonSelect = 3;
-					else	
+					else
 						buttonSelect = 0;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:ジャックポット級の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_JACKPOD);
@@ -1386,9 +1419,10 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleController.ScaleControll(talentedDemonScale, scaleMax, scaleMini, scaleSpeed);
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (biwaLakeFlg)
 						buttonSelect = 3;
 					else if (osakaMarathonFlg)
@@ -1398,10 +1432,12 @@ void CSceneTrophyCollection::Update()
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					buttonSelect = 0;
 				}
 				else if (g_pInput->IsKeyPush(MOFKEY_LEFT))
 				{
+					cSound->Play(SOUND_BUTTON_SELECT);
 					if (jackPodFlg)
 						buttonSelect = 4;
 					else if (osakaMarathonFlg)
@@ -1427,20 +1463,21 @@ void CSceneTrophyCollection::Update()
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
+					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
 					//ポップアップにトロフィー:才能魔の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_TALENTEDDEMON);
 					nowPopUpTrophy->Initialize();
-				
+
 				}
 			}
-		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
-		{
-			buttonSelect = 1;
-			page = 2;
+			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
+			{
+				buttonSelect = 1;
+				page = 2;
+			}
 		}
 	}
-}
 }
 
 void CSceneTrophyCollection::Render()
@@ -1519,6 +1556,7 @@ void CSceneTrophyCollection::Render()
 	{
 		nowPopUpTrophy->Render();
 	}
+	bubbleFade.Render();
 }
 void CSceneTrophyCollection::Release()
 {
@@ -1550,6 +1588,112 @@ void CSceneTrophyCollection::Release()
 		{
 			delete nowPopUpTrophy;
 			nowPopUpTrophy = NULL;
+		}
+	}
+	bubbleFade.Release();
+
+}
+
+void CSceneTrophyCollection::MouseCollision(int posX, int posY)
+{
+	if (ButtonGetRect(0).CollisionPoint(posX,posY) && buttonSelect != 0)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 0;
+	}
+	if (page == 1)
+	{
+		if (GetRect(TROPHY_RIVER).CollisionPoint(posX, posY) && buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+
+		else if (GetRect(TROPHY_WATERFALL).CollisionPoint(posX, posY) && buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+
+		else if (GetRect(TROPHY_LAKE).CollisionPoint(posX, posY) && buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+
+		else if (GetRect(TROPHY_DAM).CollisionPoint(posX, posY) && buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+
+		else if (GetRect(TROPHY_SEWER).CollisionPoint(posX, posY) && buttonSelect != 5)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 5;
+		}
+
+		else if (GetRect(TROPHY_INDIANOCEAN).CollisionPoint(posX, posY) && buttonSelect != 6)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 6;
+		}
+	}
+	else if (page == 2)
+	{
+		if (GetRect(TROPHY_AMAZONROVER).CollisionPoint(posX, posY) && buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+		if (GetRect(TROPHY_OCEAN).CollisionPoint(posX, posY) && buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+		if (GetRect(TROPHY_SEAOFJAPAN).CollisionPoint(posX, posY) && buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+		if (GetRect(TROPHY_AROUNDTHEGLOBE).CollisionPoint(posX, posY) && buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+		if (GetRect(TROPHY_ZEROMOTIVATION).CollisionPoint(posX, posY) && buttonSelect != 5)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 5;
+		}
+	}
+	else if (page == 3)
+	{
+		if (GetRect(TROPHY_MOUNTFJI).CollisionPoint(posX, posY) && buttonSelect != 1)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 1;
+		}
+		else if (GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(posX, posY) && buttonSelect != 2)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 2;
+		}
+
+		else if (GetRect(TROPHY_BIWALAKE).CollisionPoint(posX, posY) && buttonSelect != 3)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 3;
+		}
+		else if (GetRect(TROPHY_JACKPOD).CollisionPoint(posX, posY) && buttonSelect != 4)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 4;
+		}
+		else if (GetRect(TROPHY_TALENTEDDEMON).CollisionPoint(posX, posY) && buttonSelect != 5)
+		{
+			cSound->Play(SOUND_BUTTON_SELECT);
+			buttonSelect = 5;
 		}
 	}
 }

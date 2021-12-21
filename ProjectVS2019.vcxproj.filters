@@ -201,6 +201,9 @@
     <ClCompile Include="Utility.cpp">
       <Filter>ソース ファイル\Utilitys</Filter>
     </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -340,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>ソース ファイル\ヘッダー ファイル\Utilitys</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

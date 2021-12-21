@@ -14,7 +14,7 @@
 #include "SchoolTuna.h"
 #include "HeaderDefine.h"
 
-#define		SHOW_LIMIT	9
+#define		SHOW_LIMIT	13
 
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
@@ -32,6 +32,12 @@ enum obstacle {
 	ShoalSardine,
 	SwordFish,
 	SchoolTuna,
+};
+
+enum obstacleType {
+	Obstacle,
+	Food,
+	Rotten,
 };
 
 class CObstacleManager
@@ -53,7 +59,7 @@ private:
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
-	CRandom posYRndom;
+	CRandom posYRandom;
 	CRandom garbageNoRandom;
 	int random;
 	int obstacleNum;
@@ -66,6 +72,10 @@ private:
 	bool createFlg;
 	bool eventFoodCreateFlg;
 
+	bool obstacleFlg;
+	bool foodFlg;
+	bool rottenFlg;
+
 public:
 	CObstacleManager();
 	~CObstacleManager();
@@ -75,7 +85,8 @@ public:
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
-	void PosYRndom();
+	void PosYRandom(int obstacleType);
+	void Overlap(int obstacle,int arrayNum);
 
 		bool ObstaclePercentage(int percent)
 	{

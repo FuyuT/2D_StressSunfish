@@ -39,6 +39,8 @@ bool CSceneConfig::Load()
 	if (!BGMTextTex.Load("UI\\BGM.png"))return false;
 	if (!muteTextTex.Load("UI\\MUTE.png"))return false;
 	if (!spaceSelectTex.Load("UI\\SpaceSelect.png"))return false;
+	bubbleFade.Load();
+	
 	return true;
 }
 
@@ -52,6 +54,7 @@ void CSceneConfig::Initialize()
 	SEControlButtonPos.y = SE_CONTROL_BUTTON_POS_Y;
 
 	buttonSelect = BUTTON_RETURN;
+	bubbleFade.Initialize();
 }
 
 //更新
@@ -250,9 +253,11 @@ void CSceneConfig::ButtonUpdate()
 		//SceneGameMenu
 		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && !gamePlayFlg)
 		{
-			endFlg = true;
-			nextScene = SCENENO_GAMEMENU;
-			CSceneConfig::Release();
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_GAMEMENU;
+			//endFlg = true;
+			//nextScene = SCENENO_GAMEMENU;
+			//CSceneConfig::Release();
 		}
 		//SceneGame
 		else if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && gamePlayFlg)
@@ -269,7 +274,7 @@ void CSceneConfig::ButtonUpdate()
 
 		break;
 	case BUTTON_SE_CONTROL:		//ボタン　SE
-		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
+		buttonSEControlScale = scaleController.ScaleControll(buttonSEControlScale, scaleMax, scaleMini, scaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;
@@ -298,7 +303,7 @@ void CSceneConfig::ButtonUpdate()
 		}
 		break;
 	case BUTTON_BGM_CONTROL:	//ボタン　BGM
-		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, volumeButtonScaleMax, scaleMini, volumeButtonScaleSpeed);
+		buttonBGMControlScale = scaleController.ScaleControll(buttonBGMControlScale, scaleMax, scaleMini, scaleSpeed);
 
 		//大きさの初期化
 		buttonReturnScale = scaleMini;
@@ -402,6 +407,21 @@ void CSceneConfig::SoundUpdate()
 
 void CSceneConfig::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		CSceneConfig::Release();
+		return;
+	}
 	ButtonUpdate();
 	SoundUpdate();
 }
@@ -451,7 +471,7 @@ void CSceneConfig::Render()
 	{
 		scaleController.ScaleRender(&soundMuteTex,MUTE_TEX_POS_X, SE_MUTE_TEX_POS_Y,buttonMuteSEScale);
 	}
-
+	bubbleFade.Render();
 	//デバッグ　位置決め用
 	//Vector2 mousePos;
 	//g_pInput->GetMousePos(mousePos);
@@ -477,5 +497,6 @@ void CSceneConfig::Release()
 	BGMTextTex.Release();
 	muteTextTex.Release();
 	spaceSelectTex.Release();
+	bubbleFade.Release();
 
 }

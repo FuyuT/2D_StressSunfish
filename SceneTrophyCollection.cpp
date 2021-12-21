@@ -140,8 +140,6 @@ void CSceneTrophyCollection::Update()
 		return;
 	}
 
-	float mousePosX, mousePosY;
-	g_pInput->GetMousePos(mousePosX, mousePosY);
 
 	//ポップアップ処理
 	if (popUpFlg)
@@ -153,10 +151,12 @@ void CSceneTrophyCollection::Update()
 		}
 		nowPopUpTrophy->Update();
 	}
-		
+
+	float mousePosX, mousePosY;
+	g_pInput->GetMousePos(mousePosX, mousePosY);
 	if (!popUpFlg)
 	{
-		MouseCollision(mousePosX,mousePosY);
+		MouseCollision(mousePosX, mousePosY);
 		if (page == 1)
 		{
 			if (buttonSelect == 0)
@@ -1100,7 +1100,7 @@ void CSceneTrophyCollection::Update()
 				page = 3;
 			}
 		}
-	
+
 		else if (page == 3)
 		{
 			if (buttonSelect == 0)
@@ -1144,7 +1144,7 @@ void CSceneTrophyCollection::Update()
 					cSound->Play(SOUND_BUTTON_SELECT);
 					page = 2;
 				}
-				
+
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(0).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					bubbleFade.FadeOut();
@@ -1227,7 +1227,7 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					cSound->Play(SOUND_BUTTON_SELECT);
@@ -1274,7 +1274,7 @@ void CSceneTrophyCollection::Update()
 						buttonSelect = 5;
 					else
 						buttonSelect = 0;
-					
+
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_OSAKAMARATHON).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
@@ -1293,7 +1293,7 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					cSound->Play(SOUND_BUTTON_SELECT);
@@ -1355,7 +1355,7 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleController.ScaleControll(jackPodScale, scaleMax, scaleMini, scaleSpeed);
 				talentedDemonScale = scaleMini;
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					cSound->Play(SOUND_BUTTON_SELECT);
@@ -1399,7 +1399,7 @@ void CSceneTrophyCollection::Update()
 						buttonSelect = 2;
 					else if (biwaLakeFlg)
 						buttonSelect = 3;
-					else	
+					else
 						buttonSelect = 0;
 				}
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(TROPHY_JACKPOD).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
@@ -1419,7 +1419,7 @@ void CSceneTrophyCollection::Update()
 				jackPodScale = scaleMini;
 				talentedDemonScale = scaleController.ScaleControll(talentedDemonScale, scaleMax, scaleMini, scaleSpeed);
 				menuButtonScale = scaleMini;
-				
+
 				if (g_pInput->IsKeyPush(MOFKEY_UP))
 				{
 					cSound->Play(SOUND_BUTTON_SELECT);
@@ -1468,13 +1468,14 @@ void CSceneTrophyCollection::Update()
 					//ポップアップにトロフィー:才能魔の画像を表示させる
 					nowPopUpTrophy->SetButtonResult(TROPHY_TALENTEDDEMON);
 					nowPopUpTrophy->Initialize();
-				
+
 				}
 			}
-		if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
-		{
-			buttonSelect = 1;
-			page = 2;
+			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
+			{
+				buttonSelect = 1;
+				page = 2;
+			}
 		}
 	}
 }
