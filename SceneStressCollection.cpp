@@ -1057,6 +1057,8 @@ void CSceneStressCollection::Render()
 
 	scaleController.ScaleRender(&menuButtonTexture , menuButtonPosX,menuButtonPosY,menuButtonScale);
 	
+	//todo:マージ中の確認（この文が必要かどうか、変更者中川）
+	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(0, 0, 0), "%d/3",page);
 	if(page != 1)
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	if (page !=3)
