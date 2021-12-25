@@ -10,24 +10,19 @@ CSchoolTuna::~CSchoolTuna()
 
 bool CSchoolTuna::Load()
 {
-	if (!Texture.Load("Obstacle\\ƒ}ƒOƒ.png"))return false;
+	if (!Texture.Load("Obstacle\\maguroanim.png"))return false;
 	if (!keikokuTexture.Load("Obstacle\\gyogunanim2.png"))return false;
 
-	/*SpriteAnimationCreate anim = {
+	SpriteAnimationCreate anim = {
 		"‰j‚®",
 		0,0,
-		446,286,
-		TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},
-			  {4,0,1},{4,1,1},{4,2,1},{4,3,1},
-			  {4,0,2},{4,1,2},{4,2,2},{4,3,2},
-			  {4,0,3},{4,1,3},{4,2,3},{4,3,3},
-			  {4,0,4},{4,1,4},{4,2,4},{4,3,4},
-			  {4,0,5},{4,1,5},{4,2,5},{4,3,5},
-			  {4,0,6},{4,1,6},{4,2,6},{4,3,6},
-			  {4,0,7},{4,1,7}}
+		451,400,
+		TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},
+			  {4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},{4,8,0},
+			  {4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},{4,8,0},{4,9,0},
+			  {4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},{4,8,0}}
 
 	};
-	*/
 	SpriteAnimationCreate keikoku_anim[] = {
 		"Œx",
 		0,0,
@@ -40,7 +35,7 @@ bool CSchoolTuna::Load()
 		FALSE,{{4,0,0}}
 	};
 
-	//motion.Create(anim);
+	motion.Create(anim);
 	keikokumotion.Create(keikoku_anim, 2);
 
 
@@ -55,6 +50,7 @@ void CSchoolTuna::Initialize()
 	moveSpeed.x = 13.0f;
 	keikokumotion.ChangeMotion(0, false);
 	motion.AddTimer(CUtilities::GetFrameSecond());
+	showFlg = false;
 }
 
 void CSchoolTuna::Update(float wx, float wy)
@@ -65,7 +61,8 @@ void CSchoolTuna::Update(float wx, float wy)
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //‰æ–Ê‚Ì‰E’[
 
 	keikokumotion.ChangeMotion(0, false);
-	if (!keikokumotion.IsEndMotion()) {
+	if (!keikokumotion.IsEndMotion()) 
+	{
 		pos.x = scRight;
 	}
 	else
@@ -94,7 +91,7 @@ void CSchoolTuna::Render(float wx, float wy)
 	}
 	else
 	{
-		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f);
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f,motion.GetSrcRect());
 	}
 }
 
