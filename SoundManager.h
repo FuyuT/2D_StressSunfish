@@ -28,6 +28,8 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_BUTTON_CANCEL,
 	SOUND_BUTTON_PUSH,
 	SOUND_RESULT,
+	SOUND_READY,
+	SOUND_GO,
 }SOUNDTYPE;
 
 enum tag_Sound_NO
@@ -68,6 +70,8 @@ private:
 	CSoundBuffer buttonOKSE;		//はいボタンを押した時
 	CSoundBuffer buttonPushSE;		//上記以外のボタンを押した時
 	CSoundBuffer resultSE;			//リザルトポップアップ表示する時のSE	
+	CSoundBuffer readySE;			//レディ～？
+	CSoundBuffer goSE;				//GO～!!
 
 
 	bool muteBGM;

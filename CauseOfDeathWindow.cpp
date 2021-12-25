@@ -73,7 +73,7 @@ void CCauseOfDeathWindow::Initialize()
 
 	//フォント
 	font.Load(fontAdd, fontName);
-	font.Create(32,fontName);
+	font.Create(118,fontName);
 }
 void CCauseOfDeathWindow::Update()
 {
@@ -84,7 +84,7 @@ void CCauseOfDeathWindow::Update()
 		if (buttonNextScale = scaleMini)
 		buttonNextScaleFlg = true;
 	}
-	causeOfDeathTextureScale = scaleController.ScaleShrinkControll(causeOfDeathTextureScale, scaleMini, causeOfDeathScaleSpeed);
+	causeOfDeathTextureScale = scaleController.ScaleShrinkControll(causeOfDeathTextureScale, 0.7, causeOfDeathScaleSpeed);
 	deathTextScale = scaleController.ScaleShrinkControll(deathTextScale,scaleMini,causeOfDeathScaleSpeed);
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
@@ -113,42 +113,45 @@ void CCauseOfDeathWindow::Render()
 {
 	//popUpTexture.Render(popUpPosX, popUpPosY);
 	scaleController.ScaleRender(&popUpTexture,popUpPosX,popUpPosY,popUpScale);
-	/*switch (deathResult)
+	switch (deathResult)
 	{
 	case CAUSE_Hyperthermia:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:熱中症");
+		font.RenderString(660, 750, MOF_XRGB(0, 0, 0), "水面下は熱い！");
 		break;
 	case CAUSE_Frozen:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:体温低下");
+		font.RenderString(660, 750, MOF_XRGB(0, 0, 0), "深海は寒すぎた");
 		break;
 	case CAUSE_Starvation:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:餓死");
+		font.RenderString(570, 750, MOF_XRGB(0, 0, 0), "ご飯が食べたかった...");
 		break;
 	case CAUSE_ChokeOnShell:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:喉詰まり");
+		font.RenderString(750, 750, MOF_XRGB(0, 0, 0), "骨が喉に！");
 		break;
 	case CAUSE_Obesity:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:肥満");
+		font.RenderString(580, 780, MOF_XRGB(0, 0, 0), "食べ過ぎも悪かった。");
 		break;
 	case CAUSE_Obstacle:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:障害物と衝突");
+		font.RenderString(640, 750, MOF_XRGB(0, 0, 0), "ゴミはゴミ箱へ。");
 		break;
 	case CAUSE_Parasite:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:寄生虫");
+		font.RenderString(640, 750, MOF_XRGB(0, 0, 0), "痒くてたまらん！");
 		break;
 	case CAUSE_Jump:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ジャンプ");
+		font.RenderString(690, 750, MOF_XRGB(0, 0, 0), "結構痛かった。");
 		break;
 	case CAUSE_Bubble:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:泡");
+		font.RenderString(720, 750, MOF_XRGB(0, 0, 0), "目がアアア！");
 		break;
 	case CAUSE_SeaTurtle:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ウミガメ");
+		font.RenderString(450, 750, MOF_XRGB(0, 0, 0), "ウミガメに当たると思った...");
 		break;
 	case CAUSE_WaterFlow:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:水流");
+		font.RenderString(490, 750, MOF_XRGB(0, 0, 0), "マイペースで行きたいよね。");
 		break;
-	}*/
+	case CAUSE_ShoalFish:
+		font.RenderString(680, 750, MOF_XRGB(0, 0, 0), "前から魚群が！");
+		break;
+	}
 	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	if (newGetDeathFlg)
 	{

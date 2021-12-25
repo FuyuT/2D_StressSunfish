@@ -60,6 +60,7 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 	pl.SetSoundManager(*cSound);
+	ui.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 
 	//イベント
@@ -87,6 +88,8 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
+	//cSound->Play(SOUND_READY);
+	seFlg = false;
 }
 
 void CSceneGame::EventUpdate()
@@ -97,6 +100,7 @@ void CSceneGame::EventUpdate()
 		if (eventTimer.GetNowtime() < 0)
 		{
 			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+			seFlg = true;
 			eventTimer.SetTotalTime(40);
 		}
 		else if (eventTimer.GetNowtime() < 20)
@@ -104,6 +108,35 @@ void CSceneGame::EventUpdate()
 			eventNum = Event::Event_None;
 		}
 		eventTimer.Update();
+
+		if (seFlg)
+		{
+			if (eventNum == Event::Event_ShoalSardine)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Garbage)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Turtle)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Summer)
+			{
+				cSound->Play(SOUND_EVENT_SUMMER);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Winter)
+			{
+				cSound->Play(SOUND_EVENT_WINTER);
+				seFlg = false;
+			}
+		}				
 	}
 	else
 	{
@@ -113,6 +146,8 @@ void CSceneGame::EventUpdate()
 
 void CSceneGame::Update()
 {
+	if (!startFlg) 
+		cSound->Play(SOUND_GO);
 	//デバッグ用　エンターで初期化
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
@@ -164,7 +199,10 @@ void CSceneGame::Update()
 	stg.Update(pl);
 
 	ui.Update(eventNum);
-	if (!startFlg)return;
+	if (!startFlg)
+		return;
+
+
 
 	//イベント
 	EventUpdate();	
@@ -333,7 +371,7 @@ void CSceneGame::PopUpController()
 
 void CSceneGame::CaseOfDethController()
 {
-	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg)
+	if ((pl.GetDead()) && !popUpFlg)
 	{
 		cSound->Play(SOUND_RESULT);
 		nowPopUpGame = new CCauseOfDeathWindow;

@@ -1486,6 +1486,7 @@ void CSceneTrophyCollection::Render()
 	if (page == 1)
 	{
 		backGroundTexture1.Render(0, 0);
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "1/3");
 		//1ページ目
 		if(riverFlg)
 		scaleController.ScaleRender(&riverIconTexture, iconFirstRowPosX, iconOneLinePosY,riverScale);
@@ -1505,10 +1506,12 @@ void CSceneTrophyCollection::Render()
 		if(indianOceanFlg)
 		scaleController.ScaleRender(&indianOceanIconTexture, iconThirdRowPosX, iconTwoLinePosY, indianOceanScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconTwoLinePosY + indianOceanIconTexture.GetHeight() + 10, "インド洋級");
+		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 2)
 	{
 		backGroundTexture2.Render(0,0);
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "2/3");
 		//2ページ目
 		if(amazonRiverFlg)
 		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX, iconOneLinePosY, amazonRiverScale);
@@ -1525,10 +1528,13 @@ void CSceneTrophyCollection::Render()
 		if(zeroMotivationFlg)
 		scaleController.ScaleRender(&zeroMotivationIconTexture, icon2pageSecondRowPosX, iconTwoLinePosY, zeroMotivationScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + zeroMotivationIconTexture.GetHeight() + 10, "やる気ゼロ級");
+		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
+		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 3)
 	{
 		backGroundTexture2.Render(0, 0);
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "3/3");
 		//3ページ目
 		if(mountFujiFlg)
 		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX, iconOneLinePosY, mountFujiScale);
@@ -1545,12 +1551,11 @@ void CSceneTrophyCollection::Render()
 		if(talentedDemonFlg)
 		scaleController.ScaleRender(&talentedDemonIconTexture, icon2pageSecondRowPosX+30, iconTwoLinePosY, talentedDemonScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + talentedDemonIconTexture.GetHeight() + 10, "才能魔級");
+		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	}
 
 	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
-	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(255, 255, 255), "%d/3", page);
-	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
-	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
+	
 	font.RenderString(textPosX, textPosY, MOF_XRGB(255, 255, 255), "トロフィー集");
 	if (popUpFlg)
 	{
