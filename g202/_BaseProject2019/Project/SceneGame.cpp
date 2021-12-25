@@ -35,7 +35,6 @@ startFlg(false)
 
 CSceneGame::~CSceneGame()
 {
-	Release();
 }
 
 void CSceneGame::PlayBGM()

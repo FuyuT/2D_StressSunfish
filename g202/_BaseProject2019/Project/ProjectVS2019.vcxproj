@@ -102,6 +102,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackObjectKelp.cpp" />
     <ClCompile Include="BacktoTitleWindow.cpp" />
     <ClCompile Include="Blinking.cpp" />
     <ClCompile Include="Bubble.cpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackObjectKelp.h" />
     <ClInclude Include="BackToTitleWindow.h" />
     <ClInclude Include="Blinking.h" />
     <ClInclude Include="Bubble.h" />

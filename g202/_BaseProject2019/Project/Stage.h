@@ -1,6 +1,7 @@
 #pragma once
 #include "Mof.h"
 #include "Player.h"
+#include "BackObjectKelp.h"
 
 #define		SCROLL_SPEED	1
 #define     BACK_WAVE_SPEED -2					
@@ -32,13 +33,8 @@ private:
 	float scrollValueX;
 	float scrollValueY;
 
-	//背景のオブジェクトのアニメーション用（昆布など）
-	int imageTotalNo;
-	int useImageTotalNo;
-	CTexture* imageArray;
-	int* sameImageTotalNo;
-	float** imagePosX;
-	float** imagePosY;
+	//背景のオブジェクト
+	CBackObjectKelp ObjectKelp;
 public:
 	Stage();
 	~Stage();

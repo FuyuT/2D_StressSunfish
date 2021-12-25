@@ -91,12 +91,10 @@ void CSwordFish::Render(float wx, float wy)
 	if (!showFlg)return;
 	if (!keikokumotion.IsEndMotion()) {
 		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.0f, keikokumotion.GetSrcRect());
-
 	}
 	else
 	{
 		Texture.RenderScale(pos.x - wx + 10, pos.y - wy, 1.0f);
-
 	}
 
 }

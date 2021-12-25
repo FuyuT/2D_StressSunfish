@@ -70,7 +70,6 @@ void CSchoolTuna::Update(float wx, float wy)
 	}
 	else
 	{
-
 		pos.x -= moveSpeed.x;
 	}
 
@@ -89,14 +88,13 @@ void CSchoolTuna::Render(float wx, float wy)
 {
 
 	if (!showFlg)return;
-	if (!keikokumotion.IsEndMotion()) {
+	if (!keikokumotion.IsEndMotion())
+	{
 		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.5f, keikokumotion.GetSrcRect());
-
 	}
 	else
 	{
 		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f);
-
 	}
 }
 
@@ -110,6 +108,6 @@ void CSchoolTuna::RenderDebug(float wx, float wy)
 void CSchoolTuna::Release()
 {
 	Texture.Release();
-	//motion.Release();
+	motion.Release();
 	keikokumotion.Release();
 }

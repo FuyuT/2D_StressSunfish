@@ -6,6 +6,7 @@ private:
 	CUtility() = delete;
 	~CUtility() = delete;
 public:
-	static bool PosEditDataLoad(const char* filename, int& imageTotalNo, int& useImageTotalNo, CTexture*& imageArray, int*& sameImageTotalNo, float**& imagePosX, float**& imagePosY);
+	static bool EditDataLoad(const char* filename, int& imageTotalNo, int& useImageTotalNo, CTexture*& imageArray, int*& sameImageTotalNo, float**& imagePosX, float**& imagePosY);
+	static bool EditDataPosInitialize(const char* filename, int& imageTotalNo, int& useImageTotalNo, int*& sameImageTotalNo, float**& imagePosX, float**& imagePosY);
 };
 

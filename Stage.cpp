@@ -14,33 +14,14 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//背景画像
-	if (!skyTex.Load("BackGround\\BackGround_1.png")) 
-	{
-		return false;
-	}
-	if (!backWaveTex.Load("BackGround\\BackGround_2.png"))
-	{
-		return false;
-	}
-	if (!frontWaveTex.Load("BackGround\\BackGround_3.png"))
-	{
-		return false;
-	}
-	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))
-	{
-		return false;
-	}
-	if (!insideBackGroundTex.Load("BackGround\\BackGround_5.png"))
-	{
-		return false;
-	}
-	if (!closeBackGroundTex.Load("BackGround\\BackGround_6.png"))
-	{
-		return false;
-	}
-	//アニメーション画像
-	CUtility::PosEditDataLoad("Text\\konbu_test.txt", imageTotalNo, useImageTotalNo,imageArray, sameImageTotalNo, imagePosX, imagePosY);
+	if (!skyTex.Load("BackGround\\BackGround_1.png")) return false;
+	if (!backWaveTex.Load("BackGround\\BackGround_2.png")) return false;
+	if (!frontWaveTex.Load("BackGround\\BackGround_3.png")) return false;
+	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))	return false;
+	if (!insideBackGroundTex.Load("BackGround\\BackGround_5.png")) return false;
+	if (!closeBackGroundTex.Load("BackGround\\BackGround_6.png")) return false;
 
+	if (!ObjectKelp.Load())return false;
 	return true;
 }
 
@@ -55,6 +36,8 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	frontWavePos.x = 0;
 	frontWavePos.y = 0;
 	frontWaveScrollValueX = 0;
+
+	ObjectKelp.Initialize();
 }
 
 void Stage::WaveUpdate(const CRectangle& rec, const float& hsw)
@@ -92,7 +75,6 @@ void Stage::WaveUpdate(const CRectangle& rec, const float& hsw)
 	{
 		frontWaveScrollValueX += ((rec.Right - scrollValueX) - hsw) * FRONT_WAVE_ADJUSTMENT_SPEED;
 	}
-
 }
 
 void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
@@ -135,17 +117,8 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 		}
 	}
 
-	//背景オブジェクト
-	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
-	{
-		for (int sameTexNo = 0; sameTexNo < sameImageTotalNo[imageNo]; sameTexNo++)
-		{
-			if (imagePosX[imageNo][sameTexNo] + imageArray[0].GetWidth() < 0)
-			{
-				imagePosX[imageNo][sameTexNo] += closeBackGroundTex.GetWidth();
-			}
-		}
-	}
+	//背景のオブジェクト
+	ObjectKelp.Update(closeBackGroundTex.GetWidth(), scrollValueX);
 
 }
 
@@ -206,18 +179,7 @@ void Stage::ForeGroundRender()
 
 void Stage::Render() {
 	BackGroundRender();
-	//テキストから読み込んだ画像を描画(昆布）
-	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
-	{
-		for (int sameTexNo = 0; sameTexNo < sameImageTotalNo[imageNo]; sameTexNo++)
-		{
-			if (imagePosX[imageNo][sameTexNo] > 0)
-			{
-				imageArray[imageNo].Render(-scrollValueX + imagePosX[imageNo][sameTexNo], -scrollValueY + imagePosY[imageNo][sameTexNo]);
-			}
-		}
-	}
-
+	ObjectKelp.Render(closeBackGroundTex.GetWidth(), scrollValueX, scrollValueY);
 }
 
 
@@ -228,20 +190,7 @@ void Stage::Release() {
 	distantBackGroundTex.Release();
 	insideBackGroundTex.Release();
 	closeBackGroundTex.Release();
-
-	for (int imageNo = 0; imageNo < imageTotalNo; imageNo++)
-	{
-		imageArray[imageNo].Release();
-	}
-	
-	//for (int n = 0; n < useImageTotalNo; n++)
-	//{
-	//	delete[] imagePosX[n];
-	//	delete[] imagePosY[n];
-	//}
-	//delete[] imagePosX;
-	//delete[] imagePosY;
-
-
 	enemyTexture.Release();
+
+	ObjectKelp.Release();
 }

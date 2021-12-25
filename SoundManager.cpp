@@ -1,8 +1,8 @@
 #include "SoundManager.h"
 
-CSoundManager::CSoundManager(bool muteBGM, bool muteSE) :
-	muteBGM(muteBGM),
-	muteSE(muteSE)
+CSoundManager::CSoundManager() :
+	muteBGM(false),
+	muteSE(false)
 {
 }
 

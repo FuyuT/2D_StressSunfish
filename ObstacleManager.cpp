@@ -266,7 +266,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					if (eventNum == Event_ShoalSardine)
 						return;
 					//重なった場合表示しない
-					Overlap(ShoalSardine, n);
+					//Overlap(ShoalSardine, n);
 					return;
 				}
 			}
@@ -297,7 +297,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					if (eventNum == 4)
 						return;
 					//重なった場合表示しない
-					Overlap(SwordFish, n);
+					//Overlap(SwordFish, n);
 					return;
 				}
 			}
@@ -328,7 +328,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					if (eventNum == 4)
 						return;
 					//重なった場合表示しない
-					Overlap(SchoolTuna, n);
+					//Overlap(SchoolTuna, n);
 					return;
 				}
 			}
@@ -905,6 +905,8 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 	for (int n = 0; n < 2; n++)
 	{
 		cShoalSardine[n].Update(wx, wy);
+		cSwordFish[n].Update(wx, wy);
+		cSchoolTuna[n].Update(wx, wy);
 	}
 		cWaterFlow.Update(wx, wy);
 }

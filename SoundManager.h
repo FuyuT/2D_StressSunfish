@@ -76,7 +76,7 @@ private:
 	//Œ»İ—¬‚µ‚Ä‚¢‚é‰¹Šy‚Ìæ“¾—p•Ï”
 	int nowSound;
 public:
-	CSoundManager(bool muteBGM,bool muteSE);
+	CSoundManager();
 	~CSoundManager();
 	bool Load();
 	void SetLoop();	//BGM‚Ì‚İLoop‚Éİ’è‰Â
