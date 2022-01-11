@@ -25,14 +25,14 @@ void CPoseWindow::Update()
 {
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
-	MouseCollision(mousePosX, mousePosY);
 
 	if (buttonSelect == 1)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		buttonRetryScale = buttonScaleMini;
 		buttonTitleScale = buttonScaleMini;
-		buttonReturnGameScale = buttonScaleMini;
-		buttonConfigScale = scaleController.ScaleControll(buttonConfigScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		buttonReturnGameScale = scaleController.ScaleControll(buttonReturnGameScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		buttonConfigScale = buttonScaleMini;
 
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
@@ -44,20 +44,19 @@ void CPoseWindow::Update()
 			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 4;
 		}
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
-			//Release();
-			//設定の処理
-			//endFlg = true;
-			//nextPopUp = NULL;
-			//設定画面への遷移
-			buttonResult = 4;
+			//ゲームに戻るボタンが押された際の処理
+			Release();
+			endFlg = true;
+			nextPopUp = NULL;
+			buttonResult = 5;
 		}
 	}
 	else if (buttonSelect == 2)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		buttonConfigScale = buttonScaleMini;
 		buttonTitleScale = buttonScaleMini;
 		buttonReturnGameScale = buttonScaleMini;
@@ -84,10 +83,12 @@ void CPoseWindow::Update()
 	}
 	else if (buttonSelect == 3)
 	{
-		buttonConfigScale = buttonScaleMini;
+		MouseCollision(mousePosX, mousePosY);
+		buttonConfigScale = scaleController.ScaleControll(buttonConfigScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
 		buttonRetryScale = buttonScaleMini;
+		buttonTitleScale = buttonScaleMini;
 		buttonReturnGameScale = buttonScaleMini;
-		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		
 
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
@@ -99,22 +100,26 @@ void CPoseWindow::Update()
 			cSound->Play(SOUND_BUTTON_SELECT);
 			buttonSelect = 2;
 		}
-
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//タイトルに戻るボタンが押されたときの処理
-			Release();
-			endFlg = true;
-			nextPopUp = POPUPNO_BACKTOTITLE;
+			//設定画面に行ってもPoseWindowが消去されないようにしている↓　藤原
+			//Release();
+			//設定の処理
+			//endFlg = true;
+			//nextPopUp = NULL;
+			//設定画面への遷移
+			buttonResult = 4;
 		}
+		
 	}
 	else if (buttonSelect == 4)
 	{
+		MouseCollision(mousePosX, mousePosY);
 		buttonConfigScale = buttonScaleMini;
 		buttonRetryScale = buttonScaleMini;
-		buttonTitleScale = buttonScaleMini;
-		buttonReturnGameScale = scaleController.ScaleControll(buttonReturnGameScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
+		buttonReturnGameScale = buttonScaleMini;
+		buttonTitleScale = scaleController.ScaleControll(buttonTitleScale, buttonScaleMax, buttonScaleMini, scaleSpeed);
 
 		if (g_pInput->IsKeyPush(MOFKEY_DOWN))
 		{
@@ -127,14 +132,13 @@ void CPoseWindow::Update()
 			buttonSelect = 3;
 		}
 
-		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
+		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//ゲームに戻るボタンが押された際の処理
+			//タイトルに戻るボタンが押されたときの処理
 			Release();
 			endFlg = true;
-			nextPopUp = NULL;
-			buttonResult = 5;
+			nextPopUp = POPUPNO_BACKTOTITLE;
 		}
 	}
 }
@@ -159,25 +163,25 @@ void CPoseWindow::Release()
 
 void CPoseWindow::MouseCollision(int posX, int posY)
 {
-	if (GetRect(0).CollisionPoint(posX,posY) && buttonResult != 1)
+	if (GetRect(3).CollisionPoint(posX,posY) && buttonSelect != 1)
 	{
-		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
-	}
-	else if (GetRect(1).CollisionPoint(posX, posY) && buttonResult != 2)
-	{
 		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(1).CollisionPoint(posX, posY) && buttonSelect != 2)
+	{
 		buttonSelect = 2;
-	}
-	else if (GetRect(2).CollisionPoint(posX, posY) && buttonResult != 3)
-	{
 		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(0).CollisionPoint(posX, posY) && buttonSelect != 3)
+	{
 		buttonSelect = 3;
-	}
-	else if (GetRect(3).CollisionPoint(posX, posY) && buttonResult != 4)
-	{
 		cSound->Play(SOUND_BUTTON_SELECT);
+	}
+	else if (GetRect(2).CollisionPoint(posX, posY) && buttonSelect != 4)
+	{
 		buttonSelect = 4;
+		cSound->Play(SOUND_BUTTON_SELECT);
 	}
 }
 

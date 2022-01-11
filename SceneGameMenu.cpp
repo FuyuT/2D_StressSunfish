@@ -26,7 +26,6 @@ void CSceneGameMenu::Initialize()
 	if (fp)
 	{
 		fread(&tutorialFlg, sizeof(bool), 1, fp);
-
 		fclose(fp);
 	}
 
@@ -44,12 +43,29 @@ void CSceneGameMenu::Initialize()
 
 	titleButtonTexture.Load("ButtonTitle.png");	
 
-	
 	PlayBGM();
+	bubbleFade.Load();
+	bubbleFade.Initialize();
 }
 
 void CSceneGameMenu::Update()
 {
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		Release();
+		return;
+	}
+
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
@@ -84,6 +100,9 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(0).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ゲームプレイ画面
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_GAME;
+
 			endFlg = true;
 			nextScene = SCENENO_GAME;
 			//cSound->Play(SOUND_BUTTON_PUSH);
@@ -122,6 +141,9 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(1).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//設定画面
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_CONFIG;
+
 			endFlg = true;
 			nextScene = SCENENO_CONFIG;
 			cSound->Play(SOUND_BUTTON_PUSH);
@@ -159,6 +181,9 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(2).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//トロフィー集
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_TROPHY;
+
 			endFlg = true;
 			nextScene = SCENENO_TROPHY;
 			cSound->Play(SOUND_BUTTON_PUSH);
@@ -197,6 +222,9 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(3).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//ストレス集画面
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_STRESSCOLLECTION;
+
 			endFlg = true;
 			nextScene = SCENENO_STRESSCOLLECTION;
 			cSound->Play(SOUND_BUTTON_PUSH);
@@ -235,6 +263,9 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(4).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//チュートリアルモード
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_TUTORIAL;
+
 			tutorialFlg = true;
 			endFlg = true;
 			cSound->Play(SOUND_BUTTON_PUSH);
@@ -277,6 +308,8 @@ void CSceneGameMenu::Update()
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(5).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
 			//タイトル画面
+			bubbleFade.FadeOut();
+			nextSceneTemp = SCENENO_TITLE;
 			endFlg = true;
 			nextScene = SCENENO_TITLE;
 			cSound->Play(SOUND_BUTTON_PUSH);
@@ -299,7 +332,9 @@ void CSceneGameMenu::Render()
 	scaleController.ScaleRender(&tutorialButtonTexture,buttonPosX,tutorialButtonPosY,tutorialButtonScale);
 	scaleController.ScaleRender(&titleButtonTexture,titleButtonPosX,titleButtonPosY,titleButtonScale);
 	textTexture.Render(textPosX, textPosY);
+	bubbleFade.Render();
 }
+
 void CSceneGameMenu::Release()
 {
 	backGroundTex.Release();
@@ -310,6 +345,7 @@ void CSceneGameMenu::Release()
 	tutorialButtonTexture.Release();
 	titleButtonTexture.Release();
 	textTexture.Release();
+	bubbleFade.Release();
 }
 
 void CSceneGameMenu::MouseCollision(int posX, int posY)
@@ -339,14 +375,13 @@ void CSceneGameMenu::MouseCollision(int posX, int posY)
 		buttonSelect = 5;
 		cSound->Play(SOUND_BUTTON_SELECT);
 	}
-	else if (GetRect(5).CollisionPoint(posX,posY) && buttonSelect != 6)
+	else if (GetRect(5).CollisionPoint(posX, posY) && buttonSelect != 6)
 	{
 		buttonSelect = 6;
 		cSound->Play(SOUND_BUTTON_SELECT);
 		beforButtonSelect = 1;
 	}
 }
-
 
 /*************************************************************************//*!
 		@brief			各ボタンの矩形の取得
