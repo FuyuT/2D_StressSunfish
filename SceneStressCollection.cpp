@@ -1018,7 +1018,7 @@ void CSceneStressCollection::Render()
 	if (page == 1)
 	{
 		//1ページ目に表示
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY-2, MOF_XRGB(0, 0, 0), "1/3");
+
 		if(hyperthermiaFlg)
 		scaleController.ScaleRender(&hyperthermiaTexture, iconFirstRowPosX, iconOneLinePosY, hyperthermiaScale);
 		if(lowerBodyTemperatureFlg)
@@ -1031,7 +1031,6 @@ void CSceneStressCollection::Render()
 	if (page == 2)
 	{
 		//2ページ目に表示
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY-2, MOF_XRGB(0, 0, 0), "2/3");
 		if(obesityFlg)
 		scaleController.ScaleRender(&obesityTexture, iconFirstRowPosX, iconOneLinePosY, obesityScale);
 		if(impactFlg)
@@ -1044,7 +1043,6 @@ void CSceneStressCollection::Render()
 	if (page == 3)
 	{
 		//3ページ目に表示
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY -2, MOF_XRGB(0, 0, 0), "3/3");
 		if(bubbleFlg)
 		scaleController.ScaleRender(&bubbleTexture, iconFirstRowPosX, iconOneLinePosY, bubbleScale);
 		if(turtleFlg)
@@ -1057,7 +1055,6 @@ void CSceneStressCollection::Render()
 
 	scaleController.ScaleRender(&menuButtonTexture , menuButtonPosX,menuButtonPosY,menuButtonScale);
 	
-	//todo:マージ中の確認（この文が必要かどうか、変更者中川）
 	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(0, 0, 0), "%d/3",page);
 	if(page != 1)
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);

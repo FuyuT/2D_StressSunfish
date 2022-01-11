@@ -12,7 +12,6 @@ CSoundManager::~CSoundManager()
 
 bool CSoundManager::Load()
 {
-	
 	if (!titleBGM.Load("Sound\\BGM_Title.mp3"))return false;
 	if (!menuBGM.Load("Sound\\BGM_Menu.mp3"))return false;
 	if (!collectionBGM.Load("Sound\\BGM_Collection.mp3"))return false;
@@ -38,8 +37,6 @@ bool CSoundManager::Load()
 	if (!buttonOKSE.Load("Sound\\SE_ButtonOK.mp3"))return false;
 	if (!buttonPushSE.Load("Sound\\SE_ButtonPush.mp3"))return false;
 	if (!resultSE.Load("Sound\\SE_Result.mp3"))return false;
-	if (!readySE.Load("Sound\\SE_Ready.mp3"))return false;
-	if (!goSE.Load("Sound\\SE_GO.mp3"))return false;
 	SetLoop();
 	LoadSoundData();
 
@@ -132,12 +129,6 @@ void CSoundManager::Play(SOUNDTYPE sound)
 	case SOUND_RESULT:
 		resultSE.Play();
 		break;
-	case SOUND_READY:
-		readySE.Play();
-		break;
-	case SOUND_GO:
-		goSE.Play();
-		break;
 	default:
 		break;
 	}
@@ -218,12 +209,6 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 	case SOUND_RESULT:
 		resultSE.Stop();
 		break;
-	case SOUND_READY:
-		readySE.Stop();
-		break;
-	case SOUND_GO:
-		goSE.Stop();
-		break;
 	default:
 		break;
 	}
@@ -290,8 +275,6 @@ void CSoundManager::ChangeVolume(int soundNo)
 		buttonOKSE.SetVolume(volumeSE);
 		buttonPushSE.SetVolume(volumeSE);
 		resultSE.SetVolume(volumeSE);
-		readySE.SetVolume(volumeSE);
-		goSE.SetVolume(volumeSE);
 		break;
 	default:
 		break;
@@ -331,8 +314,6 @@ void CSoundManager::SetMute(int soundNo)
 		buttonOKSE.SetVolume(0);
 		buttonPushSE.SetVolume(0);
 		resultSE.SetVolume(0);
-		readySE.SetVolume(0);
-		goSE.SetVolume(0);
 		break;	
 	default:
 		break;
@@ -406,6 +387,4 @@ void CSoundManager::Release()
 	buttonOKSE.Release();
 	buttonPushSE.Release();
 	resultSE.Release();
-	readySE.Release();
-	goSE.Release();
 }

@@ -50,8 +50,6 @@ bool CSceneGame::Load()
 	if (!ui.Load())return false;
 	if (!stg.Load())return false;
 	if(!cObstacle.Load())return false;
-	bubbleFade.Load();
-
 	return true;
 }
 
@@ -62,7 +60,6 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 	pl.SetSoundManager(*cSound);
-	ui.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 
 	//イベント
@@ -90,9 +87,6 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
-	//cSound->Play(SOUND_READY);
-	seFlg = false;
-	bubbleFade.Initialize();
 }
 
 void CSceneGame::EventUpdate()
@@ -103,7 +97,6 @@ void CSceneGame::EventUpdate()
 		if (eventTimer.GetNowtime() < 0)
 		{
 			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
-			seFlg = true;
 			eventTimer.SetTotalTime(40);
 		}
 		else if (eventTimer.GetNowtime() < 20)
@@ -111,35 +104,6 @@ void CSceneGame::EventUpdate()
 			eventNum = Event::Event_None;
 		}
 		eventTimer.Update();
-
-		if (seFlg)
-		{
-			if (eventNum == Event::Event_ShoalSardine)
-			{
-				cSound->Play(SOUND_EVENT_OTHERS);
-				seFlg = false;
-			}
-			if (eventNum == Event::Event_Garbage)
-			{
-				cSound->Play(SOUND_EVENT_OTHERS);
-				seFlg = false;
-			}
-			if (eventNum == Event::Event_Turtle)
-			{
-				cSound->Play(SOUND_EVENT_OTHERS);
-				seFlg = false;
-			}
-			if (eventNum == Event::Event_Summer)
-			{
-				cSound->Play(SOUND_EVENT_SUMMER);
-				seFlg = false;
-			}
-			if (eventNum == Event::Event_Winter)
-			{
-				cSound->Play(SOUND_EVENT_WINTER);
-				seFlg = false;
-			}
-		}				
 	}
 	else
 	{
@@ -149,8 +113,6 @@ void CSceneGame::EventUpdate()
 
 void CSceneGame::Update()
 {
-	if (!startFlg) 
-		cSound->Play(SOUND_GO);
 	//デバッグ用　エンターで初期化
 	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
 	{
@@ -159,28 +121,7 @@ void CSceneGame::Update()
 		{
 			nowPopUpGame->Release();
 		}
-
-	//フェード処理
-	bubbleFade.Update();
-	bubbleFade.FadeIn();
-	if (bubbleFade.GetFade())
-	{
-		return;
 	}
-	//if (bubbleFade.GetFadeOutEnd())
-	//{
-	//	if (nextSceneTemp == SCENENO_GAME)
-	//	{
-	//		Initialize();
-	//		return;
-	//	}
-
-	//	//シーンの遷移	
-	//	nextScene = nextSceneTemp;
-	//	endFlg = true;
-
-	//	return;
-	//}
 
 	//画面遷移 ポップアップ画面 
 	//死んだら、もしくはF1でゲームオーバー画面
@@ -207,7 +148,7 @@ void CSceneGame::Update()
 	//ゲーム画面に戻ったらconfigFlgをfalse
 	if (!sceneConfig.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
 		configFlg = false;
-
+		
 	if (configFlg)
 	{
 		sceneConfig.Update();
@@ -216,13 +157,15 @@ void CSceneGame::Update()
 	{
 		PopUpController();
 	}
-
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
-	if (!startFlg)return;
+
 	//スクロール
 	stg.Update(pl);
+
 	ui.Update(eventNum);
+	if (!startFlg)return;
+
 	//イベント
 	EventUpdate();	
 
@@ -268,7 +211,6 @@ void CSceneGame::Render()
 		sceneConfig.Render();
 	}
 
-	bubbleFade.Render();
 }
 
 //デバッグ
@@ -301,8 +243,6 @@ void CSceneGame::Release()
 	
 	//障害物
 	cObstacle.Release();
-
-	bubbleFade.Release();
 }
 
 void CSceneGame::PopUpController()
@@ -311,35 +251,23 @@ void CSceneGame::PopUpController()
 	if (nowPopUpGame->GetButtonResult() == 1)
 	{
 		//リトライ、もしくはコンティニューボタンが押されたら初期化
-		//nextSceneTemp = SCENENO_GAME;
-		//bubbleFade.FadeOut();
 		Initialize();
 	}
 	else if (nowPopUpGame->GetButtonResult() == 2)
 	{
 		//メニューボタンが押されたらメニュー画面に遷移
-		//nextSceneTemp = SCENENO_GAMEMENU;
-		//bubbleFade.FadeOut();
-
 		nextScene = SCENENO_GAMEMENU;
 		endFlg = true;
-
 	}
 	else if (nowPopUpGame->GetButtonResult() == 3)
 	{
 		//タイトルボタンが押されたらタイトル画面に遷移
-		//nextSceneTemp = SCENENO_TITLE;
-		//bubbleFade.FadeOut();
-
 		nextScene = SCENENO_TITLE;
 		endFlg = true;
 	}
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
-		//nextSceneTemp = SCENENO_CONFIG;
-		//bubbleFade.FadeOut();
-
 		nextScene = SCENENO_CONFIG;
 		configFlg = true;
 		sceneConfig.SetGamePlayFlg();
@@ -405,7 +333,7 @@ void CSceneGame::PopUpController()
 
 void CSceneGame::CaseOfDethController()
 {
-	if ((pl.GetDead()) && !popUpFlg)
+	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg)
 	{
 		cSound->Play(SOUND_RESULT);
 		nowPopUpGame = new CCauseOfDeathWindow;

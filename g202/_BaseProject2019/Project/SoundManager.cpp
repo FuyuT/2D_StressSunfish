@@ -12,7 +12,6 @@ CSoundManager::~CSoundManager()
 
 bool CSoundManager::Load()
 {
-	
 	if (!titleBGM.Load("Sound\\BGM_Title.mp3"))return false;
 	if (!menuBGM.Load("Sound\\BGM_Menu.mp3"))return false;
 	if (!collectionBGM.Load("Sound\\BGM_Collection.mp3"))return false;

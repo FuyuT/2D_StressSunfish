@@ -40,125 +40,6 @@ enum obstacleType {
 	Rotten,
 };
 
-////データポインタ
-//char* gFileBuffer = NULL;
-//
-////コマンドの定義
-//enum tag_SCRIPTCOMMAND {
-//	CMD_SETEASY,
-//	CMD_SETNORMAL,
-//	CMD_SETHARD,
-//
-//	CMD_COUNT,
-//};
-//
-//const char* gScriptCommand[] = {
-//	"seteasy",
-//	"setnormal",
-//	"sethard",
-//
-//	"",
-//};
-//
-////コマンドを格納する構造体の基礎
-////タイプのみを持ち、継承先の各構造体でコマンドごとのパラメーターを追加する
-//typedef struct tag_COMMAND {
-//	int					Type;
-//}COMMAND;
-//
-////easyコマンドのための構造体
-//typedef struct tag_SETEASYCOMMAND : public COMMAND {
-//	int obstacleInterval;
-//	int turtleRate;
-//	int garbageRate;
-//	int waterFlowRate;
-//	int bubbleRate;
-//	int shoalSardineRate;
-//	int swordFishRate;
-//	int schoolTunaRate;
-//	int foodInterval;
-//	int rottenInterval;
-//	char name[256];
-//
-//	// コンストラクタ
-//	tag_SETEASYCOMMAND() {
-//		Type = CMD_SETEASY;
-//		obstacleInterval = 0;
-//		turtleRate = 0;
-//		garbageRate = 0;
-//		waterFlowRate = 0;
-//		bubbleRate = 0;
-//		shoalSardineRate = 0;
-//		swordFishRate = 0;
-//		schoolTunaRate = 0;
-//		foodInterval = 0;
-//		rottenInterval = 0;
-//		memset(name, 0, 256);
-//	}
-//}SETEASYCOMMAND;
-//
-////normalコマンドのための構造体
-//typedef struct tag_SETNORMALCOMMAND : public COMMAND {
-//	int obstacleInterval;
-//	int turtleRate;
-//	int garbageRate;
-//	int waterFlowRate;
-//	int bubbleRate;
-//	int shoalSardineRate;
-//	int swordFishRate;
-//	int schoolTunaRate;
-//	int foodInterval;
-//	int rottenInterval;
-//	char name[256];
-//
-//	// コンストラクタ
-//	tag_SETNORMALCOMMAND() {
-//		Type = CMD_SETNORMAL;
-//		obstacleInterval = 0;
-//		turtleRate = 0;
-//		garbageRate = 0;
-//		waterFlowRate = 0;
-//		bubbleRate = 0;
-//		shoalSardineRate = 0;
-//		swordFishRate = 0;
-//		schoolTunaRate = 0;
-//		foodInterval = 0;
-//		rottenInterval = 0;
-//		memset(name, 0, 256);
-//	}
-//}SETNORMALCOMMAND;
-//
-////hardコマンドのための構造体
-//typedef struct tag_SETHARDCOMMAND : public COMMAND {
-//	int obstacleInterval;
-//	int turtleRate;
-//	int garbageRate;
-//	int waterFlowRate;
-//	int bubbleRate;
-//	int shoalSardineRate;
-//	int swordFishRate;
-//	int schoolTunaRate;
-//	int foodInterval;
-//	int rottenInterval;
-//	char name[256];
-//
-//	// コンストラクタ
-//	tag_SETHARDCOMMAND() {
-//		Type = CMD_SETHARD;
-//		obstacleInterval = 0;
-//		turtleRate = 0;
-//		garbageRate = 0;
-//		waterFlowRate = 0;
-//		bubbleRate = 0;
-//		shoalSardineRate = 0;
-//		swordFishRate = 0;
-//		schoolTunaRate = 0;
-//		foodInterval = 0;
-//		rottenInterval = 0;
-//		memset(name, 0, 256);
-//	}
-//}SETHARDCOMMAND;
-
 class CObstacleManager
 {
 private:
@@ -195,27 +76,6 @@ private:
 	bool foodFlg;
 	bool rottenFlg;
 
-	//int obstacleInterval = 0;
-	//int turtleRate = 0;
-	//int garbageRate = 0;
-	//int waterFlowRate = 0;
-	//int bubbleRate = 0;
-	//int shoalSardineRate = 0;
-	//int swordFishRate = 0;
-	//int schoolTunaRate = 0;
-	//int foodInterval = 0;
-	//int rottenInterval = 0;
-
-	////コマンドリスト
-	//CDynamicArray< COMMAND* >		gCommandList;
-
-	//// スプライトリスト
-	//CDynamicArray< CSprite2D* >		gSpriteList;
-
-	////現在実行しているコマンド番号
-	//int								gCommandNo = 0;
-
-
 public:
 	CObstacleManager();
 	~CObstacleManager();
@@ -225,13 +85,10 @@ public:
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
-	void PosYRandom(int obstacleType,int eventNum);
+	void PosYRandom(int obstacleType);
 	void Overlap(int obstacle,int arrayNum);
-	char* Trim(char* s);
-	//bool LoadTextFile(char* pName);
-	//void TextFileUpdate();
 
-	bool ObstaclePercentage(int percent)
+		bool ObstaclePercentage(int percent)
 	{
 		//確率によってtrueを返す
 		if (createRandom.Random(1, 100 / percent + 1) == 1)

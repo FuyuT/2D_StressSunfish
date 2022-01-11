@@ -38,7 +38,7 @@ bool CSwordFish::Load()
 
 	motion.Create(anim);
 	keikokumotion.Create(keikoku_anim, 2);
-	
+
 
 	return true;
 }

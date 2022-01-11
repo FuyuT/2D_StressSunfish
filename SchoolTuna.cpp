@@ -61,7 +61,7 @@ void CSchoolTuna::Update(float wx, float wy)
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //‰æ–Ê‚Ì‰E’[
 
 	keikokumotion.ChangeMotion(0, false);
-	if (!keikokumotion.IsEndMotion()) 
+	if (!keikokumotion.IsEndMotion())
 	{
 		pos.x = scRight;
 	}
@@ -91,7 +91,7 @@ void CSchoolTuna::Render(float wx, float wy)
 	}
 	else
 	{
-		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f,motion.GetSrcRect());
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
 	}
 }
 
