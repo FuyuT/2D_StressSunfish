@@ -59,6 +59,7 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
+	cObstacle.TextLoad();
 	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 

@@ -38,6 +38,8 @@ enum obstacleType {
 	Obstacle,
 	Food,
 	Rotten,
+	SummerFood,
+	WinterFood,
 };
 
 class CObstacleManager
@@ -76,6 +78,12 @@ private:
 	bool foodFlg;
 	bool rottenFlg;
 
+	char* gFileBuffer = NULL;
+
+	int gBufferOffset = 0;
+
+	char gLineBuffer[256];
+
 public:
 	CObstacleManager();
 	~CObstacleManager();
@@ -87,6 +95,8 @@ public:
 	void Release();
 	void PosYRandom(int obstacleType);
 	void Overlap(int obstacle,int arrayNum);
+    bool TextLoad();
+
 
 		bool ObstaclePercentage(int percent)
 	{
