@@ -16,7 +16,7 @@ bool CSwordFish::Load()
 	SpriteAnimationCreate anim = {
 		"ЙjВо",
 		0,0,
-		300,300,
+		297.7,300,
 		TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},
 			  {4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},
 			  {4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},
@@ -38,7 +38,7 @@ bool CSwordFish::Load()
 
 	motion.Create(anim);
 	keikokumotion.Create(keikoku_anim, 2);
-	
+
 
 	return true;
 }
@@ -87,12 +87,10 @@ void CSwordFish::Render(float wx, float wy)
 	if (!showFlg)return;
 	if (!keikokumotion.IsEndMotion()) {
 		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.0f, keikokumotion.GetSrcRect());
-
 	}
 	else
 	{
 		Texture.RenderScale(pos.x - wx + 10, pos.y - wy, 1.0f, motion.GetSrcRect());
-
 	}
 
 }

@@ -34,6 +34,7 @@ bool CObstacleManager::Load()
 		if (!cSchoolTuna[n].Load())return false;
 	}
 	if (!cWaterFlow.Load())return false;
+	if (!cFishShadow.Load())return false;
 	return true;
 }
 
@@ -66,6 +67,7 @@ void CObstacleManager::Initialize()
 	}
 
 	cWaterFlow.Initialize();
+	cFishShadow.Initialize();
 
 	obstacleRandom.SetSeed((MofU32)time(NULL));
 	posYRandom.SetSeed((MofU32)time(NULL));
@@ -114,7 +116,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 	//showFlgがfalseの障害物を一つランダムで選んで、
 	if (distance % 20 == 0 && distance != 0 && obstacleFlg)
 	{
-		obstacleNum = obstacleRandom.Random(500, 700);
+		obstacleNum = obstacleRandom.Random(0, 700);
 
 		if (eventNum == Event_Turtle)
 			obstacleNum = 0;
@@ -211,7 +213,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 							return;
 						cWaterFlow.SetShow(true);
 						//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
-			
+
 						cWaterFlow.SetPosx(posx + g_pGraphics->GetTargetWidth());
 						PosYRandom(Obstacle);
 						cWaterFlow.SetPosy(posY);
@@ -220,6 +222,28 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 					return;
 				}
 			}
+			//魚影（お試し）
+			else if (!cFishShadow.GetShow())
+			{
+			if (eventNum != Event_Turtle)
+				{
+					if (!cWaterFlow.GetShow())
+					{
+						createFlg = ObstaclePercentage(25);
+						if (!createFlg)
+							return;
+						cFishShadow.SetShow(true);
+						//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
+
+						cFishShadow.SetPosx(posx + g_pGraphics->GetTargetWidth());
+						PosYRandom(Obstacle);
+						cFishShadow.SetPosy(posY);
+						return;
+					}
+				}
+
+			}
+			
 		}
 		else if (obstacleNum >= 300 && obstacleNum < 400)
 		{
@@ -908,7 +932,8 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 		cSwordFish[n].Update(wx, wy);
 		cSchoolTuna[n].Update(wx, wy);
 	}
-		cWaterFlow.Update(wx, wy);
+	cWaterFlow.Update(wx, wy);
+	cFishShadow.Update(wx, wy);
 }
 
 
@@ -940,6 +965,7 @@ void CObstacleManager::Render(float wx, float wy)
 	}
 
 	cWaterFlow.Render(wx, wy);
+	cFishShadow .Render(wx, wy);
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
@@ -970,6 +996,7 @@ void CObstacleManager::RenderDebug(float wx, float wy)
 		cSchoolTuna[n].RenderDebug(wx, wy);
 	}
 	cWaterFlow.RenderDebug(wx, wy);
+	cFishShadow.RenderDebug(wx, wy);
 }
 
 void CObstacleManager::Release()
@@ -1000,6 +1027,7 @@ void CObstacleManager::Release()
 		cSchoolTuna[n].Release();
 	}
 	cWaterFlow.Release();
+	cFishShadow.Release();
 }
 
 void CObstacleManager::PosYRandom(int obstacleType)

@@ -12,6 +12,11 @@
 #include "ShoalSardine.h"
 #include "SwordFish.h"
 #include "SchoolTuna.h"
+#include "FishShadow.h"
+#include "HeaderDefine.h"
+
+#define		SHOW_LIMIT	13
+
 
 //“–‚½‚è”»’è‚Ì”»•Ê‚Ì‚½‚ß’Ç‰Á
 enum obstacle {
@@ -30,6 +35,12 @@ enum obstacle {
 	SchoolTuna,
 };
 
+enum obstacleType {
+	Obstacle,
+	Food,
+	Rotten,
+};
+
 class CObstacleManager
 {
 private:
@@ -46,17 +57,27 @@ private:
 	CShoalSardine cShoalSardine[2];
 	CSwordFish cSwordFish[2];
 	CSchoolTuna cSchoolTuna[2];
+	CFishShadow cFishShadow;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
-	CRandom posYRndom;
+	CRandom posYRandom;
 	CRandom garbageNoRandom;
+	CRandom fishShadowNoRandom;
+	int random;
 	int obstacleNum;
+	int foodRandom;
+	int rottenRandom;
 	int posY;
 	int posYNum;
+	int lastTimePosY;
 
 	bool createFlg;
 	bool eventFoodCreateFlg;
+
+	bool obstacleFlg;
+	bool foodFlg;
+	bool rottenFlg;
 
 public:
 	CObstacleManager();
@@ -67,7 +88,8 @@ public:
 	void Render(float wx, float wy);
 	void RenderDebug(float wx, float wy);
 	void Release();
-	void PosYRndom();
+	void PosYRandom(int obstacleType);
+	void Overlap(int obstacle,int arrayNum);
 
 		bool ObstaclePercentage(int percent)
 	{
@@ -191,10 +213,10 @@ public:
 			return cRottenShrimp[num].GetShow();
 			break;
 		case SwordFish:
-			return cSwordFish[num].GetRect();
+			return cSwordFish[num].GetShow();
 			break;
 		case SchoolTuna:
-			return cSchoolTuna[num].GetRect();
+			return cSchoolTuna[num].GetShow();
 			break;
 		}
 	}

@@ -16,7 +16,7 @@ bool CSchoolTuna::Load()
 	SpriteAnimationCreate anim = {
 		"‰j‚®",
 		0,0,
-		451,400,
+		454.5,450,
 		TRUE,{{4,0,0},{4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},
 			  {4,1,0},{4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},{4,8,0},
 			  {4,2,0},{4,3,0},{4,4,0},{4,5,0},{4,6,0},{4,7,0},{4,8,0},{4,9,0},
@@ -46,6 +46,7 @@ void CSchoolTuna::Initialize()
 {
 	pos.x = 1000;
 	pos.y = 1500;
+	showFlg = false;
 	moveSpeed.x = 13.0f;
 	keikokumotion.ChangeMotion(0, false);
 	motion.AddTimer(CUtilities::GetFrameSecond());
@@ -60,13 +61,12 @@ void CSchoolTuna::Update(float wx, float wy)
 	int scRight = wx + g_pGraphics->GetTargetWidth(); //‰æ–Ê‚Ì‰E’[
 
 	keikokumotion.ChangeMotion(0, false);
-	if (!keikokumotion.IsEndMotion()) 
+	if (!keikokumotion.IsEndMotion())
 	{
 		pos.x = scRight;
 	}
 	else
 	{
-
 		pos.x -= moveSpeed.x;
 	}
 
@@ -85,14 +85,13 @@ void CSchoolTuna::Render(float wx, float wy)
 {
 
 	if (!showFlg)return;
-	if (!keikokumotion.IsEndMotion()) {
+	if (!keikokumotion.IsEndMotion())
+	{
 		keikokuTexture.RenderScale(0, pos.y - wy, 4.0f, 3.5f, keikokumotion.GetSrcRect());
-
 	}
 	else
 	{
-		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f,motion.GetSrcRect());
-
+		Texture.RenderScale(pos.x - wx, pos.y - wy, 1.0f, motion.GetSrcRect());
 	}
 }
 
