@@ -105,7 +105,7 @@ void CSceneGameMenu::Update()
 
 			//endFlg = true;
 			//nextScene = SCENENO_GAME;
-			cSound->Play(SOUND_BUTTON_PUSH);
+			//cSound->Play(SOUND_BUTTON_PUSH);
 			cSound->Play(SOUND_BUTTON_OK);
 			//Release();
 		}
@@ -144,10 +144,10 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_CONFIG;
 
-			//endFlg = true;
-			//nextScene = SCENENO_CONFIG;
+			endFlg = true;
+			nextScene = SCENENO_CONFIG;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//Release();
+			Release();
 		}
 	}
 	//トロフィー集ボタン
@@ -184,10 +184,10 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_TROPHY;
 
-			//endFlg = true;
-			//nextScene = SCENENO_TROPHY;
+			endFlg = true;
+			nextScene = SCENENO_TROPHY;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//Release();
+			Release();
 		}
 	}
 	//ストレス一覧ボタン
@@ -225,10 +225,10 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_STRESSCOLLECTION;
 
-			//endFlg = true;
-			//nextScene = SCENENO_STRESSCOLLECTION;
+			endFlg = true;
+			nextScene = SCENENO_STRESSCOLLECTION;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//Release();
+			Release();
 		}
 	}
 	//チュートリアルボタン
@@ -267,16 +267,16 @@ void CSceneGameMenu::Update()
 			nextSceneTemp = SCENENO_TUTORIAL;
 
 			tutorialFlg = true;
-			//endFlg = true;
+			endFlg = true;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//nextScene = SCENENO_TUTORIAL;
+			nextScene = SCENENO_TUTORIAL;
 			FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "wb");
 			if (fp)
 			{
 				fwrite(&tutorialFlg, sizeof(bool), 1, fp);
 				fclose(fp);
 			}
-			//Release();
+			Release();
 		}
 	}
 	//タイトルボタン
@@ -309,10 +309,10 @@ void CSceneGameMenu::Update()
 			//タイトル画面
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_TITLE;
-			//endFlg = true;
-			//nextScene = SCENENO_TITLE;
+			endFlg = true;
+			nextScene = SCENENO_TITLE;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			//Release();
+			Release();
 		}
 	}
 }
