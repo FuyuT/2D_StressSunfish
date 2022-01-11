@@ -1486,8 +1486,9 @@ void CSceneTrophyCollection::Render()
 	if (page == 1)
 	{
 		backGroundTexture1.Render(0, 0);
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "1/3");
 		//1ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "1/3");
+
 		if(riverFlg)
 		scaleController.ScaleRender(&riverIconTexture, iconFirstRowPosX, iconOneLinePosY,riverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + riverIconTexture.GetHeight() +10, "川級");
@@ -1506,13 +1507,13 @@ void CSceneTrophyCollection::Render()
 		if(indianOceanFlg)
 		scaleController.ScaleRender(&indianOceanIconTexture, iconThirdRowPosX, iconTwoLinePosY, indianOceanScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconTwoLinePosY + indianOceanIconTexture.GetHeight() + 10, "インド洋級");
-		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 2)
 	{
 		backGroundTexture2.Render(0,0);
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "2/3");
 		//2ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "2/3");
+
 		if(amazonRiverFlg)
 		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX, iconOneLinePosY, amazonRiverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + amazonRiverIconTexture.GetHeight() + 10, "アマゾン川級");
@@ -1528,14 +1529,13 @@ void CSceneTrophyCollection::Render()
 		if(zeroMotivationFlg)
 		scaleController.ScaleRender(&zeroMotivationIconTexture, icon2pageSecondRowPosX, iconTwoLinePosY, zeroMotivationScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + zeroMotivationIconTexture.GetHeight() + 10, "やる気ゼロ級");
-		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
-		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 3)
 	{
 		backGroundTexture2.Render(0, 0);
-		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "3/3");
 		//3ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "3/3");
+
 		if(mountFujiFlg)
 		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX, iconOneLinePosY, mountFujiScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + mountFujiIconTexture.GetHeight() + 10, "富士山級");
@@ -1551,11 +1551,11 @@ void CSceneTrophyCollection::Render()
 		if(talentedDemonFlg)
 		scaleController.ScaleRender(&talentedDemonIconTexture, icon2pageSecondRowPosX+30, iconTwoLinePosY, talentedDemonScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + talentedDemonIconTexture.GetHeight() + 10, "才能魔級");
-		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	}
 
 	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
-	
+	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
+	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	font.RenderString(textPosX, textPosY, MOF_XRGB(255, 255, 255), "トロフィー集");
 	if (popUpFlg)
 	{

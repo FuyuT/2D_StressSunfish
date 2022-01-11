@@ -24,8 +24,8 @@ void CCheckCauseOfDeathWindow::Initialize()
 		causeOfDeathTexture.Load("マンボウ 体温低下.png");
 
 	if (buttonResult == CAUSE_Starvation)
-		causeOfDeathTexture.Load("マンボウ 空腹2.png");	
-	
+		causeOfDeathTexture.Load("マンボウ 空腹2.png");
+
 	if (buttonResult == CAUSE_ChokeOnShell)
 		causeOfDeathTexture.Load("マンボウ　喉つまり.png");
 
@@ -65,7 +65,6 @@ void CCheckCauseOfDeathWindow::Update()
 		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
 	}
-	
 
 	if (buttonSelect == 1)
 	{
@@ -82,7 +81,7 @@ void CCheckCauseOfDeathWindow::Update()
 void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY,0.8);
+	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY, 0.8);
 	if (buttonResult == CAUSE_Hyperthermia)
 	{
 		font.RenderString(850, 240, MOF_XRGB(0, 0, 0), "熱中症");
@@ -110,19 +109,19 @@ void CCheckCauseOfDeathWindow::Render()
 		font.RenderString(880, 240, MOF_XRGB(0, 0, 0), "肥満");
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "食べ過ぎて肥満になったストレスで死亡");
 	}
-	
+
 	if (buttonResult == CAUSE_Obstacle)
 	{
 		font.RenderString(760, 240, MOF_XRGB(0, 0, 0), "衝突死(ゴミ)");
 		font.RenderString(550, 760, MOF_XRGB(0, 0, 0), "障害物にぶつかった衝撃で死亡");
 	}
-	
+
 	if (buttonResult == CAUSE_Parasite)
 	{
 		font.RenderString(850, 240, MOF_XRGB(0, 0, 0), "寄生死");
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "寄生虫が体に付きすぎたストレスで死亡");
 	}
-	
+
 	if (buttonResult == CAUSE_Jump)
 	{
 		font.RenderString(850, 240, MOF_XRGB(0, 0, 0), "衝撃死");
@@ -134,7 +133,7 @@ void CCheckCauseOfDeathWindow::Render()
 		font.RenderString(780, 240, MOF_XRGB(0, 0, 0), "ストレス死");
 		font.RenderString(530, 760, MOF_XRGB(0, 0, 0), "泡が目に入ったストレスで死亡");
 	}
-	
+
 	if (buttonResult == CAUSE_SeaTurtle)
 	{
 		font.RenderString(850, 240, MOF_XRGB(0, 0, 0), "予感死");
@@ -154,7 +153,7 @@ void CCheckCauseOfDeathWindow::Render()
 		font.RenderString(525, 760, MOF_XRGB(0, 0, 0), "魚群に衝突したストレスで死亡");
 	}
 
-	scaleController.ScaleRender(&buttonBackTexture,buttonBackPosX,buttonBackPosY,buttonBackScale);
+	scaleController.ScaleRender(&buttonBackTexture, buttonBackPosX, buttonBackPosY, buttonBackScale);
 }
 void CCheckCauseOfDeathWindow::Release()
 {
