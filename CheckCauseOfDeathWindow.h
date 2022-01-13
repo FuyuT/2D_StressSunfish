@@ -12,8 +12,8 @@ private:
 	const int			buttonBackPosX = 150;
 	const int			buttonBackPosY = 100;
 	float				buttonBackScale = 1.0f;
-	const int			causeOfDeathTexturePosX = 750;
-	const int			causeOfDeathTexturePosY = 340;
+	const int			causeOfDeathTexturePosX = 725;
+	const int			causeOfDeathTexturePosY = 225;
 public:
 	CCheckCauseOfDeathWindow();
 	~CCheckCauseOfDeathWindow();

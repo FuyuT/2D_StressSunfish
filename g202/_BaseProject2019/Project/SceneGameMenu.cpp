@@ -68,11 +68,11 @@ void CSceneGameMenu::Update()
 
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
+	MouseCollision(mousePosX, mousePosY);
 
 	//ゲームプレイボタン
 	if (buttonSelect == 1)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -113,7 +113,6 @@ void CSceneGameMenu::Update()
 	//設定ボタン
 	else if (buttonSelect == 2)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -153,7 +152,6 @@ void CSceneGameMenu::Update()
 	//トロフィー集ボタン
 	else if (buttonSelect == 3)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -193,7 +191,6 @@ void CSceneGameMenu::Update()
 	//ストレス一覧ボタン
 	else if (buttonSelect == 4)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -234,7 +231,6 @@ void CSceneGameMenu::Update()
 	//チュートリアルボタン
 	else if (buttonSelect == 5)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
