@@ -13,13 +13,13 @@ private:
 	const int			textPosX = 790;
 	const int			textPosY = 215;
 	const int			buttonPosX = 680;
-	const int			buttonConfigPosY = 350;
+	const int			buttonConfigPosY = 620;
 	float				buttonConfigScale = 0.9f;
 	const int			buttonRetryPosY = 485;
 	float				buttonRetryScale = 0.9f;
-	const int			buttonTitlePosY = 620;
+	const int			buttonTitlePosY = 755;
 	float				buttonTitleScale = 0.9f;
-	const int			buttonReturnGamePosY = 755;
+	const int			buttonReturnGamePosY = 350;
 	float				buttonReturnGameScale = 0.9f;
 
 	const float			buttonScaleMini = 0.9f;

@@ -14,6 +14,7 @@
 #include "SchoolTuna.h"
 #include "FishShadow.h"
 #include "HeaderDefine.h"
+#include "SoundManager.h"
 
 #define		SHOW_LIMIT	13
 
@@ -86,6 +87,8 @@ private:
 	int gBufferOffset = 0;
 
 	char gLineBuffer[256];
+
+	CSoundManager* cSound;
 
 public:
 	CObstacleManager();
@@ -231,5 +234,6 @@ public:
 		}
 	}
 
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

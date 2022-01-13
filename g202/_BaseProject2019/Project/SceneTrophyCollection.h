@@ -101,13 +101,14 @@ private:
 	//文字座標
 	const int			textPosX = 20;
 	const int			textPosY = 30;
+
 	//ボタン座標
 	const int			menuButtonPosX = 1150;
 	const int			menuButtonPosY = 875;
 	float				menuButtonScale = 1.0f;
 
-	const int			rightButtonPosX = 990;
-	const int			leftButtonPosX = 900;
+	const int			rightButtonPosX = 1000;
+	const int			leftButtonPosX = 825;
 	const int			leftAndRightButtonPosY = 900;
 
 	//取得したトロフィーを三つ保存するための配列ポインタ

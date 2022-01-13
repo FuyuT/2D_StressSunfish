@@ -73,19 +73,19 @@ void CCauseOfDeathWindow::Initialize()
 
 	//フォント
 	font.Load(fontAdd, fontName);
-	font.Create(32,fontName);
+	font.Create(118, fontName);
 }
 void CCauseOfDeathWindow::Update()
 {
 	popUpScale = scaleController.ScaleShrinkControll(popUpScale, scaleMini, causeOfDeathScaleSpeed);
-	if (!buttonNextScaleFlg )
+	if (!buttonNextScaleFlg)
 	{
 		buttonNextScale = scaleController.ScaleShrinkControll(buttonNextScale, scaleMini, causeOfDeathScaleSpeed);
 		if (buttonNextScale = scaleMini)
-		buttonNextScaleFlg = true;
+			buttonNextScaleFlg = true;
 	}
-	causeOfDeathTextureScale = scaleController.ScaleShrinkControll(causeOfDeathTextureScale, scaleMini, causeOfDeathScaleSpeed);
-	deathTextScale = scaleController.ScaleShrinkControll(deathTextScale,scaleMini,causeOfDeathScaleSpeed);
+	causeOfDeathTextureScale = scaleController.ScaleShrinkControll(causeOfDeathTextureScale, 0.7, causeOfDeathScaleSpeed);
+	deathTextScale = scaleController.ScaleShrinkControll(deathTextScale, scaleMini, causeOfDeathScaleSpeed);
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
 
@@ -94,11 +94,11 @@ void CCauseOfDeathWindow::Update()
 		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
 	}
-	
+
 	if (buttonSelect == 1)
 	{
-		if(buttonNextScaleFlg)
-		buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
+		if (buttonNextScaleFlg)
+			buttonNextScale = scaleController.ScaleControll(buttonNextScale, scaleMax, scaleMini, scaleSpeed);
 
 		if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect().CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
@@ -112,50 +112,64 @@ void CCauseOfDeathWindow::Update()
 void CCauseOfDeathWindow::Render()
 {
 	//popUpTexture.Render(popUpPosX, popUpPosY);
-	scaleController.ScaleRender(&popUpTexture,popUpPosX,popUpPosY,popUpScale);
-	/*switch (deathResult)
-	{
-	case CAUSE_Hyperthermia:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:熱中症");
-		break;
-	case CAUSE_Frozen:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:体温低下");
-		break;
-	case CAUSE_Starvation:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:餓死");
-		break;
-	case CAUSE_ChokeOnShell:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:喉詰まり");
-		break;
-	case CAUSE_Obesity:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:肥満");
-		break;
-	case CAUSE_Obstacle:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:障害物と衝突");
-		break;
-	case CAUSE_Parasite:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:寄生虫");
-		break;
-	case CAUSE_Jump:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ジャンプ");
-		break;
-	case CAUSE_Bubble:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:泡");
-		break;
-	case CAUSE_SeaTurtle:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ウミガメ");
-		break;
-	case CAUSE_WaterFlow:
-		font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:水流");
-		break;
-	}*/
+	scaleController.ScaleRender(&popUpTexture, popUpPosX, popUpPosY, popUpScale);
+	//switch (deathResult)
+	//{
+	//case CAUSE_Hyperthermia:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:熱中症");
+	//	break;
+
+	//case CAUSE_Frozen:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:体温低下");
+	//	break;
+
+	//case CAUSE_Starvation:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:餓死");
+	//	break;
+
+	//case CAUSE_ChokeOnShell:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:喉詰まり");
+	//	break;
+
+	//case CAUSE_Obesity:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:肥満");
+	//	break;
+
+	//case CAUSE_Obstacle:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:障害物と衝突");
+	//	break;
+
+	//case CAUSE_Parasite:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:寄生虫");
+	//	break;
+
+	//case CAUSE_Jump:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ジャンプ");
+	//	break;
+
+	//case CAUSE_Bubble:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:泡");
+	//	break;
+
+	//case CAUSE_SeaTurtle:
+	//	font.RenderString(750, 250, MOF_XRGB(0, 0, 0), "死因:ウミガメ");
+	//	break;
+
+	//case CAUSE_WaterFlow:
+	//	font.RenderString(490, 750, MOF_XRGB(0, 0, 0), "マイペースで行きたいよね。");
+	//	break;
+
+	//case CAUSE_ShoalFish:
+	//	font.RenderString(680, 750, MOF_XRGB(0, 0, 0), "前から魚群が！");
+	//	break;
+	//}
 	scaleController.ScaleRender(&caseOfDethTexture, causeOfDeathTexturePosX, causeOfDeathTexturePosY, causeOfDeathTextureScale);
 	if (newGetDeathFlg)
 	{
 		newGetTexture.Render(350, 250);
 	}
-	scaleController.ScaleRender(&buttonNextTexture,buttonNextPosX,buttonNextPosY,buttonNextScale);
-	scaleController.ScaleRender(&deathTextTexture,deathTextPosX,deathTextPosY,deathTextScale);
+	scaleController.ScaleRender(&buttonNextTexture, buttonNextPosX, buttonNextPosY, buttonNextScale);
+	scaleController.ScaleRender(&deathTextTexture, deathTextPosX, deathTextPosY, deathTextScale);
 }
 void CCauseOfDeathWindow::Release()
 {

@@ -59,17 +59,19 @@ private:
 	CTexture	menuButtonTexture;
 	CTexture	leftButtonTexture;
 	CTexture	rightButtonTexture;
+
 	const int			textPosX = 80;
 	const int			textPosY = 10;
+
 	const int			menuButtonPosX = 1250;
 	const int			menuButtonPosY = 920;
 	float				menuButtonScale = 0.9f;
 	float				menuButtonScaleMax = 0.95f;
 	float				menuButtonScaleMini = 0.9f;
-	const int			rightButtonPosX = 990;
-	const int			leftButtonPosX = 900;
-	const int			leftAndRightButtonPosY = 950;
 
+	const int			rightButtonPosX = 1025;
+	const int			leftButtonPosX = 850;
+	const int			leftAndRightButtonPosY = 970;
 
 public:
 	CSceneStressCollection();

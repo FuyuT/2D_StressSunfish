@@ -83,26 +83,37 @@ void CCheckCauseOfDeathWindow::Render()
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY, 0.8);
 	if (buttonResult == CAUSE_Hyperthermia)
+	{
 		font.RenderString(450, 760, MOF_XRGB(0, 0, 0), "体温上昇しすぎて熱中症になり死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_Frozen)
+	{
 		font.RenderString(365, 760, MOF_XRGB(0, 0, 0), "深海に潜りすぎて体温が下がりすぎて死亡");
+	}
 
 	if (buttonResult == CAUSE_Starvation)
+	{
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "ご飯を食べなさすぎて餓死してしまった");
+	}
 
 	if (buttonResult == CAUSE_ChokeOnShell)
+	{
 		font.RenderString(440, 760, MOF_XRGB(0, 0, 0), "骨や殻が喉に刺さったストレスで死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_Obesity)
+	{
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "食べ過ぎて肥満になったストレスで死亡");
 	}
 
 	if (buttonResult == CAUSE_Obstacle)
+	{
 		font.RenderString(550, 760, MOF_XRGB(0, 0, 0), "障害物にぶつかった衝撃で死亡");
 	}
 
 	if (buttonResult == CAUSE_Parasite)
+	{
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "寄生虫が体に付きすぎたストレスで死亡");
 	}
 
@@ -113,6 +124,7 @@ void CCheckCauseOfDeathWindow::Render()
 	}
 
 	if (buttonResult == CAUSE_Bubble)
+	{
 		font.RenderString(530, 760, MOF_XRGB(0, 0, 0), "泡が目に入ったストレスで死亡");
 	}
 
@@ -123,10 +135,14 @@ void CCheckCauseOfDeathWindow::Render()
 	}
 
 	if (buttonResult == CAUSE_WaterFlow)
+	{
 		font.RenderString(475, 760, MOF_XRGB(0, 0, 0), "急に加速させられたストレスで死亡");
+	}
 
-	if(buttonResult == CAUSE_ShoalFish)
+	if (buttonResult == CAUSE_ShoalFish)
+	{
 		font.RenderString(525, 760, MOF_XRGB(0, 0, 0), "魚群に衝突したストレスで死亡");
+	}
 
 	scaleController.ScaleRender(&buttonBackTexture, buttonBackPosX, buttonBackPosY, buttonBackScale);
 }

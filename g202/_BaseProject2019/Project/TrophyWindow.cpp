@@ -112,7 +112,7 @@ void CTrophyWindow::Update()
 	}
 	
 
-if (buttonSelect == 1)
+	if (buttonSelect == 1)
 	{
 		buttonBackScale = scaleController.ScaleControll(buttonBackScale, scaleMax, scaleMini, scaleSpeed);
 
@@ -148,7 +148,6 @@ void CTrophyWindow::Render()
 		trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
 		font.RenderString(800, 225, MOF_XRGB(0, 0, 0), "湖級");
 		//説明文描画
-				//説明文描画
 		font.RenderStringScale(465, 675, 0.6f, MOF_XRGB(0, 0, 0), "そこそこ頑張っているトロフィー");
 		font.RenderStringScale(610, 775, 0.6f, MOF_XRGB(0, 0, 0), "湖並みの距離泳いだ証");
 	}

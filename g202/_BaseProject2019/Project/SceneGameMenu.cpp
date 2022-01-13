@@ -105,7 +105,7 @@ void CSceneGameMenu::Update()
 
 			endFlg = true;
 			nextScene = SCENENO_GAME;
-			//cSound->Play(SOUND_BUTTON_PUSH);
+			cSound->Play(SOUND_BUTTON_PUSH);
 			cSound->Play(SOUND_BUTTON_OK);
 			Release();
 		}

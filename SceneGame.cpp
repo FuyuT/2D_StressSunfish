@@ -180,10 +180,11 @@ void CSceneGame::Update()
 		sceneConfig.Update();
 	}
 
-
-
 	//スクロール
-	stg.Update(pl);
+	if (!poseFlg)
+	{
+		stg.Update(pl);
+	}
 
 	//フェード
 	if (bubbleFade.GetFade())
@@ -253,8 +254,6 @@ void CSceneGame::Update()
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
-	//スクロール
-	stg.Update(pl);
 
 	ui.Update(eventNum);
 

@@ -13,7 +13,7 @@ bool CFishShadow::Load()
 	if (!SardineShadow.Load("BackGround\\iwasi kage.png"))return false;
 	if (!SwordFishShadow.Load("BackGround\\カジキ 影.png"))return false;
 	if (!TunaShadow.Load("BackGround\\マグロ 影.png"))return false;
-	return false;
+	return true;
 }
 
 void CFishShadow::Initialize()

@@ -50,6 +50,12 @@ private:
 	//開始フラグ
 	bool startFlg;
 
+	//SEフラグ
+	bool seFlg;
+	bool alertFlg;
+	bool goFlg;
+	bool popUpGuardFlg;
+
 public:
 	CSceneGame();
 	~CSceneGame();
@@ -61,6 +67,7 @@ public:
 	void Render() override;
 	void RenderDebug() override;
 	void Release() override;
+	void SEUpdate();
 
 	CRectangle GetRect() {
 		return CRectangle(playerX, playerY, playerX + playerTexture.GetWidth() , playerY + playerTexture.GetHeight());

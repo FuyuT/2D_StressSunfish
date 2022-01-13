@@ -1554,7 +1554,6 @@ void CSceneTrophyCollection::Render()
 	}
 
 	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
-	CGraphicsUtilities::RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY + 5, MOF_XRGB(255, 255, 255), "%d/3", page);
 	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	font.RenderString(textPosX, textPosY, MOF_XRGB(255, 255, 255), "トロフィー集");
