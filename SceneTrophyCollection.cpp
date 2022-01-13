@@ -1487,6 +1487,8 @@ void CSceneTrophyCollection::Render()
 	{
 		backGroundTexture1.Render(0, 0);
 		//1ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "1/3");
+
 		if(riverFlg)
 		scaleController.ScaleRender(&riverIconTexture, iconFirstRowPosX, iconOneLinePosY,riverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + riverIconTexture.GetHeight() +10, "川級");
@@ -1510,6 +1512,8 @@ void CSceneTrophyCollection::Render()
 	{
 		backGroundTexture2.Render(0,0);
 		//2ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "2/3");
+
 		if(amazonRiverFlg)
 		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX, iconOneLinePosY, amazonRiverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + amazonRiverIconTexture.GetHeight() + 10, "アマゾン川級");
@@ -1530,6 +1534,8 @@ void CSceneTrophyCollection::Render()
 	{
 		backGroundTexture2.Render(0, 0);
 		//3ページ目
+		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "3/3");
+
 		if(mountFujiFlg)
 		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX, iconOneLinePosY, mountFujiScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + mountFujiIconTexture.GetHeight() + 10, "富士山級");

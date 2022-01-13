@@ -24,8 +24,8 @@ void CCheckCauseOfDeathWindow::Initialize()
 		causeOfDeathTexture.Load("マンボウ 体温低下.png");
 
 	if (buttonResult == CAUSE_Starvation)
-		causeOfDeathTexture.Load("マンボウ 空腹2.png");	
-	
+		causeOfDeathTexture.Load("マンボウ 空腹2.png");
+
 	if (buttonResult == CAUSE_ChokeOnShell)
 		causeOfDeathTexture.Load("マンボウ　喉つまり.png");
 
@@ -65,7 +65,6 @@ void CCheckCauseOfDeathWindow::Update()
 		cSound->Play(SOUND_BUTTON_SELECT);
 		buttonSelect = 1;
 	}
-	
 
 	if (buttonSelect == 1)
 	{
@@ -82,7 +81,7 @@ void CCheckCauseOfDeathWindow::Update()
 void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
-	causeOfDeathTexture.Render(causeOfDeathTexturePosX, causeOfDeathTexturePosY);
+	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY, 0.8);
 	if (buttonResult == CAUSE_Hyperthermia)
 		font.RenderString(450, 760, MOF_XRGB(0, 0, 0), "体温上昇しすぎて熱中症になり死亡");
 	
@@ -97,13 +96,16 @@ void CCheckCauseOfDeathWindow::Render()
 	
 	if (buttonResult == CAUSE_Obesity)
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "食べ過ぎて肥満になったストレスで死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_Obstacle)
 		font.RenderString(550, 760, MOF_XRGB(0, 0, 0), "障害物にぶつかった衝撃で死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_Parasite)
 		font.RenderString(400, 760, MOF_XRGB(0, 0, 0), "寄生虫が体に付きすぎたストレスで死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_Jump)
 	{
 		font.RenderString(390, 735, MOF_XRGB(0, 0, 0), "寄生虫を体から落とす為にジャンプして");
@@ -112,7 +114,8 @@ void CCheckCauseOfDeathWindow::Render()
 
 	if (buttonResult == CAUSE_Bubble)
 		font.RenderString(530, 760, MOF_XRGB(0, 0, 0), "泡が目に入ったストレスで死亡");
-	
+	}
+
 	if (buttonResult == CAUSE_SeaTurtle)
 	{
 		font.RenderString(450, 735, MOF_XRGB(0, 0, 0), "目の前のウミガメにぶつかりそうな");
@@ -125,7 +128,7 @@ void CCheckCauseOfDeathWindow::Render()
 	if(buttonResult == CAUSE_ShoalFish)
 		font.RenderString(525, 760, MOF_XRGB(0, 0, 0), "魚群に衝突したストレスで死亡");
 
-	scaleController.ScaleRender(&buttonBackTexture,buttonBackPosX,buttonBackPosY,buttonBackScale);
+	scaleController.ScaleRender(&buttonBackTexture, buttonBackPosX, buttonBackPosY, buttonBackScale);
 }
 void CCheckCauseOfDeathWindow::Release()
 {
