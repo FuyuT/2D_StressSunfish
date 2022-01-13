@@ -20,6 +20,7 @@ bool CSoundManager::Load()
 	if (!sceneChangeSE.Load("Sound\\SE_SceneChange.mp3"))return false;
 	if (!buttonSE.Load("Sound\\SE_Button.mp3"))return false;
 	if (!alertSE.Load("Sound\\SE_Alert.mp3"))return false;
+	if (!alertTemperatureSE.Load("Sound\\SE_AlertTemperature.mp3")) return false;
 	if (!jumpStartSE.Load("Sound\\SE_JumpStart.mp3"))return false;
 	if (!jumpingSE.Load("Sound\\SE_Jumping.mp3"))return false;
 	if (!waterLandingSE.Load("Sound\\SE_WaterLanding.mp3"))return false;
@@ -37,6 +38,9 @@ bool CSoundManager::Load()
 	if (!buttonOKSE.Load("Sound\\SE_ButtonOK.mp3"))return false;
 	if (!buttonPushSE.Load("Sound\\SE_ButtonPush.mp3"))return false;
 	if (!resultSE.Load("Sound\\SE_Result.mp3"))return false;
+	if (!readySE.Load("Sound\\SE_Ready.mp3"))return false;
+	if (!goSE.Load("Sound\\SE_GO.mp3"))return false;
+	if (!hungrySE.Load("Sound\\SE_Hunger.mp3"))return false;
 	SetLoop();
 	LoadSoundData();
 
@@ -80,6 +84,9 @@ void CSoundManager::Play(SOUNDTYPE sound)
 		break;
 	case SOUND_ALERT:
 		alertSE.Play();
+		break;
+	case SOUND_ALERTTEMPERATURE:
+		alertTemperatureSE.Play();
 		break;
 	case SOUND_JUMP_START:
 		jumpStartSE.Play();
@@ -129,6 +136,15 @@ void CSoundManager::Play(SOUNDTYPE sound)
 	case SOUND_RESULT:
 		resultSE.Play();
 		break;
+	case SOUND_READY:
+		readySE.Play();
+		break;
+	case SOUND_GO:
+		goSE.Play();
+		break;
+	case SOUND_HUNGRY:
+		hungrySE.Play();
+		break;
 	default:
 		break;
 	}
@@ -160,6 +176,9 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 		break;
 	case SOUND_ALERT:
 		alertSE.Stop();
+		break;
+	case SOUND_ALERTTEMPERATURE:
+		alertTemperatureSE.Stop();
 		break;
 	case SOUND_JUMP_START:
 		jumpStartSE.Stop();
@@ -208,6 +227,15 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 		break;
 	case SOUND_RESULT:
 		resultSE.Stop();
+		break;
+	case SOUND_READY:
+		readySE.Stop();
+		break;
+	case SOUND_GO:
+		goSE.Stop();
+		break;
+	case SOUND_HUNGRY:
+		hungrySE.Stop();
 		break;
 	default:
 		break;
@@ -259,6 +287,7 @@ void CSoundManager::ChangeVolume(int soundNo)
 		sceneChangeSE.SetVolume(volumeSE);
 		buttonSE.SetVolume(volumeSE);
 		alertSE.SetVolume(volumeSE);
+		alertTemperatureSE.SetVolume(volumeSE);
 		jumpStartSE.SetVolume(volumeSE);
 		jumpingSE.SetVolume(volumeSE);
 		waterLandingSE.SetVolume(volumeSE);
@@ -275,6 +304,9 @@ void CSoundManager::ChangeVolume(int soundNo)
 		buttonOKSE.SetVolume(volumeSE);
 		buttonPushSE.SetVolume(volumeSE);
 		resultSE.SetVolume(volumeSE);
+		readySE.SetVolume(volumeSE);
+		goSE.SetVolume(volumeSE);
+		hungrySE.SetVolume(volumeSE);
 		break;
 	default:
 		break;
@@ -298,6 +330,7 @@ void CSoundManager::SetMute(int soundNo)
 		sceneChangeSE.SetVolume(0);
 		buttonSE.SetVolume(0);
 		alertSE.SetVolume(0);
+		alertTemperatureSE.SetVolume(0);
 		jumpStartSE.SetVolume(0);
 		jumpingSE.SetVolume(0);
 		waterLandingSE.SetVolume(0);
@@ -314,6 +347,9 @@ void CSoundManager::SetMute(int soundNo)
 		buttonOKSE.SetVolume(0);
 		buttonPushSE.SetVolume(0);
 		resultSE.SetVolume(0);
+		readySE.SetVolume(0);
+		goSE.SetVolume(0);
+		hungrySE.SetVolume(0);
 		break;	
 	default:
 		break;
@@ -371,6 +407,7 @@ void CSoundManager::Release()
 	sceneChangeSE.Release();
 	buttonSE.Release();
 	alertSE.Release();
+	alertTemperatureSE.Release();
 	jumpStartSE.Release();
 	jumpingSE.Release();
 	waterLandingSE.Release();
@@ -387,4 +424,7 @@ void CSoundManager::Release()
 	buttonOKSE.Release();
 	buttonPushSE.Release();
 	resultSE.Release();
+	readySE.Release();
+	goSE.Release();
+	hungrySE.Release(); 
 }

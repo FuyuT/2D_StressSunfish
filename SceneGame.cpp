@@ -59,6 +59,7 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
+	cObstacle.SetSoundManager(*cSound);
 	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 
@@ -87,6 +88,9 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
+	seFlg = false;
+	alertFlg = false;
+	goFlg = false;
 }
 
 void CSceneGame::EventUpdate()
@@ -104,6 +108,35 @@ void CSceneGame::EventUpdate()
 			eventNum = Event::Event_None;
 		}
 		eventTimer.Update();
+
+		if (seFlg)
+		{
+			if (eventNum == Event::Event_ShoalSardine)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Garbage)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Turtle)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Summer)
+			{
+				cSound->Play(SOUND_EVENT_SUMMER);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Winter)
+			{
+				cSound->Play(SOUND_EVENT_WINTER);
+				seFlg = false;
+			}
+		}
 	}
 	else
 	{
@@ -136,7 +169,7 @@ void CSceneGame::Update()
 		popUpFlg = true;
 		poseFlg = true;
 	}
-	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg && !pl.GetDead())
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg && !pl.GetDead() && !configFlg)
 	{
 		nowPopUpGame->Release();
 		nowPopUpGame = NULL;
@@ -164,6 +197,7 @@ void CSceneGame::Update()
 	stg.Update(pl);
 
 	ui.Update(eventNum);
+
 	if (!startFlg)return;
 
 	//イベント
@@ -179,6 +213,9 @@ void CSceneGame::Update()
 
 	//障害物
 	cObstacle.Update(pl.GetDistance(),pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(), Task_End,eventNum);
+
+	//SE
+	SEUpdate();
 
 }
 
@@ -243,6 +280,30 @@ void CSceneGame::Release()
 	
 	//障害物
 	cObstacle.Release();
+}
+
+void CSceneGame::SEUpdate()
+{
+	//体温アラート
+	if ((500 * (pl.GetTemperature() * 0.01f) <= 150 || 500 * (pl.GetTemperature() * 0.01f) >= 330) && !alertFlg)
+	{
+		cSound->Play(SOUND_ALERTTEMPERATURE);
+		alertFlg = true;
+	}
+	else if (!(500 * (pl.GetTemperature() * 0.01f) >= 330) && 500 * (pl.GetTemperature() * 0.01f) > 150 && alertFlg)
+	{
+		alertFlg = false;
+	}
+	else if (!(500 * (pl.GetTemperature() * 0.01f) <= 150) && 500 * (pl.GetTemperature() * 0.01f) < 330 && alertFlg)
+	{
+		alertFlg = false;
+	}
+
+	if (startFlg && !goFlg)
+	{
+		cSound->Play(SOUND_GO);
+		goFlg = true;
+	}
 }
 
 void CSceneGame::PopUpController()

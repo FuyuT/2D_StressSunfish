@@ -257,6 +257,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 						if (!createFlg)
 							return;
 					}
+					cSound->Play(SOUND_ALERT);
 					cShoalSardine[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
@@ -288,6 +289,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 						if (!createFlg)
 							return;
 					}
+					cSound->Play(SOUND_ALERT);
 					cSwordFish[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 
@@ -319,6 +321,7 @@ void CObstacleManager::Update(int distance,int posx,float wx,float wy, int tutor
 						if (!createFlg)
 							return;
 					}
+					cSound->Play(SOUND_ALERT);
 					cSchoolTuna[n].SetShow(true);
 					//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
 

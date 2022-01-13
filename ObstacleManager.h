@@ -13,6 +13,7 @@
 #include "SwordFish.h"
 #include "SchoolTuna.h"
 #include "HeaderDefine.h"
+#include"SoundManager.h"
 
 #define		SHOW_LIMIT	13
 
@@ -76,6 +77,7 @@ private:
 	bool foodFlg;
 	bool rottenFlg;
 
+	CSoundManager* cSound;
 public:
 	CObstacleManager();
 	~CObstacleManager();
@@ -217,5 +219,7 @@ public:
 			break;
 		}
 	}
+
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

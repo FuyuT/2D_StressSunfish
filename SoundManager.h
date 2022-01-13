@@ -10,6 +10,7 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_SCENE_CHANGE,
 	SOUND_BUTTON,
 	SOUND_ALERT,
+	SOUND_ALERTTEMPERATURE,
 	SOUND_JUMP_START,
 	SOUND_JUMPING,
 	SOUND_WATER_LANDING,
@@ -28,6 +29,9 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_BUTTON_CANCEL,
 	SOUND_BUTTON_PUSH,
 	SOUND_RESULT,
+	SOUND_READY,
+	SOUND_GO,
+	SOUND_HUNGRY,
 }SOUNDTYPE;
 
 enum tag_Sound_NO
@@ -51,6 +55,7 @@ private:
 	CSoundBuffer sceneChangeSE;
 	CSoundBuffer buttonSE;			//ボタン
 	CSoundBuffer alertSE;			//警告
+	CSoundBuffer alertTemperatureSE;//体温低下/上昇警告		
 	CSoundBuffer jumpStartSE;		//ジャンプした時の水
 	CSoundBuffer jumpingSE;			//ジャンプ
 	CSoundBuffer waterLandingSE;	//着水音
@@ -67,7 +72,10 @@ private:
 	CSoundBuffer buttonCancelSE;	//いいえボタンを押した時
 	CSoundBuffer buttonOKSE;		//はいボタンを押した時
 	CSoundBuffer buttonPushSE;		//上記以外のボタンを押した時
-	CSoundBuffer resultSE;			//リザルトポップアップ表示する時のSE	
+	CSoundBuffer resultSE;			//リザルトポップアップ表示する時のSE
+	CSoundBuffer readySE;			//レディ～？
+	CSoundBuffer goSE;				//GO～!!
+	CSoundBuffer hungrySE;			//空腹
 
 
 	bool muteBGM;
