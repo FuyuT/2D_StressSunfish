@@ -60,6 +60,7 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 	cObstacle.SetSoundManager(*cSound);
+	cObstacle.TextLoad();
 	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
 
