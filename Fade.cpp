@@ -82,7 +82,7 @@ void CFade::Update()
 
 void CFade::Render()
 {
-	texture.RenderScale(-300, 0, 5.0f, motion.GetSrcRect());
+	texture.RenderScale(-300, -50, 5.0f, motion.GetSrcRect());
 }
 
 void CFade::Release()
