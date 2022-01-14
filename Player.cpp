@@ -341,7 +341,6 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
 	{
-		cSound->Play(SOUND_EAT);
 		//チュートリアルタスク
 		eatTaskFlg = true;
 
@@ -359,6 +358,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 			//死因：肥満
 			if (hungerRegion <= FULL_STOMACH)
 			{
+				cSound->Play(SOUND_OBESITY);
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_Obesity;
 				//エサを食べたことを返す
@@ -389,12 +389,14 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 				//20%で死ぬ
 				if (DieInPercentage(20))
 				{
+					cSound->Play(SOUND_CLOGGED);
 					motion.ChangeMotion(MOTION_DEATH);
 					causeOfDeath = CAUSE_ChokeOnShell;
 				}
 			}
 		}
 
+		cSound->Play(SOUND_EAT);
 		//エサを食べたことを返す
 		return true;
 	}

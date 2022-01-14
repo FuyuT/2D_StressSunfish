@@ -12,8 +12,9 @@
 #include "ShoalSardine.h"
 #include "SwordFish.h"
 #include "SchoolTuna.h"
+#include "FishShadow.h"
 #include "HeaderDefine.h"
-#include"SoundManager.h"
+#include "SoundManager.h"
 
 #define		SHOW_LIMIT	13
 
@@ -39,6 +40,8 @@ enum obstacleType {
 	Obstacle,
 	Food,
 	Rotten,
+	SummerFood,
+	WinterFood,
 };
 
 class CObstacleManager
@@ -57,11 +60,13 @@ private:
 	CShoalSardine cShoalSardine[2];
 	CSwordFish cSwordFish[2];
 	CSchoolTuna cSchoolTuna[2];
+	CFishShadow cFishShadow;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
 	CRandom posYRandom;
 	CRandom garbageNoRandom;
+	CRandom fishShadowNoRandom;
 	int random;
 	int obstacleNum;
 	int foodRandom;
@@ -77,7 +82,14 @@ private:
 	bool foodFlg;
 	bool rottenFlg;
 
+	char* gFileBuffer = NULL;
+
+	int gBufferOffset = 0;
+
+	char gLineBuffer[256];
+
 	CSoundManager* cSound;
+
 public:
 	CObstacleManager();
 	~CObstacleManager();
@@ -89,6 +101,8 @@ public:
 	void Release();
 	void PosYRandom(int obstacleType);
 	void Overlap(int obstacle,int arrayNum);
+    bool TextLoad();
+
 
 		bool ObstaclePercentage(int percent)
 	{

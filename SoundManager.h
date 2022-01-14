@@ -32,6 +32,8 @@ typedef enum tag_SOUNDTYPE {
 	SOUND_READY,
 	SOUND_GO,
 	SOUND_HUNGRY,
+	SOUND_OBESITY,
+	SOUND_CLOGGED,
 }SOUNDTYPE;
 
 enum tag_Sound_NO
@@ -76,7 +78,8 @@ private:
 	CSoundBuffer readySE;			//ÉåÉfÉBÅ`ÅH
 	CSoundBuffer goSE;				//GOÅ`!!
 	CSoundBuffer hungrySE;			//ãÛï†
-
+	CSoundBuffer obesitySE;			//îÏñû
+	CSoundBuffer cloggedSE;			//çAãlÇ‹ÇË
 
 	bool muteBGM;
 	bool muteSE;
