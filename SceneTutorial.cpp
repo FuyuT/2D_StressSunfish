@@ -58,10 +58,10 @@ void CSceneTutorial::MessageUpdate()
 		{
 			if (tutorialStep == TutorialStep::Task_Complete)
 			{
-				tutorialStep = TutorialStep::Task_End;
-
-				nextSceneTemp = SCENENO_GAME;
 				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAME;
+
+				tutorialStep = TutorialStep::Task_End;
 				//nextScene = SCENENO_GAME;
 				//endFlg = true;
 			}
@@ -156,7 +156,6 @@ bool CSceneTutorial::Load()
 	if (!TextLoad())return false;
 	//フォントの読込み
 	FontLoad();
-
 	bubbleFade.Load();
 	return true;
 }
@@ -171,6 +170,7 @@ void CSceneTutorial::Initialize()
 	mShowDelay = 0;
 	messageEndFlg = false;
 	tutorialStep = TutorialStep::Task_Movement;
+	pl.SetSoundManager(*cSound);
 	bubbleFade.Initialize();
 }
 
@@ -183,12 +183,12 @@ void CSceneTutorial::Update()
 		endFlg = true;
 	}
 
-	stg.Update(pl);
-	pl.Update(true, tutorialStep, Event_None);
-
 	//フェード処理
 	bubbleFade.Update();
 	bubbleFade.FadeIn();
+
+	stg.Update(pl);
+
 	if (bubbleFade.GetFade())
 	{
 		return;
@@ -207,6 +207,7 @@ void CSceneTutorial::Update()
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
+	pl.Update(true, tutorialStep,Event_None);
 	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep, Event_None);
 	MessageUpdate();
 
@@ -253,7 +254,7 @@ void CSceneTutorial::Render()
 			font.RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
-	if (tutorialStep != TutorialStep::Task_Complete)
+	if (tutorialStep < TutorialStep::Task_Complete)
 	{
 		font.RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
@@ -267,6 +268,7 @@ void CSceneTutorial::Render()
 	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
 
 	bubbleFade.Render();
+
 }
 
 void CSceneTutorial::RenderDebug()

@@ -61,6 +61,8 @@ void CSceneGame::Initialize()
 	ui.Initialize();
 	stg.Initialize();
 	cObstacle.Initialize();
+	cObstacle.SetSoundManager(*cSound);
+	cObstacle.TextLoad();
 	bubbleFade.Initialize();
 	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
@@ -91,7 +93,9 @@ void CSceneGame::Initialize()
 		numberOfTrophy[i] = TROPHY_NULL;
 	}
 	PlayBGM();
-
+	seFlg = false;
+	alertFlg = false;
+	goFlg = false;
 }
 
 void CSceneGame::EventUpdate()
@@ -109,6 +113,35 @@ void CSceneGame::EventUpdate()
 			eventNum = Event::Event_None;
 		}
 		eventTimer.Update();
+
+		if (seFlg)
+		{
+			if (eventNum == Event::Event_ShoalSardine)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Garbage)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Turtle)
+			{
+				cSound->Play(SOUND_EVENT_OTHERS);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Summer)
+			{
+				cSound->Play(SOUND_EVENT_SUMMER);
+				seFlg = false;
+			}
+			if (eventNum == Event::Event_Winter)
+			{
+				cSound->Play(SOUND_EVENT_WINTER);
+				seFlg = false;
+			}
+		}
 	}
 	else
 	{
@@ -130,7 +163,7 @@ void CSceneGame::Update()
 
 	//フェード処理
 	bubbleFade.Update();
-	bubbleFade.FadeIn();
+	//bubbleFade.FadeIn();
 
 
 	//設定表示
@@ -139,7 +172,11 @@ void CSceneGame::Update()
 	if (!sceneConfig.GetGamePlayFlg())
 	{
 		configFlg = false;
-
+		bubbleFade.FadeIn();
+	}
+	else
+	{
+		bubbleFade.Initialize();
 	}
 
 	if (configFlg)
@@ -147,46 +184,60 @@ void CSceneGame::Update()
 		sceneConfig.Update();
 	}
 
-
-
 	//スクロール
-	stg.Update(pl);
+	if (!poseFlg)
+	{
+		stg.Update(pl);
+	}
+
+	if (popUpFlg && !configFlg)
+	{
+		PopUpController();
+
+	}
 
 	//フェード
 	if (bubbleFade.GetFade())
 	{
 		return;
 	}
+
 	if (bubbleFade.GetFadeOutEnd())
 	{
-		if (nowPopUpGame != nullptr)
+		if (nextSceneTemp == SCENENO_CONFIG)
 		{
-			nowPopUpGame->Release();
+			configFlg = true;
+			sceneConfig.SetGamePlayFlg();
+			sceneConfig.Load();
+			sceneConfig.Initialize();
 		}
-
-		if (nextSceneTemp == SCENENO_GAME)
+		else
 		{
-			//リトライ、もしくはコンティニューボタンが押されたら初期化
-			Initialize();
-			return;
+			if (nowPopUpGame != nullptr)
+			{
+				nowPopUpGame->Release();
+			}
+
+			if (nextSceneTemp == SCENENO_GAME)
+			{
+				//リトライ、もしくはコンティニューボタンが押されたら初期化
+				Initialize();
+				return;
+			}
+			else
+			{
+				endFlg = true;
+			}
 		}
-
-		//if (nextSceneTemp == SCENENO_CONFIG)
-		//{
-
-		//}
-
+		
 		//シーンの遷移
-		endFlg = true;
 		nextScene = nextSceneTemp;
-
 		return;
 	}
 
 	//画面遷移 ポップアップ画面 
 	//死んだら、もしくはF1でゲームオーバー画面
 	CaseOfDethController();
-
 
 	//Rでポーズ画面
 	if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
@@ -197,7 +248,7 @@ void CSceneGame::Update()
 		popUpFlg = true;
 		poseFlg = true;
 	}
-	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg && !pl.GetDead())
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg && !pl.GetDead() && !configFlg)
 	{
 		nowPopUpGame->Release();
 		nowPopUpGame = NULL;
@@ -205,12 +256,9 @@ void CSceneGame::Update()
 		poseFlg = false;
 	}
 
-	if (popUpFlg && !configFlg)
-	{
-		PopUpController();
-	}
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
+
 
 	ui.Update(eventNum);
 
@@ -229,6 +277,9 @@ void CSceneGame::Update()
 
 	//障害物
 	cObstacle.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(), Task_End, eventNum);
+
+	//SE
+	SEUpdate();
 
 }
 
@@ -296,15 +347,40 @@ void CSceneGame::Release()
 	bubbleFade.Release();
 }
 
+void CSceneGame::SEUpdate()
+{
+	//体温アラート
+	if ((500 * (pl.GetTemperature() * 0.01f) <= 150 || 500 * (pl.GetTemperature() * 0.01f) >= 330) && !alertFlg)
+	{
+		cSound->Play(SOUND_ALERTTEMPERATURE);
+		alertFlg = true;
+	}
+	else if (!(500 * (pl.GetTemperature() * 0.01f) >= 330) && 500 * (pl.GetTemperature() * 0.01f) > 150 && alertFlg)
+	{
+		alertFlg = false;
+	}
+	else if (!(500 * (pl.GetTemperature() * 0.01f) <= 150) && 500 * (pl.GetTemperature() * 0.01f) < 330 && alertFlg)
+	{
+		alertFlg = false;
+	}
+
+	if (startFlg && !goFlg)
+	{
+		cSound->Play(SOUND_GO);
+		goFlg = true;
+	}
+}
+
 void CSceneGame::PopUpController()
 {
 	nowPopUpGame->Update();
 	if (nowPopUpGame->GetButtonResult() == 1)
 	{
+		//リトライ、もしくはコンティニューボタンが押されたら初期化
+		//Initialize();
 		popUpGuardFlg = true;
 		nextSceneTemp = SCENENO_GAME;
 		bubbleFade.FadeOut();
-
 	}
 	else if (nowPopUpGame->GetButtonResult() == 2)
 	{
@@ -314,7 +390,6 @@ void CSceneGame::PopUpController()
 		popUpGuardFlg = true;
 		nextSceneTemp = SCENENO_GAMEMENU;
 		bubbleFade.FadeOut();
-
 	}
 	else if (nowPopUpGame->GetButtonResult() == 3)
 	{
@@ -328,14 +403,10 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
-		nextScene = SCENENO_CONFIG;
-		//nextSceneTemp = SCENENO_CONFIG;
-		//bubbleFade.FadeOut();
+		//nextScene = SCENENO_CONFIG;
+		nextSceneTemp = SCENENO_CONFIG;
+		bubbleFade.FadeOut();
 
-		configFlg = true;
-		sceneConfig.SetGamePlayFlg();
-		sceneConfig.Load();
-		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
 

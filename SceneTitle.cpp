@@ -14,7 +14,7 @@ CSceneTitle::~CSceneTitle()
 
 void CSceneTitle::PlayBGM()
 {
-	cSound->AllStop();
+	cSound->BGMStop();
 	cSound->Play(SOUND_TITLE_BGM);
 }
 
@@ -25,6 +25,7 @@ bool CSceneTitle::Load()
 	if (!gamePrayButtonTexture.Load("ButtonStart.png"))return false;
 	if(!gameFinishButtonTexture.Load("ButtonFinish.png"))return false;
 	bubbleFade.Load();
+
 	return true;
 }
 
@@ -34,10 +35,9 @@ void CSceneTitle::Initialize()
 	buttonSelect = 1;
 	nowPopUpTitle = new CGameQuitWindow;
 	nowPopUpTitle->Initialize();
-	SEReset();
+	nowPopUpTitle->SetSoundManager(*cSound);
 	PlayBGM();
 	bubbleFade.Initialize();
-
 }
 
 void CSceneTitle::Update()
@@ -122,18 +122,13 @@ void CSceneTitle::Update()
 			}
 		}
 	}
-
 	SoundUpdate();
 }
 
 void CSceneTitle::SoundUpdate()
 {
-	if (seSelectFlg)
-	{
-		cSound->Play(SOUND_BUTTON_SELECT);
-		seSelectFlg = false;
-	}
 }
+
 
 void CSceneTitle::Render()
 {
