@@ -9,6 +9,7 @@ private:
 	CTexture	buttonBackTexture;
 	CTexture	causeOfDeathTexture;
 
+	//É{É^Éìç¿ïW
 	const int			buttonBackPosX = 150;
 	const int			buttonBackPosY = 100;
 	float				buttonBackScale = 1.0f;

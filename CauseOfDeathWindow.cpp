@@ -67,6 +67,7 @@ void CCauseOfDeathWindow::Initialize()
 		caseOfDethTexture.Load("マンボウ　魚群衝突死 .png");
 		break;
 	}
+
 	buttonSelect = 1;
 	endFlg = false;
 	buttonNextScaleFlg = false;
@@ -113,6 +114,8 @@ void CCauseOfDeathWindow::Render()
 {
 	//popUpTexture.Render(popUpPosX, popUpPosY);
 	scaleController.ScaleRender(&popUpTexture, popUpPosX, popUpPosY, popUpScale);
+
+	//死因テキスト
 	switch (deathResult)
 	{
 	case CAUSE_Hyperthermia:
