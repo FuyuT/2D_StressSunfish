@@ -16,8 +16,6 @@
 
 //移動速度	
 #define		PLAYER_SPEED			0.6f
-//最大速度
-#define		PLAYER_MAXSPEED			10.0f
 //重力
 #define		GRAVITY					1.0f
 
@@ -114,6 +112,9 @@ enum Temperature
 class CPlayer
 {
 private:
+	//最大速度
+	float		playerMaxSpeedX = 10.0f;
+	float		playerMaxSpeedY = 10.0f;
 
 	//テクスチャ
 	CTexture	standTexture;
