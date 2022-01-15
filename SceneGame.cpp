@@ -96,6 +96,7 @@ void CSceneGame::Initialize()
 	seFlg = false;
 	alertFlg = false;
 	goFlg = false;
+	hungryFlg = false;
 }
 
 void CSceneGame::EventUpdate()
@@ -164,7 +165,6 @@ void CSceneGame::Update()
 	//フェード処理
 	bubbleFade.Update();
 	bubbleFade.FadeIn();
-
 
 	//設定表示
 	//ゲームに戻るボタンを押した時
@@ -359,10 +359,21 @@ void CSceneGame::SEUpdate()
 		alertFlg = false;
 	}
 
+	//スタートSE
 	if (startFlg && !goFlg)
 	{
 		cSound->Play(SOUND_GO);
 		goFlg = true;
+	}
+	//空腹SE
+	if (pl.GetHungry() >= 62 && !hungryFlg)
+	{
+		cSound->Play(SOUND_HUNGRY);
+		hungryFlg = true;
+	}
+	else if (pl.GetHungry() < 62 && hungryFlg)
+	{
+		hungryFlg = false;
 	}
 }
 
