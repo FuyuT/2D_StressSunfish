@@ -60,13 +60,11 @@ private:
 	CShoalSardine cShoalSardine[2];
 	CSwordFish cSwordFish[2];
 	CSchoolTuna cSchoolTuna[2];
-	CFishShadow cFishShadow;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
 	CRandom posYRandom;
 	CRandom garbageNoRandom;
-	CRandom fishShadowNoRandom;
 	int random;
 	int obstacleNum;
 	int foodRandom;
@@ -104,7 +102,7 @@ public:
     bool TextLoad();
 
 
-		bool ObstaclePercentage(int percent)
+	bool ObstaclePercentage(int percent)
 	{
 		//Šm—¦‚É‚æ‚Á‚Ätrue‚ð•Ô‚·
 		if (createRandom.Random(1, 100 / percent + 1) == 1)

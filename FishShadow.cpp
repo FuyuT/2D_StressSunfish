@@ -22,25 +22,21 @@ void CFishShadow::Initialize()
 	moveSpeed.x = 3.0;
 	moveSpeed.y = MAX_MOVE_SPEED;
 	showFlg = false;
-	fishShadowNo = FISHSHADOW_NOT_SHOW;
+	fishShadowNo = SARDINESHADOW;
 }
 
 void CFishShadow::Update(float wx, float wy)
 {
 	if (!showFlg)return;
-	//移動調整
-	if (moveSpeed.y > MAX_MOVE_SPEED) {
-		moveSpeed.y = MAX_MOVE_SPEED;
-	}
-	else {
-		moveSpeed.y -= MAX_MOVE_SPEED;
-	}
 
 	//移動
-	pos.y -= moveSpeed.y;
+	pos.x += moveSpeed.x;
 
 	//スクリーンから出たらshowFlgをfalse
-	if (pos.x + SardineShadow.GetWidth() <= wx)showFlg = false;
+	if (pos.x + SardineShadow.GetWidth() < wx)
+	{
+		showFlg = false;
+	}
 }
 
 void CFishShadow::Render(float wx, float wy)
@@ -60,6 +56,7 @@ void CFishShadow::Render(float wx, float wy)
 	default:
 		break;
 	}
+
 }
 
 void CFishShadow::RenderDebug(float wx, float wy)

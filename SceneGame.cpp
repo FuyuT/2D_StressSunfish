@@ -166,6 +166,7 @@ void CSceneGame::Update()
 	bubbleFade.Update();
 	//bubbleFade.FadeIn();
 
+
 	//設定表示
 	//ゲームに戻るボタンを押した時
 	//ゲーム画面に戻ったらconfigFlgをfalse
@@ -178,7 +179,6 @@ void CSceneGame::Update()
 	{
 		bubbleFade.Initialize();
 	}
-
 	if (configFlg)
 	{
 		sceneConfig.Update();
@@ -190,18 +190,11 @@ void CSceneGame::Update()
 		stg.Update(pl);
 	}
 
-	if (popUpFlg && !configFlg)
-	{
-		PopUpController();
-
-	}
-
 	//フェード
 	if (bubbleFade.GetFade())
 	{
 		return;
 	}
-
 	if (bubbleFade.GetFadeOutEnd())
 	{
 		if (nextSceneTemp == SCENENO_CONFIG)
@@ -229,7 +222,7 @@ void CSceneGame::Update()
 				endFlg = true;
 			}
 		}
-		
+
 		//シーンの遷移
 		nextScene = nextSceneTemp;
 		return;
@@ -256,6 +249,19 @@ void CSceneGame::Update()
 		poseFlg = false;
 	}
 
+	//設定表示
+	//ゲーム画面に戻ったらconfigFlgをfalse
+	if (!sceneConfig.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
+		configFlg = false;
+		
+	if (configFlg)
+	{
+		sceneConfig.Update();
+	}
+	if (popUpFlg && !configFlg)
+	{
+		PopUpController();
+	}
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
@@ -280,7 +286,6 @@ void CSceneGame::Update()
 
 	//SE
 	SEUpdate();
-
 }
 
 void CSceneGame::Render()
@@ -289,16 +294,16 @@ void CSceneGame::Render()
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
-	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
+	CGraphicsUtilities::RenderString(10, 10, "%d m", distancePlayer);
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), false, eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	if (ui.StartSign(poseFlg))startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
-	
+
 	//最前面の岩背景
 	stg.ForeGroundRender();
 
@@ -313,17 +318,6 @@ void CSceneGame::Render()
 	}
 	bubbleFade.Render();
 }
-
-//デバッグ
-void CSceneGame::RenderDebug()
-{
-	//プレイヤー
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
-	//障害物
-	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
-
-
-} 
 
 void CSceneGame::Release()
 {
@@ -341,10 +335,18 @@ void CSceneGame::Release()
 			nowPopUpGame = NULL;
 		}
 	}
-	
+
 	//障害物
 	cObstacle.Release();
 	bubbleFade.Release();
+}
+
+//デバッグ
+void CSceneGame::RenderDebug()
+{
+	//プレイヤー
+	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+	//障害物
 }
 
 void CSceneGame::SEUpdate()
@@ -362,8 +364,6 @@ void CSceneGame::SEUpdate()
 	else if (!(500 * (pl.GetTemperature() * 0.01f) <= 150) && 500 * (pl.GetTemperature() * 0.01f) < 330 && alertFlg)
 	{
 		alertFlg = false;
-	}
-
 	//スタートSE
 	if (startFlg && !goFlg)
 	{
@@ -414,10 +414,14 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
-		//nextScene = SCENENO_CONFIG;
-		nextSceneTemp = SCENENO_CONFIG;
-		bubbleFade.FadeOut();
+		nextScene = SCENENO_CONFIG;
+		//nextSceneTemp = SCENENO_CONFIG;
+		//bubbleFade.FadeOut();
 
+		configFlg = true;
+		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Load();
+		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
 
