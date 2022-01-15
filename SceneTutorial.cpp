@@ -58,9 +58,12 @@ void CSceneTutorial::MessageUpdate()
 		{
 			if (tutorialStep == TutorialStep::Task_Complete)
 			{
+				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAME;
+
 				tutorialStep = TutorialStep::Task_End;
-				nextScene = SCENENO_GAME;
-				endFlg = true;
+				//nextScene = SCENENO_GAME;
+				//endFlg = true;
 			}
 			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
@@ -153,6 +156,7 @@ bool CSceneTutorial::Load()
 	if (!TextLoad())return false;
 	//フォントの読込み
 	FontLoad();
+	bubbleFade.Load();
 	return true;
 }
 
@@ -166,6 +170,8 @@ void CSceneTutorial::Initialize()
 	mShowDelay = 0;
 	messageEndFlg = false;
 	tutorialStep = TutorialStep::Task_Movement;
+	pl.SetSoundManager(*cSound);
+	bubbleFade.Initialize();
 }
 
 void CSceneTutorial::Update()
@@ -177,7 +183,25 @@ void CSceneTutorial::Update()
 		endFlg = true;
 	}
 
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+
 	stg.Update(pl);
+
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		//Release();
+		return;
+	}
+
 	ui.Update(Event_None);
 	for (int i = 0; i < 5; i++)
 	{
@@ -230,7 +254,7 @@ void CSceneTutorial::Render()
 			font.RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
-	if (tutorialStep != TutorialStep::Task_Complete)
+	if (tutorialStep < TutorialStep::Task_Complete)
 	{
 		font.RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
@@ -242,6 +266,8 @@ void CSceneTutorial::Render()
 	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
 	font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
 	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
+
+	bubbleFade.Render();
 
 }
 

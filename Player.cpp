@@ -341,6 +341,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 	//エサを食べる
 	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
 	{
+		cSound->Play(SOUND_EAT);
 		//チュートリアルタスク
 		eatTaskFlg = true;
 

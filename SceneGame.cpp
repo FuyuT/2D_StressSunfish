@@ -164,7 +164,7 @@ void CSceneGame::Update()
 
 	//フェード処理
 	bubbleFade.Update();
-	bubbleFade.FadeIn();
+	//bubbleFade.FadeIn();
 
 	//設定表示
 	//ゲームに戻るボタンを押した時
@@ -172,7 +172,11 @@ void CSceneGame::Update()
 	if (!sceneConfig.GetGamePlayFlg())
 	{
 		configFlg = false;
-
+		bubbleFade.FadeIn();
+	}
+	else
+	{
+		bubbleFade.Initialize();
 	}
 
 	if (configFlg)
@@ -186,34 +190,48 @@ void CSceneGame::Update()
 		stg.Update(pl);
 	}
 
+	if (popUpFlg && !configFlg)
+	{
+		PopUpController();
+
+	}
+
 	//フェード
 	if (bubbleFade.GetFade())
 	{
 		return;
 	}
+
 	if (bubbleFade.GetFadeOutEnd())
 	{
-		if (nowPopUpGame != nullptr)
+		if (nextSceneTemp == SCENENO_CONFIG)
 		{
-			nowPopUpGame->Release();
+			configFlg = true;
+			sceneConfig.SetGamePlayFlg();
+			sceneConfig.Load();
+			sceneConfig.Initialize();
 		}
-
-		if (nextSceneTemp == SCENENO_GAME)
+		else
 		{
-			//リトライ、もしくはコンティニューボタンが押されたら初期化
-			Initialize();
-			return;
+			if (nowPopUpGame != nullptr)
+			{
+				nowPopUpGame->Release();
+			}
+
+			if (nextSceneTemp == SCENENO_GAME)
+			{
+				//リトライ、もしくはコンティニューボタンが押されたら初期化
+				Initialize();
+				return;
+			}
+			else
+			{
+				endFlg = true;
+			}
 		}
-
-		//if (nextSceneTemp == SCENENO_CONFIG)
-		//{
-
-		//}
-
+		
 		//シーンの遷移
-		endFlg = true;
 		nextScene = nextSceneTemp;
-
 		return;
 	}
 
@@ -238,19 +256,6 @@ void CSceneGame::Update()
 		poseFlg = false;
 	}
 
-	//設定表示
-	//ゲーム画面に戻ったらconfigFlgをfalse
-	if (!sceneConfig.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
-		configFlg = false;
-		
-	if (configFlg)
-	{
-		sceneConfig.Update();
-	}
-	if (popUpFlg && !configFlg)
-	{
-		PopUpController();
-	}
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
@@ -409,14 +414,10 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
-		nextScene = SCENENO_CONFIG;
-		//nextSceneTemp = SCENENO_CONFIG;
-		//bubbleFade.FadeOut();
+		//nextScene = SCENENO_CONFIG;
+		nextSceneTemp = SCENENO_CONFIG;
+		bubbleFade.FadeOut();
 
-		configFlg = true;
-		sceneConfig.SetGamePlayFlg();
-		sceneConfig.Load();
-		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
 
