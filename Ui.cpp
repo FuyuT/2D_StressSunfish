@@ -69,6 +69,18 @@ bool CUi::Load()
 		return false;
 	}
 
+	//行動可能UI
+	//ジャンプ
+	if (!jumpPoss.Load("UI\\ジャンプUI.png"))
+	{
+		return false;
+	}
+	//食事
+	if (!eatPoss.Load("UI\\食べるUI.png"))
+	{
+		return false;
+	}
+
 	//注意UI
 	if (!cautionUi.Load("UI_Caution.png"))
 	{
@@ -314,7 +326,7 @@ void CUi::Update(int eventNum)
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum,int posy,float wy)
 {
 	//間隔、幅
 	constexpr int FrameSpace = 10;
@@ -575,11 +587,20 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//空腹値の調整（表示する割合がバグる）
 	if (hungry >= 100)
 	{
+<<<<<<< HEAD
 		hungry = 100;
 	}
 	else if (hungry <= 0)
 	{
 		hungry = 0;
+=======
+		jumpPoss.RenderScale(550, posy - wy,0.45f);
+	}
+	//食事
+	if (eatFlg)
+	{
+		eatPoss.RenderScale(550, posy - wy,0.45f);
+>>>>>>> origin/mori
 	}
 
 	CRectangle rec3(0, hungerGaugeFrame.GetHeight()* (hungry * 0.01f),

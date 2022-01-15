@@ -164,7 +164,7 @@ void CSceneGame::Update()
 
 	//フェード処理
 	bubbleFade.Update();
-	//bubbleFade.FadeIn();
+	bubbleFade.FadeIn();
 
 
 	//設定表示
@@ -296,6 +296,8 @@ void CSceneGame::Render()
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
 	CGraphicsUtilities::RenderString(10, 10, "%d m", distancePlayer);
 
+	//UIの描画
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum, pl.GetPosY(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	if (ui.StartSign(poseFlg))startFlg = true;
 
