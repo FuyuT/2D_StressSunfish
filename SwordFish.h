@@ -1,9 +1,9 @@
 #pragma once
 #include "ObstacleBase.h"
-#define  SWORDFISH_RECT_TOP_ADJ 190
+#define  SWORDFISH_RECT_TOP_ADJ 100
 #define  SWORDFISH_RECT_LEFT_ADJ 0
 #define  SWORDFISH_RECT_RIGHT_ADJ 446
-#define  SWORDFISH_RECT_BUTTOM_ADJ 350
+#define  SWORDFISH_RECT_BUTTOM_ADJ 200
 
 class CSwordFish :
     public CObstacleBase

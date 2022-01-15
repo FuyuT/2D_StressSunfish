@@ -2,6 +2,11 @@
 
 bool CUi::Load()
 {
+	if (!nowPosFrameTex.Load("UI\\現在UI.png"))return false;
+	if (!nextTrophyDistanceFrameTex.Load("UI\\目標UI.png"))return false;
+	if (!nextTrophyFrameTex.Load("UI\\トロフィーの枠.png"))return false;
+	if (!eventFrameTex.Load("UI\\イベントUI.png"))return false;
+
 	//体温アイコンの背景
 	if (!stressMeter.Load("sutoresume--ta-.png"))
 	{
@@ -60,18 +65,6 @@ bool CUi::Load()
 		return false;
 	}
 	if (!parasite5.Load("kiseitilyuu5.png"))
-	{
-		return false;
-	}
-
-	//行動可能UI
-	//ジャンプ
-	if (!jumpPoss.Load("UI_Jump.png"))
-	{
-		return false;
-	}
-	//食事
-	if (!eatPoss.Load("UI_Eat.png"))
 	{
 		return false;
 	}
@@ -177,7 +170,7 @@ void CUi::Initialize()
 	font.Create(48, fontName);
 
 	trophyFont.Load(fileAdd, fontName);
-	trophyFont.Create(32, fontName);
+	trophyFont.Create(48, fontName);
 	//点滅設定
 	//亀注意
 	cautionB.SetBlinkingCount(5);
@@ -301,9 +294,39 @@ void CUi::Update(int eventNum)
 
 void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
 {
-	//m数表示 枠組み
-	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
-	CGraphicsUtilities::RenderRect(2, 2, 220, 60, MOF_COLOR_BLACK);
+	//間隔、幅
+	constexpr int FrameSpace = 10;
+	constexpr int FrameWidth = 20;
+	constexpr int FrameHeight = 30;
+	constexpr float ShortSpace = 4.5f;
+
+	//フレームとトロフィーの位置
+	const Vector2 torophyFrame(g_pGraphics->GetTargetWidth() - FrameSpace - nextTrophyFrameTex.GetWidth(), FrameSpace);
+	const Vector2 torophyPos(torophyFrame.x + FrameWidth, torophyFrame.y + FrameHeight);
+
+	const Vector2 torophyNowPosFrame(torophyFrame.x - FrameSpace - nowPosFrameTex.GetWidth(), FrameSpace);
+	const Vector2 torophyDistanceFrame(torophyFrame.x - FrameSpace - nextTrophyDistanceFrameTex.GetWidth(), torophyNowPosFrame.y + nowPosFrameTex.GetHeight() + ShortSpace);
+	const Vector2 eventFrame(torophyFrame.x - FrameSpace - eventFrameTex.GetWidth(), torophyDistanceFrame.y + nextTrophyDistanceFrameTex.GetHeight() + ShortSpace);
+
+	//テキスト
+	constexpr int torophyDistanceTextPosX = 1200;
+	constexpr int torophyDistanceTextPosY = 50;
+	constexpr int adjustmentTextPosX = 100;
+	constexpr int adjustmentTextPosY = 50;
+
+	const Vector2 nowPosTextPos(torophyNowPosFrame.x + adjustmentTextPosX, torophyNowPosFrame.y + adjustmentTextPosY);
+	const Vector2 NextTrophyTextPos(torophyNowPosFrame.x + adjustmentTextPosX, torophyDistanceFrame.y + adjustmentTextPosY);
+	//フレームを描画
+	nowPosFrameTex.Render(torophyNowPosFrame.x, torophyNowPosFrame.y);
+	nextTrophyDistanceFrameTex.Render(torophyDistanceFrame.x, torophyDistanceFrame.y);
+	nextTrophyFrameTex.Render(torophyFrame.x, torophyFrame.y);
+	eventFrameTex.Render(eventFrame.x, eventFrame.y);
+	//位置はかる用
+	Vector2 mousePos;
+	g_pInput->GetMousePos(mousePos);
+	CGraphicsUtilities::RenderString(500, 50, MOF_COLOR_RED, "%1.0f:%1.0f", mousePos.x,mousePos.y);
+
+	////m数表示
 	if (tutorialFlg)
 	{
 		font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "━━ m");
@@ -312,7 +335,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	{
 		if (distanceNum < 1000)
 		{
-			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
+			font.RenderFormatString(nowPosTextPos.x, nowPosTextPos.y, MOF_COLOR_BLACK, "%6.0f m", distanceNum);
 		}
 		else if (distanceNum >= 1000)
 		{
@@ -325,7 +348,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			distance = distanceNum / 1000;
 			int dis = distance;
 			double trueDis = (double)dis;
-			font.RenderFormatString(10, 10, MOF_COLOR_BLACK, "%6.0f km", trueDis);
+			font.RenderFormatString(nowPosTextPos.x, nowPosTextPos.y, MOF_COLOR_BLACK, "%6.0f km", trueDis);
 		}
 	}
 
@@ -411,187 +434,186 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			break;
 	}
 
-
 	//現在獲得中のトロフィーと次にトロフィーを獲得できるまでの距離
 	if (tutorialFlg)
 	{
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと━━ m");
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "━ m");
 	}
 	else if (distanceNum < RIVER)										//川級
 	{
-		riverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", RIVER - distanceNum);
+		riverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", RIVER - distanceNum);
 	}
 	else if (distanceNum >= RIVER && distanceNum < WATERFALL)			//滝級
 	{
-		waterFallIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", WATERFALL - distanceNum);
+		waterFallIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", WATERFALL - distanceNum);
 	}
 	else if (distanceNum >= WATERFALL && distanceNum < LAKE)			//湖級
 	{
-		lakeIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", LAKE - distanceNum);
+		lakeIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", LAKE - distanceNum);
 	}
 	else if (distanceNum >= LAKE && distanceNum < DAM)		//ダム級
 	{
-		damIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", DAM - distanceNum);
+		damIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", DAM - distanceNum);
 	}
 	else if (distanceNum >= DAM && distanceNum < SEWER)		//下水道級
 	{
-		sewerIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", SEWER - distanceNum);
+		sewerIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEWER - distanceNum);
 	}
 	else if (distanceNum >= SEWER && distanceNum < INDIANOCEAN)		//インド洋級
 	{
-		indianOceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", INDIANOCEAN - distanceNum);
+		indianOceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", INDIANOCEAN - distanceNum);
 	}
 	else if (distanceNum >= INDIANOCEAN && distanceNum < AMAZONRIVER)		//アマゾン川級
 	{
-		amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", AMAZONRIVER - distanceNum);
+		amazonRiverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", AMAZONRIVER - distanceNum);
 	}
 	else if (distanceNum >= AMAZONRIVER && distanceNum < OCEAN)		//海級
 	{
-		oceanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", OCEAN - distanceNum);
+		oceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", OCEAN - distanceNum);
 	}
 	else if (distanceNum >= OCEAN && distanceNum < SEAOFJAPAN)		//日本海級
 	{
-		seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
-		trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", SEAOFJAPAN - distanceNum);
+		seaOf​​JapanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEAOFJAPAN - distanceNum);
 	}
 	else if (distanceNum >= SEAOFJAPAN)								//地球一周級
 	{
 		if (distanceNum < 1000)										//川級
 		{
-			riverIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 1000 - distanceNum);
+			riverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 1000 - distanceNum);
 		}
 		else if (distanceNum >= 1000 && distanceNum < 2500)			//滝級
 		{
-			waterFallIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 2500 - distanceNum);
+			waterFallIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 2500 - distanceNum);
 		}
 		else if (distanceNum >= 2500 && distanceNum < 5000)			//湖級
 		{
-			lakeIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 5000 - distanceNum);
+			lakeIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 5000 - distanceNum);
 		}
 		else if (distanceNum >= 5000 && distanceNum < 10000)		//ダム級
 		{
-			damIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 10000 - distanceNum);
+			damIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 10000 - distanceNum);
 		}
 		else if (distanceNum >= 10000 && distanceNum < 25000)		//下水道級
 		{
-			sewerIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 25000 - distanceNum);
+			sewerIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 25000 - distanceNum);
 		}
 		else if (distanceNum >= 25000 && distanceNum < 50000)		//インド洋級
 		{
-			indianOceanIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 50000 - distanceNum);
+			indianOceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 50000 - distanceNum);
 		}
 		else if (distanceNum >= 50000 && distanceNum < 100000)		//アマゾン川級
 		{
-			amazonRiverIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 100000 - distanceNum);
+			amazonRiverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 100000 - distanceNum);
 		}
 		else if (distanceNum >= 100000 && distanceNum < 200000)		//海級
 		{
-			oceanIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 200000 - distanceNum);
+			oceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 200000 - distanceNum);
 		}
 		else if (distanceNum >= 200000 && distanceNum < 300000)		//日本海級
 		{
-			seaOf​​JapanIconTexture.RenderScale(220, 0, 0.75f);
-			trophyFont.RenderFormatString(380, 0, MOF_COLOR_BLACK, "次のトロフィー\n獲得まであと%6.0f m", 300000 - distanceNum);
+			seaOf​​JapanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", 300000 - distanceNum);
 		}
 		else if (distanceNum >= 300000)								//地球一周級
 		{
-			aroundTheGlobeIconTexture.RenderScale(220, 0, 0.75f);
+			aroundTheGlobeIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
 		}
 	}
 
-	//マンボウの顔の枠
-	stressMeter.Render(1600, 0);
+	////マンボウの顔の枠
+	//stressMeter.Render(1600, 0);
 
-	//体温UI描画
-	if (500 * (tempRegionNum * 0.01f) <= 150)
-	{
-		tempHot.Render(1600, 0);
-		//高温注意UIのフェードインスタート
-		cautionHotB.SetInStart(true);
-	}
-	else if (500 * (tempRegionNum * 0.01f) >= 330)
-	{
-		tempCold.Render(1600, 0);
-		//低温注意UIのフェードインスタート
-		cautionColdB.SetInStart(true);
-	}
-	else
-	{
-		tempNormal.Render(1600, 0);
-		cautionHotB.SetInStart(false);
-		cautionColdB.SetInStart(false);
-	}
+	////体温UI描画
+	//if (500 * (tempRegionNum * 0.01f) <= 150)
+	//{
+	//	tempHot.Render(1600, 0);
+	//	//高温注意UIのフェードインスタート
+	//	cautionHotB.SetInStart(true);
+	//}
+	//else if (500 * (tempRegionNum * 0.01f) >= 330)
+	//{
+	//	tempCold.Render(1600, 0);
+	//	//低温注意UIのフェードインスタート
+	//	cautionColdB.SetInStart(true);
+	//}
+	//else
+	//{
+	//	tempNormal.Render(1600, 0);
+	//	cautionHotB.SetInStart(false);
+	//	cautionColdB.SetInStart(false);
+	//}
 
 
 	//温度計UI描画
-	tempMeterFrame.Render(1550, 200);
+	tempMeterFrame.Render(-150, 200);
 	CRectangle rec1(0,500 * (tempRegionNum * 0.01f), 500, 500);
-	tempMeter.Render(1550, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
+	tempMeter.Render(-150, 200 + (500 * (tempRegionNum * 0.01f)), rec1);
 
 
-	//寄生虫UIの描画
-	switch (parasiteNum)
-	{
-	case 1:
-		parasite1.Render(1600, 0);
-		break;
-	case 2:
-		parasite2.Render(1600, 0);
-		break;
-	case 3:
-		parasite3.Render(1600, 0);
-		break;
-	case 4:
-		parasite4.Render(1600, 0);
-		break;
-	case 5:
-		parasite5.Render(1600, 0);
-		break;
-	}
+	////寄生虫UIの描画
+	//switch (parasiteNum)
+	//{
+	//case 1:
+	//	parasite1.Render(1600, 0);
+	//	break;
+	//case 2:
+	//	parasite2.Render(1600, 0);
+	//	break;
+	//case 3:
+	//	parasite3.Render(1600, 0);
+	//	break;
+	//case 4:
+	//	parasite4.Render(1600, 0);
+	//	break;
+	//case 5:
+	//	parasite5.Render(1600, 0);
+	//	break;
+	//}
 
-	//空腹ゲージUI描画
-	CRectangle rec2(0, 0, 330, 200);
-	hungerGaugeFrame.Render(1400, 0, rec2);
-	CRectangle rec3(0, 200 * (hungry * 0.01f), 330, 200);
-	hungerGauge.Render(1400, 200 * (hungry * 0.01f), rec3);
-	
-	//行動可能UIの描画
-	//ジャンプ
-	if (jumpFlg)
-	{
-		jumpAlpha = MAX_ALPHA;
-	}
-	else
-	{
-		jumpAlpha = TIN_ALPHA;
-	}
-	jumpPoss.Render(1400, 0, MOF_ARGB(jumpAlpha, 255, 255, 255));
-	//食事
-	if (eatFlg)
-	{
-		eatAlpha = MAX_ALPHA;
-	}
-	else
-	{
-		eatAlpha = TIN_ALPHA;
-	}
-	eatPoss.Render(1400, 100, MOF_ARGB(eatAlpha, 255, 255, 255));
+	////空腹ゲージUI描画
+	//CRectangle rec2(0, 0, 330, 200);
+	//hungerGaugeFrame.Render(1400, 0, rec2);
+	//CRectangle rec3(0, 200 * (hungry * 0.01f), 330, 200);
+	//hungerGauge.Render(1400, 200 * (hungry * 0.01f), rec3);
+	//
+	////行動可能UIの描画
+	////ジャンプ
+	//if (jumpFlg)
+	//{
+	//	jumpAlpha = MAX_ALPHA;
+	//}
+	//else
+	//{
+	//	jumpAlpha = TIN_ALPHA;
+	//}
+	//jumpPoss.Render(1400, 0, MOF_ARGB(jumpAlpha, 255, 255, 255));
+	////食事
+	//if (eatFlg)
+	//{
+	//	eatAlpha = MAX_ALPHA;
+	//}
+	//else
+	//{
+	//	eatAlpha = TIN_ALPHA;
+	//}
+	//eatPoss.Render(1400, 100, MOF_ARGB(eatAlpha, 255, 255, 255));
 
 	//亀注意UIの描画
 	int w = g_pGraphics->GetTargetWidth();
@@ -611,11 +633,15 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	cautionHot.Render(1000, 125, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
 	//低温注意UI
 	cautionCold.Render(1000, 125, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
-
 }
 
 void CUi::Release()
 {
+	nowPosFrameTex.Release();
+	nextTrophyDistanceFrameTex.Release();
+	nextTrophyFrameTex.Release();
+	eventFrameTex.Release();
+
 	stressMeter.Release();
 
 	tempNormal.Release();

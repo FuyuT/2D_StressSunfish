@@ -13,6 +13,7 @@ class Stage
 {
 private:
 	CTexture	skyTex;
+	CTexture	cloudTex;
 	CTexture	backWaveTex;
 	Vector2		backWavePos;
 	Vector2		backWaveSpeed;
@@ -67,11 +68,11 @@ public:
 
 	float GetBackTextureWidth()
 	{
-		return skyTex.GetWidth();
+		return cloudTex.GetWidth();
 	}
 	float GetBackTextureHeight()
 	{
-		return skyTex.GetHeight();
+		return cloudTex.GetHeight();
 	}
 };
 

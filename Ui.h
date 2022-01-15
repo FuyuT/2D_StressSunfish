@@ -64,6 +64,15 @@ private:
 
 	int eventPosX = 1920;
 
+	//現在位置のフレーム
+	CTexture nowPosFrameTex;
+	//次のトロフィーまでの距離のフレーム
+	CTexture nextTrophyDistanceFrameTex;
+	//次のトロフィーのフレーム
+	CTexture nextTrophyFrameTex;
+	//イベントのフレーム
+	CTexture eventFrameTex;
+
 	//マンボウの顔の枠
 	CTexture stressMeter;
 

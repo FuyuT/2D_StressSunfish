@@ -1,7 +1,7 @@
 #include "Stage.h"
 #include "Utility.h"
 Stage::Stage() :
-	skyTex(),
+	cloudTex(),
 	scrollValueX(0.0f),
 	scrollValueY(0.0f),
 	enemyCount(0),
@@ -14,7 +14,8 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//”wŒi‰æ‘œ
-	if (!skyTex.Load("BackGround\\BackGround_1.png")) return false;
+	if (!skyTex.Load("BackGround\\BackGround_0.png")) return false;
+	if (!cloudTex.Load("BackGround\\BackGround_1.png")) return false;
 	if (!backWaveTex.Load("BackGround\\BackGround_2.png")) return false;
 	if (!frontWaveTex.Load("BackGround\\BackGround_3.png")) return false;
 	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))	return false;
@@ -89,7 +90,7 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	float hsw = sw * 0.3f;
 	float hsh = sh * 0.4f;
 	//ƒXƒe[ƒW‘S‘Ì‚Ì• ‚Æ‚è‚ ‚¦‚¸‰æ‘œ‚Ì•‚Å
-	float stgh = skyTex.GetHeight();
+	float stgh = cloudTex.GetHeight();
 	
 	WaveUpdate(prec,hsw);
 
@@ -163,9 +164,10 @@ void Stage::BackGroundRender() {
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 
-	int w = skyTex.GetWidth();
-	int h = skyTex.GetHeight();
-	Scroll(skyTex, 1, 1);
+	skyTex.Render(0,0);
+	int w = cloudTex.GetWidth();
+	int h = cloudTex.GetHeight();
+	Scroll(cloudTex, 1, 1);
 	WaveRender(); //“®‚­”g
 	Scroll(distantBackGroundTex, 0.25, 1);
 	Scroll(insideBackGroundTex, 0.5, 1);
@@ -185,6 +187,7 @@ void Stage::Render() {
 
 void Stage::Release() {
 	skyTex.Release();
+	cloudTex.Release();
 	backWaveTex.Release();
 	frontWaveTex.Release();
 	distantBackGroundTex.Release();
