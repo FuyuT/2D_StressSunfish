@@ -66,12 +66,12 @@ bool CUi::Load()
 
 	//行動可能UI
 	//ジャンプ
-	if (!jumpPoss.Load("UI_Jump.png"))
+	if (!jumpPoss.Load("UI\\ジャンプUI.png"))
 	{
 		return false;
 	}
 	//食事
-	if (!eatPoss.Load("UI_Eat.png"))
+	if (!eatPoss.Load("UI\\食べるUI.png"))
 	{
 		return false;
 	}
@@ -299,7 +299,7 @@ void CUi::Update(int eventNum)
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum,int posy,float wy)
 {
 	//m数表示 枠組み
 	CGraphicsUtilities::RenderFillRect(2, 2, 220, 60, MOF_COLOR_WHITE);
@@ -575,23 +575,13 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	//ジャンプ
 	if (jumpFlg)
 	{
-		jumpAlpha = MAX_ALPHA;
+		jumpPoss.RenderScale(550, posy - wy,0.45f);
 	}
-	else
-	{
-		jumpAlpha = TIN_ALPHA;
-	}
-	jumpPoss.Render(1400, 0, MOF_ARGB(jumpAlpha, 255, 255, 255));
 	//食事
 	if (eatFlg)
 	{
-		eatAlpha = MAX_ALPHA;
+		eatPoss.RenderScale(550, posy - wy,0.45f);
 	}
-	else
-	{
-		eatAlpha = TIN_ALPHA;
-	}
-	eatPoss.Render(1400, 100, MOF_ARGB(eatAlpha, 255, 255, 255));
 
 	//亀注意UIの描画
 	int w = g_pGraphics->GetTargetWidth();

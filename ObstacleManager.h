@@ -12,7 +12,9 @@
 #include "ShoalSardine.h"
 #include "SwordFish.h"
 #include "SchoolTuna.h"
+#include "FishShadow.h"
 #include "HeaderDefine.h"
+#include "SoundManager.h"
 
 #define		SHOW_LIMIT	13
 
@@ -58,11 +60,13 @@ private:
 	CShoalSardine cShoalSardine[2];
 	CSwordFish cSwordFish[2];
 	CSchoolTuna cSchoolTuna[2];
+	CFishShadow cFishShadow;
 
 	CRandom obstacleRandom;
 	CRandom createRandom;
 	CRandom posYRandom;
 	CRandom garbageNoRandom;
+	CRandom fishShadowNoRandom;
 	int random;
 	int obstacleNum;
 	int foodRandom;
@@ -78,11 +82,20 @@ private:
 	bool foodFlg;
 	bool rottenFlg;
 
-	char* gFileBuffer = NULL;
+	//ランダムデータ
+	int obstacleDistance;
+	int turtleRate;
+	int garbageRate;
+	int waterFlowRate;
+	int bubbleRate;
+	int shoalSardineRate;
+	int tunaRate;
+	int swordFishRate;
+	int safeFoodDistance;
+	int dangerFoodDistance;
 
-	int gBufferOffset = 0;
-
-	char gLineBuffer[256];
+	//サウンド
+	CSoundManager* cSound;
 
 public:
 	CObstacleManager();
@@ -95,8 +108,10 @@ public:
 	void Release();
 	void PosYRandom(int obstacleType);
 	void Overlap(int obstacle,int arrayNum);
-    bool TextLoad();
-
+    bool TextLoad(int& obstacleDistance, int& turtleRate, int& garbageRate, int& waterFlowRate, int& bubbleRate, int& shoalSardineRate, int& tunaRate, int& swordFishRate, int& safeFoodDistance, int& dangerFoodDistance);
+	void ObstacleGenerate(int distance, bool obstacleFlg, int eventNum,int posx);
+	void SafeFoodGenerate(int distance, bool foodFlg, int eventNum, int posx);
+	void DangerFoodGenerate(int distance, bool rottenFlg, int eventNum, int posx);
 
 		bool ObstaclePercentage(int percent)
 	{
@@ -227,5 +242,7 @@ public:
 			break;
 		}
 	}
+
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

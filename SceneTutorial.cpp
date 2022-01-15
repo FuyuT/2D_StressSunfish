@@ -197,7 +197,7 @@ void CSceneTutorial::Render()
 	
 	//最前面の岩背景
 	stg.ForeGroundRender();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None,pl.GetPosY(), stg.GetScrollY());
 	MessageRender();
 
 	//現在のタスク一覧表示
