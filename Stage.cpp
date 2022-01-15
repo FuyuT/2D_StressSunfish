@@ -140,7 +140,7 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	float hsw = sw * 0.3f;
 	float hsh = sh * 0.4f;
 	//ステージ全体の幅 とりあえず画像の幅で
-	float stgh = skyTex.GetHeight();
+	float stgh = cloudTex.GetHeight();
 	
 	WaveUpdate(prec,hsw);
 
@@ -216,9 +216,9 @@ void Stage::BackGroundRender() {
 	int sch = g_pGraphics->GetTargetHeight();
 	skyTex.Render(0, 0);
 
-	int w = skyTex.GetWidth();
-	int h = skyTex.GetHeight();
-	Scroll(skyTex, 1, 1);
+	int w = cloudTex.GetWidth();
+	int h = cloudTex.GetHeight();
+	Scroll(cloudTex, 1, 1);
 	WaveRender(); //動く波
 	Scroll(distantBackGroundTex, 0.25, 1);
 	FishShadowRender();

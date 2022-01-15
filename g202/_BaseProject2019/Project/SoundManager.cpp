@@ -41,6 +41,8 @@ bool CSoundManager::Load()
 	if (!readySE.Load("Sound\\SE_Ready.mp3"))return false;
 	if (!goSE.Load("Sound\\SE_GO.mp3"))return false;
 	if (!hungrySE.Load("Sound\\SE_Hunger.mp3"))return false;
+	if (!obesitySE.Load("Sound\\SE_Obesity.mp3"))return false;
+	if (!cloggedSE.Load("Sound\\SE_Clogged.mp3"))return false;
 	SetLoop();
 	LoadSoundData();
 
@@ -145,6 +147,12 @@ void CSoundManager::Play(SOUNDTYPE sound)
 	case SOUND_HUNGRY:
 		hungrySE.Play();
 		break;
+	case SOUND_OBESITY:
+		obesitySE.Play();
+		break;
+	case SOUND_CLOGGED:
+		cloggedSE.Play();
+		break;
 	default:
 		break;
 	}
@@ -237,6 +245,12 @@ void CSoundManager::Stop(SOUNDTYPE sound)
 	case SOUND_HUNGRY:
 		hungrySE.Stop();
 		break;
+	case SOUND_OBESITY:
+		obesitySE.Stop();
+		break;
+	case SOUND_CLOGGED:
+		cloggedSE.Stop();
+		break;
 	default:
 		break;
 	}
@@ -307,6 +321,8 @@ void CSoundManager::ChangeVolume(int soundNo)
 		readySE.SetVolume(volumeSE);
 		goSE.SetVolume(volumeSE);
 		hungrySE.SetVolume(volumeSE);
+		obesitySE.SetVolume(volumeSE);
+		cloggedSE.SetVolume(volumeSE);
 		break;
 	default:
 		break;
@@ -350,6 +366,8 @@ void CSoundManager::SetMute(int soundNo)
 		readySE.SetVolume(0);
 		goSE.SetVolume(0);
 		hungrySE.SetVolume(0);
+		obesitySE.SetVolume(0);
+		cloggedSE.SetVolume(0);
 		break;	
 	default:
 		break;
@@ -427,4 +445,6 @@ void CSoundManager::Release()
 	readySE.Release();
 	goSE.Release();
 	hungrySE.Release(); 
+	obesitySE.Release();
+	cloggedSE.Release();
 }

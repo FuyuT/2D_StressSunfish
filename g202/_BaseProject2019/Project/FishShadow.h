@@ -41,7 +41,11 @@ public:
 	{
 		pos.y = posy;
 	}
-	void SetFishShadpwNo(int no)
+	void SetSpeed(float speed)
+	{
+		moveSpeed.x = speed;
+	}
+	void SetFishShadowNo(int no)
 	{
 		fishShadowNo = no;
 	}

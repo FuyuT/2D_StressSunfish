@@ -47,10 +47,12 @@
 #define		HUNGRYLEVEL				0.05f
 //エサを食べたときに得られる満腹度
 #define		FEED_SATIETYLEVEL		36.0f
+//空腹地
+#define		INIT_STOMACH			40;
 //満腹
-#define		FULL_STOMACH			20
+#define		FULL_STOMACH			0
 //餓死
-#define		STARVATION				85
+#define		STARVATION				100
 //同じエサが一度に画面に出てくる最大数
 #define FEED_MAXCOUNT 3
 
@@ -289,7 +291,7 @@ public:
 	{
 		return parasite;
 	}
-	//空腹度を返す 10～0
+	//空腹度を返す 100～0
 	float GetHungry()
 	{
 		return hungerRegion;

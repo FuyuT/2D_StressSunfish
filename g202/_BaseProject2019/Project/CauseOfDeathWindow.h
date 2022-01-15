@@ -13,7 +13,7 @@ private:
 	CTexture	newGetTexture;
 
 	float				causeOfDeathScaleSpeed = 0.1f;
-	float				popUpScale = 2.0f;;
+	float				popUpScale = 2.0f;
 
 	const int			buttonNextPosX = 1400;
 	const int			buttonNextPosY = 850;

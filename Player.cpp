@@ -107,7 +107,7 @@ void CPlayer::Initialize()
 	tempRegion = 50;
 	temperature = Temperature::Temp_Normal;
 	//空腹度
-	hungerRegion = FULL_STOMACH;
+	hungerRegion = INIT_STOMACH;
 	//寄生虫
 	parasite = 0;
 	//速度
@@ -790,7 +790,6 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 
 	//移動更新
 	UpdateMove(tutorialStep);
-
 }
 
 //描画

@@ -262,8 +262,7 @@ void CSceneConfig::ButtonUpdate()
 		//SceneGame
 		else if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(BUTTON_RETURN).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE)) && gamePlayFlg)
 		{
-			CSceneConfig::Release();
-			gamePlayFlg = false;
+			bubbleFade.FadeOut();
 		}
 
 		//大きさの初期化
@@ -416,10 +415,19 @@ void CSceneConfig::Update()
 	}
 	if (bubbleFade.GetFadeOutEnd())
 	{
-		//シーンの遷移
-		endFlg = true;
-		nextScene = nextSceneTemp;
-		CSceneConfig::Release();
+		if (gamePlayFlg)
+		{
+
+			CSceneConfig::Release();
+			gamePlayFlg = false;
+		}
+		else
+		{
+			//シーンの遷移
+			endFlg = true;
+			nextScene = nextSceneTemp;
+			CSceneConfig::Release();
+		}
 		return;
 	}
 	ButtonUpdate();

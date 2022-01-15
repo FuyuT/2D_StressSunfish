@@ -44,7 +44,7 @@ void CSceneTutorial::FontLoad()
 {
 	//fontの作成
 	font.Load(fontAdd, fontName);
-	font.Create(26, fontName);
+	font.Create(38, fontName);
 }
 
 //メッセージの更新
@@ -58,9 +58,12 @@ void CSceneTutorial::MessageUpdate()
 		{
 			if (tutorialStep == TutorialStep::Task_Complete)
 			{
+				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAME;
+
 				tutorialStep = TutorialStep::Task_End;
-				nextScene = SCENENO_GAME;
-				endFlg = true;
+				//nextScene = SCENENO_GAME;
+				//endFlg = true;
 			}
 			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
@@ -153,6 +156,7 @@ bool CSceneTutorial::Load()
 	if (!TextLoad())return false;
 	//フォントの読込み
 	FontLoad();
+	bubbleFade.Load();
 	return true;
 }
 
@@ -166,6 +170,8 @@ void CSceneTutorial::Initialize()
 	mShowDelay = 0;
 	messageEndFlg = false;
 	tutorialStep = TutorialStep::Task_Movement;
+	pl.SetSoundManager(*cSound);
+	bubbleFade.Initialize();
 }
 
 void CSceneTutorial::Update()
@@ -177,7 +183,25 @@ void CSceneTutorial::Update()
 		endFlg = true;
 	}
 
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+
 	stg.Update(pl);
+
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		//シーンの遷移
+		endFlg = true;
+		nextScene = nextSceneTemp;
+		//Release();
+		return;
+	}
+
 	ui.Update(Event_None);
 	for (int i = 0; i < 5; i++)
 	{
@@ -203,45 +227,47 @@ void CSceneTutorial::Render()
 	//現在のタスク一覧表示
 	if (tutorialStep >= TutorialStep::Task_Movement)
 	{
-		font.RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+		font.RenderString(10, 100, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
 		if (!pl.GetMoveUpTask())
-			font.RenderString(40, 280, MOF_COLOR_BLACK, "□ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "□ [W]で上に移動");
 		else if (pl.GetMoveUpTask())
-			font.RenderString(40, 280, MOF_COLOR_BLACK, "■ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "■ [W]で上に移動");
 
 		if (!pl.GetMoveDownTask())
-			font.RenderString(40, 320, MOF_COLOR_BLACK, "□ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "□ [S]で下に移動");
 		else if (pl.GetMoveDownTask())
-			font.RenderString(40, 320, MOF_COLOR_BLACK, "■ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
 	if(tutorialStep >= TutorialStep::Task_Action)
 	{
-		font.RenderString(10, 360, MOF_COLOR_BLACK, "┃\n┃\n┃");
+		font.RenderString(10, 180, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
 		if (!pl.GetJumpTask())
-			font.RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "□ [A]でジャンプ");
 		else if (pl.GetJumpTask())
-			font.RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "■ [A]でジャンプ");
 
 		if (!pl.GetEatTask())
-			font.RenderString(40, 400, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
 		else if (pl.GetEatTask())
-			font.RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
 	}
 
-	if (tutorialStep != TutorialStep::Task_Complete)
+	if (tutorialStep < TutorialStep::Task_Complete)
 	{
-		font.RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
 	else
 	{
-		font.RenderString(10, 240, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
 	}
 	
 	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
-	font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
-	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
+	//font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
+	//font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
+
+	bubbleFade.Render();
 
 }
 

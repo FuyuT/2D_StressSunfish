@@ -64,6 +64,7 @@ private:
 
 	int eventPosX = 1920;
 
+	//フレーム
 	//現在位置のフレーム
 	CTexture nowPosFrameTex;
 	//次のトロフィーまでの距離のフレーム
@@ -104,7 +105,14 @@ private:
 	CTexture cautionHot;
 	CTexture cautionCold;
 
-	//トロフィー
+	//イベントUI
+	CTexture eventGarbageUI;
+	CTexture eventFishUI;
+	CTexture eventTurtleUI;
+	CTexture eventSummerUI;
+	CTexture eventWinterUI;
+
+	//トロフィーCTexture
 	CTexture	riverIconTexture;		//川級
 	CTexture	waterFallIconTexture;	//滝級
 	CTexture	lakeIconTexture;		//湖級

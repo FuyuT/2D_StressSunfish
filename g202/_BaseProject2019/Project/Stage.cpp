@@ -2,6 +2,7 @@
 #include "Utility.h"
 Stage::Stage() :
 	cloudTex(),
+	skyTex(),
 	scrollValueX(0.0f),
 	scrollValueY(0.0f),
 	enemyCount(0),
@@ -14,6 +15,10 @@ Stage::~Stage() {
 
 bool Stage::Load() {
 	//”wŒi‰æ‘œ
+	for (int n = 0; n < 3; n++)
+	{
+		if (!cFishShadow[n].Load())return false;
+	}
 	if (!skyTex.Load("BackGround\\BackGround_0.png")) return false;
 	if (!cloudTex.Load("BackGround\\BackGround_1.png")) return false;
 	if (!backWaveTex.Load("BackGround\\BackGround_2.png")) return false;
@@ -21,7 +26,6 @@ bool Stage::Load() {
 	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))	return false;
 	if (!insideBackGroundTex.Load("BackGround\\BackGround_5.png")) return false;
 	if (!closeBackGroundTex.Load("BackGround\\BackGround_6.png")) return false;
-
 	if (!ObjectKelp.Load())return false;
 	return true;
 }
@@ -37,6 +41,9 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 	frontWavePos.x = 0;
 	frontWavePos.y = 0;
 	frontWaveScrollValueX = 0;
+	for (int n = 0; n < 3; n++) {
+		cFishShadow[n].Initialize();
+	}
 
 	ObjectKelp.Initialize();
 }
@@ -75,6 +82,49 @@ void Stage::WaveUpdate(const CRectangle& rec, const float& hsw)
 	if (rec.Right - scrollValueX > hsw)
 	{
 		frontWaveScrollValueX += ((rec.Right - scrollValueX) - hsw) * FRONT_WAVE_ADJUSTMENT_SPEED;
+	}
+}
+
+void Stage::FishShadowUpdate(int distance) 
+{
+	//‹›‰e
+	if (distance % 10 == 0 && distance != 0)
+	{
+		for (int n = 0; n < 3; n++)
+		{
+			if (!cFishShadow[n].GetShow())
+			{
+				if (!FishShadowPercentage(25))
+				{
+					return;
+				}
+				cFishShadow[n].SetShow(true);
+				//‹›‰e‚Ìƒ‰ƒ“ƒ_ƒ€Œˆ’è
+				int no = fishShadowNoRandom.Random(SARDINESHADOW, TUNASHADOW + 1);
+				cFishShadow[n].SetFishShadowNo(no);
+				//Player‚Ìpos.x + screenWidth‚Æy‚ÌposiŠC‚©‚ço‚È‚¢‚æ‚¤‚Éƒ‰ƒ“ƒ_ƒ€j
+
+				cFishShadow[n].SetPosx(scrollValueX + g_pGraphics->GetTargetWidth());
+				PosYRandom();
+				cFishShadow[n].SetPosy(posY);
+				switch (n)
+				{
+				case 0:
+					cFishShadow[n].SetSpeed(4.0f);
+					break;
+				case 1:
+					cFishShadow[n].SetSpeed(7.0f);
+					break;
+				case 2:
+					cFishShadow[n].SetSpeed(10.0f);
+					break;
+				default:
+					break;
+				}
+				return;
+			}
+			cFishShadow[n].Update(scrollValueX, scrollValueY);
+		}
 	}
 }
 
@@ -121,6 +171,7 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	//”wŒi‚ÌƒIƒuƒWƒFƒNƒg
 	ObjectKelp.Update(closeBackGroundTex.GetWidth(), scrollValueX);
 
+	FishShadowUpdate(pl.GetPosX());
 }
 
 void Stage::Scroll(CTexture tex, float scrollSpeedX, float scrollSpeedY)
@@ -163,13 +214,14 @@ void Stage::WaveRender()
 void Stage::BackGroundRender() {
 	int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
+	skyTex.Render(0, 0);
 
-	skyTex.Render(0,0);
 	int w = cloudTex.GetWidth();
 	int h = cloudTex.GetHeight();
 	Scroll(cloudTex, 1, 1);
 	WaveRender(); //“®‚­”g
 	Scroll(distantBackGroundTex, 0.25, 1);
+	FishShadowRender();
 	Scroll(insideBackGroundTex, 0.5, 1);
 }
 
@@ -179,21 +231,57 @@ void Stage::ForeGroundRender()
 }
 
 
+
 void Stage::Render() {
 	BackGroundRender();
 	ObjectKelp.Render(closeBackGroundTex.GetWidth(), scrollValueX, scrollValueY);
+}
+
+void Stage::FishShadowRender()
+{
+
+	for (int n = 0; n < 3; n++) 
+	{
+ 		cFishShadow[n].Render(scrollValueX, scrollValueY);
+	}
+
 }
 
 
 void Stage::Release() {
 	skyTex.Release();
 	cloudTex.Release();
+	
 	backWaveTex.Release();
 	frontWaveTex.Release();
 	distantBackGroundTex.Release();
 	insideBackGroundTex.Release();
 	closeBackGroundTex.Release();
 	enemyTexture.Release();
+	for (int n = 0; n < 3; n++) {
+		cFishShadow[n].Release();
+	}
 
 	ObjectKelp.Release();
+}
+
+int Stage::PosYRandom()
+{
+
+		posYNum = posYRandom.Random(1, 3);
+
+	switch (posYNum)
+	{
+	case 1:
+		posY = 1470;
+		break;
+	case 2:
+		posY = 1815;
+		break;
+	case 3:
+		posY = 2160;
+		break;
+	}
+	return posYNum;
+
 }

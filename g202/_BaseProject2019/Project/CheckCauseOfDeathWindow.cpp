@@ -17,6 +17,7 @@ void CCheckCauseOfDeathWindow::Initialize()
 	font.Load(fontAdd, fontName);
 	font.Create(90, fontName);
 
+	//テクスチャの読み込み
 	if (buttonResult == CAUSE_Hyperthermia)
 		causeOfDeathTexture.Load("マンボウ 体温上昇.png");
 
@@ -82,6 +83,8 @@ void CCheckCauseOfDeathWindow::Render()
 {
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY, 0.8);
+
+	//死因説明テキスト
 	if (buttonResult == CAUSE_Hyperthermia)
 	{
 		font.RenderString(450, 760, MOF_XRGB(0, 0, 0), "体温上昇しすぎて熱中症になり死亡");

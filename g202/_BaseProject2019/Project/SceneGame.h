@@ -55,6 +55,7 @@ private:
 	bool alertFlg;
 	bool goFlg;
 	bool popUpGuardFlg;
+	bool hungryFlg;
 
 public:
 	CSceneGame();

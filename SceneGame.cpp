@@ -296,8 +296,6 @@ void CSceneGame::Render()
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
 	CGraphicsUtilities::RenderString(10, 10, "%d m", distancePlayer);
 
-	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), false, eventNum);
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	if (ui.StartSign(poseFlg))startFlg = true;
 
@@ -306,6 +304,9 @@ void CSceneGame::Render()
 
 	//最前面の岩背景
 	stg.ForeGroundRender();
+
+	//UIの描画
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), false, eventNum);
 
 	//ポップアップ描画
 	if (popUpFlg)
@@ -347,6 +348,7 @@ void CSceneGame::RenderDebug()
 	//プレイヤー
 	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 	//障害物
+	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 }
 
 void CSceneGame::SEUpdate()
@@ -364,6 +366,7 @@ void CSceneGame::SEUpdate()
 	else if (!(500 * (pl.GetTemperature() * 0.01f) <= 150) && 500 * (pl.GetTemperature() * 0.01f) < 330 && alertFlg)
 	{
 		alertFlg = false;
+	}
 	//スタートSE
 	if (startFlg && !goFlg)
 	{
