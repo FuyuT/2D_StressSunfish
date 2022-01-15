@@ -196,6 +196,9 @@ void CPlayer::Initialize()
 	motion.Create(anim, MOTION_COUNT);
 
 	//motion.ChangeMotion(MOTION_STAND);
+
+	playerMaxSpeedX = 10.0f;
+	playerMaxSpeedY = 10.0f;
 }
 
 //移動
@@ -245,9 +248,9 @@ void CPlayer::UpdateMove(int tutorialStep)
 	}
 
 	//自動で右に進むように
-	if (moveX > PLAYER_MAXSPEED)
+	if (moveX > playerMaxSpeedX)
 	{
-		moveX = PLAYER_MAXSPEED;
+		moveX = playerMaxSpeedX;
 	}
 	else
 	{
@@ -279,18 +282,18 @@ void CPlayer::UpdateMove(int tutorialStep)
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
 		moveY -= PLAYER_SPEED;
-		if (moveY < -PLAYER_MAXSPEED)
+		if (moveY < -playerMaxSpeedY)
 		{
-			moveY = -PLAYER_MAXSPEED;
+			moveY = -playerMaxSpeedY;
 		}
 	}
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
 		moveY += PLAYER_SPEED;
-		if (moveY > PLAYER_MAXSPEED)
+		if (moveY > playerMaxSpeedY)
 		{
-			moveY = PLAYER_MAXSPEED;
+			moveY = playerMaxSpeedY;
 		}
 	}
 	else
@@ -333,6 +336,66 @@ void CPlayer::UpdateMove(int tutorialStep)
 		posY = SEA_LEVEL - COLLISION_ADJUSTMENT_TOP;
 		moveY = 0;
 	}	
+
+	
+	//一定距離毎にMAX SPEEDを0.01上げる
+	if (GetDistance() < 1000)
+	{
+		playerMaxSpeedX = 10.0f;
+		playerMaxSpeedY = 10.0f;
+	}
+	else if (GetDistance() < 2500)
+	{
+		playerMaxSpeedX = 11.2f;
+		playerMaxSpeedY = 10.5;
+	}
+	else if (GetDistance() < 5000)
+	{
+		playerMaxSpeedX = 12.4f;
+		playerMaxSpeedY = 11.0f;
+	}
+	else if (GetDistance() < 10000)
+	{
+		playerMaxSpeedX = 13.6f;
+		playerMaxSpeedY = 11.5f;
+	}
+	else if (GetDistance() < 25000)
+	{
+		playerMaxSpeedX = 14.8f;
+		playerMaxSpeedY = 12.0f;
+	}
+	else if (GetDistance() < 50000)
+	{
+		playerMaxSpeedX = 16.0f;
+		playerMaxSpeedY = 12.5f;
+	}
+	else if (GetDistance() < 100000)
+	{
+		playerMaxSpeedX = 17.2f;
+		playerMaxSpeedY = 13.0f;
+	}
+	else if (GetDistance() < 200000)
+	{
+		playerMaxSpeedX = 18.4f;
+		playerMaxSpeedY = 13.5f;
+	}
+	else if (GetDistance() < 300000)
+	{
+		playerMaxSpeedX = 19.6;
+		playerMaxSpeedY = 14.0f;
+	}
+	else
+	{
+		playerMaxSpeedX = 20.8;
+		playerMaxSpeedY = 14.5f;
+	}
+
+	if (g_pInput->IsKeyPush(MOFKEY_1))
+	{
+		playerMaxSpeedX = 20.8;
+		playerMaxSpeedY = 14.5f;
+	}
+
 }
 
 //エサを食べる
@@ -456,8 +519,8 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 			parasite = 0;
 
 			//着水後に勢いを持たせる
-			moveY = PLAYER_MAXSPEED;
-			moveX = PLAYER_MAXSPEED;
+			moveY = playerMaxSpeedX;
+			moveX = playerMaxSpeedX;
 
 			jumpFlg = false;
 
@@ -875,6 +938,7 @@ void CPlayer::RenderDebug(float wx,float wy)
 	//無敵(デバッグ用)
 	if(hitFlg)
 		CGraphicsUtilities::RenderString(10, 220, MOF_COLOR_BLACK, "無敵");
+	CGraphicsUtilities::RenderString(10, 260, MOF_COLOR_BLACK, "最高速度 %d",playerMaxSpeedX);
 }
 
 //解放
