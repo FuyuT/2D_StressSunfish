@@ -185,7 +185,7 @@ void CTrophyWindow::Render()
 	}
 	if (buttonResult == TROPHY_OCEAN)
 	{
-		trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
+		trophyTexture.Render(trophyTexturePosX + 40, trophyTexturePosY - 5);
 		font.RenderString(800, 225, MOF_XRGB(0, 0, 0), "海級");
 		//説明文描画
 		font.RenderStringScale(465, 675, 0.6f, MOF_XRGB(0, 0, 0), "やりこんでいる達人のトロフィー");
@@ -193,7 +193,7 @@ void CTrophyWindow::Render()
 	}
 	if (buttonResult == TROPHY_SEAOFJAPAN)
 	{
-		trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
+		trophyTexture.Render(trophyTexturePosX + 45, trophyTexturePosY - 5);
 		font.RenderString(690, 225, MOF_XRGB(0, 0, 0), "日本海級");
 		//説明文描画
 		font.RenderStringScale(465, 675, 0.6f, MOF_XRGB(0, 0, 0), "やりこみ過ぎな超人のトロフィー");
@@ -217,7 +217,7 @@ void CTrophyWindow::Render()
 	}
 	if (buttonResult == TROPHY_MOUNTFJI)
 	{
-		scaleController.ScaleRender(&trophyTexture,trophyTexturePosX, trophyTexturePosY - 130,1.7f);
+		scaleController.ScaleRender(&trophyTexture,trophyTexturePosX - 5, trophyTexturePosY + 105, 2.0f);
 		//trophyTexture.RenderScale(trophyTexturePosX, trophyTexturePosY -75,1.5f);
 		font.RenderString(690, 225, MOF_XRGB(0, 0, 0), "富士山級");
 		//説明文描画

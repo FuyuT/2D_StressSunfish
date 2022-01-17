@@ -161,7 +161,7 @@ public:
 	void Initialize();
 	void Update(int eventNum);
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg,int eventNum);
+	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg,int eventNum,int posy,float wy);
 	void Release();
 
 	bool StartSign(bool pose);

@@ -62,7 +62,6 @@ void CSceneGame::Initialize()
 	stg.Initialize();
 	cObstacle.Initialize();
 	cObstacle.SetSoundManager(*cSound);
-	cObstacle.TextLoad();
 	bubbleFade.Initialize();
 	pl.SetSoundManager(*cSound);
 	sceneConfig.SetSoundManager(*cSound);
@@ -153,7 +152,7 @@ void CSceneGame::EventUpdate()
 void CSceneGame::Update()
 {
 	//デバッグ用　エンターで初期化
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	if (g_pInput->IsKeyPush(MOFKEY_5))
 	{
 		Initialize();
 		if (nowPopUpGame != nullptr)
@@ -265,7 +264,6 @@ void CSceneGame::Update()
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
-
 	ui.Update(eventNum);
 
 	if (!startFlg)return;
@@ -294,10 +292,7 @@ void CSceneGame::Render()
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
-	CGraphicsUtilities::RenderString(10, 10, "%d m", distancePlayer);
 
-	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum, pl.GetPosY(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	if (ui.StartSign(poseFlg))startFlg = true;
 
@@ -308,7 +303,7 @@ void CSceneGame::Render()
 	stg.ForeGroundRender();
 
 	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), false, eventNum);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum, pl.GetPosY(), stg.GetScrollY());
 
 	//ポップアップ描画
 	if (popUpFlg)

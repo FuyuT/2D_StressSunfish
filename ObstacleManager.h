@@ -97,8 +97,6 @@ private:
 	//ƒTƒEƒ“ƒh
 	CSoundManager* cSound;
 
-	CSoundManager* cSound;
-
 public:
 	CObstacleManager();
 	~CObstacleManager();

@@ -69,6 +69,18 @@ bool CUi::Load()
 		return false;
 	}
 
+	//行動可能UI
+	//ジャンプ
+	if (!jumpPoss.Load("UI\\ジャンプUI.png"))
+	{
+		return false;
+	}
+	//食事
+	if (!eatPoss.Load("UI\\食べるUI.png"))
+	{
+		return false;
+	}
+
 	//注意UI
 	if (!cautionUi.Load("UI_Caution.png"))
 	{
@@ -284,7 +296,6 @@ void CUi::Update(int eventNum)
 
 	//タイマー
 	eventTimer.Update();
-
 	//イベントアニメーション
 	switch (eventNum)
 	{
@@ -314,7 +325,7 @@ void CUi::Update(int eventNum)
 	motion.AddTimer(CUtilities::GetFrameSecond());
 }
 
-void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum)
+void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distanceNum, bool jumpFlg, bool eatFlg, bool tutorialFlg,int eventNum,int posy,float wy)
 {
 	//間隔、幅
 	constexpr int FrameSpace = 10;
@@ -324,7 +335,7 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 
 	//フレームとトロフィーの位置
 	const Vector2 torophyFrame(g_pGraphics->GetTargetWidth() - FrameSpace - nextTrophyFrameTex.GetWidth(), FrameSpace);
-	const Vector2 torophyPos(torophyFrame.x + FrameWidth, torophyFrame.y + FrameHeight);
+	const Vector2 torophyPos(torophyFrame.x + FrameWidth + 1, torophyFrame.y + FrameHeight - 7);
 
 	const Vector2 torophyNowPosFrame(torophyFrame.x - FrameSpace - nowPosFrameTex.GetWidth(), FrameSpace);
 	const Vector2 torophyDistanceFrame(torophyFrame.x - FrameSpace - nextTrophyDistanceFrameTex.GetWidth(), torophyNowPosFrame.y + nowPosFrameTex.GetHeight() + ShortSpace);
@@ -345,11 +356,6 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	nextTrophyDistanceFrameTex.Render(torophyDistanceFrame.x, torophyDistanceFrame.y);
 	nextTrophyFrameTex.Render(torophyFrame.x, torophyFrame.y);
 	eventFrameTex.Render(eventFrame.x, eventFrame.y);
-
-	//todo:後で消す 位置はかる用
-	Vector2 mousePos;
-	g_pInput->GetMousePos(mousePos);
-	CGraphicsUtilities::RenderString(500, 50, MOF_COLOR_RED, "%1.0f:%1.0f", mousePos.x,mousePos.y);
 
 
 	////m数表示
@@ -383,6 +389,8 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	{
 		case Event_None:
 			font.RenderString(nowEventText.x + 50, nowEventText.y, MOF_COLOR_BLACK, "なし");
+			eventPosX = 1920;
+			eventTimer.SetTotalTime(3);
 			break;
 		case Event_Summer:
 			//夏イベント
@@ -395,8 +403,9 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 					eventPosX -= EVENT_MOVE;
 				}
 			}
-			eventSummerUI.Render(nowEventText.x, nowEventText.y - 4);
-			eventSummer.RenderScale(eventPosX, 380,0.75f, motion.GetSrcRect());
+			eventSummerUI.Render(nowEventText.x, nowEventText.y - 8);
+			eventSummer.RenderScale(eventPosX, 380, 0.75f, motion.GetSrcRect());
+
 			break;
 		case Event_Winter:
 			//冬イベント
@@ -455,8 +464,6 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 			eventGarbage.Render(eventPosX, 380, motion.GetSrcRect());
 			break;
 		default:
-			eventPosX = 1920;
-			eventTimer.SetTotalTime(3);
 			break;
 	}
 
@@ -497,22 +504,22 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	}
 	else if (distanceNum >= INDIANOCEAN && distanceNum < AMAZONRIVER)		//アマゾン川級
 	{
-		amazonRiverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		amazonRiverIconTexture.RenderScale(1700, 77, 0.7f);
 		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", AMAZONRIVER - distanceNum);
 	}
 	else if (distanceNum >= AMAZONRIVER && distanceNum < OCEAN)		//海級
 	{
-		oceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		oceanIconTexture.RenderScale(1737, 48, 0.9f);
 		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", OCEAN - distanceNum);
 	}
 	else if (distanceNum >= OCEAN && distanceNum < SEAOFJAPAN)		//日本海級
 	{
-		seaOf​​JapanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		seaOf​​JapanIconTexture.RenderScale(1746, 47, 0.9f);
 		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEAOFJAPAN - distanceNum);
 	}
 	else if (distanceNum >= SEAOFJAPAN)								//地球一周級
 	{
-		aroundTheGlobeIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
+		aroundTheGlobeIconTexture.RenderScale(1716, 50, 0.9f);
 	}
 
 	//顔のUI
@@ -606,6 +613,19 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	cautionHot.Render(torophyNowPosFrame.x - FrameSpace - cautionHot.GetWidth(), torophyNowPosFrame.y, MOF_ARGB((int)(255 * cautionHotB.GetAlpha()), 255, 255, 255));
 	//低温注意
 	cautionCold.Render(torophyNowPosFrame.x - FrameSpace - cautionHot.GetWidth(), torophyNowPosFrame.y, MOF_ARGB((int)(255 * cautionColdB.GetAlpha()), 255, 255, 255));
+
+	//行動UI
+	//ジャンプ
+	if (jumpFlg)
+	{
+		jumpPoss.RenderScale(550, posy - wy, 0.45f);
+	}
+	//食事
+	if (eatFlg)
+	{
+		eatPoss.RenderScale(550, posy - wy, 0.45f);
+	}
+
 }
 
 void CUi::Release()

@@ -12,7 +12,7 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmdL
 	//画面サイズ指定
 	Info.WindowCreateInfo.Width = 1920;
 	Info.WindowCreateInfo.Height = 1080;
-	//Info.GraphicsCreateInfo.bWindowed = FALSE;
+	Info.GraphicsCreateInfo.bWindowed = FALSE;
 	if (pFrame->Initialize(&Info))
 	{
 		pFrame->Run();

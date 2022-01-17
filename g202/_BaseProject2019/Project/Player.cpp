@@ -402,7 +402,7 @@ void CPlayer::UpdateMove(int tutorialStep)
 bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) && tutorialStep >= Task_Action)
 	{
 		cSound->Play(SOUND_EAT);
 		//チュートリアルタスク
@@ -472,7 +472,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
-	if (g_pInput->IsKeyPush(MOFKEY_A) &&
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) &&
 		possibleToJumpFlg && tutorialStep >= Task_Action)
 	{
 		cSound->Play(SOUND_JUMP_START);
