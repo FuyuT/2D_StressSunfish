@@ -333,7 +333,17 @@ void CResultWindow::Render()
 	//m•`‰æ
 	if (distance < 1000000)
 	{
-		sprintf_s(meter,10, "%dm", distance);
+		if (distance >= 1000)
+		{
+			double distanceNum = distance / 100;
+			int km = distanceNum;
+			double trueDis = (double)distanceNum / 10;
+			sprintf_s(meter, 10, "%4.1fkm", trueDis);
+		}
+		else
+		{
+			sprintf_s(meter, 10, "%dm", distance);
+		}
 	}
 	else
 	{

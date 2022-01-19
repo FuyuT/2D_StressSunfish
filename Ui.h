@@ -48,6 +48,7 @@ private:
 	int hungerRegion = 40;
 
 	double distance = 0;
+	double trophyDis = 0;
 
 	int jumpAlpha = 0;
 	int eatAlpha = 0;
@@ -63,6 +64,16 @@ private:
 	float goPosy = 370;
 
 	int eventPosX = 1920;
+
+	//フレーム
+	//現在位置のフレーム
+	CTexture nowPosFrameTex;
+	//次のトロフィーまでの距離のフレーム
+	CTexture nextTrophyDistanceFrameTex;
+	//次のトロフィーのフレーム
+	CTexture nextTrophyFrameTex;
+	//イベントのフレーム
+	CTexture eventFrameTex;
 
 	//マンボウの顔の枠
 	CTexture stressMeter;
@@ -95,7 +106,14 @@ private:
 	CTexture cautionHot;
 	CTexture cautionCold;
 
-	//トロフィー
+	//イベントUI
+	CTexture eventGarbageUI;
+	CTexture eventFishUI;
+	CTexture eventTurtleUI;
+	CTexture eventSummerUI;
+	CTexture eventWinterUI;
+
+	//トロフィーCTexture
 	CTexture	riverIconTexture;		//川級
 	CTexture	waterFallIconTexture;	//滝級
 	CTexture	lakeIconTexture;		//湖級

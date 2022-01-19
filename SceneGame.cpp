@@ -95,6 +95,7 @@ void CSceneGame::Initialize()
 	seFlg = false;
 	alertFlg = false;
 	goFlg = false;
+	hungryFlg = false;
 }
 
 void CSceneGame::EventUpdate()
@@ -105,6 +106,7 @@ void CSceneGame::EventUpdate()
 		if (eventTimer.GetNowtime() < 0)
 		{
 			eventNum = eventRandom.Random(Event::Event_Summer, Event_Count);
+			seFlg = true;
 			eventTimer.SetTotalTime(40);
 		}
 		else if (eventTimer.GetNowtime() < 20)
@@ -151,14 +153,14 @@ void CSceneGame::EventUpdate()
 void CSceneGame::Update()
 {
 	//デバッグ用　エンターで初期化
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	/*if (g_pInput->IsKeyPush(MOFKEY_5))
 	{
 		Initialize();
 		if (nowPopUpGame != nullptr)
 		{
 			nowPopUpGame->Release();
 		}
-	}
+	}*/
 
 	//フェード処理
 	bubbleFade.Update();
@@ -171,9 +173,12 @@ void CSceneGame::Update()
 	if (!sceneConfig.GetGamePlayFlg())
 	{
 		configFlg = false;
-
+		bubbleFade.FadeIn();
 	}
-
+	else
+	{
+		bubbleFade.Initialize();
+	}
 	if (configFlg)
 	{
 		sceneConfig.Update();
@@ -192,27 +197,34 @@ void CSceneGame::Update()
 	}
 	if (bubbleFade.GetFadeOutEnd())
 	{
-		if (nowPopUpGame != nullptr)
+		if (nextSceneTemp == SCENENO_CONFIG)
 		{
-			nowPopUpGame->Release();
+			configFlg = true;
+			sceneConfig.SetGamePlayFlg();
+			sceneConfig.Load();
+			sceneConfig.Initialize();
 		}
-
-		if (nextSceneTemp == SCENENO_GAME)
+		else
 		{
-			//リトライ、もしくはコンティニューボタンが押されたら初期化
-			Initialize();
-			return;
+			if (nowPopUpGame != nullptr)
+			{
+				nowPopUpGame->Release();
+			}
+
+			if (nextSceneTemp == SCENENO_GAME)
+			{
+				//リトライ、もしくはコンティニューボタンが押されたら初期化
+				Initialize();
+				return;
+			}
+			else
+			{
+				endFlg = true;
+			}
 		}
-
-		//if (nextSceneTemp == SCENENO_CONFIG)
-		//{
-
-		//}
 
 		//シーンの遷移
-		endFlg = true;
 		nextScene = nextSceneTemp;
-
 		return;
 	}
 
@@ -253,7 +265,6 @@ void CSceneGame::Update()
 	//ポーズ画面を開いていたら、閉じるまで更新しない
 	if (poseFlg)return;
 
-
 	ui.Update(eventNum);
 
 	if (!startFlg)return;
@@ -274,7 +285,6 @@ void CSceneGame::Update()
 
 	//SE
 	SEUpdate();
-
 }
 
 void CSceneGame::Render()
@@ -283,18 +293,18 @@ void CSceneGame::Render()
 	/*int scw = g_pGraphics->GetTargetWidth();
 	int sch = g_pGraphics->GetTargetHeight();
 	backGroundTexture.Render(-scrollValueX, -scrollValueY);*/
-	CGraphicsUtilities::RenderString(10, 10, "%d m",distancePlayer);
 
-	//UIの描画
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum, pl.GetPosY(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
 	if (ui.StartSign(poseFlg))startFlg = true;
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
-	
+
 	//最前面の岩背景
 	stg.ForeGroundRender();
+
+	//UIの描画
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(),false,eventNum, pl.GetPosY(), stg.GetScrollY());
 
 	//ポップアップ描画
 	if (popUpFlg)
@@ -306,18 +316,9 @@ void CSceneGame::Render()
 		sceneConfig.Render();
 	}
 	bubbleFade.Render();
+	CGraphicsUtilities::RenderString(500, 100, MOF_COLOR_BLACK,"FPS : %d", CUtilities::GetFPS());
+
 }
-
-//デバッグ
-void CSceneGame::RenderDebug()
-{
-	//プレイヤー
-	pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
-	//障害物
-	cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
-
-
-} 
 
 void CSceneGame::Release()
 {
@@ -335,10 +336,19 @@ void CSceneGame::Release()
 			nowPopUpGame = NULL;
 		}
 	}
-	
+
 	//障害物
 	cObstacle.Release();
 	bubbleFade.Release();
+}
+
+//デバッグ
+void CSceneGame::RenderDebug()
+{
+	////プレイヤー
+	//pl.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
+	////障害物
+	//cObstacle.RenderDebug(stg.GetScrollX(), stg.GetScrollY());
 }
 
 void CSceneGame::SEUpdate()
@@ -357,11 +367,21 @@ void CSceneGame::SEUpdate()
 	{
 		alertFlg = false;
 	}
-
+	//スタートSE
 	if (startFlg && !goFlg)
 	{
 		cSound->Play(SOUND_GO);
 		goFlg = true;
+	}
+	//空腹SE
+	if (pl.GetHungry() >= 62 && !hungryFlg)
+	{
+		cSound->Play(SOUND_HUNGRY);
+		hungryFlg = true;
+	}
+	else if (pl.GetHungry() < 62 && hungryFlg)
+	{
+		hungryFlg = false;
 	}
 }
 
@@ -466,7 +486,7 @@ void CSceneGame::PopUpController()
 
 void CSceneGame::CaseOfDethController()
 {
-	if ((g_pInput->IsKeyPush(MOFKEY_F1) || pl.GetDead()) && !popUpFlg && !popUpGuardFlg)
+	if ((pl.GetDead()) && !popUpFlg && !popUpGuardFlg)
 	{
 		cSound->Play(SOUND_RESULT);
 		nowPopUpGame = new CCauseOfDeathWindow;

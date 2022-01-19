@@ -243,19 +243,19 @@ void CObstacleManager::Release()
 
 void CObstacleManager::PosYRandom(int obstacleType)
 {	
-	if (obstacleType = Food)
+	if (obstacleType == Food)
 	{
 		posYNum = posYRandom.Random(2, 5);
 	}
-	else if (obstacleType = SummerFood)
+	else if (obstacleType == SummerFood)
 	{
 		posYNum = posYRandom.Random(3, 5);
 	}
-	else if (obstacleType = WinterFood)
+	else if (obstacleType == WinterFood)
 	{
 		posYNum = posYRandom.Random(2, 4);
 	}
-	else if (obstacleType = Rotten)
+	else if (obstacleType == Rotten || obstacleType == Obstacle)
 	{
 		posYNum = posYRandom.Random(1, 5);
 	}
@@ -395,7 +395,7 @@ bool CObstacleManager::TextLoad(int& obstacleDistance,int& turtleRate, int& garb
 	return true;
 }
 
-void CObstacleManager::ObstacleGenerate(int distance,bool obstacleFlg,int eventNum,int posx)
+void CObstacleManager::ObstacleGenerate(int distance, bool obstacleFlg, int eventNum, int posx)
 {
 	//showFlgがfalseの障害物を一つランダムで選んで、
 	if (distance % obstacleDistance == 0 && distance != 0 && obstacleFlg)
@@ -506,28 +506,6 @@ void CObstacleManager::ObstacleGenerate(int distance,bool obstacleFlg,int eventN
 					return;
 				}
 			}
-			//魚影（お試し）
-			else if (!cFishShadow.GetShow())
-			{
-				if (eventNum != Event_Turtle)
-				{
-					if (!cWaterFlow.GetShow())
-					{
-						createFlg = ObstaclePercentage(25);
-						if (!createFlg)
-							return;
-						cFishShadow.SetShow(true);
-						//Playerのpos.x + screenWidthとyのpos（海から出ないようにランダム）
-
-						cFishShadow.SetPosx(posx + g_pGraphics->GetTargetWidth());
-						PosYRandom(Obstacle);
-						cFishShadow.SetPosy(posY);
-						return;
-					}
-				}
-
-			}
-
 		}
 		else if (obstacleNum >= waterFlowRate && obstacleNum < bubbleRate)
 		{
@@ -611,10 +589,10 @@ void CObstacleManager::ObstacleGenerate(int distance,bool obstacleFlg,int eventN
 					return;
 				}
 			}
-        }
+		}
 		else if (obstacleNum >= tunaRate && obstacleNum < swordFishRate)
 		{
-			
+
 			//カジキ
 			for (int n = 0; n < 2; n++)
 			{
@@ -812,5 +790,5 @@ void CObstacleManager::DangerFoodGenerate(int distance, bool rottenFlg, int even
 				}
 			}
 		}
-	}
+	}	
 }
