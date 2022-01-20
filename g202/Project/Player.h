@@ -75,6 +75,9 @@
 //水流による加速度
 #define		WATERFLOW_SPEED			0.02f
 
+//水しぶき
+#define		WAVE_POSY				620
+
 //死因一覧
 enum CAUSE_OF_DEATH
 {
@@ -134,6 +137,8 @@ private:
 	CTexture	coldJumpTexture;
 	CTexture	coldDeathTexture;
 
+	CTexture	waveTexture;
+
 	//確率
 	CRandom		random;
 	//座標
@@ -173,6 +178,13 @@ private:
 	bool		waterFlowFlg;
 	//アニメーション
 	CSpriteMotionController	motion;
+
+	CSpriteMotionController	outWaveMotion;
+	CSpriteMotionController	inWaveMotion;
+
+	//水しぶき
+	int			jumpStartPosX;
+	int			jumpEndPosX;
 
 	//ブレーキ(テスト)
 	CTimer		brakeTimer;

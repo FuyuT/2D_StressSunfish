@@ -87,6 +87,10 @@ bool CPlayer::Load()
 		return false;
 	}
 
+	if (!waveTexture.Load("nami.png"))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -126,6 +130,9 @@ void CPlayer::Initialize()
 	//連続衝突を避ける
 	hitFlg = false;
 	hitTimer.SetTotalTime(1);
+	//水しぶき
+	jumpStartPosX = 0;
+	jumpEndPosX = 0;
 
 	//フラグ
 	deadFlg = false;
@@ -194,6 +201,28 @@ void CPlayer::Initialize()
 		},
 	};
 	motion.Create(anim, MOTION_COUNT);
+
+	SpriteAnimationCreate waveAnim[] = {
+		{
+			"無",
+			0,0,
+			1,1,
+			FALSE,{{1,0,0}}
+		},
+		{
+			"波",
+			0,0,
+			381,206,//373 3205
+			FALSE,{{3,0,0},{3,1,0},{3,2,0},{3,3,0},{3,4,0},
+				  {3,0,1},{3,1,1},{3,2,1},{3,3,1},{3,4,1},
+				  {3,0,2},{3,1,2},{3,2,2},{3,3,2},{3,4,2},
+				  {3,0,3},{3,1,3},{3,2,3},{3,3,3},{3,4,3},
+				  {3,0,4},{3,1,4}}
+		},
+		
+	};
+	outWaveMotion.Create(waveAnim,2);
+	inWaveMotion.Create(waveAnim, 2);
 
 	//motion.ChangeMotion(MOTION_STAND);
 
@@ -485,6 +514,10 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 
 		motion.ChangeMotion(MOTION_JUMP);
 
+		//水しぶきの発生座標取得
+		jumpStartPosX = posX;
+		outWaveMotion.ChangeMotion(1);
+
 		//ジャンプ力
 		moveY = -JUMP_POWER_Y;
 		moveX = JUMP_POWER_X;
@@ -498,6 +531,10 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 		//落下による勢いで少し潜るように
 		if (posY > SEA_LEVEL + WATER_LANDING_DEEP)
 		{
+			//着水時の座標取得
+			jumpEndPosX = posX;
+			inWaveMotion.ChangeMotion(1);
+
 			//jumpDangerTimerの時間内にジャンプを行うと死亡
 			if (jumpDangerFlg)
 			{
@@ -562,6 +599,8 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	{
 		possibleToJumpFlg = false;
 	}
+
+	
 
 	/*********
 	 * 体温
@@ -741,6 +780,8 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 {
 	//アニメーションの更新
 	motion.AddTimer(CUtilities::GetFrameSecond());
+	outWaveMotion.AddTimer(CUtilities::GetFrameSecond());
+	inWaveMotion.AddTimer(CUtilities::GetFrameSecond());
 
 	//死亡アニメーションが終わり次第、deadflgをtrueにする
 	if (motion.GetMotionNo() == MOTION_DEATH)
@@ -748,6 +789,21 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 		if (motion.IsEndMotion())
 		{
 			deadFlg = true;
+		}
+	}
+
+	if (outWaveMotion.GetMotionNo() == 1)
+	{
+		if (outWaveMotion.IsEndMotion())
+		{
+			outWaveMotion.ChangeMotion(0);
+		}
+	}
+	if (inWaveMotion.GetMotionNo() == 1)
+	{
+		if (inWaveMotion.IsEndMotion())
+		{
+			inWaveMotion.ChangeMotion(0);
 		}
 	}
 
@@ -798,6 +854,18 @@ void CPlayer::Render(float wx, float wy)
 	//プレイヤーが死んでいる場合
 	if (deadFlg && !jumpFlg)
 		return;
+
+	//水しぶき
+	//飛び出し
+	if (outWaveMotion.GetMotionNo() == 1)
+	{
+		waveTexture.Render(jumpStartPosX - wx, WAVE_POSY - wy, outWaveMotion.GetSrcRect());
+	}
+	//着水
+	if (inWaveMotion.GetMotionNo() == 1)
+	{
+		waveTexture.Render(jumpEndPosX - wx, WAVE_POSY - wy, inWaveMotion.GetSrcRect());
+	}
 
 	//プレイヤーの描画
 	switch (motion.GetMotionNo())
@@ -958,7 +1026,12 @@ void CPlayer::Release()
 	coldJumpTexture.Release();
 	coldDeathTexture.Release();
 
+	waveTexture.Release();
+
 	motion.Release();
+	outWaveMotion.Release();
+	inWaveMotion.Release();
+
 }
 
 
