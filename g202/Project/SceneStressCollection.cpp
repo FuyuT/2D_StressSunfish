@@ -33,29 +33,58 @@ void CSceneStressCollection::Initialize()
 
 	page = 1;
 	//死因テクスチャ読み込み
-	hyperthermiaTexture.Load("マンボウ 体温上昇icon.png");
+	if (hyperthermiaFlg)
+		hyperthermiaTexture.Load("マンボウ 体温上昇icon.png");
+	else
+		hyperthermiaTexture.Load("マンボウ 体温上昇icon_影.png");
+	if (lowerBodyTemperatureFlg)
+		lowerBodyTemperatureTexture.Load("マンボウ 体温低下icon.png");
+	else
+		lowerBodyTemperatureTexture.Load("マンボウ 体温低下icon_影.png");
+	if (starvationFlg)
+		starvationTexture.Load("マンボウ 空腹icon.png");
+	else
+		starvationTexture.Load("マンボウ 空腹icon_影.png");
+	if (cloggedThroatFlg)
+		cloggedThroatexture.Load("マンボウ　喉つまりicon.png");
+	else
+		cloggedThroatexture.Load("マンボウ　喉つまりicon_影.png");
 
-	lowerBodyTemperatureTexture.Load("マンボウ 体温低下icon.png");
+	if (obesityFlg)
+		obesityTexture.Load("肥満マンボウ2icon.png");
+	else
+		obesityTexture.Load("肥満マンボウ2icon_影.png");
+	if (impactFlg)
+		impactTexture.Load("障害物にあたって死亡icon.png");
+	else
+		impactTexture.Load("障害物にあたって死亡icon_影.png");
+	if (parasiteFlg)
+		parasiteIconTexture.Load("マンボウ寄生虫ストレスicon.png");
+	else
+		parasiteIconTexture.Load("マンボウ寄生虫ストレスicon_影.png");
+	if (jumpFlg)
+		jumpTexture.Load("水面にたたきつけられ死亡 海なしicon.png");
+	else
+		jumpTexture.Load("水面にたたきつけられ死亡 海なしicon_影.png");
+	
+	if (bubbleFlg)
+		bubbleTexture.Load("マンボウ泡icon.png");
+	else 
+		bubbleTexture.Load("マンボウ泡icon_影.png");
 
-	starvationTexture.Load("マンボウ 空腹icon.png");
+	if (turtleFlg)
+		turtleTexture.Load("マンボウ亀予感icon.png");
+	else
+		turtleTexture.Load("マンボウ亀予感icon_影.png");
 
-	cloggedThroatexture.Load("マンボウ　喉つまりicon.png");
-
-	obesityTexture.Load("肥満マンボウ2icon.png");
-
-	impactTexture.Load("障害物にあたって死亡icon.png");
-
-	parasiteIconTexture.Load("マンボウ寄生虫ストレスicon.png");
-
-	jumpTexture.Load("水面にたたきつけられ死亡 海なしicon.png");
-
-	bubbleTexture.Load("マンボウ泡icon.png");
-
-	turtleTexture.Load("マンボウ亀予感icon.png");
-
-	waterFlowTexture.Load("加速死icon.png");
-
-	shoalFishTexture.Load("マンボウ　魚群衝突死icon.png");
+	if (waterFlowFlg)
+		waterFlowTexture.Load("加速死icon.png");
+	else
+		waterFlowTexture.Load("加速死icon_影.png");
+	if (shoalFishFlg)
+		shoalFishTexture.Load("マンボウ　魚群衝突死icon.png");
+	else
+		shoalFishTexture.Load("マンボウ　魚群衝突死icon_影.png");
 
 	//ボタンテクスチャ読み込み
 	menuButtonTexture.Load("ButtonMenu.png");
@@ -388,6 +417,16 @@ void CSceneStressCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX,mousePosY)))
 			{
 				page = 2;
+				if (obesityFlg)
+					buttonSelect = 1;
+				else if (parasiteFlg)
+					buttonSelect = 3;
+				else if (impactFlg)
+					buttonSelect = 2;
+				else if (jumpFlg)
+					buttonSelect = 4;
+				else
+					buttonSelect = 0;
 				cSound->Play(SOUND_BUTTON_PUSH);
 			}
 		}
@@ -502,6 +541,8 @@ void CSceneStressCollection::Update()
 						buttonSelect = 1;
 					else if (starvationFlg)
 						buttonSelect = 3;
+					else
+						buttonSelect = 0;
 				}
 
 				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obesity).CollisionPoint(mousePosX, mousePosY) || g_pInput->IsKeyPush(MOFKEY_SPACE) && !popUpFlg)
@@ -725,11 +766,31 @@ void CSceneStressCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON)&& ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_PUSH);
+				if (hyperthermiaFlg)
+					buttonSelect = 1;
+				else if (starvationFlg)
+					buttonSelect = 3;
+				else if (starvationFlg)
+					buttonSelect = 2;
+				else if (cloggedThroatFlg)
+					buttonSelect = 4;
+				else
+					buttonSelect = 0;
 				page = 1;
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_PUSH);
+				if (bubbleFlg)
+					buttonSelect = 1;
+				else if (waterFlowFlg)
+					buttonSelect = 3;
+				else if (turtleFlg)
+					buttonSelect = 2;
+				else if (shoalFishFlg)
+					buttonSelect = 4;
+				else
+					buttonSelect = 0;
 				page = 3;
 			}
 		}
@@ -884,7 +945,7 @@ void CSceneStressCollection::Update()
 							buttonSelect = 0;
 					}
 				}
-				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_Obstacle).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
+				if (g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && GetRect(CAUSE_SeaTurtle).CollisionPoint(mousePosX, mousePosY) && !popUpFlg || g_pInput->IsKeyPush(MOFKEY_SPACE))
 				{
 					cSound->Play(SOUND_BUTTON_PUSH);
 					popUpFlg = true;
@@ -1006,6 +1067,16 @@ void CSceneStressCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_PUSH);
+				if (obesityFlg)
+					buttonSelect = 1;
+				else if (parasiteFlg)
+					buttonSelect = 3;
+				else if (impactFlg)
+					buttonSelect = 2;
+				else if (jumpFlg)
+					buttonSelect = 4;
+				else
+					buttonSelect = 0;
 				page = 2;
 			}
 		}
@@ -1020,13 +1091,9 @@ void CSceneStressCollection::Render()
 		//1ページ目に表示
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(0, 0, 0), "1/3");
 
-		if(hyperthermiaFlg)
 		scaleController.ScaleRender(&hyperthermiaTexture, iconFirstRowPosX, iconOneLinePosY, hyperthermiaScale);
-		if(lowerBodyTemperatureFlg)
 		scaleController.ScaleRender(&lowerBodyTemperatureTexture, iconSecondRowPosX, iconOneLinePosY, lowerBodyTemperatureScale);
-		if(starvationFlg)
 		scaleController.ScaleRender(&starvationTexture, iconFirstRowPosX, iconTwoLinePosY, starvationScale);
-		if(cloggedThroatFlg)
 		scaleController.ScaleRender(&cloggedThroatexture, iconSecondRowPosX, iconTwoLinePosY, cloggedThroatScale);
 	}
 	if (page == 2)
@@ -1034,13 +1101,9 @@ void CSceneStressCollection::Render()
 		//2ページ目に表示
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(0, 0, 0), "2/3");
 
-		if(obesityFlg)
 		scaleController.ScaleRender(&obesityTexture, iconFirstRowPosX, iconOneLinePosY, obesityScale);
-		if(impactFlg)
 		scaleController.ScaleRender(&impactTexture, iconSecondRowPosX, iconOneLinePosY, impactScale);
-		if(parasiteFlg)
 		scaleController.ScaleRender(&parasiteIconTexture, iconFirstRowPosX, iconTwoLinePosY, parasiteScale);
-		if(jumpFlg)
 		scaleController.ScaleRender(&jumpTexture, iconSecondRowPosX, iconTwoLinePosY +10, jumpScale);
 	}
 	if (page == 3)
@@ -1048,13 +1111,9 @@ void CSceneStressCollection::Render()
 		//3ページ目に表示
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(0, 0, 0), "3/3");
 
-		if(bubbleFlg)
 		scaleController.ScaleRender(&bubbleTexture, iconFirstRowPosX, iconOneLinePosY, bubbleScale);
-		if(turtleFlg)
 		scaleController.ScaleRender(&turtleTexture, iconSecondRowPosX, iconOneLinePosY, turtleScalse);
-		if(waterFlowFlg)
 		scaleController.ScaleRender(&waterFlowTexture, iconFirstRowPosX, iconTwoLinePosY+10, waterFlowScale);
-		if(shoalFishFlg)
 		scaleController.ScaleRender(&shoalFishTexture,iconSecondRowPosX,iconTwoLinePosY+20,shoalFishScale);
 	}
 
