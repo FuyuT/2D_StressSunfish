@@ -48,6 +48,7 @@ private:
 	int hungerRegion = 40;
 
 	double distance = 0;
+	double trophyDis = 0;
 
 	int jumpAlpha = 0;
 	int eatAlpha = 0;

@@ -243,19 +243,19 @@ void CObstacleManager::Release()
 
 void CObstacleManager::PosYRandom(int obstacleType)
 {	
-	if (obstacleType = Food)
+	if (obstacleType == Food)
 	{
 		posYNum = posYRandom.Random(2, 5);
 	}
-	else if (obstacleType = SummerFood)
+	else if (obstacleType == SummerFood)
 	{
 		posYNum = posYRandom.Random(3, 5);
 	}
-	else if (obstacleType = WinterFood)
+	else if (obstacleType == WinterFood)
 	{
 		posYNum = posYRandom.Random(2, 4);
 	}
-	else if (obstacleType = Rotten)
+	else if (obstacleType == Rotten || obstacleType == Obstacle)
 	{
 		posYNum = posYRandom.Random(1, 5);
 	}

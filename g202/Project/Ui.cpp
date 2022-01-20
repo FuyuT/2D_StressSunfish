@@ -475,47 +475,137 @@ void CUi::Render(int parasiteNum, int hungry, float tempRegionNum, double distan
 	else if (distanceNum < RIVER)										//川級
 	{
 		riverIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", RIVER - distanceNum);
+		if (RIVER - distanceNum >= 1000)
+		{
+			trophyDis = (RIVER - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", RIVER - distanceNum);
+		}		
 	}
 	else if (distanceNum >= RIVER && distanceNum < WATERFALL)			//滝級
 	{
 		waterFallIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", WATERFALL - distanceNum);
+		if (WATERFALL - distanceNum >= 1000)
+		{
+			trophyDis = (WATERFALL - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", WATERFALL - distanceNum);
+		}
 	}
 	else if (distanceNum >= WATERFALL && distanceNum < LAKE)			//湖級
 	{
 		lakeIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", LAKE - distanceNum);
+		if (LAKE - distanceNum >= 1000)
+		{
+			trophyDis = (LAKE - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", LAKE - distanceNum);
+		}
 	}
 	else if (distanceNum >= LAKE && distanceNum < DAM)		//ダム級
 	{
 		damIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", DAM - distanceNum);
+		if (DAM - distanceNum >= 1000)
+		{
+			trophyDis = (DAM - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", DAM - distanceNum);
+		}
 	}
 	else if (distanceNum >= DAM && distanceNum < SEWER)		//下水道級
 	{
 		sewerIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEWER - distanceNum);
+		if (SEWER - distanceNum >= 1000)
+		{
+			trophyDis = (SEWER - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEWER - distanceNum);
+		}
 	}
 	else if (distanceNum >= SEWER && distanceNum < INDIANOCEAN)		//インド洋級
 	{
 		indianOceanIconTexture.RenderScale(torophyPos.x, torophyPos.y, 1.0f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", INDIANOCEAN - distanceNum);
+		if (INDIANOCEAN - distanceNum >= 1000)
+		{
+			trophyDis = (INDIANOCEAN - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f m", INDIANOCEAN - distanceNum);
+		}
 	}
 	else if (distanceNum >= INDIANOCEAN && distanceNum < AMAZONRIVER)		//アマゾン川級
 	{
 		amazonRiverIconTexture.RenderScale(1700, 77, 0.7f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", AMAZONRIVER - distanceNum);
+		if (AMAZONRIVER - distanceNum >= 1000)
+		{
+			trophyDis = (AMAZONRIVER - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", AMAZONRIVER - distanceNum);
+		}
 	}
 	else if (distanceNum >= AMAZONRIVER && distanceNum < OCEAN)		//海級
 	{
 		oceanIconTexture.RenderScale(1737, 48, 0.9f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", OCEAN - distanceNum);
+		if (OCEAN - distanceNum >= 1000)
+		{
+			trophyDis = (OCEAN - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", OCEAN - distanceNum);
+		}
 	}
 	else if (distanceNum >= OCEAN && distanceNum < SEAOFJAPAN)		//日本海級
 	{
 		seaOf​​JapanIconTexture.RenderScale(1746, 47, 0.9f);
-		trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEAOFJAPAN - distanceNum);
+		if (SEAOFJAPAN - distanceNum >= 1000)
+		{
+			trophyDis = (SEAOFJAPAN - distanceNum) / 100;
+			int km = trophyDis;
+			double trueTrophyDis = (double)km / 10;
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.1f km", trueTrophyDis);
+		}
+		else
+		{
+			trophyFont.RenderFormatString(NextTrophyTextPos.x, NextTrophyTextPos.y, MOF_COLOR_BLACK, "%6.0f m", SEAOFJAPAN - distanceNum);
+		}
 	}
 	else if (distanceNum >= SEAOFJAPAN)								//地球一周級
 	{
