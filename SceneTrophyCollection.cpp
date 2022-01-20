@@ -34,55 +34,85 @@ void CSceneTrophyCollection::Initialize()
 
 	//トロフィーテクスチャ読み込み
 	//フラグがオンなら対応するテクスチャ、フラグがオフなら未取得テクスチャを読み込む。
-	//とりあえず仮テクスチャ読み込み
 	if (riverFlg)
 		riverIconTexture.Load("1_川級.png");
+	else
+		riverIconTexture.Load("1_川級_影.png");
 
 	if(waterFallFlg)
 		waterFallIconTexture.Load("2_滝級.png");
-	
+	else
+		waterFallIconTexture.Load("2_滝級_影.png");
+
 	if(lakeFlg)
 		lakeIconTexture.Load("3_湖級.png");
+	else
+		lakeIconTexture.Load("3_湖級_影.png");
 
 	if(damFlg)
 		damIconTexture.Load("4_ダム級.png");
+	else
+		damIconTexture.Load("4_ダム級_影.png");
 
 	if(sewerFlg)
 		sewerIconTexture.Load("5_下水道級.png");
+	else
+		sewerIconTexture.Load("5_下水道級_影.png");
 
 	if(indianOceanFlg)
 		indianOceanIconTexture.Load("6_インド洋級.png");
+	else
+		indianOceanIconTexture.Load("6_インド洋級_影.png");
 
 	if(amazonRiverFlg)
 		amazonRiverIconTexture.Load("7_アマゾン川級.png");
+	else
+		amazonRiverIconTexture.Load("7_アマゾン川級_影.png");
 
 	if(oceanFlg)
 		oceanIconTexture.Load("8_海級.png");
+	else
+		oceanIconTexture.Load("8_海級_影.png");
 
 	if(seaOf​​JapanFlg)
 		seaOf​​JapanIconTexture.Load("9_日本海級.png");
+	else
+		seaOf​​JapanIconTexture.Load("9_日本海級_影.png");
 
 	if(aroundTheGlobeFlg)
 		aroundTheGlobeIconTexture.Load("10_地球一周級.png");
+	else
+		aroundTheGlobeIconTexture.Load("10_地球一周級_影.png");
 
 	if(zeroMotivationFlg)
 		zeroMotivationIconTexture.Load("S1_やる気ゼロ級.png");
+	else
+		zeroMotivationIconTexture.Load("S1_やる気ゼロ級_影.png");
 
 	if(mountFujiFlg)
 		mountFujiIconTexture.Load("S5_富士山級.png");
+	else
+		mountFujiIconTexture.Load("S5_富士山級_影.png");
 
 	if(osakaMarathonFlg)
 		osakaMarathonIconTexture.Load("S4_大阪マラソン級.png");
+	else
+		osakaMarathonIconTexture.Load("S4_大阪マラソン級_影.png");
 
 	if(biwaLakeFlg)
 		biwaLakeIconTexture.Load("S2_琵琶湖級.png");
+	else
+		biwaLakeIconTexture.Load("S2_琵琶湖級_影.png");
 
 	if(jackPodFlg)
 		jackPodIconTexture.Load("S3_ジャックポット級.png");
+	else
+		jackPodIconTexture.Load("S3_ジャックポット級_影.png");
 
 	if(talentedDemonFlg)
 		talentedDemonIconTexture.Load("S6_才能魔級.png");
-	
+	else
+		talentedDemonIconTexture.Load("S6_才能魔級_影.png");
 
 	//ボタンテクスチャ読み込み
 	menuButtonTexture.Load("ButtonMenu.png");
@@ -625,7 +655,18 @@ void CSceneTrophyCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_SELECT);
-				buttonSelect = 1;
+				if (amazonRiverFlg)
+					buttonSelect = 1;
+				else if (aroundTheGlobeFlg)
+					buttonSelect = 4;
+				else if (oceanFlg)
+					buttonSelect = 2;
+				else if (zeroMotivationFlg)
+					buttonSelect = 5;
+				else if (seaOf​​JapanFlg)
+					buttonSelect = 3;
+				else
+					buttonSelect = 0;
 				page = 2;
 			}
 
@@ -1090,13 +1131,37 @@ void CSceneTrophyCollection::Update()
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_SELECT);
-				buttonSelect = 1;
+				if (riverFlg)
+					buttonSelect = 1;
+				else if (damFlg)
+					buttonSelect = 4;
+				else if (waterFallFlg)
+					buttonSelect = 2;
+				else if (sewerFlg)
+					buttonSelect = 5;
+				else if (lakeFlg)
+					buttonSelect = 3;
+				else if (indianOceanFlg)
+					buttonSelect = 6;
+				else
+					buttonSelect = 0;
 				page = 1;
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(2).CollisionPoint(mousePosX, mousePosY)))
 			{
 				cSound->Play(SOUND_BUTTON_SELECT);
-				buttonSelect = 1;
+				if (mountFujiFlg)
+					buttonSelect = 1;
+				else if (jackPodFlg)
+					buttonSelect = 4;
+				else if (osakaMarathonFlg)
+					buttonSelect = 2;
+				else if (talentedDemonFlg)
+					buttonSelect = 5;
+				else if (biwaLakeFlg)
+					buttonSelect = 3;
+				else
+					buttonSelect = 0;
 				page = 3;
 			}
 		}
@@ -1473,7 +1538,19 @@ void CSceneTrophyCollection::Update()
 			}
 			if ((g_pInput->IsMouseKeyPush(MOFMOUSE_LBUTTON) && ButtonGetRect(1).CollisionPoint(mousePosX, mousePosY)))
 			{
-				buttonSelect = 1;
+				cSound->Play(SOUND_BUTTON_SELECT);
+				if (amazonRiverFlg)
+					buttonSelect = 1;
+				else if (aroundTheGlobeFlg)
+					buttonSelect = 4;
+				else if (oceanFlg)
+					buttonSelect = 2;
+				else if (zeroMotivationFlg)
+					buttonSelect = 5;
+				else if (seaOf​​JapanFlg)
+					buttonSelect = 3;
+				else
+					buttonSelect = 0;
 				page = 2;
 			}
 		}
@@ -1489,24 +1566,19 @@ void CSceneTrophyCollection::Render()
 		//1ページ目
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 31, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "1/3");
 
-		if(riverFlg)
 		scaleController.ScaleRender(&riverIconTexture, iconFirstRowPosX, iconOneLinePosY,riverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + riverIconTexture.GetHeight() +10, "川級");
-		if(waterFallFlg)
 		scaleController.ScaleRender(&waterFallIconTexture, iconSecondRowPosX, iconOneLinePosY, waterFallScale);
 		//CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + waterFallIconTexture.GetHeight() + 10, "滝級");
-		if(lakeFlg)
 		scaleController.ScaleRender(&lakeIconTexture, iconThirdRowPosX, iconOneLinePosY, lakeScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + lakeIconTexture.GetHeight() + 10, "湖級");
-		if(damFlg)
 		scaleController.ScaleRender(&damIconTexture, iconFirstRowPosX, iconTwoLinePosY, damScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconTwoLinePosY + damIconTexture.GetHeight() + 10 , "ダム級");
-		if(sewerFlg)
 		scaleController.ScaleRender(&sewerIconTexture, iconSecondRowPosX, iconTwoLinePosY, sewerScale);
 		//CGraphicsUtilities::RenderString(iconSecondRowPosX, iconTwoLinePosY + sewerIconTexture.GetHeight() + 10, "下水道級");
-		if(indianOceanFlg)
 		scaleController.ScaleRender(&indianOceanIconTexture, iconThirdRowPosX, iconTwoLinePosY, indianOceanScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconTwoLinePosY + indianOceanIconTexture.GetHeight() + 10, "インド洋級");
+		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 2)
 	{
@@ -1514,48 +1586,38 @@ void CSceneTrophyCollection::Render()
 		//2ページ目
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 10, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "2/3");
 
-		if(amazonRiverFlg)
-		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX, iconOneLinePosY, amazonRiverScale);
+		scaleController.ScaleRender(&amazonRiverIconTexture, iconFirstRowPosX - 30, iconOneLinePosY - 10, amazonRiverScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + amazonRiverIconTexture.GetHeight() + 10, "アマゾン川級");
-		if(oceanFlg)
-		scaleController.ScaleRender(&oceanIconTexture, iconSecondRowPosX, iconOneLinePosY, oceanScale);
+		scaleController.ScaleRender(&oceanIconTexture, iconSecondRowPosX + 45, iconOneLinePosY - 10, oceanScale);
 		//CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + oceanIconTexture.GetHeight() + 10, "海級");
-		if(seaOf​​JapanFlg)
-		scaleController.ScaleRender(&seaOf​​JapanIconTexture, iconThirdRowPosX, iconOneLinePosY, seaOf​​JapanScale);
+		scaleController.ScaleRender(&seaOf​​JapanIconTexture, iconThirdRowPosX + 52, iconOneLinePosY - 10, seaOf​​JapanScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + seaOf​​JapanIconTexture.GetHeight() + 10, "日本海級");
-		if(aroundTheGlobeFlg)
-		scaleController.ScaleRender(&aroundTheGlobeIconTexture, icon2PageFirstRowPosX, iconTwoLinePosY, aroundTheGlobeScale);
+		scaleController.ScaleRender(&aroundTheGlobeIconTexture, icon2PageFirstRowPosX + 23, iconTwoLinePosY - 5, aroundTheGlobeScale);
 		//CGraphicsUtilities::RenderString(icon2PageFirstRowPosX, iconTwoLinePosY + aroundTheGlobeIconTexture.GetHeight() + 10, "地球一周級");
-		if(zeroMotivationFlg)
-		scaleController.ScaleRender(&zeroMotivationIconTexture, icon2pageSecondRowPosX, iconTwoLinePosY, zeroMotivationScale);
+		scaleController.ScaleRender(&zeroMotivationIconTexture, icon2pageSecondRowPosX + 2, iconTwoLinePosY - 5, zeroMotivationScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + zeroMotivationIconTexture.GetHeight() + 10, "やる気ゼロ級");
+		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
+		rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	}
 	if (page == 3)
 	{
 		backGroundTexture2.Render(0, 0);
 		//3ページ目
 		font.RenderString(leftButtonPosX + leftButtonTexture.GetWidth() + 9, leftAndRightButtonPosY - 2, MOF_XRGB(255, 255, 255), "3/3");
-
-		if(mountFujiFlg)
-		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX, iconOneLinePosY, mountFujiScale);
+		scaleController.ScaleRender(&mountFujiIconTexture, iconFirstRowPosX , iconOneLinePosY + 120, mountFujiScale);
 		//CGraphicsUtilities::RenderString(iconFirstRowPosX, iconOneLinePosY + mountFujiIconTexture.GetHeight() + 10, "富士山級");
-		if(osakaMarathonFlg)
-		scaleController.ScaleRender(&osakaMarathonIconTexture, iconSecondRowPosX, iconOneLinePosY, osakaMarathonScale);
+		scaleController.ScaleRender(&osakaMarathonIconTexture, iconSecondRowPosX + 2, iconOneLinePosY - 10, osakaMarathonScale);
 		//CGraphicsUtilities::RenderString(iconSecondRowPosX, iconOneLinePosY + osakaMarathonIconTexture.GetHeight() + 10, "大阪マラソン級");
-		if(biwaLakeFlg)
-		scaleController.ScaleRender(&biwaLakeIconTexture, iconThirdRowPosX, iconOneLinePosY, biwaLakeScale);
+		scaleController.ScaleRender(&biwaLakeIconTexture, iconThirdRowPosX + 3, iconOneLinePosY - 10, biwaLakeScale);
 		//CGraphicsUtilities::RenderString(iconThirdRowPosX, iconOneLinePosY + biwaLakeIconTexture.GetHeight() + 10, "琵琶湖級");
-		if(jackPodFlg)
-		scaleController.ScaleRender(&jackPodIconTexture, icon2PageFirstRowPosX, iconTwoLinePosY, jackPodScale);
+		scaleController.ScaleRender(&jackPodIconTexture, icon2PageFirstRowPosX + 20, iconTwoLinePosY - 10, jackPodScale);
 		//CGraphicsUtilities::RenderString(icon2PageFirstRowPosX, iconTwoLinePosY + jackPodIconTexture.GetHeight() + 10, "ジャックポット級");
-		if(talentedDemonFlg)
-		scaleController.ScaleRender(&talentedDemonIconTexture, icon2pageSecondRowPosX+30, iconTwoLinePosY, talentedDemonScale);
+		scaleController.ScaleRender(&talentedDemonIconTexture, icon2pageSecondRowPosX + 15, iconTwoLinePosY - 10, talentedDemonScale);
 		//CGraphicsUtilities::RenderString(icon2pageSecondRowPosX, iconTwoLinePosY + talentedDemonIconTexture.GetHeight() + 10, "才能魔級");
+		leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
 	}
 
 	scaleController.ScaleRender(&menuButtonTexture,menuButtonPosX,menuButtonPosY,menuButtonScale);
-	leftButtonTexture.Render(leftButtonPosX, leftAndRightButtonPosY);
-	rightButtonTexture.Render(rightButtonPosX, leftAndRightButtonPosY);
 	font.RenderString(textPosX, textPosY, MOF_XRGB(255, 255, 255), "トロフィー集");
 	if (popUpFlg)
 	{
@@ -1742,7 +1804,7 @@ CRectangle CSceneTrophyCollection::GetRect(int i)
 
 	//富士山級
 	if(i == TROPHY_MOUNTFJI && mountFujiFlg)
-		return CRectangle(iconFirstRowPosX, iconOneLinePosY, iconFirstRowPosX + mountFujiIconTexture.GetWidth(), iconOneLinePosY + mountFujiIconTexture.GetHeight());
+		return CRectangle(iconFirstRowPosX, iconOneLinePosY, iconFirstRowPosX - 5 + mountFujiIconTexture.GetWidth(), iconOneLinePosY + 105 + mountFujiIconTexture.GetHeight());
 	//大阪マラソン級
 	if(i == TROPHY_OSAKAMARATHON && osakaMarathonFlg)
 		return CRectangle(iconSecondRowPosX, iconOneLinePosY, iconSecondRowPosX +osakaMarathonIconTexture.GetWidth(), iconOneLinePosY + osakaMarathonIconTexture.GetHeight());

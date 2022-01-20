@@ -36,7 +36,7 @@ private:
 	bool		waterFallFlg = false;
 	float		waterFallScale = 1.0f;
 	CTexture	lakeIconTexture;		//湖級
-	bool		lakeFlg = true;
+	bool		lakeFlg = false;
 	float		lakeScale = 1.0f;
 	CTexture	damIconTexture;			//ダム級
 	bool		damFlg = false;
@@ -86,9 +86,9 @@ private:
 	const int			icon2PageFirstRowPosX = 570;
 	const int			icon2pageSecondRowPosX = 1075;
 	//一行目のY座標
-	const int			iconOneLinePosY = 100;
+	const int			iconOneLinePosY = 80;
 	//二行目のY座標
-	const int			iconTwoLinePosY = 500;
+	const int			iconTwoLinePosY = 480;
 
 	//ページ数
 	int			page;
