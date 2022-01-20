@@ -84,7 +84,6 @@ void CCheckCauseOfDeathWindow::Render()
 	popUpTexture.Render(popUpPosX, popUpPosY);
 	causeOfDeathTexture.RenderScale(causeOfDeathTexturePosX, causeOfDeathTexturePosY, 0.8);
 
-	//死因説明テキスト
 	if (buttonResult == CAUSE_Hyperthermia)
 	{
 		font.RenderString(850, 240, MOF_XRGB(0, 0, 0), "熱中症");

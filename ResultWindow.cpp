@@ -316,18 +316,90 @@ void CResultWindow::Render()
 	//ÉgÉçÉtÉBÅ[ï`âÊ
 	if (numberOfTrophy[2] != TROPHY_NULL)
 	{
-		trophyTexture3.Render(trophyTexturePosX - 100, trophyTexturePosY);
+		if (numberOfTrophy[2] == TROPHY_MOUNTFJI)
+		{
+			trophyTexture3.Render(trophyTexturePosX - 100, trophyTexturePosY + 195);
+		}
+		else if (numberOfTrophy[2] == TROPHY_OCEAN)
+		{
+			trophyTexture3.Render(trophyTexturePosX - 100, trophyTexturePosY);
+		}
+		else if (numberOfTrophy[2] == TROPHY_SEAOFJAPAN)
+		{
+			trophyTexture3.Render(trophyTexturePosX - 90, trophyTexturePosY);
+		}
+		else
+		{
+			trophyTexture3.Render(trophyTexturePosX - 100, trophyTexturePosY);
+		}
 	}
 	if (numberOfTrophy[1] != TROPHY_NULL)
 	{
-		trophyTexture2.Render(trophyTexturePosX - 50, trophyTexturePosY);
+		if (numberOfTrophy[1] == TROPHY_MOUNTFJI)
+		{
+			trophyTexture2.Render(trophyTexturePosX - 50, trophyTexturePosY + 195);
+		}
+		else if (numberOfTrophy[1] == TROPHY_OCEAN)
+		{
+			trophyTexture2.Render(trophyTexturePosX  +30 , trophyTexturePosY);
+		}
+		else if (numberOfTrophy[1] == TROPHY_SEAOFJAPAN)
+		{
+			trophyTexture2.Render(trophyTexturePosX - 40, trophyTexturePosY);
+		}
+		else
+		{
+			trophyTexture2.Render(trophyTexturePosX - 50, trophyTexturePosY);
+		}	
 	}
-	trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
-	classPlateTexture.Render(classPlatePosX,classPlatePosY);
-	//êVãKÉQÉbÉgÇÃèÍçánewÇï`âÊ
-	if (newGetTrophyFlg)
+
+	if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
 	{
-		newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+		trophyTexture.Render(trophyTexturePosX, trophyTexturePosY + 195);
+	}
+	else if (numberOfTrophy[0] == TROPHY_OCEAN)
+	{
+		trophyTexture.Render(trophyTexturePosX + 90, trophyTexturePosY);
+	}
+	else if (numberOfTrophy[0] == TROPHY_SEAOFJAPAN)
+	{
+		trophyTexture.Render(trophyTexturePosX + 90, trophyTexturePosY);
+	}
+	else
+	{
+		trophyTexture.Render(trophyTexturePosX, trophyTexturePosY);
+	}
+
+	if (numberOfTrophy[0] == TROPHY_JACKPOD)
+	{
+		scaleController.ScaleRender(&classPlateTexture, classPlatePosX - 10, classPlatePosY - 80,0.9f);
+	}
+	else
+	{
+		classPlateTexture.Render(classPlatePosX, classPlatePosY);
+	}
+	//êVãKÉQÉbÉgÇÃèÍçánewÇï`âÊ
+
+	if (numberOfTrophy[2] != TROPHY_NULL)
+	{
+		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+			newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+		else
+			newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+	}
+	else if(numberOfTrophy[1] != TROPHY_NULL)
+	{
+		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+			newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+		else
+			newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+	}
+	else
+	{
+		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+			newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+		else
+			newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 10);
 	}
 
 	//mï`âÊ
