@@ -5,6 +5,7 @@
 #include "timer.h"
 #include "time.h"
 #include "HeaderDefine.h"
+#include "SoundManager.h"
 
 //初期位置 X
 #define		STARTPOS_X				200
@@ -15,8 +16,6 @@
 
 //移動速度	
 #define		PLAYER_SPEED			0.6f
-//最大速度
-#define		PLAYER_MAXSPEED			10.0f
 //重力
 #define		GRAVITY					1.0f
 
@@ -48,10 +47,12 @@
 #define		HUNGRYLEVEL				0.05f
 //エサを食べたときに得られる満腹度
 #define		FEED_SATIETYLEVEL		36.0f
+//空腹地
+#define		INIT_STOMACH			40;
 //満腹
-#define		FULL_STOMACH			20
+#define		FULL_STOMACH			0
 //餓死
-#define		STARVATION				85
+#define		STARVATION				100
 //同じエサが一度に画面に出てくる最大数
 #define FEED_MAXCOUNT 3
 
@@ -73,6 +74,9 @@
 #define		WATERFLOW_MAXSPEED		1.5f
 //水流による加速度
 #define		WATERFLOW_SPEED			0.02f
+
+//水しぶき
+#define		WAVE_POSY				620
 
 //死因一覧
 enum CAUSE_OF_DEATH
@@ -113,6 +117,9 @@ enum Temperature
 class CPlayer
 {
 private:
+	//最大速度
+	float		playerMaxSpeedX = 10.0f;
+	float		playerMaxSpeedY = 10.0f;
 
 	//テクスチャ
 	CTexture	standTexture;
@@ -129,6 +136,8 @@ private:
 	CTexture	coldEatTexture;
 	CTexture	coldJumpTexture;
 	CTexture	coldDeathTexture;
+
+	CTexture	waveTexture;
 
 	//確率
 	CRandom		random;
@@ -170,6 +179,13 @@ private:
 	//アニメーション
 	CSpriteMotionController	motion;
 
+	CSpriteMotionController	outWaveMotion;
+	CSpriteMotionController	inWaveMotion;
+
+	//水しぶき
+	int			jumpStartPosX;
+	int			jumpEndPosX;
+
 	//ブレーキ(テスト)
 	CTimer		brakeTimer;
 
@@ -185,6 +201,8 @@ private:
 	CTimer	moveUpTaskTimer;
 	CTimer	moveDownTaskTimer;
 
+	//サウンド用
+	CSoundManager* cSound;
 public:
 	CPlayer();
 	~CPlayer();
@@ -285,7 +303,7 @@ public:
 	{
 		return parasite;
 	}
-	//空腹度を返す 10～0
+	//空腹度を返す 100～0
 	float GetHungry()
 	{
 		return hungerRegion;
@@ -345,5 +363,8 @@ public:
 	{
 		return taskCompleteStep;
 	}
+
+	//サウンド用
+	void SetSoundManager(CSoundManager& p) { cSound = &p; }
 };
 

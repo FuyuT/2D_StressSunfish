@@ -87,6 +87,10 @@ bool CPlayer::Load()
 		return false;
 	}
 
+	if (!waveTexture.Load("nami.png"))
+	{
+		return false;
+	}
 
 	return true;
 }
@@ -107,7 +111,7 @@ void CPlayer::Initialize()
 	tempRegion = 50;
 	temperature = Temperature::Temp_Normal;
 	//空腹度
-	hungerRegion = FULL_STOMACH;
+	hungerRegion = INIT_STOMACH;
 	//寄生虫
 	parasite = 0;
 	//速度
@@ -126,6 +130,9 @@ void CPlayer::Initialize()
 	//連続衝突を避ける
 	hitFlg = false;
 	hitTimer.SetTotalTime(1);
+	//水しぶき
+	jumpStartPosX = 0;
+	jumpEndPosX = 0;
 
 	//フラグ
 	deadFlg = false;
@@ -195,7 +202,32 @@ void CPlayer::Initialize()
 	};
 	motion.Create(anim, MOTION_COUNT);
 
+	SpriteAnimationCreate waveAnim[] = {
+		{
+			"無",
+			0,0,
+			1,1,
+			FALSE,{{1,0,0}}
+		},
+		{
+			"波",
+			0,0,
+			381,206,//373 3205
+			FALSE,{{3,0,0},{3,1,0},{3,2,0},{3,3,0},{3,4,0},
+				  {3,0,1},{3,1,1},{3,2,1},{3,3,1},{3,4,1},
+				  {3,0,2},{3,1,2},{3,2,2},{3,3,2},{3,4,2},
+				  {3,0,3},{3,1,3},{3,2,3},{3,3,3},{3,4,3},
+				  {3,0,4},{3,1,4}}
+		},
+		
+	};
+	outWaveMotion.Create(waveAnim,2);
+	inWaveMotion.Create(waveAnim, 2);
+
 	//motion.ChangeMotion(MOTION_STAND);
+
+	playerMaxSpeedX = 10.0f;
+	playerMaxSpeedY = 10.0f;
 }
 
 //移動
@@ -245,9 +277,9 @@ void CPlayer::UpdateMove(int tutorialStep)
 	}
 
 	//自動で右に進むように
-	if (moveX > PLAYER_MAXSPEED)
+	if (moveX > playerMaxSpeedX)
 	{
-		moveX = PLAYER_MAXSPEED;
+		moveX = playerMaxSpeedX;
 	}
 	else
 	{
@@ -279,18 +311,18 @@ void CPlayer::UpdateMove(int tutorialStep)
 	if (g_pInput->IsKeyHold(MOFKEY_W))
 	{
 		moveY -= PLAYER_SPEED;
-		if (moveY < -PLAYER_MAXSPEED)
+		if (moveY < -playerMaxSpeedY)
 		{
-			moveY = -PLAYER_MAXSPEED;
+			moveY = -playerMaxSpeedY;
 		}
 	}
 	//下に移動
 	else if (g_pInput->IsKeyHold(MOFKEY_S))
 	{
 		moveY += PLAYER_SPEED;
-		if (moveY > PLAYER_MAXSPEED)
+		if (moveY > playerMaxSpeedY)
 		{
-			moveY = PLAYER_MAXSPEED;
+			moveY = playerMaxSpeedY;
 		}
 	}
 	else
@@ -333,13 +365,73 @@ void CPlayer::UpdateMove(int tutorialStep)
 		posY = SEA_LEVEL - COLLISION_ADJUSTMENT_TOP;
 		moveY = 0;
 	}	
+
+	
+	//一定距離毎にMAX SPEEDを0.01上げる
+	if (GetDistance() < 1000)
+	{
+		playerMaxSpeedX = 10.0f;
+		playerMaxSpeedY = 10.0f;
+	}
+	else if (GetDistance() < 2500)
+	{
+		playerMaxSpeedX = 11.2f;
+		playerMaxSpeedY = 10.5;
+	}
+	else if (GetDistance() < 5000)
+	{
+		playerMaxSpeedX = 12.4f;
+		playerMaxSpeedY = 11.0f;
+	}
+	else if (GetDistance() < 10000)
+	{
+		playerMaxSpeedX = 13.6f;
+		playerMaxSpeedY = 11.5f;
+	}
+	else if (GetDistance() < 25000)
+	{
+		playerMaxSpeedX = 14.8f;
+		playerMaxSpeedY = 12.0f;
+	}
+	else if (GetDistance() < 50000)
+	{
+		playerMaxSpeedX = 16.0f;
+		playerMaxSpeedY = 12.5f;
+	}
+	else if (GetDistance() < 100000)
+	{
+		playerMaxSpeedX = 17.2f;
+		playerMaxSpeedY = 13.0f;
+	}
+	else if (GetDistance() < 200000)
+	{
+		playerMaxSpeedX = 18.4f;
+		playerMaxSpeedY = 13.5f;
+	}
+	else if (GetDistance() < 300000)
+	{
+		playerMaxSpeedX = 19.6;
+		playerMaxSpeedY = 14.0f;
+	}
+	else
+	{
+		playerMaxSpeedX = 20.8;
+		playerMaxSpeedY = 14.5f;
+	}
+
+	if (g_pInput->IsKeyPush(MOFKEY_1))
+	{
+		playerMaxSpeedX = 20.8;
+		playerMaxSpeedY = 14.5f;
+	}
+
 }
 
 //エサを食べる
 bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 {
 	//エサを食べる
-	if (g_pInput->IsKeyPush(MOFKEY_A) && tutorialStep >= Task_Action)
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) && tutorialStep >= Task_Action)
 	{
 		cSound->Play(SOUND_EAT);
 		//チュートリアルタスク
@@ -359,6 +451,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 			//死因：肥満
 			if (hungerRegion <= FULL_STOMACH)
 			{
+				cSound->Play(SOUND_OBESITY);
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_Obesity;
 				//エサを食べたことを返す
@@ -389,12 +482,14 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 				//20%で死ぬ
 				if (DieInPercentage(20))
 				{
+					cSound->Play(SOUND_CLOGGED);
 					motion.ChangeMotion(MOTION_DEATH);
 					causeOfDeath = CAUSE_ChokeOnShell;
 				}
 			}
 		}
 
+		cSound->Play(SOUND_EAT);
 		//エサを食べたことを返す
 		return true;
 	}
@@ -406,7 +501,7 @@ bool CPlayer::Eat(bool rottenFlg, bool unDeadFlg, int tutorialStep)
 void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 {
 	//海面に近いとき(ジャンプ可能である際) に A を押す
-	if (g_pInput->IsKeyPush(MOFKEY_A) &&
+	if (g_pInput->IsKeyPush(MOFKEY_RETURN) &&
 		possibleToJumpFlg && tutorialStep >= Task_Action)
 	{
 		cSound->Play(SOUND_JUMP_START);
@@ -418,6 +513,10 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 		possibleToJumpFlg = false;
 
 		motion.ChangeMotion(MOTION_JUMP);
+
+		//水しぶきの発生座標取得
+		jumpStartPosX = posX;
+		outWaveMotion.ChangeMotion(1);
 
 		//ジャンプ力
 		moveY = -JUMP_POWER_Y;
@@ -432,6 +531,10 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 		//落下による勢いで少し潜るように
 		if (posY > SEA_LEVEL + WATER_LANDING_DEEP)
 		{
+			//着水時の座標取得
+			jumpEndPosX = posX;
+			inWaveMotion.ChangeMotion(1);
+
 			//jumpDangerTimerの時間内にジャンプを行うと死亡
 			if (jumpDangerFlg)
 			{
@@ -453,8 +556,8 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 			parasite = 0;
 
 			//着水後に勢いを持たせる
-			moveY = PLAYER_MAXSPEED;
-			moveX = PLAYER_MAXSPEED;
+			moveY = playerMaxSpeedX;
+			moveX = playerMaxSpeedX;
 
 			jumpFlg = false;
 
@@ -496,6 +599,8 @@ void CPlayer::UpdateStatus(bool unDeadFlg, int tutorialStep, int eventNum)
 	{
 		possibleToJumpFlg = false;
 	}
+
+	
 
 	/*********
 	 * 体温
@@ -675,6 +780,8 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 {
 	//アニメーションの更新
 	motion.AddTimer(CUtilities::GetFrameSecond());
+	outWaveMotion.AddTimer(CUtilities::GetFrameSecond());
+	inWaveMotion.AddTimer(CUtilities::GetFrameSecond());
 
 	//死亡アニメーションが終わり次第、deadflgをtrueにする
 	if (motion.GetMotionNo() == MOTION_DEATH)
@@ -682,6 +789,21 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 		if (motion.IsEndMotion())
 		{
 			deadFlg = true;
+		}
+	}
+
+	if (outWaveMotion.GetMotionNo() == 1)
+	{
+		if (outWaveMotion.IsEndMotion())
+		{
+			outWaveMotion.ChangeMotion(0);
+		}
+	}
+	if (inWaveMotion.GetMotionNo() == 1)
+	{
+		if (inWaveMotion.IsEndMotion())
+		{
+			inWaveMotion.ChangeMotion(0);
 		}
 	}
 
@@ -724,7 +846,6 @@ void CPlayer::Update(bool unDeadFlg, int tutorialStep,int eventNum)
 
 	//移動更新
 	UpdateMove(tutorialStep);
-
 }
 
 //描画
@@ -733,6 +854,18 @@ void CPlayer::Render(float wx, float wy)
 	//プレイヤーが死んでいる場合
 	if (deadFlg && !jumpFlg)
 		return;
+
+	//水しぶき
+	//飛び出し
+	if (outWaveMotion.GetMotionNo() == 1)
+	{
+		waveTexture.Render(jumpStartPosX - wx, WAVE_POSY - wy, outWaveMotion.GetSrcRect());
+	}
+	//着水
+	if (inWaveMotion.GetMotionNo() == 1)
+	{
+		waveTexture.Render(jumpEndPosX - wx, WAVE_POSY - wy, inWaveMotion.GetSrcRect());
+	}
 
 	//プレイヤーの描画
 	switch (motion.GetMotionNo())
@@ -872,6 +1005,7 @@ void CPlayer::RenderDebug(float wx,float wy)
 	//無敵(デバッグ用)
 	if(hitFlg)
 		CGraphicsUtilities::RenderString(10, 220, MOF_COLOR_BLACK, "無敵");
+	CGraphicsUtilities::RenderString(10, 260, MOF_COLOR_BLACK, "最高速度 %d",playerMaxSpeedX);
 }
 
 //解放
@@ -892,7 +1026,12 @@ void CPlayer::Release()
 	coldJumpTexture.Release();
 	coldDeathTexture.Release();
 
+	waveTexture.Release();
+
 	motion.Release();
+	outWaveMotion.Release();
+	inWaveMotion.Release();
+
 }
 
 
