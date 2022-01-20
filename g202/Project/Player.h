@@ -76,7 +76,7 @@
 #define		WATERFLOW_SPEED			0.02f
 
 //…‚µ‚Ô‚«
-#define		WAVE_POSY				620
+#define		WAVE_POSY				530
 
 //€ˆöˆê——
 enum CAUSE_OF_DEATH

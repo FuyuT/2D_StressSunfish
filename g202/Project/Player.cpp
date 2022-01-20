@@ -859,12 +859,12 @@ void CPlayer::Render(float wx, float wy)
 	//飛び出し
 	if (outWaveMotion.GetMotionNo() == 1)
 	{
-		waveTexture.Render(jumpStartPosX - wx, WAVE_POSY - wy, outWaveMotion.GetSrcRect());
+		waveTexture.RenderScale(jumpStartPosX - wx, WAVE_POSY - wy, 1.5,outWaveMotion.GetSrcRect());
 	}
 	//着水
 	if (inWaveMotion.GetMotionNo() == 1)
 	{
-		waveTexture.Render(jumpEndPosX - wx, WAVE_POSY - wy, inWaveMotion.GetSrcRect());
+		waveTexture.RenderScale(jumpEndPosX - wx, WAVE_POSY - wy, 1.5, inWaveMotion.GetSrcRect());
 	}
 
 	//プレイヤーの描画
