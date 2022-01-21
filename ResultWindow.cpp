@@ -379,33 +379,45 @@ void CResultWindow::Render()
 		classPlateTexture.Render(classPlatePosX, classPlatePosY);
 	}
 	//êVãKÉQÉbÉgÇÃèÍçánewÇï`âÊ
-
-	if (numberOfTrophy[2] != TROPHY_NULL)
+	if (newGetTrophyFlg)
 	{
-		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
-			newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+		if (numberOfTrophy[2] != TROPHY_NULL)
+		{
+			if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+				newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+			else
+				newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+		}
+		else if (numberOfTrophy[1] != TROPHY_NULL)
+		{
+			if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+				newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+			else
+				newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+		}
 		else
-			newGetTexture.Render(trophyTexturePosX - 90, trophyTexturePosY + trophyTexture.GetHeight() + 10);
-	}
-	else if(numberOfTrophy[1] != TROPHY_NULL)
-	{
-		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
-			newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 205);
-		else
-			newGetTexture.Render(trophyTexturePosX - 50, trophyTexturePosY + trophyTexture.GetHeight() + 10);
-	}
-	else
-	{
-		if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
-			newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 205);
-		else
-			newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+		{
+			if (numberOfTrophy[0] == TROPHY_MOUNTFJI)
+				newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 205);
+			else
+				newGetTexture.Render(trophyTexturePosX - 25, trophyTexturePosY + trophyTexture.GetHeight() + 10);
+		}
 	}
 
 	//mï`âÊ
 	if (distance < 1000000)
 	{
-		sprintf_s(meter,10, "%dm", distance);
+		if (distance >= 1000)
+		{
+			double distanceNum = distance / 100;
+			int km = distanceNum;
+			double trueDis = (double)distanceNum / 10;
+			sprintf_s(meter, 10, "%4.1fkm", trueDis);
+		}
+		else
+		{
+			sprintf_s(meter, 10, "%dm", distance);
+		}
 	}
 	else
 	{
