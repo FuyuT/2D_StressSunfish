@@ -7,7 +7,6 @@ CSceneGameMenu:: CSceneGameMenu()
 
 CSceneGameMenu::~CSceneGameMenu()
 {
-	Release();
 }
 
 void CSceneGameMenu::PlayBGM()
@@ -51,6 +50,29 @@ void CSceneGameMenu::Initialize()
 
 	titleButtonTexture.Load("ButtonTitle.png");	
 
+	//こんぶ
+	//オブジェクトの数を取得して、数分メモリ確保
+	CUtility::GetEditObjectData("Text\\menuObject_0.txt", kelp.tex, kelp.objectTotalNo, kelp.pos);
+	objectKelp = new CBackObjectKelp[kelp.objectTotalNo];
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Load(kelp.tex, kelp.objectTotalNo, kelp.pos[n], -1, 3, 4);
+	}
+	//あかこんぶ
+	CUtility::GetEditObjectData("Text\\menuObject_1.txt", redKelp.tex, redKelp.objectTotalNo, redKelp.pos);
+	objectRedKelp = new CBackObjectRedKelp[redKelp.objectTotalNo];
+	for (int n = 0; n < redKelp.objectTotalNo; n++)
+	{
+		objectRedKelp[n].Load(redKelp.tex, redKelp.pos[n], -1, 3, 4);
+	}
+	//みどりこんぶ
+	CUtility::GetEditObjectData("Text\\menuObject_2.txt", greenKelp.tex, greenKelp.objectTotalNo, greenKelp.pos);
+	objectGreenKelp = new CBackObjectGreenKelp[greenKelp.objectTotalNo];
+	for (int n = 0; n < greenKelp.objectTotalNo; n++)
+	{
+		objectGreenKelp[n].Load(greenKelp.tex, greenKelp.pos[n], -1, 5, 7);
+	}
+
 	PlayBGM();
 	bubbleFade.Load();
 	bubbleFade.Initialize();
@@ -70,7 +92,7 @@ void CSceneGameMenu::Update()
 		//シーンの遷移
 		endFlg = true;
 		nextScene = nextSceneTemp;
-		Release();
+		//Release();
 		return;
 	}
 
@@ -115,7 +137,7 @@ void CSceneGameMenu::Update()
 			nextScene = SCENENO_GAME;
 			cSound->Play(SOUND_BUTTON_PUSH);
 			cSound->Play(SOUND_BUTTON_OK);
-			Release();
+			//Release();
 		}
 	}
 	//設定ボタン
@@ -319,6 +341,23 @@ void CSceneGameMenu::Update()
 			//Release();
 		}
 	}
+	//背景のオブジェクト
+	//こんぶ
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Update(backGround_0.GetWidth(), 0);
+	}
+	//あかこんぶ
+	for (int n = 0; n < redKelp.objectTotalNo; n++)
+	{
+		objectRedKelp[n].Update(backGround_0.GetWidth(), 0);
+	}
+	//みどりこんぶ
+	for (int n = 0; n < greenKelp.objectTotalNo; n++)
+	{
+		objectGreenKelp[n].Update(backGround_0.GetWidth(), 0);
+	}
+	
 }
 void CSceneGameMenu::SoundUpdate()
 {
@@ -332,9 +371,25 @@ void CSceneGameMenu::Render()
 	backGround_2.Render(0, 0);
 	backGround_3.Render(0, 0);
 	backGround_4.Render(0, 0);
+	//背景のオブジェクト
+	//こんぶ
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Render(backGround_0.GetWidth(), 0, 0, 0.6);
+	}
 	backGround_5.Render(0, 0);
 	backGround_6.Render(0, 0);
 	backGround_7.Render(0, 0);
+	//あかこんぶ
+	for (int n = 0; n < redKelp.objectTotalNo; n++)
+	{
+		objectRedKelp[n].Render(backGround_0.GetWidth(), 0, 0, 0.6);
+	}
+	//みどりこんぶ
+	for (int n = 0; n < greenKelp.objectTotalNo; n++)
+	{
+		objectGreenKelp[n].Render(backGround_0.GetWidth(), 0, 0, 0.6);
+	}
 	scaleController.ScaleRender(&gamePlayButtonTexture,buttonPosX,gamePlayButtonPosY,gamePlayButtonScale);
 	scaleController.ScaleRender(&configButtonTexture,buttonPosX,configButtonPosY,configButtonScale);
 	scaleController.ScaleRender(&stressButtonTexture,buttonPosX,stressButtonPosY,stressButtonScale);
@@ -355,6 +410,8 @@ void CSceneGameMenu::Release()
 	backGround_5.Release();
 	backGround_6.Release();
 	backGround_7.Release();
+
+
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();
@@ -363,6 +420,25 @@ void CSceneGameMenu::Release()
 	titleButtonTexture.Release();
 	textTexture.Release();
 	bubbleFade.Release();
+	delete kelp.pos;
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Release();
+	}
+	delete[] objectKelp;
+	delete redKelp.pos;
+	for (int n = 0; n < redKelp.objectTotalNo; n++)
+	{
+		objectRedKelp[n].Release();
+	}
+	delete[] objectRedKelp;
+
+	delete greenKelp.pos;
+	for (int n = 0; n < greenKelp.objectTotalNo; n++)
+	{
+		objectGreenKelp[n].Release();
+	}
+	delete[] objectGreenKelp;
 }
 
 void CSceneGameMenu::MouseCollision(int posX, int posY)

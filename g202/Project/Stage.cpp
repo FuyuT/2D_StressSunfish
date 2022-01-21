@@ -26,7 +26,14 @@ bool Stage::Load() {
 	if (!distantBackGroundTex.Load("BackGround\\BackGround_4.png"))	return false;
 	if (!insideBackGroundTex.Load("BackGround\\BackGround_5.png")) return false;
 	if (!closeBackGroundTex.Load("BackGround\\BackGround_6.png")) return false;
-	//if (!ObjectKelp.Load("Text\\konbu_test.txt",7))return false;
+	//こんぶ
+	//オブジェクトの数を取得して、数分メモリ確保
+	CUtility::GetEditObjectData("Text\\gameObject_0.txt", kelp.tex, kelp.objectTotalNo, kelp.pos);
+	objectKelp = new CBackObjectKelp[kelp.objectTotalNo];
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Load(kelp.tex, kelp.objectTotalNo, kelp.pos[n], -1, 3, 4);
+	}
 	return true;
 }
 
@@ -45,7 +52,6 @@ void Stage::Initialize(/*ENEMYSTART* pSt, int cnt*/) {
 		cFishShadow[n].Initialize();
 	}
 
-	ObjectKelp.Initialize();
 }
 
 void Stage::WaveUpdate(const CRectangle& rec, const float& hsw)
@@ -169,7 +175,11 @@ void Stage::Update(/*Enemy* ene, int ecnt*/CPlayer& pl) {
 	}
 
 	//背景のオブジェクト
-	ObjectKelp.Update(closeBackGroundTex.GetWidth(), scrollValueX);
+	//こんぶ
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Update(closeBackGroundTex.GetWidth(), scrollValueX);
+	}
 
 	FishShadowUpdate(pl.GetPosX());
 }
@@ -234,7 +244,17 @@ void Stage::ForeGroundRender()
 
 void Stage::Render() {
 	BackGroundRender();
-	ObjectKelp.Render(closeBackGroundTex.GetWidth(), scrollValueX, scrollValueY, 1);
+	//背景のオブジェクト
+	//こんぶ
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Render(closeBackGroundTex.GetWidth(), scrollValueX, scrollValueY, 1);
+	}
+	//CGraphicsUtilities::RenderString(100, 0, MOF_COLOR_BLACK,"scrollx:%1.0f y:%1.0f", scrollValueX, scrollValueY );
+	//Vector2 mousePos;
+	//g_pInput->GetMousePos(mousePos);
+	//CGraphicsUtilities::RenderString(100, 200, MOF_COLOR_BLACK, "mousex:%1.0f y:%1.0f", mousePos.x, mousePos.y);
+	//kelp.tex.Render(mousePos.x, mousePos.y);
 }
 
 void Stage::FishShadowRender()
@@ -262,7 +282,12 @@ void Stage::Release() {
 		cFishShadow[n].Release();
 	}
 
-	ObjectKelp.Release();
+	delete kelp.pos;
+	for (int n = 0; n < kelp.objectTotalNo; n++)
+	{
+		objectKelp[n].Release();
+	}
+	delete[] objectKelp;
 }
 
 int Stage::PosYRandom()

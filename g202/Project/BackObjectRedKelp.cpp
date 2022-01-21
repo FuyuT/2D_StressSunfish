@@ -8,7 +8,7 @@ CBackObjectRedKelp::~CBackObjectRedKelp()
 {
 }
 
-bool CBackObjectRedKelp::Load(const CTexture& tex, Vector2 pos, int frameNo, int randomMax)
+bool CBackObjectRedKelp::Load(const CTexture& tex, Vector2 pos, int frameNo, int randomMin, int randomMax)
 {
 	//画像を参照で取得
 	this->tex = tex;
@@ -17,19 +17,21 @@ bool CBackObjectRedKelp::Load(const CTexture& tex, Vector2 pos, int frameNo, int
 	//アニメーション
 	if (frameNo < 0)
 	{
-		frameNo = CUtilities::Random(randomMax);
+		frameNo = CUtilities::Random(randomMin,randomMax);
 	}
 	frameNo = 4;
 	SpriteAnimationCreate anim = {
 	"あかこんぶ",
 	0,0,
-	400,335,
-	TRUE,{{frameNo,0,0},{frameNo,1,0},{frameNo,2,0},{frameNo,3,0},{frameNo,4,0},{frameNo,5,0},
-		  {frameNo,0,1},{frameNo,1,1},{frameNo,2,1},{frameNo,3,1},{frameNo,4,1},{frameNo,5,1},
-		  {frameNo,0,2},{frameNo,1,2},{frameNo,2,2},{frameNo,3,2},{frameNo,4,2},{frameNo,5,2},
-		  {frameNo,0,3},{frameNo,1,3},{frameNo,2,3},{frameNo,3,3},{frameNo,4,3},{frameNo,5,3},
-		  {frameNo,0,4},{frameNo,1,4},{frameNo,2,4},{frameNo,3,4},{frameNo,4,4},{frameNo,5,4}}
+	600,337.5,
+	TRUE,{{frameNo,0,0},{frameNo,1,0},{frameNo,2,0},{frameNo,3,0},{frameNo,4,0},
+		  {frameNo,0,1},{frameNo,1,1},{frameNo,2,1},{frameNo,3,1},{frameNo,4,1},
+		  {frameNo,0,2},{frameNo,1,2},{frameNo,2,2},{frameNo,3,2},{frameNo,4,2},
+		  {frameNo,0,3},{frameNo,1,3},{frameNo,2,3},{frameNo,3,3},{frameNo,4,3},
+		  {frameNo,0,4},{frameNo,1,4},{frameNo,2,4},{frameNo,3,4},{frameNo,4,4},
+		  {frameNo,0,5},{frameNo,1,5},{frameNo,2,5},{frameNo,3,5},{frameNo,4,5}}
 	};
+	motion.Create(anim);
 	//縦再生ver.
 	//SpriteAnimationCreate anim = {
 	//"あかこんぶ",

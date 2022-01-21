@@ -52,6 +52,7 @@ bool CSceneGame::Load()
 	if (!stg.Load())return false;
 	if(!cObstacle.Load())return false;
 	bubbleFade.Load();
+
 	return true;
 }
 
@@ -285,6 +286,8 @@ void CSceneGame::Update()
 
 	//SE
 	SEUpdate();
+
+
 }
 
 void CSceneGame::Render()
@@ -299,6 +302,7 @@ void CSceneGame::Render()
 
 	//è·äQï®
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
+
 
 	//ç≈ëOñ ÇÃä‚îwåi
 	stg.ForeGroundRender();

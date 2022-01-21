@@ -12,7 +12,7 @@ private:
 public:
 	CBackObjectKelp();
 	~CBackObjectKelp();
-	bool Load(const CTexture& tex, Vector2 pos, int frameNo, int randomMax);
+	bool Load(const CTexture& tex, int posTotalNo, Vector2 pos, int frameNo, int randomMin, int randomMax);
 	void Initialize();
 	void Update(const float& backGroundWidth, const float& scrollX);
 	void Render(const float& backGroundWidth, const float& scrollX, const float& scrollY, const float renderScale);

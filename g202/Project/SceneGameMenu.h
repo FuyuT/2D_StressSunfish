@@ -1,6 +1,8 @@
 #pragma once
 #include "SceneBase.h"
-
+#include "BackObjectKelp.h"
+#include "BackObjectRedKelp.h"
+#include "BackObjectGreenKelp.h"
 class CSceneGameMenu : public CSceneBase
 {
 private:
@@ -44,6 +46,21 @@ private:
 
 	//前選択ボタン保存用
 	int	beforButtonSelect;
+
+	//背景のオブジェクト
+	struct BackObject
+	{
+		CTexture tex;
+		int objectTotalNo;
+		Vector2* pos;
+	};
+	BackObject kelp;
+	CBackObjectKelp* objectKelp;
+	BackObject redKelp;
+	CBackObjectRedKelp* objectRedKelp;
+	BackObject greenKelp;
+	CBackObjectGreenKelp* objectGreenKelp;
+
 
 public:
 	CSceneGameMenu();

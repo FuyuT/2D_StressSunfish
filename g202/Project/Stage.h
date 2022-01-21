@@ -47,7 +47,16 @@ private:
 	int posYNum;
 
 	//背景のオブジェクト
-	CBackObjectKelp ObjectKelp;
+	//背景のオブジェクト
+	struct BackObject
+	{
+		CTexture tex;
+		int objectTotalNo;
+		Vector2* pos;
+	};
+	BackObject kelp;
+	CBackObjectKelp* objectKelp;
+
 public:
 	Stage();
 	~Stage();

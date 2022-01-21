@@ -34,21 +34,21 @@ bool CSceneTitle::Load()
 	objectKelp = new CBackObjectKelp[kelp.objectTotalNo];
 	for (int n = 0; n < kelp.objectTotalNo; n++)
 	{
-		objectKelp[n].Load(kelp.tex, kelp.pos[n],-1,8);
+		objectKelp[n].Load(kelp.tex, kelp.objectTotalNo,kelp.pos[n],-1,3,4);
 	}
 	//‚ ‚©‚±‚ñ‚Ô
 	CUtility::GetEditObjectData("Text\\menuObject_1.txt", redKelp.tex, redKelp.objectTotalNo, redKelp.pos);
 	objectRedKelp = new CBackObjectRedKelp[redKelp.objectTotalNo];
 	for (int n = 0; n < redKelp.objectTotalNo; n++)
 	{
-		objectRedKelp[n].Load(redKelp.tex, redKelp.pos[n], -1, 8);
+		objectRedKelp[n].Load(redKelp.tex, redKelp.pos[n], -1,3, 4);
 	}
 	//‚Ý‚Ç‚è‚±‚ñ‚Ô
 	CUtility::GetEditObjectData("Text\\menuObject_2.txt", greenKelp.tex, greenKelp.objectTotalNo, greenKelp.pos);
 	objectGreenKelp = new CBackObjectGreenKelp[greenKelp.objectTotalNo];
 	for (int n = 0; n < greenKelp.objectTotalNo; n++)
 	{
-		objectGreenKelp[n].Load(greenKelp.tex, greenKelp.pos[n], -1, 8);
+		objectGreenKelp[n].Load(greenKelp.tex, greenKelp.pos[n], -1, 5, 7);
 	}
 
 	if(!titleLogoTex.Load("TitleLogo.png"))return false;

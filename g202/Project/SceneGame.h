@@ -57,6 +57,16 @@ private:
 	bool popUpGuardFlg;
 	bool hungryFlg;
 
+	//背景のオブジェクト
+	struct BackObject
+	{
+		CTexture tex;
+		int objectTotalNo;
+		Vector2* pos;
+	};
+	BackObject kelp;
+
+
 public:
 	CSceneGame();
 	~CSceneGame();
