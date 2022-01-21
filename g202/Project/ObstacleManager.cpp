@@ -300,7 +300,7 @@ void CObstacleManager::Overlap(int obstacle,int arrayNum)
 					cTurtle[arrayNum].SetShow(false);
 					break;
 				case Garbage:
-					cGarbage[arrayNum].SetShow(false);
+					//cGarbage[arrayNum].SetShow(false);
 					break;
 				case WaterFlow:	//…—¬‚Í¡‚Ì‚Æ‚±‚ëˆê‚Â‚È‚Ì‚ÅA‚±‚ÌŠÖ”‚ğŒÄ‚Î‚È‚¢i“Ç‚ñ‚¾‚çSetShow(false)‚É‚Í‚¢‚éj
 					cWaterFlow.SetShow(false);

@@ -178,6 +178,11 @@ void CSceneTutorial::Initialize()
 	ui.Initialize();
 	obs.Initialize();
 	fBufferOffset = 0;
+	for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
+	{
+		fLineBuffer[n] = NULL;
+	}
+
 	mShowDelay = 0;
 	messageEndFlg = false;
 	tutorialStep = TutorialStep::Task_Movement;
@@ -246,7 +251,7 @@ void CSceneTutorial::Update()
 				nowPopUpTutorial->Release();
 			}
 
-			if (nextSceneTemp == SCENENO_GAME)
+			if (nextSceneTemp == SCENENO_TUTORIAL)
 			{
 				//リトライ、もしくはコンティニューボタンが押されたら初期化
 				Initialize();
@@ -256,6 +261,7 @@ void CSceneTutorial::Update()
 			{
 				endFlg = true;
 			}
+
 		}
 
 		//シーンの遷移
