@@ -45,6 +45,11 @@ private:
 	bool			 messageEndFlg;
 	int				tutorialStep;
 
+	//ポーズ画面フラグ
+	bool poseFlg;
+	//設定画面フラグ
+	bool configFlg = false;
+
 public:
 	CSceneTutorial();
 	~CSceneTutorial();
@@ -59,5 +64,6 @@ public:
 	void RenderDebug() override;
 	void Release() override;
 
+	void PopUpController();
 
 };
