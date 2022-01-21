@@ -21,7 +21,7 @@ void CSceneGameMenu::PlayBGM()
 
 void CSceneGameMenu::Initialize()
 {
-	FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "rb");
+	FILE* fp = fopen("SaveData\\SaveTutorial.dat", "rb");
 	if (fp)
 	{
 		fread(&tutorialFlg, sizeof(bool), 1, fp);
@@ -296,7 +296,7 @@ void CSceneGameMenu::Update()
 			//endFlg = true;
 			cSound->Play(SOUND_BUTTON_PUSH);
 			//nextScene = SCENENO_TUTORIAL;
-			FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "wb");
+			FILE* fp = fopen("SaveData\\SaveTutorial.dat", "wb");
 			if (fp)
 			{
 				fwrite(&tutorialFlg, sizeof(bool), 1, fp);
@@ -410,8 +410,6 @@ void CSceneGameMenu::Release()
 	backGround_5.Release();
 	backGround_6.Release();
 	backGround_7.Release();
-
-
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();
