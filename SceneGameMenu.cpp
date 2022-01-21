@@ -22,7 +22,7 @@ void CSceneGameMenu::PlayBGM()
 
 void CSceneGameMenu::Initialize()
 {
-	FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "rb");
+	FILE* fp = fopen("SaveData\\SaveTutorial.dat", "rb");
 	if (fp)
 	{
 		fread(&tutorialFlg, sizeof(bool), 1, fp);
@@ -30,7 +30,15 @@ void CSceneGameMenu::Initialize()
 	}
 
 	buttonSelect = 1;
-	backGroundTex.Load("Title.png");
+	//背景
+	backGround_0.Load("BackGround\\Menu_0.png");
+	backGround_1.Load("BackGround\\Menu_1.png");
+	backGround_2.Load("BackGround\\Menu_2.png");
+	backGround_3.Load("BackGround\\Menu_3.png");
+	backGround_4.Load("BackGround\\Menu_4.png");
+	backGround_5.Load("BackGround\\Menu_5.png");
+	backGround_6.Load("BackGround\\Menu_6.png");
+	backGround_7.Load("BackGround\\Menu_7.png");
 	textTexture.Load("MenuText.png");
 	gamePlayButtonTexture.Load("ButtonSwimGo.png");
 	configButtonTexture.Load("ButtonConfig.png");
@@ -68,11 +76,11 @@ void CSceneGameMenu::Update()
 
 	float mousePosX, mousePosY;
 	g_pInput->GetMousePos(mousePosX, mousePosY);
+	MouseCollision(mousePosX, mousePosY);
 
 	//ゲームプレイボタン
 	if (buttonSelect == 1)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -105,7 +113,7 @@ void CSceneGameMenu::Update()
 
 			endFlg = true;
 			nextScene = SCENENO_GAME;
-			//cSound->Play(SOUND_BUTTON_PUSH);
+			cSound->Play(SOUND_BUTTON_PUSH);
 			cSound->Play(SOUND_BUTTON_OK);
 			Release();
 		}
@@ -113,7 +121,6 @@ void CSceneGameMenu::Update()
 	//設定ボタン
 	else if (buttonSelect == 2)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -144,16 +151,15 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_CONFIG;
 
-			endFlg = true;
-			nextScene = SCENENO_CONFIG;
+			//endFlg = true;
+			//nextScene = SCENENO_CONFIG;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			Release();
+			//Release();
 		}
 	}
 	//トロフィー集ボタン
 	else if (buttonSelect == 3)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -184,16 +190,15 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_TROPHY;
 
-			endFlg = true;
-			nextScene = SCENENO_TROPHY;
+			//endFlg = true;
+			//nextScene = SCENENO_TROPHY;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			Release();
+			//Release();
 		}
 	}
 	//ストレス一覧ボタン
 	else if (buttonSelect == 4)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		trophyButtonScale = scaleMini;
@@ -225,16 +230,15 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_STRESSCOLLECTION;
 
-			endFlg = true;
-			nextScene = SCENENO_STRESSCOLLECTION;
+			//endFlg = true;
+			//nextScene = SCENENO_STRESSCOLLECTION;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			Release();
+			//Release();
 		}
 	}
 	//チュートリアルボタン
 	else if (buttonSelect == 5)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -267,22 +271,21 @@ void CSceneGameMenu::Update()
 			nextSceneTemp = SCENENO_TUTORIAL;
 
 			tutorialFlg = true;
-			endFlg = true;
+			//endFlg = true;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			nextScene = SCENENO_TUTORIAL;
-			FILE* fp = fopen("SaveDeta\\SaveTutorial.dat", "wb");
+			//nextScene = SCENENO_TUTORIAL;
+			FILE* fp = fopen("SaveData\\SaveTutorial.dat", "wb");
 			if (fp)
 			{
 				fwrite(&tutorialFlg, sizeof(bool), 1, fp);
 				fclose(fp);
 			}
-			Release();
+			//Release();
 		}
 	}
 	//タイトルボタン
 	else if (buttonSelect == 6)
 	{
-		MouseCollision(mousePosX, mousePosY);
 		gamePlayButtonScale = scaleMini;
 		configButtonScale = scaleMini;
 		stressButtonScale = scaleMini;
@@ -310,10 +313,10 @@ void CSceneGameMenu::Update()
 			//タイトル画面
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_TITLE;
-			endFlg = true;
-			nextScene = SCENENO_TITLE;
+			//endFlg = true;
+			//nextScene = SCENENO_TITLE;
 			cSound->Play(SOUND_BUTTON_PUSH);
-			Release();
+			//Release();
 		}
 	}
 }
@@ -324,7 +327,14 @@ void CSceneGameMenu::SoundUpdate()
 
 void CSceneGameMenu::Render()
 {
-	backGroundTex.Render(0,0);
+	backGround_0.Render(0, 0);
+	backGround_1.Render(0, 0);
+	backGround_2.Render(0, 0);
+	backGround_3.Render(0, 0);
+	backGround_4.Render(0, 0);
+	backGround_5.Render(0, 0);
+	backGround_6.Render(0, 0);
+	backGround_7.Render(0, 0);
 	scaleController.ScaleRender(&gamePlayButtonTexture,buttonPosX,gamePlayButtonPosY,gamePlayButtonScale);
 	scaleController.ScaleRender(&configButtonTexture,buttonPosX,configButtonPosY,configButtonScale);
 	scaleController.ScaleRender(&stressButtonTexture,buttonPosX,stressButtonPosY,stressButtonScale);
@@ -337,7 +347,14 @@ void CSceneGameMenu::Render()
 
 void CSceneGameMenu::Release()
 {
-	backGroundTex.Release();
+	backGround_0.Release();
+	backGround_1.Release();
+	backGround_2.Release();
+	backGround_3.Release();
+	backGround_4.Release();
+	backGround_5.Release();
+	backGround_6.Release();
+	backGround_7.Release();
 	gamePlayButtonTexture.Release();
 	configButtonTexture.Release();
 	stressButtonTexture.Release();
