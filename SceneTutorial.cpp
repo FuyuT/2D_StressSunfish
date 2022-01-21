@@ -1,10 +1,21 @@
 #include "SceneTutorial.h"
+#include "SceneConfig.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
+
+CPopUpWindowBase* nowPopUpTutorial = NULL;
+//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+CSceneConfig sceneConfigT;
+
 CSceneTutorial::CSceneTutorial():
 	fBuffer(NULL),
 	fBufferOffset(0),
 	mShowDelay(0),
 	messageEndFlg(false),
-	tutorialStep(0)
+	tutorialStep(0),
+	poseFlg(false)
 {
 }
 
@@ -43,25 +54,29 @@ bool CSceneTutorial::TextLoad()
 void CSceneTutorial::FontLoad()
 {
 	//fontの作成
-	CFontCharaInputArray(fontAdd);
-	FontPopRumCute.Create(26, "PoPRumCute");
+	font.Load(fontAdd, fontName);
+	font.Create(38, fontName);
 }
 
 //メッセージの更新
 void CSceneTutorial::MessageUpdate()
 {
-	//文字列が終了(改行の次に改行がある)したら、ENTERで次の説明へ
+	//文字列が終了(改行の次に改行がある)したら、SPACEで次の説明へ
 	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
 	{
 		messageEndFlg = true;
 		if (g_pInput->IsKeyPush(MOFKEY_SPACE))
 		{
-			if (tutorialStep == 2)
+			if (tutorialStep == TutorialStep::Task_Complete)
 			{
-				nextScene = SCENENO_GAME;
-				endFlg = true;
+				bubbleFade.FadeOut();
+				nextSceneTemp = SCENENO_GAME;
+
+				tutorialStep = TutorialStep::Task_End;
+				//nextScene = SCENENO_GAME;
+				//endFlg = true;
 			}
-			if (tutorialStep != pl.GetTaskCompleteStep())
+			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
 				for (int n = 0; n < MESSAGE_ARRAY_BYTE; n++)
 				{
@@ -69,8 +84,15 @@ void CSceneTutorial::MessageUpdate()
 				}
 				fBufferOffset++; //テキストを分けている改行は表示文字に入れないので、飛ばす
 				messageEndFlg = false;
-				//チュートリアルの段階を一つ進める
-				tutorialStep += 1;
+				//チュートリアルの段階を一つ進める 最後のタスクが終わっていたら、タスクを完了状態にする
+				if (tutorialStep == TutorialStep::Task_Action)
+				{
+					tutorialStep = TutorialStep::Task_Complete;
+				}
+				else
+				{
+					tutorialStep += 1;
+				}
 			}
 		}
 	}
@@ -115,18 +137,18 @@ void CSceneTutorial::MessageUpdate()
 void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
-	FontPopRumCute.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messageEndFlg && tutorialStep == 2)
+	font.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
+	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押してゲームを開始する");
+		font.RenderString(1000, 960, "Spaceを押してゲームを開始する");
 	}
 	else if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "Spaceを押して次へ→");
+		font.RenderString(1000, 960, "Spaceを押して次へ→");
 	}
 	else if (messageEndFlg && tutorialStep == pl.GetTaskCompleteStep())
 	{
-		CGraphicsUtilities::RenderString(1200, 980, "タスクをこなそう！");
+		font.RenderString(1000, 960, "タスクをこなそう！");
 	}
 }
 
@@ -145,6 +167,7 @@ bool CSceneTutorial::Load()
 	if (!TextLoad())return false;
 	//フォントの読込み
 	FontLoad();
+	bubbleFade.Load();
 	return true;
 }
 
@@ -157,70 +180,199 @@ void CSceneTutorial::Initialize()
 	fBufferOffset = 0;
 	mShowDelay = 0;
 	messageEndFlg = false;
-	tutorialStep = 0;
+	tutorialStep = TutorialStep::Task_Movement;
+	pl.SetSoundManager(*cSound);
+	bubbleFade.Initialize();
+	sceneConfigT.SetSoundManager(*cSound);
+	//ポップアップ
+	popUpFlg = false;
+	poseFlg = false;
+	configFlg = false;
 }
 
 void CSceneTutorial::Update()
 {
-	stg.Update(pl);
-	ui.Update();
-	for (int i = 0; i < 3; i++)
+	//todo:ポーズ画面表示に変更　現在Enterでメニューに戻る
+	//if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	//{
+	//	nextScene = SCENENO_GAMEMENU;
+	//	endFlg = true;
+	//}
+
+
+	//フェード処理
+	bubbleFade.Update();
+	bubbleFade.FadeIn();
+
+	//設定表示
+	//ゲームに戻るボタンを押した時
+	//ゲーム画面に戻ったらconfigFlgをfalse
+	if (!sceneConfigT.GetGamePlayFlg())
+	{
+		configFlg = false;
+		bubbleFade.FadeIn();
+	}
+	else
+	{
+		bubbleFade.Initialize();
+	}
+	if (configFlg)
+	{
+		sceneConfigT.Update();
+	}
+
+	//スクロール
+	if (!poseFlg)
+	{
+		stg.Update(pl);
+	}
+
+	if (bubbleFade.GetFade())
+	{
+		return;
+	}
+	if (bubbleFade.GetFadeOutEnd())
+	{
+		if (nextSceneTemp == SCENENO_CONFIG)
+		{
+			configFlg = true;
+			sceneConfigT.SetGamePlayFlg();
+			sceneConfigT.Load();
+			sceneConfigT.Initialize();
+		}
+		else
+		{
+			if (nowPopUpTutorial != nullptr)
+			{
+				nowPopUpTutorial->Release();
+			}
+
+			if (nextSceneTemp == SCENENO_GAME)
+			{
+				//リトライ、もしくはコンティニューボタンが押されたら初期化
+				Initialize();
+				return;
+			}
+			else
+			{
+				endFlg = true;
+			}
+		}
+
+		//シーンの遷移
+		nextScene = nextSceneTemp;
+		return;
+	}
+	//Rでポーズ画面
+	if (g_pInput->IsKeyPush(MOFKEY_R) && !popUpFlg)
+	{
+		nowPopUpTutorial = new CPoseWindow;
+		nowPopUpTutorial->SetSoundManager(*cSound);
+		nowPopUpTutorial->Initialize();
+		popUpFlg = true;
+		poseFlg = true;
+	}
+	else if (g_pInput->IsKeyPush(MOFKEY_R) && popUpFlg&& !configFlg)
+	{
+		nowPopUpTutorial->Release();
+		nowPopUpTutorial = NULL;
+		popUpFlg = false;
+		poseFlg = false;
+	}
+
+	//設定表示
+	//ゲーム画面に戻ったらconfigFlgをfalse
+	if (!sceneConfigT.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
+		configFlg = false;
+
+	if (configFlg)
+	{
+		sceneConfigT.Update();
+	}
+	if (popUpFlg && !configFlg)
+	{
+		PopUpController();
+	}
+	//ポーズ画面を開いていたら、閉じるまで更新しない
+	if (poseFlg)return;
+
+	ui.Update(Event_None);
+	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
 	}
-	pl.Update(true, tutorialStep,0);
-	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep,0);
+	pl.Update(true, tutorialStep,Event_None);
+	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep, Event_None);
 	MessageUpdate();
+
 
 }
 
 void CSceneTutorial::Render()
 {
 	stg.Render();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(),pl.GetJump(),pl.GetEat(),true,0);
-	obs.Render(stg.GetScrollX(), stg.GetScrollY());
 	pl.Render(stg.GetScrollX(), stg.GetScrollY());
+	obs.Render(stg.GetScrollX(), stg.GetScrollY());
+	
+	//最前面の岩背景
+	stg.ForeGroundRender();
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None,pl.GetPosY(), stg.GetScrollY());
 	MessageRender();
 
 	//現在のタスク一覧表示
-	if (tutorialStep >= 0)
+	if (tutorialStep >= TutorialStep::Task_Movement)
 	{
-		CGraphicsUtilities::RenderString(10, 240, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+		font.RenderString(10, 100, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
 		if (!pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 250, MOF_COLOR_BLACK, "□ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "□ [W]で上に移動");
 		else if (pl.GetMoveUpTask())
-			CGraphicsUtilities::RenderString(40, 250, MOF_COLOR_BLACK, "■ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "■ [W]で上に移動");
 
 		if (!pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 290, MOF_COLOR_BLACK, "□ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "□ [S]で下に移動");
 		else if (pl.GetMoveDownTask())
-			CGraphicsUtilities::RenderString(40, 290, MOF_COLOR_BLACK, "■ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
-	if(tutorialStep >= 1)
+	if(tutorialStep >= TutorialStep::Task_Action)
 	{
-		CGraphicsUtilities::RenderString(10, 320, MOF_COLOR_BLACK, "┃\n┃\n┃");
+		font.RenderString(10, 180, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
 		if (!pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "□ [ENTER]でジャンプ");
 		else if (pl.GetJumpTask())
-			CGraphicsUtilities::RenderString(40, 320, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "■ [ENTER]でジャンプ");
 
 		if (!pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "□ [ENTER]でエサを食べる");
 		else if (pl.GetEatTask())
-			CGraphicsUtilities::RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "■ [ENTER]でエサを食べる");
 	}
 
-	if (tutorialStep != 2)
+	if (tutorialStep < TutorialStep::Task_Complete)
 	{
-		CGraphicsUtilities::RenderString(10, 210, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
 	else
 	{
-		CGraphicsUtilities::RenderString(10, 210, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
 	}
 	
+	//ポップアップ描画
+	if (popUpFlg)
+	{
+		nowPopUpTutorial->Render();
+	}
+	if (configFlg)
+	{
+		sceneConfigT.Render();
+	}
+
+	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
+	//font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
+	//font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
+
+	bubbleFade.Render();
 
 }
 
@@ -238,4 +390,96 @@ void CSceneTutorial::Release()
 	obs.Release();
 	messageWindowImg.Release();
 	free(fBuffer);
+
+	if (nowPopUpTutorial != NULL)
+	{
+		nowPopUpTutorial->Release();
+		if (nowPopUpTutorial)
+		{
+			delete nowPopUpTutorial;
+			nowPopUpTutorial = NULL;
+		}
+	}
+}
+
+void CSceneTutorial::PopUpController()
+{
+	nowPopUpTutorial->Update();
+	if (nowPopUpTutorial->GetButtonResult() == 1)
+	{
+		//リトライ、もしくはコンティニューボタンが押されたら初期化
+		//Initialize();
+		nextSceneTemp = SCENENO_TUTORIAL;
+		bubbleFade.FadeOut();
+	}
+	else if (nowPopUpTutorial->GetButtonResult() == 2)
+	{
+		//メニューボタンが押されたらメニュー画面に遷移
+		//nextScene = SCENENO_GAMEMENU;
+		//endFlg = true;
+		nextSceneTemp = SCENENO_GAMEMENU;
+		bubbleFade.FadeOut();
+	}
+	else if (nowPopUpTutorial->GetButtonResult() == 3)
+	{
+		//タイトルボタンが押されたらタイトル画面に遷移
+		//nextScene = SCENENO_TITLE;
+		//endFlg = true;
+		nextSceneTemp = SCENENO_TITLE;
+		bubbleFade.FadeOut();
+	}
+	else if (nowPopUpTutorial->GetButtonResult() == 4)
+	{
+		//設定が押されたら設定画面を表示
+		nextScene = SCENENO_CONFIG;
+		//nextSceneTemp = SCENENO_CONFIG;
+		//bubbleFade.FadeOut();
+
+		configFlg = true;
+		sceneConfigT.SetGamePlayFlg();
+		sceneConfigT.Load();
+		sceneConfigT.Initialize();
+		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
+		nowPopUpTutorial->SetButtonResult(0);
+
+	}
+	else if (nowPopUpTutorial->GetButtonResult() == 5)
+	{
+		//ゲームに戻るが押されたら
+		poseFlg = false;
+	}
+
+
+	//ポップアップの変更
+	if (nowPopUpTutorial->IsEnd())
+	{
+		//次のポップアップの取得
+		short nextPopUp = nowPopUpTutorial->GetNextPopUp();
+		//古いポップアップの消去
+		nowPopUpTutorial->Release();
+		delete nowPopUpTutorial;
+		//次のポップアップ番号に応じてポップアップを初期化
+		switch (nextPopUp)
+		{
+		case POPUPNO_POSE:
+			nowPopUpTutorial = new CPoseWindow;
+			nowPopUpTutorial->Initialize();
+			nowPopUpTutorial->SetSoundManager(*cSound);
+			break;
+		case POPUPNO_BACKTOTITLE:
+			nowPopUpTutorial = new CBackToTitleWindow;
+			nowPopUpTutorial->Initialize();
+			nowPopUpTutorial->SetSoundManager(*cSound);
+			break;
+		case POPUPNO_RETRY:
+			nowPopUpTutorial = new CRetryWindow;
+			nowPopUpTutorial->Initialize();
+			nowPopUpTutorial->SetSoundManager(*cSound);
+			break;
+		case NULL:
+			nowPopUpTutorial = NULL;
+			popUpFlg = false;
+			break;
+		}
+	}
 }

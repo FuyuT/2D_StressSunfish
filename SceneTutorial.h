@@ -5,6 +5,8 @@
 #include "ObstacleManager.h"
 #include "Stage.h"
 #include "Timer.h"
+#include "HeaderDefine.h"
+#include "ResourceFont.h"
 
 #define	 MESSAGE_WINDOW_POS_X 210
 #define	 MESSAGE_WINDOW_POS_Y 650
@@ -12,6 +14,7 @@
 #define  FIRST_MESSAGE_POS_Y  750
 #define  MESSAGE_ARRAY_BYTE   500	//メッセージの文字数を変更したかったら、ここを変更する
 #define  MESSAGE_DELAY_FRAME  5		//何フレームごとに一文字を表示するか
+
 
 class CSceneTutorial : public CSceneBase
 {
@@ -28,7 +31,8 @@ private:
 
 	//フォント
 	LPMofChar fontAdd = "Text\\PopRumCute.otf";
-	CFont FontPopRumCute;
+	CResourceFont	font;
+	LPMofChar fontName = "ポプらむ☆キュート";
 
 	//チュートリアルメッセージ
 	CTexture		 messageWindowImg;
@@ -40,6 +44,11 @@ private:
 	int				 mShowDelay;
 	bool			 messageEndFlg;
 	int				tutorialStep;
+
+	//ポーズ画面フラグ
+	bool poseFlg;
+	//設定画面フラグ
+	bool configFlg = false;
 
 public:
 	CSceneTutorial();
@@ -55,5 +64,6 @@ public:
 	void RenderDebug() override;
 	void Release() override;
 
+	void PopUpController();
 
 };
