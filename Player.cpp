@@ -120,7 +120,7 @@ void CPlayer::Initialize()
 	//ジャンプ
 	jumpFlg = false;
 	jumpDangerFlg = false;
-	jumpDangerTimer.SetTotalTime(5);
+	jumpDangerTimer.SetTotalTime(2.7);
 	//水流
 	moveSpeed = 1.0f;
 	waterFlowTimer.SetTotalTime(4);
@@ -151,8 +151,8 @@ void CPlayer::Initialize()
 	eatTaskFlg = false;
 	jumpTaskFlg = false;
 	taskCompleteStep = Task_Movement;
-	moveUpTaskTimer.SetTotalTime(3);
-	moveDownTaskTimer.SetTotalTime(3);
+	moveUpTaskTimer.SetTotalTime(1);
+	moveDownTaskTimer.SetTotalTime(1);
 
 	//ブレーキ(テスト)
 	brakeTimer.SetTotalTime(0);
@@ -204,7 +204,7 @@ void CPlayer::Initialize()
 
 	SpriteAnimationCreate waveAnim[] = {
 		{
-			"無",
+			"空",
 			0,0,
 			1,1,
 			FALSE,{{1,0,0}}
@@ -548,7 +548,7 @@ void CPlayer::Jump(bool unDeadFlg, int tutorialStep)
 			else
 			{
 				jumpDangerFlg = true;
-				jumpDangerTimer.SetTotalTime(5);
+				jumpDangerTimer.SetTotalTime(2.7);
 				jumpDangerTimer.StartTimer();
 			}
 			//寄生虫を振り落とす
@@ -855,16 +855,16 @@ void CPlayer::Render(float wx, float wy)
 	if (deadFlg && !jumpFlg)
 		return;
 
-	//水しぶき
+	//水しぶき(波)
 	//飛び出し
 	if (outWaveMotion.GetMotionNo() == 1)
 	{
-		waveTexture.Render(jumpStartPosX - wx, WAVE_POSY - wy, outWaveMotion.GetSrcRect());
+		waveTexture.RenderScale(jumpStartPosX - wx, WAVE_POSY - wy, 1.5,outWaveMotion.GetSrcRect());
 	}
 	//着水
 	if (inWaveMotion.GetMotionNo() == 1)
 	{
-		waveTexture.Render(jumpEndPosX - wx, WAVE_POSY - wy, inWaveMotion.GetSrcRect());
+		waveTexture.RenderScale(jumpEndPosX - wx, WAVE_POSY - wy, 1.5, inWaveMotion.GetSrcRect());
 	}
 
 	//プレイヤーの描画

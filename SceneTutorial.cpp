@@ -44,13 +44,13 @@ void CSceneTutorial::FontLoad()
 {
 	//fontの作成
 	font.Load(fontAdd, fontName);
-	font.Create(26, fontName);
+	font.Create(38, fontName);
 }
 
 //メッセージの更新
 void CSceneTutorial::MessageUpdate()
 {
-	//文字列が終了(改行の次に改行がある)したら、ENTERで次の説明へ
+	//文字列が終了(改行の次に改行がある)したら、SPACEで次の説明へ
 	if(fBuffer[fBufferOffset] == '\n' && fBuffer[fBufferOffset + 1] == '\n')
 	{
 		messageEndFlg = true;
@@ -127,17 +127,17 @@ void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
 	font.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
+	if (messageEndFlg && tutorialStep >= TutorialStep::Task_Complete)
 	{
-		font.RenderString(1200, 980, "Spaceを押してゲームを開始する");
+		font.RenderString(1000, 960, "Spaceを押してゲームを開始する");
 	}
 	else if (messageEndFlg && tutorialStep != pl.GetTaskCompleteStep())
 	{
-		font.RenderString(1200, 980, "Spaceを押して次へ→");
+		font.RenderString(1000, 960, "Spaceを押して次へ→");
 	}
 	else if (messageEndFlg && tutorialStep == pl.GetTaskCompleteStep())
 	{
-		font.RenderString(1200, 980, "タスクをこなそう！");
+		font.RenderString(1000, 960, "タスクをこなそう！");
 	}
 }
 
@@ -177,11 +177,11 @@ void CSceneTutorial::Initialize()
 void CSceneTutorial::Update()
 {
 	//todo:ポーズ画面表示に変更　現在Enterでメニューに戻る
-	if (g_pInput->IsKeyPush(MOFKEY_RETURN))
-	{
-		nextScene = SCENENO_GAMEMENU;
-		endFlg = true;
-	}
+	//if (g_pInput->IsKeyPush(MOFKEY_RETURN))
+	//{
+	//	nextScene = SCENENO_GAMEMENU;
+	//	endFlg = true;
+	//}
 
 	//フェード処理
 	bubbleFade.Update();
@@ -203,6 +203,8 @@ void CSceneTutorial::Update()
 	}
 
 	ui.Update(Event_None);
+	ui.SetPos(pl.GetPosX(), pl.GetPosY());
+
 	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);
@@ -221,51 +223,51 @@ void CSceneTutorial::Render()
 	
 	//最前面の岩背景
 	stg.ForeGroundRender();
-	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None);
+	ui.Render(pl.GetParasite(), pl.GetHungry(), pl.GetTemperature(), pl.GetDistance(), pl.GetJump(), pl.GetEat(), true, Event_None,pl.GetPosY(), stg.GetScrollY());
 	MessageRender();
 
 	//現在のタスク一覧表示
 	if (tutorialStep >= TutorialStep::Task_Movement)
 	{
-		font.RenderString(10, 280, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
+		font.RenderString(10, 100, MOF_COLOR_BLACK, "┃\n┃\n┃\n┃\n");
 
 		if (!pl.GetMoveUpTask())
-			font.RenderString(40, 280, MOF_COLOR_BLACK, "□ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "□ [W]で上に移動");
 		else if (pl.GetMoveUpTask())
-			font.RenderString(40, 280, MOF_COLOR_BLACK, "■ [W]で上に移動");
+			font.RenderString(40, 100, MOF_COLOR_BLACK, "■ [W]で上に移動");
 
 		if (!pl.GetMoveDownTask())
-			font.RenderString(40, 320, MOF_COLOR_BLACK, "□ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "□ [S]で下に移動");
 		else if (pl.GetMoveDownTask())
-			font.RenderString(40, 320, MOF_COLOR_BLACK, "■ [S]で下に移動");
+			font.RenderString(40, 140, MOF_COLOR_BLACK, "■ [S]で下に移動");
 	}
 	if(tutorialStep >= TutorialStep::Task_Action)
 	{
-		font.RenderString(10, 360, MOF_COLOR_BLACK, "┃\n┃\n┃");
+		font.RenderString(10, 180, MOF_COLOR_BLACK, "┃\n┃\n┃");
 
 		if (!pl.GetJumpTask())
-			font.RenderString(40, 360, MOF_COLOR_BLACK, "□ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "□ [ENTER]でジャンプ");
 		else if (pl.GetJumpTask())
-			font.RenderString(40, 360, MOF_COLOR_BLACK, "■ [A]でジャンプ");
+			font.RenderString(40, 180, MOF_COLOR_BLACK, "■ [ENTER]でジャンプ");
 
 		if (!pl.GetEatTask())
-			font.RenderString(40, 400, MOF_COLOR_BLACK, "□ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "□ [ENTER]でエサを食べる");
 		else if (pl.GetEatTask())
-			font.RenderString(40, 400, MOF_COLOR_BLACK, "■ [A]でエサを食べる");
+			font.RenderString(40, 220, MOF_COLOR_BLACK, "■ [ENTER]でエサを食べる");
 	}
 
 	if (tutorialStep < TutorialStep::Task_Complete)
 	{
-		font.RenderString(10, 240, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "□ チュートリアルを完了する");
 	}
 	else
 	{
-		font.RenderString(10, 240, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
+		font.RenderString(10, 60, MOF_COLOR_BLACK, "■ チュートリアルを完了する");
 	}
 	
 	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
-	font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
-	font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
+	//font.RenderStringScale(800, 50, 2.0f, MOF_COLOR_BLACK, "デバッグ用");
+	//font.RenderStringScale(800, 100, 2.0f, MOF_COLOR_BLACK,"Enterでゲームメニューに戻る");
 
 	bubbleFade.Render();
 
@@ -285,5 +287,4 @@ void CSceneTutorial::Release()
 	obs.Release();
 	messageWindowImg.Release();
 	free(fBuffer);
-	bubbleFade.Release();
 }

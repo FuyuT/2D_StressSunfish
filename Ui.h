@@ -4,7 +4,9 @@
 #include "Blinking.h"
 #include "ObstacleManager.h"
 #include "Turtle.h"
+#include "Player.h"
 #include "HeaderDefine.h"
+#include "ResourceFont.h"
 
 //トロフィーの距離
 #define RIVER 1000
@@ -35,6 +37,7 @@ enum EventMotion
 	EVENTMOTION_COUNT,
 };
 
+
 class CUi
 {
 private:
@@ -61,6 +64,21 @@ private:
 	float goPosy = 370;
 
 	int eventPosX = 1920;
+
+	float GetPosX;
+
+	int PlayerPosX;
+	int PlayerPosY;
+
+	//フレーム
+	//現在位置のフレーム
+	CTexture nowPosFrameTex;
+	//次のトロフィーまでの距離のフレーム
+	CTexture nextTrophyDistanceFrameTex;
+	//次のトロフィーのフレーム
+	CTexture nextTrophyFrameTex;
+	//イベントのフレーム
+	CTexture eventFrameTex;
 
 	//マンボウの顔の枠
 	CTexture stressMeter;
@@ -93,7 +111,14 @@ private:
 	CTexture cautionHot;
 	CTexture cautionCold;
 
-	//トロフィー
+	//イベントUI
+	CTexture eventGarbageUI;
+	CTexture eventFishUI;
+	CTexture eventTurtleUI;
+	CTexture eventSummerUI;
+	CTexture eventWinterUI;
+
+	//トロフィーCTexture
 	CTexture	riverIconTexture;		//川級
 	CTexture	waterFallIconTexture;	//滝級
 	CTexture	lakeIconTexture;		//湖級
@@ -124,8 +149,10 @@ private:
 	CBlinking radyGoB;
 
 	//フォント
-	CFont font;
-	CFont trophyFont;
+	CResourceFont font;
+	CResourceFont trophyFont;
+	LPMofChar fileAdd = "Text\\PopRumCute.otf";
+	LPMofChar fontName = "ポプらむ☆キュート";
 
 	//アニメーション
 	CSpriteMotionController motion;
@@ -140,8 +167,15 @@ public:
 	void Initialize();
 	void Update(int eventNum);
 	void Render(int parasiteNum,int hungry,float tempRegionNum,
-	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg,int eventNum);
+	double distanceNum,bool jumpFlg,bool eatFlg, bool tutorialFlg,int eventNum,int posy,float wy);
 	void Release();
 
 	bool StartSign(bool pose);
+
+	//sceneGame、sceneTutorialのUpdate内で呼び出し、プレイヤーの座標をもらう
+	void SetPos(int PosX,int PosY) {
+		PlayerPosX = PosX;
+		PlayerPosY = PosY;
+	}
+
 };
