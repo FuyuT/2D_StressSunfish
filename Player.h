@@ -7,71 +7,6 @@
 #include "HeaderDefine.h"
 #include "SoundManager.h"
 
-//初期位置 X
-#define		STARTPOS_X				200
-#define		STARTPOS_Y				900
-
-//座標を進んだ距離に変換する割合
-#define		TRANSLATE_DISTANCE		10
-
-//移動速度	
-#define		PLAYER_SPEED			0.6f
-//重力
-#define		GRAVITY					1.0f
-
-//当たり判定の幅調整
-#define		COLLISION_ADJUSTMENT_TOP	100.0f
-#define		COLLISION_ADJUSTMENT_LEFT	110.0f
-#define		COLLISION_ADJUSTMENT_RIGHT	150.0f
-#define		COLLISION_ADJUSTMENT_BOTTOM	160.0f
-
-//エサ探知範囲
-#define		FEED_SEARCHRANGE		60.0f
-//テクスチャの幅(仮)
-#define		TEXTURE_SIZE			384
-
-//ジャンプ力
-#define		JUMP_POWER_X			9.0f
-#define		JUMP_POWER_Y			30.0f
-//ジャンプ後に潜る量
-#define		WATER_LANDING_DEEP		50.0f
-//海面からどこまでがジャンプ可能か
-#define		JUMP_ZONE				40.0f
-
-//海面
-#define		SEA_LEVEL				780
-//海底
-#define		UNDER_SEA				2160
-
-//お腹が空く度合い
-#define		HUNGRYLEVEL				0.05f
-//エサを食べたときに得られる満腹度
-#define		FEED_SATIETYLEVEL		36.0f
-//満腹
-#define		FULL_STOMACH			20
-//餓死
-#define		STARVATION				85
-//同じエサが一度に画面に出てくる最大数
-#define FEED_MAXCOUNT 3
-
-//寄生虫許容限界数
-#define		PARASITE_LIMIT			5
-
-//体温が変動する度合い(速さ)
-#define		TEMPERATURE_LEVEL		0.07f
-//標準体温
-#define		STANDARD_TEMPERATURE	10
-//体温限界値(熱中症)
-#define		HYPERTHERMIA_LIMIT		0
-//体温限界値(凍死)
-#define		FROZEN_LIMIT			100
-//体温変動区域
-#define		TEMPERATURE_CHANGEZONE	500
-
-//水流による最大加速度
-#define		WATERFLOW_MAXSPEED		1.5f
-//水流による加速度
-#define		WATERFLOW_SPEED			0.02f
 
 //死因一覧
 enum CAUSE_OF_DEATH
@@ -112,6 +47,77 @@ enum Temperature
 class CPlayer
 {
 private:
+	//初期位置 X
+	#define		STARTPOS_X				200
+	#define		STARTPOS_Y				900
+
+	//座標を進んだ距離に変換する割合
+	#define		TRANSLATE_DISTANCE		10
+
+	//移動速度	
+	#define		PLAYER_SPEED			0.6f
+	//重力
+	#define		GRAVITY					1.0f
+
+	//当たり判定の幅調整
+	#define		COLLISION_ADJUSTMENT_TOP	100.0f
+	#define		COLLISION_ADJUSTMENT_LEFT	110.0f
+	#define		COLLISION_ADJUSTMENT_RIGHT	150.0f
+	#define		COLLISION_ADJUSTMENT_BOTTOM	160.0f
+
+	//エサ探知範囲
+	#define		FEED_SEARCHRANGE		60.0f
+	//テクスチャの幅(仮)
+	#define		TEXTURE_SIZE			384
+
+	//ジャンプ力
+	#define		JUMP_POWER_X			9.0f
+	#define		JUMP_POWER_Y			30.0f
+	//ジャンプ後に潜る量
+	#define		WATER_LANDING_DEEP		50.0f
+	//海面からどこまでがジャンプ可能か
+	#define		JUMP_ZONE				40.0f
+
+	//海面
+	#define		SEA_LEVEL				780
+	//海底
+	#define		UNDER_SEA				2160
+
+	//お腹が空く度合い
+	#define		HUNGRYLEVEL				0.05f
+	//エサを食べたときに得られる満腹度
+	#define		FEED_SATIETYLEVEL		36.0f
+	//空腹地
+	#define		INIT_STOMACH			40;
+	//満腹
+	#define		FULL_STOMACH			0
+	//餓死
+	#define		STARVATION				100
+	//同じエサが一度に画面に出てくる最大数
+	#define FEED_MAXCOUNT 3
+
+	//寄生虫許容限界数
+	#define		PARASITE_LIMIT			5
+
+	//体温が変動する度合い(速さ)
+	#define		TEMPERATURE_LEVEL		0.07f
+	//標準体温
+	#define		STANDARD_TEMPERATURE	10
+	//体温限界値(熱中症)
+	#define		HYPERTHERMIA_LIMIT		0
+	//体温限界値(凍死)
+	#define		FROZEN_LIMIT			100
+	//体温変動区域
+	#define		TEMPERATURE_CHANGEZONE	500
+
+	//水流による最大加速度
+	#define		WATERFLOW_MAXSPEED		1.5f
+	//水流による加速度
+	#define		WATERFLOW_SPEED			0.02f
+
+	//水しぶき
+	#define		WAVE_POSY				530
+
 	//最大速度
 	float		playerMaxSpeedX = 10.0f;
 	float		playerMaxSpeedY = 10.0f;
@@ -131,6 +137,8 @@ private:
 	CTexture	coldEatTexture;
 	CTexture	coldJumpTexture;
 	CTexture	coldDeathTexture;
+
+	CTexture	waveTexture;
 
 	//確率
 	CRandom		random;
@@ -171,6 +179,13 @@ private:
 	bool		waterFlowFlg;
 	//アニメーション
 	CSpriteMotionController	motion;
+
+	CSpriteMotionController	outWaveMotion;
+	CSpriteMotionController	inWaveMotion;
+
+	//水しぶき
+	int			jumpStartPosX;
+	int			jumpEndPosX;
 
 	//ブレーキ(テスト)
 	CTimer		brakeTimer;
@@ -289,7 +304,7 @@ public:
 	{
 		return parasite;
 	}
-	//空腹度を返す 10～0
+	//空腹度を返す 100～0
 	float GetHungry()
 	{
 		return hungerRegion;
