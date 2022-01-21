@@ -267,6 +267,7 @@ void CSceneGame::Update()
 	if (poseFlg)return;
 
 	ui.Update(eventNum);
+	ui.SetPos(pl.GetPosX(), pl.GetPosY());
 
 	if (!startFlg)return;
 
@@ -286,8 +287,6 @@ void CSceneGame::Update()
 
 	//SE
 	SEUpdate();
-
-
 }
 
 void CSceneGame::Render()
@@ -302,7 +301,6 @@ void CSceneGame::Render()
 
 	//障害物
 	cObstacle.Render(stg.GetScrollX(), stg.GetScrollY());
-
 
 	//最前面の岩背景
 	stg.ForeGroundRender();
@@ -419,14 +417,14 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
-		nextScene = SCENENO_CONFIG;
-		//nextSceneTemp = SCENENO_CONFIG;
-		//bubbleFade.FadeOut();
+		//nextScene = SCENENO_CONFIG;
+		nextSceneTemp = SCENENO_CONFIG;
+		bubbleFade.FadeOut();
 
-		configFlg = true;
-		sceneConfig.SetGamePlayFlg();
-		sceneConfig.Load();
-		sceneConfig.Initialize();
+		//configFlg = true;
+		//sceneConfig.SetGamePlayFlg();
+		//sceneConfig.Load();
+		//sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
 

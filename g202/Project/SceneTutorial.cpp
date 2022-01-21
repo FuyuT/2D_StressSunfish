@@ -127,7 +127,7 @@ void CSceneTutorial::MessageRender()
 {
 	messageWindowImg.Render(MESSAGE_WINDOW_POS_X, MESSAGE_WINDOW_POS_Y);
 	font.RenderString(FIRST_MESSAGE_POS_X, FIRST_MESSAGE_POS_Y, fLineBuffer);
-	if (messageEndFlg && tutorialStep == TutorialStep::Task_Complete)
+	if (messageEndFlg && tutorialStep >= TutorialStep::Task_Complete)
 	{
 		font.RenderString(1000, 960, "Space‚ğ‰Ÿ‚µ‚ÄƒQ[ƒ€‚ğŠJn‚·‚é");
 	}
@@ -203,6 +203,8 @@ void CSceneTutorial::Update()
 	}
 
 	ui.Update(Event_None);
+	ui.SetPos(pl.GetPosX(), pl.GetPosY());
+
 	for (int i = 0; i < 5; i++)
 	{
 		pl.Collision(obs, i, true, tutorialStep);

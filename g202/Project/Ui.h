@@ -4,6 +4,7 @@
 #include "Blinking.h"
 #include "ObstacleManager.h"
 #include "Turtle.h"
+#include "Player.h"
 #include "HeaderDefine.h"
 #include "ResourceFont.h"
 
@@ -64,6 +65,11 @@ private:
 	float goPosy = 370;
 
 	int eventPosX = 1920;
+
+	float GetPosX;
+
+	int PlayerPosX;
+	int PlayerPosY;
 
 	//フレーム
 	//現在位置のフレーム
@@ -166,4 +172,11 @@ public:
 	void Release();
 
 	bool StartSign(bool pose);
+
+	//sceneGame、sceneTutorialのUpdate内で呼び出し、プレイヤーの座標をもらう
+	void SetPos(int PosX,int PosY) {
+		PlayerPosX = PosX;
+		PlayerPosY = PosY;
+	}
+
 };
