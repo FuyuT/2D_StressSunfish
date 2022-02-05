@@ -195,7 +195,7 @@ void CSceneGame::Update()
 	{
 		return;
 	}
-	if (bubbleFade.GetFadeOutEnd())
+	else if (bubbleFade.GetFadeOutEnd())
 	{
 		if (nextSceneTemp == SCENENO_CONFIG)
 		{
@@ -416,6 +416,7 @@ void CSceneGame::PopUpController()
 	else if (nowPopUpGame->GetButtonResult() == 5)
 	{
 		//ƒQ[ƒ€‚É–ß‚é‚ª‰Ÿ‚³‚ê‚½‚ç
+		popUpFlg = false;
 		poseFlg = false;
 	}
 	else if (nowPopUpGame->GetButtonResult() == 4)

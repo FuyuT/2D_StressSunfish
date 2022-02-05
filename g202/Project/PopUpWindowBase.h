@@ -48,7 +48,10 @@ protected:
 	//ボタン選択用変数
 	int	buttonSelect;
 public:
-	CPopUpWindowBase() {}
+	CPopUpWindowBase():
+		buttonResult(0),
+		buttonSelect(0)
+	{};
 	virtual ~CPopUpWindowBase() {}
 	virtual void Initialize() {}
 	virtual void Update() {}
