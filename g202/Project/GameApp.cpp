@@ -53,12 +53,22 @@ MofBool CGameApp::Update(void) {
 	//キーの更新
 	g_pInput->RefreshKey();
 
-	//デバッグ用
-	if (g_pInput->IsKeyPush(MOFKEY_0))
+	//F1でフルスクリーン表示の更新
+	if (g_pInput->IsKeyPush(MOFKEY_F1))
 	{
-		if (debugShowFlg) debugShowFlg = false;
-		else if(!debugShowFlg) debugShowFlg = true;
+		g_pGraphics->SetScreenMode(false);
 	}
+	else if (g_pInput->IsKeyPush(MOFKEY_F2))
+	{
+		g_pGraphics->SetScreenMode(true);
+	}
+
+	//デバッグ用
+	//if (g_pInput->IsKeyPush(MOFKEY_0))
+	//{
+	//	if (debugShowFlg) debugShowFlg = false;
+	//	else if(!debugShowFlg) debugShowFlg = true;
+	//}
 
 	//画面遷移
 	nowScene->Update();
@@ -119,17 +129,8 @@ MofBool CGameApp::Render(void) {
 	nowScene->Render();
 	if (debugShowFlg)
 	{
-		nowScene->RenderDebug();
+		//nowScene->RenderDebug();
 	}
-	//サウンド
-	//if (!cSound.GetMuteBGM())
-	//{
-	//	CGraphicsUtilities::RenderString(100, 500, "muteじゃない");
-	//}
-	//else
-	//{
-	//	CGraphicsUtilities::RenderString(100, 500, "mute中");
-	//}
 
 	//描画の終了
 	g_pGraphics->RenderEnd();
