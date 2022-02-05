@@ -29,13 +29,13 @@ public:
 	{
 		if (!startFlg)
 		{
-			motion.ChangeMotion(FADE_MOTION_IN);
+			motion.ChangeMotion(FADE_MOTION_IN, false);
 			startFlg = true;
 		}
 	}
 	void FadeOut()
 	{
-		motion.ChangeMotion(FADE_MOTION_OUT);
+		motion.ChangeMotion(FADE_MOTION_OUT, false);
 	}
 	bool GetFadeOutEnd()
 	{
@@ -49,6 +49,5 @@ public:
 		}
 		return false;
 	}
-
 };
 

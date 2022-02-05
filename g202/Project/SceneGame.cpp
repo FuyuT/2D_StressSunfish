@@ -174,7 +174,6 @@ void CSceneGame::Update()
 	if (!sceneConfig.GetGamePlayFlg())
 	{
 		configFlg = false;
-		bubbleFade.FadeIn();
 	}
 	else
 	{
