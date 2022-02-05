@@ -1,26 +1,5 @@
 #include "SceneGame.h"
-#include "SceneConfig.h"
-#include "Timer.h"
-#include "ContinueWindow.h"
-#include "ResultWindow.h"
-#include "CauseOfDeathWindow.h"
-#include "SceneTrophyCollection.h"
-#include "SceneStressCollection.h"
-#include "PoseWindow.h"
-#include "BackToTitleWindow.h"
-#include "RetryWindow.h"
-#include "SceneBase.h"
 
-#define	PLAYER_SPEED 10
-CTimer tempTimer;
-CTimer hungerTimer;
-CTimer parasiteTimer;
-CSceneTrophyCollection trophy;
-CSceneStressCollection caseOfDeth;
-CPopUpWindowBase* nowPopUpGame = NULL;
-//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
-//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
-CSceneConfig sceneConfig;
 
 CSceneGame::CSceneGame():
 //scrollValueX(0),

@@ -7,6 +7,10 @@
 #include "Timer.h"
 #include "HeaderDefine.h"
 #include "ResourceFont.h"
+#include "SceneConfig.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
 
 #define	 MESSAGE_WINDOW_POS_X 210
 #define	 MESSAGE_WINDOW_POS_Y 650
@@ -19,6 +23,12 @@
 class CSceneTutorial : public CSceneBase
 {
 private:
+	//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+	//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+	CSceneConfig sceneConfig;
+
+	CPopUpWindowBase* nowPopUpTutorial = NULL;
+
 	Stage			 stg;
 	CUi				 ui;
 	CPlayer			 pl;
@@ -43,7 +53,7 @@ private:
 	char			 fLineBuffer[MESSAGE_ARRAY_BYTE] = "\0";
 	int				 mShowDelay;
 	bool			 messageEndFlg;
-	int				tutorialStep;
+	int				 tutorialStep;
 
 	//ポーズ画面フラグ
 	bool poseFlg;

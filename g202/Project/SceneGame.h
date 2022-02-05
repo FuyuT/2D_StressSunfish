@@ -5,11 +5,35 @@
 #include "Ui.h"
 #include "Stage.h"
 #include "HeaderDefine.h"
+#include "SceneConfig.h"
+#include "SceneTrophyCollection.h"
+#include "SceneStressCollection.h"
+#include "Timer.h"
+#include "ContinueWindow.h"
+#include "ResultWindow.h"
+#include "CauseOfDeathWindow.h"
+#include "PoseWindow.h"
+#include "BackToTitleWindow.h"
+#include "RetryWindow.h"
+#include "SceneBase.h"
+
+#define	PLAYER_SPEED 10
 
 
 class CSceneGame : public CSceneBase
 {
 private:
+	CTimer tempTimer;
+	CTimer hungerTimer;
+	CTimer parasiteTimer;
+	CSceneTrophyCollection trophy;
+	CSceneStressCollection caseOfDeth;
+	CPopUpWindowBase* nowPopUpGame = NULL;
+
+	//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
+	//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
+	CSceneConfig sceneConfig;
+
 	CPlayer pl;
 	Stage stg;
 	CObstacleManager cObstacle;

@@ -1,13 +1,5 @@
 #include "SceneTutorial.h"
-#include "SceneConfig.h"
-#include "PoseWindow.h"
-#include "BackToTitleWindow.h"
-#include "RetryWindow.h"
 
-CPopUpWindowBase* nowPopUpTutorial = NULL;
-//GameAppで遷移すると設定画面からゲームシーンに戻った際にゲームシーンが初期化されるため、
-//ここで宣言し、ゲームシーンの上から設定画面を表示するようにする。
-CSceneConfig sceneConfigT;
 
 CSceneTutorial::CSceneTutorial():
 	fBuffer(NULL),
@@ -73,8 +65,6 @@ void CSceneTutorial::MessageUpdate()
 				nextSceneTemp = SCENENO_GAME;
 
 				tutorialStep = TutorialStep::Task_End;
-				//nextScene = SCENENO_GAME;
-				//endFlg = true;
 			}
 			else if (tutorialStep != pl.GetTaskCompleteStep())
 			{
@@ -188,7 +178,7 @@ void CSceneTutorial::Initialize()
 	tutorialStep = TutorialStep::Task_Movement;
 	pl.SetSoundManager(*cSound);
 	bubbleFade.Initialize();
-	sceneConfigT.SetSoundManager(*cSound);
+	sceneConfig.SetSoundManager(*cSound);
 	//ポップアップ
 	popUpFlg = false;
 	poseFlg = false;
@@ -211,7 +201,7 @@ void CSceneTutorial::Update()
 	//設定表示
 	//ゲームに戻るボタンを押した時
 	//ゲーム画面に戻ったらconfigFlgをfalse
-	if (!sceneConfigT.GetGamePlayFlg())
+	if (!sceneConfig.GetGamePlayFlg())
 	{
 		configFlg = false;
 		bubbleFade.FadeIn();
@@ -222,7 +212,7 @@ void CSceneTutorial::Update()
 	}
 	if (configFlg)
 	{
-		sceneConfigT.Update();
+		sceneConfig.Update();
 	}
 
 	//スクロール
@@ -240,9 +230,9 @@ void CSceneTutorial::Update()
 		if (nextSceneTemp == SCENENO_CONFIG)
 		{
 			configFlg = true;
-			sceneConfigT.SetGamePlayFlg();
-			sceneConfigT.Load();
-			sceneConfigT.Initialize();
+			sceneConfig.SetGamePlayFlg();
+			sceneConfig.Load();
+			sceneConfig.Initialize();
 		}
 		else
 		{
@@ -287,12 +277,12 @@ void CSceneTutorial::Update()
 
 	//設定表示
 	//ゲーム画面に戻ったらconfigFlgをfalse
-	if (!sceneConfigT.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
+	if (!sceneConfig.GetGamePlayFlg())   //ゲームに戻るボタンを押した時
 		configFlg = false;
 
 	if (configFlg)
 	{
-		sceneConfigT.Update();
+		sceneConfig.Update();
 	}
 	if (popUpFlg && !configFlg)
 	{
@@ -309,8 +299,6 @@ void CSceneTutorial::Update()
 	pl.Update(true, tutorialStep,Event_None);
 	obs.Update(pl.GetDistance(), pl.GetPosX(), stg.GetScrollX(), stg.GetScrollY(),tutorialStep, Event_None);
 	MessageUpdate();
-
-
 }
 
 void CSceneTutorial::Render()
@@ -370,7 +358,7 @@ void CSceneTutorial::Render()
 	}
 	if (configFlg)
 	{
-		sceneConfigT.Render();
+		sceneConfig.Render();
 	}
 
 	//todo:デバッグ用 あとで消す（ポーズ画面使えるように変更した後）
@@ -393,9 +381,9 @@ void CSceneTutorial::Release()
 	ui.Release();
 	pl.Release();
 	obs.Release();
+	sceneConfig.Release();
 	messageWindowImg.Release();
 	free(fBuffer);
-
 	if (nowPopUpTutorial != NULL)
 	{
 		nowPopUpTutorial->Release();
@@ -405,6 +393,7 @@ void CSceneTutorial::Release()
 			nowPopUpTutorial = NULL;
 		}
 	}
+	font.Release();
 }
 
 void CSceneTutorial::PopUpController()
@@ -441,9 +430,9 @@ void CSceneTutorial::PopUpController()
 		//bubbleFade.FadeOut();
 
 		configFlg = true;
-		sceneConfigT.SetGamePlayFlg();
-		sceneConfigT.Load();
-		sceneConfigT.Initialize();
+		sceneConfig.SetGamePlayFlg();
+		sceneConfig.Load();
+		sceneConfig.Initialize();
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpTutorial->SetButtonResult(0);
 
