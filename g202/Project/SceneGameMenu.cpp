@@ -133,8 +133,6 @@ void CSceneGameMenu::Update()
 			bubbleFade.FadeOut();
 			nextSceneTemp = SCENENO_GAME;
 
-			endFlg = true;
-			nextScene = SCENENO_GAME;
 			cSound->Play(SOUND_BUTTON_PUSH);
 			cSound->Play(SOUND_BUTTON_OK);
 			//Release();
