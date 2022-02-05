@@ -174,8 +174,6 @@ void CObstacleManager::Render(float wx, float wy)
 	cWaterFlow.Render(wx, wy);
 	cFishShadow .Render(wx, wy);
 
-	//確認デバッグ用
-	//CGraphicsUtilities::RenderString(10, 100, gFileBuffer);
 }
 
 void CObstacleManager::RenderDebug(float wx, float wy)
@@ -243,39 +241,37 @@ void CObstacleManager::Release()
 
 void CObstacleManager::PosYRandom(int obstacleType)
 {	
-	if (obstacleType = Food)
-	{
-		posYNum = posYRandom.Random(2, 5);
-	}
-	else if (obstacleType = SummerFood)
-	{
-		posYNum = posYRandom.Random(3, 5);
-	}
-	else if (obstacleType = WinterFood)
-	{
-		posYNum = posYRandom.Random(2, 4);
-	}
-	else if (obstacleType = Rotten)
+	if (obstacleType == Food || obstacleType == Rotten)
 	{
 		posYNum = posYRandom.Random(1, 5);
 	}
+	else if (obstacleType == SummerFood)
+	{
+		posYNum = posYRandom.Random(1, 4);
+	}
+	else if (obstacleType == WinterFood)
+	{
+		posYNum = posYRandom.Random(2, 5);
+	}
+	else if ( obstacleType == Obstacle)
+	{
+		posYNum = posYRandom.Random(1, 3);
+	}
+
 
 	switch (posYNum)
 	{
 	case 1:
-		posY = 780;
+		posY = 1100;
 		break;
 	case 2:
-		posY = 1125;
+		posY = 1550;
 		break;
 	case 3:
-		posY = 1470;
+		posY = 2000;
 		break;
 	case 4:
-		posY = 1815;
-		break;
-	case 5:
-		posY = 2160;
+		posY = 2450;
 		break;
 	}
 }
@@ -294,13 +290,14 @@ void CObstacleManager::Overlap(int obstacle,int arrayNum)
 					continue;
 				}
 
+
 				switch (obstacle)
 				{
 				case Turtle:
 					cTurtle[arrayNum].SetShow(false);
 					break;
 				case Garbage:
-					//cGarbage[arrayNum].SetShow(false);
+					cGarbage[arrayNum].SetShow(false);
 					break;
 				case WaterFlow:	//水流は今のところ一つなので、この関数を呼ばない（読んだらSetShow(false)にはいる）
 					cWaterFlow.SetShow(false);

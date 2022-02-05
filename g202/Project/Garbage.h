@@ -54,6 +54,8 @@ public:
 				pos.x + garbageShoes.GetWidth() + BAG_RECT_RIGHT_ADJ, pos.y + garbageShoes.GetHeight() + BAG_RECT_BUTTOM_ADJ);
 			break;
 		default:
+			return CRectangle(pos.x, pos.y,
+				pos.x + garbageShoes.GetWidth(), pos.y + garbageShoes.GetHeight());
 			break;
 		}
 		

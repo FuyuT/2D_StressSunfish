@@ -1049,14 +1049,11 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 
 	//ウミガメ
 	if (prec.CollisionRect(cObstacle.GetRect(Turtle, num)) &&
-		cObstacle.GetShow(Turtle, num) && !hitFlg)
+		cObstacle.GetShow(Turtle, num))
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			cSound->Play(SOUND_COLLISION);
-			//衝突
-			hitFlg = true;
-
 			//死因：ショック死
 			//当たった時点で即死
 			motion.ChangeMotion(MOTION_DEATH);
@@ -1075,39 +1072,33 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 		//todo:死因を障害物と衝突にしてるので、あとで変更
 		//魚群（イワシ）
 		if (prec.CollisionRect(cObstacle.GetRect(ShoalSardine, num)) &&
-			cObstacle.GetShow(ShoalSardine, num) && !hitFlg)
+			cObstacle.GetShow(ShoalSardine, num))
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
 				cSound->Play(SOUND_COLLISION);
-				//衝突
-				hitFlg = true;
 				//死因：衝突死
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_ShoalFish;
 			}
 		}
 		else if (prec.CollisionRect(cObstacle.GetRect(SwordFish, num)) &&
-			cObstacle.GetShow(SwordFish, num) && !hitFlg)
+			cObstacle.GetShow(SwordFish, num))
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
 				cSound->Play(SOUND_COLLISION);
-				//衝突
-				hitFlg = true;
 				//死因：衝突死
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = CAUSE_ShoalFish;
 			}
 		}
 		else if (prec.CollisionRect(cObstacle.GetRect(SchoolTuna, num)) &&
-			cObstacle.GetShow(SchoolTuna, num) && !hitFlg)
+			cObstacle.GetShow(SchoolTuna, num))
 		{
 			if (causeOfDeath == CAUSE_None && !unDeadFlg)
 			{
 				cSound->Play(SOUND_COLLISION);
-				//衝突
-				hitFlg = true;
 				//死因：衝突死
 				motion.ChangeMotion(MOTION_DEATH);
 				causeOfDeath = SchoolTuna;
@@ -1118,13 +1109,11 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 
 	//障害物
 	if (prec.CollisionRect(cObstacle.GetRect(Garbage, num)) &&
-		cObstacle.GetShow(Garbage, num) && !hitFlg)
+		cObstacle.GetShow(Garbage, num))
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			cSound->Play(SOUND_COLLISION);
-			//衝突
-			hitFlg = true;
 			//死因：衝突死
 			motion.ChangeMotion(MOTION_DEATH);
 			causeOfDeath = CAUSE_Obstacle;
@@ -1156,13 +1145,11 @@ void CPlayer::Collision(CObstacleManager& cObstacle, int num, bool unDeadFlg, in
 	prec = GetEyeRect();
 	//泡
 	if (prec.CollisionRect(cObstacle.GetRect(Bubble, num)) &&
-		cObstacle.GetShow(Bubble, num) && !hitFlg)
+		cObstacle.GetShow(Bubble, num))
 	{
 		if (causeOfDeath == CAUSE_None && !unDeadFlg)
 		{
 			cSound->Play(SOUND_BUBBLE_COLLISION);
-			//衝突
-			hitFlg = true;
 			//泡死
 			motion.ChangeMotion(MOTION_DEATH);
 			causeOfDeath = CAUSE_Bubble;
