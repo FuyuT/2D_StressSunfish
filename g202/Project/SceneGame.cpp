@@ -414,6 +414,11 @@ void CSceneGame::PopUpController()
 		nextSceneTemp = SCENENO_TITLE;
 		bubbleFade.FadeOut();
 	}
+	else if (nowPopUpGame->GetButtonResult() == 5)
+	{
+		//ゲームに戻るが押されたら
+		poseFlg = false;
+	}
 	else if (nowPopUpGame->GetButtonResult() == 4)
 	{
 		//設定が押されたら設定画面を表示
@@ -428,11 +433,6 @@ void CSceneGame::PopUpController()
 		//設定の処理だけポップアップの消去を行わないので、ここでbuttonResultを初期化
 		nowPopUpGame->SetButtonResult(0);
 
-	}
-	else if (nowPopUpGame->GetButtonResult() == 5)
-	{
-		//ゲームに戻るが押されたら
-		poseFlg = false;
 	}
 
 

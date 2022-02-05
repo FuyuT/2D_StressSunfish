@@ -3,8 +3,23 @@
 
 CPopUpWindowBase* nowPopUpTrophy = NULL;
 
-
-CSceneTrophyCollection::CSceneTrophyCollection()
+CSceneTrophyCollection::CSceneTrophyCollection():
+	riverFlg(false),
+	waterFallFlg(false),
+	lakeFlg(false),
+	damFlg(false),
+	sewerFlg(false),
+	indianOceanFlg(false),
+	amazonRiverFlg(false),
+	oceanFlg(false),
+	seaOf​​JapanFlg(false),
+	aroundTheGlobeFlg(false),
+	zeroMotivationFlg(false),
+	mountFujiFlg(false),
+	osakaMarathonFlg(false),
+	biwaLakeFlg(false),
+	jackPodFlg(false),
+	talentedDemonFlg(false)
 {
 
 }
@@ -1817,6 +1832,11 @@ CRectangle CSceneTrophyCollection::GetRect(int i)
 	//才能魔級
 	if(i == TROPHY_TALENTEDDEMON && talentedDemonFlg)
 		return CRectangle(icon2pageSecondRowPosX, iconTwoLinePosY, icon2pageSecondRowPosX + talentedDemonIconTexture.GetWidth(), iconTwoLinePosY + talentedDemonIconTexture.GetHeight());
+	else
+	{
+		return CRectangle(0, 0, 0, 0);
+	}
+
 }
 
 CRectangle CSceneTrophyCollection::ButtonGetRect(int i)

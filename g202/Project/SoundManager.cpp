@@ -377,16 +377,6 @@ void CSoundManager::SetMute(int soundNo)
 void CSoundManager::LoadSoundData()
 {
 	FILE* fp = fopen("SaveData\\Volume.dat", "rb");
-	//ファイルが無い時、音量を設定して新しく作る
-	if (fp == nullptr)
-	{
-		muteBGM   = false;
-		muteSE    = false;
-		volumeBGM = 0.5;
-		volumeSE  = 0.5;
-		SaveSoundData();
-		return;
-	}
 	//ファイルがある時は、前回のデータを読み込む
 	if (fp)
 	{
@@ -395,6 +385,15 @@ void CSoundManager::LoadSoundData()
 		fread(&volumeBGM, sizeof(float), 1, fp);
 		fread(&volumeSE, sizeof(float), 1, fp);
 		fclose(fp);
+	}
+	//ファイルが無い時、音量を設定して新しく作る
+	else if (fp == nullptr)
+	{
+		muteBGM   = false;
+		muteSE    = false;
+		volumeBGM = 0.5;
+		volumeSE  = 0.5;
+		SaveSoundData();
 	}
 	if (muteBGM)SetMute(SOUND_BGM);
 	if (muteSE)SetMute(SOUND_SE);

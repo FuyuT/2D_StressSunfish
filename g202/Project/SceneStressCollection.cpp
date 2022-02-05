@@ -3,7 +3,19 @@
 
 CPopUpWindowBase* nowPopUpStress = NULL;
 
-CSceneStressCollection::CSceneStressCollection()
+CSceneStressCollection::CSceneStressCollection():
+	hyperthermiaFlg(false),
+	lowerBodyTemperatureFlg(false),
+	starvationFlg(false),
+	cloggedThroatFlg(false),
+	obesityFlg(false),
+	impactFlg(false),
+	parasiteFlg(false),
+	jumpFlg(false),
+	bubbleFlg(false),
+	turtleFlg(false),
+	waterFlowFlg(false),
+	shoalFishFlg(false)
 {
 
 }
@@ -1200,15 +1212,20 @@ CRectangle CSceneStressCollection::GetRect(int i)
 	//Ž€ˆö:‹›ŒQ
 	if(i == CAUSE_ShoalFish && shoalFishFlg)
 		return CRectangle(iconSecondRowPosX, iconTwoLinePosY, iconSecondRowPosX + shoalFishTexture.GetWidth(), iconTwoLinePosY + shoalFishTexture.GetHeight());
+	
+	else
+	{
+		return CRectangle(0, 0, 0, 0);
+	}
 }
 
 void CSceneStressCollection::MouseCollision(int posX, int posY)
 {
-		if (ButtonGetRect(0).CollisionPoint(posX, posY) && buttonSelect != 0)
-		{
-			cSound->Play(SOUND_BUTTON_SELECT);
-			buttonSelect = 0;
-		}
+	if (ButtonGetRect(0).CollisionPoint(posX, posY) && buttonSelect != 0)
+	{
+		cSound->Play(SOUND_BUTTON_SELECT);
+		buttonSelect = 0;
+	}
 	if (page == 1)
 	{
 		if (GetRect(CAUSE_Hyperthermia).CollisionPoint(posX, posY) && buttonSelect != 1)
