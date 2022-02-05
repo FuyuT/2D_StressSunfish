@@ -48,6 +48,17 @@ enum tag_BUTTON_NO
 class CSceneConfig :public CSceneBase
 {
 private:
+	//îwåi
+	CTexture			backGround_0;
+	CTexture			backGround_1;
+	CTexture			backGround_2;
+	CTexture			backGround_3;
+	CTexture			backGround_4;
+	CTexture			backGround_5;
+	CTexture			backGround_6;
+	CTexture			backGround_7;
+
+
 	CTexture	buttonReturnTexture;
 	const int	buttonReturnPosX = 800;
 	const int	buttonReturnPosY = 800;

@@ -13,10 +13,19 @@ CSceneConfig::~CSceneConfig()
 //ロード
 bool CSceneConfig::Load()
 {
+	//背景
+	if (!backGround_0.Load("BackGround\\Menu_0.png"))return false;
+	if (!backGround_1.Load("BackGround\\Menu_1.png"))return false;
+	if (!backGround_2.Load("BackGround\\Menu_2.png"))return false;
+	if (!backGround_3.Load("BackGround\\Menu_3.png"))return false;
+	if (!backGround_4.Load("BackGround\\Menu_4.png"))return false;
+	if (!backGround_5.Load("BackGround\\Menu_5.png"))return false;
+	if (!backGround_6.Load("BackGround\\Menu_6.png"))return false;
+	if (!backGround_7.Load("BackGround\\Menu_7.png"))return false;
+
 	//スクロールバーの割合
 	scrollBarLength = VOLUME_CONTROL_BUTTON_MAX - VOLUME_CONTROL_BUTTON_MIN;
 
-	if (!backGroundTex.Load("Title.png"))return false;
 	if (!scaneTextImage.Load("PopUpOption.png"))return false;
 
 	//SceneGameMenuの時とSceneGameuの時で読込みを変更
@@ -437,7 +446,14 @@ void CSceneConfig::Update()
 //描画
 void CSceneConfig::Render()
 {
-	backGroundTex.Render(0, 0);
+	backGround_0.Render(0, 0);
+	backGround_1.Render(0, 0);
+	backGround_2.Render(0, 0);
+	backGround_3.Render(0, 0);
+	backGround_4.Render(0, 0);
+	backGround_5.Render(0, 0);
+	backGround_6.Render(0, 0);
+	backGround_7.Render(0, 0);
 	scaneTextImage.Render(SCENE_TEXT_IMAGE_X, SCENE_TEXT_IMAGE_Y);
 	buttonReturnTexture.Render(buttonReturnPosX, buttonReturnPosY);
 	scaleController.ScaleRender(&buttonReturnTexture, buttonReturnPosX,buttonReturnPosY, buttonReturnScale);
@@ -491,7 +507,15 @@ void CSceneConfig::Render()
 //解放
 void CSceneConfig::Release()
 {
-	backGroundTex.Release();
+	backGround_0.Release();
+	backGround_1.Release();
+	backGround_2.Release();
+	backGround_3.Release();
+	backGround_4.Release();
+	backGround_5.Release();
+	backGround_6.Release();
+	backGround_7.Release();
+
 	scaneTextImage.Release();
 	buttonReturnTexture.Release();
 	soundMuteTex.Release();
